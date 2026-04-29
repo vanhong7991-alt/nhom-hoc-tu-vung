@@ -48,11 +48,31 @@
                 let reloaded = false;
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    if (data.studyData && confirm("☁️ Đã tìm thấy dữ liệu trên Cloud!\nBạn có muốn tải về và ghi đè dữ liệu hiện tại trên máy không?")) {
-                        localStorage.setItem('mgao_v37_db', data.studyData);
-                        alert("✅ Phục hồi dữ liệu từ Cloud thành công!");
-                        location.reload();
-                        reloaded = true;
+                    if (data.studyData) {
+                        const cloudDate = data.updatedAt ? new Date(data.updatedAt).getTime() : 0;
+                        const localDateStr = localStorage.getItem('mgao_v37_updatedAt');
+                        const localDate = localDateStr ? new Date(localDateStr).getTime() : 0;
+                        
+                        if (cloudDate > localDate + 1000) {
+                            if (confirm("☁️ Dữ liệu trên Cloud mới hơn máy của bạn!\nBạn có muốn tải về và đồng bộ không?")) {
+                                localStorage.setItem('mgao_v37_db', data.studyData);
+                                if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
+                                alert("✅ Phục hồi dữ liệu từ Cloud thành công!");
+                                location.reload();
+                                reloaded = true;
+                            }
+                        } else if (localDate > cloudDate + 1000) {
+                            if (confirm("📱 Dữ liệu trên máy của bạn mới hơn Cloud!\nBạn có muốn đẩy lên Cloud không?")) {
+                                await window.uploadToCloud(true);
+                                alert("✅ Đã đẩy dữ liệu lên Cloud thành công!");
+                            }
+                        } else if (confirm("☁️ Đã tìm thấy dữ liệu trên Cloud!\nBạn có muốn tải về và ghi đè dữ liệu hiện tại trên máy không?")) {
+                            localStorage.setItem('mgao_v37_db', data.studyData);
+                            if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
+                            alert("✅ Phục hồi dữ liệu từ Cloud thành công!");
+                            location.reload();
+                            reloaded = true;
+                        }
                     }
                 }
                 
@@ -90,9 +110,10 @@
                     return;
                 }
                 const docRef = doc(dbFirestore, "users", window.firebaseUser.uid);
+                const localDate = localStorage.getItem('mgao_v37_updatedAt') || new Date().toISOString();
                 await setDoc(docRef, {
                     studyData: localData,
-                    updatedAt: new Date().toISOString()
+                    updatedAt: localDate
                 });
                 if (!silent) alert("✅ Đã sao lưu dữ liệu lên Cloud thành công!");
             } catch (error) {
@@ -113,6 +134,7 @@
                     if (data.studyData) {
                         if (confirm("⚠️ CẢNH BÁO: Dữ liệu hiện tại trên máy sẽ bị GHI ĐÈ TOÀN BỘ.\nBạn có chắc chắn muốn tải về?")) {
                             localStorage.setItem('mgao_v37_db', data.studyData);
+                            if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
                             alert("✅ Đã tải dữ liệu từ Cloud thành công!");
                             location.reload();
                         }
@@ -356,8 +378,11 @@
                 ĐĂNG NHẬP GOOGLE
             </button>
         </div>
-        <div id="inline-login-success" style="display: none; margin-top: 15px; font-size: 14px; color: var(--success); font-weight: bold; text-align: center; margin-bottom: 20px;">
-            ✅ Đã đăng nhập: <span id="inline-login-email"></span>
+        <div id="inline-login-success" style="display: none; margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 16px; border: 1px dashed var(--success); text-align: center; margin-bottom: 20px;">
+            <div style="font-size: 14px; color: var(--success); font-weight: bold; margin-bottom: 10px;">✅ <span id="inline-login-email"></span></div>
+            <button onclick="logoutGoogle()" class="btn" style="background: #ef4444; width: 100%; border-radius: 15px; font-size: 16px; justify-content: center;">
+                ĐĂNG XUẤT
+            </button>
         </div>
 
         <div id="mode-box-container" style="display:none; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 15px; margin-bottom: 20px; border: 1px dashed var(--accent);">
@@ -545,7 +570,10 @@
         renderSidebar(); updateGlobalStats();
     };
 
-    function saveToLocal() { localStorage.setItem('mgao_v37_db', JSON.stringify(db)); }
+    function saveToLocal() { 
+        localStorage.setItem('mgao_v37_db', JSON.stringify(db)); 
+        localStorage.setItem('mgao_v37_updatedAt', new Date().toISOString()); 
+    }
     function applyUser() { 
         document.getElementById('header-user-name').innerText = `${userName} cố lên nhé! 🌸`;
         document.getElementById('sidebar-user-name').innerText = `HỌC CÙNG ${userName.toUpperCase()} 🌸`;
