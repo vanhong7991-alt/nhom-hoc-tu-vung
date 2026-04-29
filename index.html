@@ -169,21 +169,25 @@
     <div id="sidebar-user-name" style="padding: 30px 10px; text-align: center; background: #ec4899; color: white; font-weight: 800; font-size: 20px;">HỌC CÙNG BẠN 🌸</div>
     <div id="sidebar-journey-text" style="padding: 10px; text-align: center; color: #fbbf24; font-weight: bold; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2);">Bạn chưa thiết lập hành trình!</div>
     <div class="sidebar-stats-container">
-        <div class="stat-box voca-box">
-            <div class="stat-icon">📚</div>
-            <div class="stat-info">
-                <span class="stat-title">Từ vựng<br>đã nhập</span>
-                <span class="stat-val" id="stat-voca-total">0</span>
+        <div class="stat-box voca-box" style="flex-direction: column; align-items: stretch; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="stat-icon">📚</div>
+                <div style="font-weight: 800; font-size: 15px; color: white;">TỪ VỰNG</div>
             </div>
-            <div class="stat-sub">Đã thuộc: <b id="stat-voca-master" style="color:var(--success);">0</b></div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; color: #cbd5e1;">
+                <span>Đã học: <b id="stat-voca-total" style="color: var(--warning);">0</b> từ</span>
+                <span>Đã làm: <b id="stat-voca-quiz-total" style="color: var(--success);">0</b> câu</span>
+            </div>
         </div>
-        <div class="stat-box gram-box">
-            <div class="stat-icon">✍️</div>
-            <div class="stat-info">
-                <span class="stat-title">Ngữ pháp<br>đã học</span>
-                <span class="stat-val" id="stat-gram-total">0</span>
+        <div class="stat-box gram-box" style="flex-direction: column; align-items: stretch; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="stat-icon">✍️</div>
+                <div style="font-weight: 800; font-size: 15px; color: white;">NGỮ PHÁP</div>
             </div>
-            <div class="stat-sub">Đã thuộc: <b id="stat-gram-master" style="color:var(--success);">0</b></div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; color: #cbd5e1;">
+                <span>Đã học: <b id="stat-gram-total" style="color: var(--warning);">0</b> mẫu</span>
+                <span>Đã làm: <b id="stat-gram-quiz-total" style="color: var(--success);">0</b> câu</span>
+            </div>
         </div>
     </div>
     <div class="menu-lvl1" onclick="toggleSub('n1-sub')">NĂNG LỰC N1 ▼</div>
@@ -993,6 +997,7 @@
             Object.keys(db[lv][ty]).forEach((dayKey, idx) => {
                 const isAllDone = db[lv][ty][dayKey].done.every(v => v === true);
                 const wordCount = db[lv][ty][dayKey].list.length;
+                const unitText = (ty === 'voca_quiz' || ty === 'gram_quiz') ? "câu" : (ty === 'gram' ? "mẫu" : "từ");
                 const div = document.createElement("div"); div.className = "menu-lvl3";
                 const rIcon = icons[idx % icons.length];
                 div.innerHTML = `
@@ -1001,7 +1006,7 @@
                     </span>
                     <span style="display:flex; align-items:center; gap:8px; margin-right:12px;">
                         ${isAllDone ? '<b class="done-check" style="font-size:18px;">✅</b>' : ''}
-                        <span style="font-size:13px; font-weight:800; color:var(--accent); border: 1px solid var(--accent); padding: 2px 8px; border-radius: 12px; box-shadow: 0 0 8px rgba(59,130,246,0.5);">${wordCount} từ</span>
+                        <span style="font-size:13px; font-weight:800; color:var(--accent); border: 1px solid var(--accent); padding: 2px 8px; border-radius: 12px; box-shadow: 0 0 8px rgba(59,130,246,0.5);">${wordCount} ${unitText}</span>
                     </span>
                     <span style="display:flex; gap:12px; align-items:center;">
                         <span style="color:var(--success)" onclick="exportDayTxt('${lv}', '${ty}', '${dayKey}')" title="Xuất file TXT">📄</span>
@@ -1710,17 +1715,17 @@
         }
     }
     function updateGlobalStats() { 
-        let tVoca = 0, mVoca = 0, tGram = 0, mGram = 0;
+        let tVoca = 0, qVoca = 0, tGram = 0, qGram = 0;
         ["n1","n2","n3","bjt"].forEach(lv => {
-            Object.values(db[lv]['voca']).forEach(day => { tVoca += day.list.length; day.list.forEach(item => { if(item.count>=5) mVoca++; }) });
-            Object.values(db[lv]['voca_quiz']).forEach(day => { tVoca += day.list.length; day.list.forEach(item => { if(item.count>=5) mVoca++; }) });
-            Object.values(db[lv]['gram']).forEach(day => { tGram += day.list.length; day.list.forEach(item => { if(item.count>=5) mGram++; }) });
-            Object.values(db[lv]['gram_quiz']).forEach(day => { tGram += day.list.length; day.list.forEach(item => { if(item.count>=5) mGram++; }) });
+            Object.values(db[lv]['voca']).forEach(day => { tVoca += day.list.length; });
+            Object.values(db[lv]['voca_quiz']).forEach(day => { qVoca += day.list.length; });
+            Object.values(db[lv]['gram']).forEach(day => { tGram += day.list.length; });
+            Object.values(db[lv]['gram_quiz']).forEach(day => { qGram += day.list.length; });
         });
         const elTotalVoca = document.getElementById('stat-voca-total'); if(elTotalVoca) elTotalVoca.innerText = tVoca;
-        const elMasterVoca = document.getElementById('stat-voca-master'); if(elMasterVoca) elMasterVoca.innerText = mVoca;
+        const elQuizVoca = document.getElementById('stat-voca-quiz-total'); if(elQuizVoca) elQuizVoca.innerText = qVoca;
         const elTotalGram = document.getElementById('stat-gram-total'); if(elTotalGram) elTotalGram.innerText = tGram;
-        const elMasterGram = document.getElementById('stat-gram-master'); if(elMasterGram) elMasterGram.innerText = mGram;
+        const elQuizGram = document.getElementById('stat-gram-quiz-total'); if(elQuizGram) elQuizGram.innerText = qGram;
     }
     function showHint(idx) { 
         const input = document.getElementById(`input-${idx}`); 
