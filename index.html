@@ -6,421 +6,6 @@
     <title>Lộ Trình Học Tập Thông Minh 🌸</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Noto+Sans+JP:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-        import { getFirestore, enableIndexedDbPersistence, doc, setDoc, getDoc, onSnapshot, enableNetwork } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyA7DCMQthW8E9-QloZRgVYx0BbcNEr3Mqc",
-            authDomain: "nhom-hoc-tu-vung.firebaseapp.com",
-            projectId: "nhom-hoc-tu-vung",
-            storageBucket: "nhom-hoc-tu-vung.firebasestorage.app",
-            messagingSenderId: "372638164131",
-            appId: "1:372638164131:web:6bce949ab355d21bae8b16",
-            measurementId: "G-ZMNERCCZ59"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const dbFirestore = getFirestore(app);
-        const provider = new GoogleAuthProvider();
-
-        // ✅ FIX 1: Bật Offline Persistence (IndexedDB) - cache dữ liệu xuống máy
-        enableIndexedDbPersistence(dbFirestore).catch(err => {
-            if (err.code === 'failed-precondition') {
-                console.warn('Offline persistence: nhiều tab đang mở, chỉ 1 tab được cache.');
-            } else if (err.code === 'unimplemented') {
-                console.warn('Offline persistence: browser không hỗ trợ.');
-            } else {
-                console.warn('Offline persistence error:', err);
-            }
-        });
-
-        // ✅ FIX: Auth persistence
-        try {
-            setPersistence(auth, browserLocalPersistence).catch(err => {
-                console.warn("Persistence error, using default:", err);
-            });
-        } catch(e) {
-            console.warn("Persistence setup error:", e);
-        }
-
-        window.firebaseUser = null;
-        let autoSyncTimer = null;
-        let cloudDataListener = null;
-        let isIgnoringCloudUpdate = false;
-        let listenerRetryTimer = null;
-
-        // Toast không làm phiền - hiện 3 giây rồi tự biến mất
-        window.showSyncToast = (msg, isError = false) => {
-            let toast = document.getElementById('sync-toast');
-            if (!toast) {
-                toast = document.createElement('div');
-                toast.id = 'sync-toast';
-                toast.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:12px 20px;border-radius:12px;font-weight:800;font-size:14px;z-index:9999;transition:opacity 0.4s;pointer-events:none;`;
-                document.body.appendChild(toast);
-            }
-            toast.style.background = isError ? '#ef4444' : '#22c55e';
-            toast.style.color = '#fff';
-            toast.style.boxShadow = isError ? '0 4px 15px rgba(239,68,68,0.5)' : '0 4px 15px rgba(34,197,94,0.5)';
-            toast.innerText = msg;
-            toast.style.opacity = '1';
-            clearTimeout(toast._timer);
-            toast._timer = setTimeout(() => { toast.style.opacity = '0'; }, 3000);
-        };
-
-        // ✅ FIX 3: Helper getDoc với retry (exponential backoff)
-        async function getDocWithRetry(docRef, maxRetries = 3) {
-            for (let i = 0; i < maxRetries; i++) {
-                try {
-                    return await getDoc(docRef);
-                } catch (e) {
-                    const isOffline = e.code === 'unavailable' || (e.message && e.message.includes('offline'));
-                    if (isOffline && i < maxRetries - 1) {
-                        const delay = 1500 * (i + 1);
-                        console.warn(`Firestore offline, retry ${i+1}/${maxRetries} sau ${delay}ms...`);
-                        await new Promise(r => setTimeout(r, delay));
-                        // Thử kết nối lại
-                        try { await enableNetwork(dbFirestore); } catch(_) {}
-                        continue;
-                    }
-                    throw e;
-                }
-            }
-        }
-
-        window.checkSyncWithCloud = async (user, silentEqual = true) => {
-            // ✅ FIX 2: Kiểm tra online trước khi gọi Firestore
-            if (!navigator.onLine) {
-                console.log('📴 Offline - bỏ qua sync');
-                if (!silentEqual) window.showSyncToast('📴 Đang offline - không thể đồng bộ', true);
-                return false;
-            }
-            try {
-                const localData = localStorage.getItem('mgao_v37_db');
-                const localDateStr = localStorage.getItem('mgao_v37_updatedAt');
-                const localDate = localDateStr ? new Date(localDateStr).getTime() : 0;
-
-                const docRef = doc(dbFirestore, "users", user.uid);
-                // ✅ FIX 3: Dùng retry thay vì gọi thẳng
-                const docSnap = await getDocWithRetry(docRef);
-
-                // --- CASE 1: Không có dữ liệu nào trên Cloud ---
-                if (!docSnap.exists() || !docSnap.data().studyData) {
-                    if (localData) {
-                        await window.uploadToCloud(true);
-                        window.showSyncToast('☁️ Đã backup dữ liệu lên Cloud lần đầu!');
-                    }
-                    return false;
-                }
-
-                const data = docSnap.data();
-                const cloudDate = data.updatedAt ? new Date(data.updatedAt).getTime() : 0;
-
-                // --- CASE 2: Cloud mới hơn local ---
-                if (cloudDate > localDate + 1000) {
-                    if (confirm("☁️ Có bản lưu mới hơn trên Cloud!\nBạn có muốn tải về thiết bị này không?")) {
-                        localStorage.setItem('mgao_v37_db', data.studyData);
-                        if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
-                        alert("✅ Đã đồng bộ dữ liệu từ Cloud về máy!");
-                        location.reload();
-                        return true;
-                    }
-                    return false;
-                }
-
-                // --- CASE 3: Local mới hơn cloud ---
-                const localIsNewer = localDate > cloudDate + 1000;
-                const localHasNoTimestamp = !localDateStr && localData;
-
-                if (localIsNewer || localHasNoTimestamp) {
-                    if (silentEqual) {
-                        const ok = await window.uploadToCloud(true);
-                        if (ok !== false) window.showSyncToast('☁️ Đã tự động đẩy dữ liệu lên Cloud!');
-                    } else if (confirm("📱 Dữ liệu trên máy của bạn mới hơn Cloud!\nBạn có muốn đẩy lên Cloud không?")) {
-                        await window.uploadToCloud(true);
-                        alert("✅ Đã đẩy dữ liệu lên Cloud thành công!");
-                    }
-                    return false;
-                }
-
-                // --- CASE 4: Bằng nhau ---
-                if (!silentEqual) {
-                    if (confirm("☁️ Dữ liệu đang đồng bộ. Bạn có muốn tải lại từ Cloud không?")) {
-                        localStorage.setItem('mgao_v37_db', data.studyData);
-                        if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
-                        alert("✅ Phục hồi dữ liệu từ Cloud thành công!");
-                        location.reload();
-                        return true;
-                    }
-                }
-
-            } catch(e) {
-                console.error("Sync error:", e);
-                const isOffline = e.code === 'unavailable' || (e.message && e.message.includes('offline'));
-                if (isOffline) {
-                    // Không hiện lỗi phiền khi offline, chỉ toast nhẹ
-                    window.showSyncToast('📴 Đang offline - sẽ đồng bộ khi có mạng', true);
-                } else {
-                    if (!silentEqual) alert("❌ Lỗi đồng bộ: " + e.message);
-                    else window.showSyncToast('⚠️ Lỗi đồng bộ: ' + e.message, true);
-                }
-            }
-            return false;
-        };
-
-        let hasCheckedSync = false;
-
-        onAuthStateChanged(auth, async (user) => {
-            window.firebaseUser = user;
-            if (window.updateSyncModalUI) window.updateSyncModalUI();
-            
-            if (user && !hasCheckedSync) {
-                hasCheckedSync = true;
-                // ✅ FIX 5: Đợi DOM + thêm delay 2s để Firestore khởi tạo xong
-                const doSync = async () => {
-                    await new Promise(r => setTimeout(r, 2000));
-                    await window.checkSyncWithCloud(user, true);
-                    window.listenToCloudChanges(user.uid);
-                };
-                if (document.readyState === 'complete') {
-                    doSync();
-                } else {
-                    window.addEventListener('load', doSync, { once: true });
-                }
-            } else if (!user) {
-                hasCheckedSync = false;
-                if (cloudDataListener) {
-                    cloudDataListener();
-                    cloudDataListener = null;
-                }
-                if (listenerRetryTimer) {
-                    clearTimeout(listenerRetryTimer);
-                    listenerRetryTimer = null;
-                }
-            }
-        });
-
-        // ✅ FIX 4: Lắng nghe sự kiện online/offline của browser
-        window.addEventListener('online', async () => {
-            console.log('🌐 Mạng trở lại!');
-            window.showSyncToast('🌐 Đã kết nối mạng - đang đồng bộ...');
-            try { await enableNetwork(dbFirestore); } catch(_) {}
-            if (window.firebaseUser) {
-                setTimeout(async () => {
-                    await window.checkSyncWithCloud(window.firebaseUser, true);
-                    // Restart listener nếu bị mất
-                    if (!cloudDataListener) {
-                        window.listenToCloudChanges(window.firebaseUser.uid);
-                    }
-                }, 1000);
-            }
-        });
-
-        window.addEventListener('offline', () => {
-            console.log('📴 Mất kết nối mạng');
-            window.showSyncToast('📴 Mất kết nối - dữ liệu vẫn được lưu offline', true);
-        });
-
-        window.loginGoogle = async () => {
-            try {
-                // ✅ FIX: Thêm check sessionStorage
-                if (typeof sessionStorage === 'undefined') {
-                    alert("❌ Lỗi: sessionStorage không khả dụng.\n\n💡 Cách fix:\n1. Đóng Incognito/Private mode\n2. Xoá cache browser\n3. Bật cookies trong settings");
-                    return;
-                }
-
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-                
-                const nameInput = document.getElementById('user-name-input');
-                if (nameInput && !nameInput.value && user.displayName) {
-                    nameInput.value = user.displayName;
-                }
-
-                // ✅ FIX: Luôn kiểm tra sync khi login
-                const reloaded = await window.checkSyncWithCloud(user, false);
-                
-                if (!reloaded) {
-                    const welcome = document.getElementById('welcome-screen');
-                    if (welcome && welcome.style.display !== 'none') {
-                        if (nameInput && nameInput.value && typeof saveUser === 'function') {
-                            saveUser();
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error("Login error:", error);
-                
-                // ✅ FIX: Xử lý các lỗi cụ thể
-                if (error.code === 'auth/popup-closed-by-user') {
-                    console.log("User đóng popup");
-                } else if (error.code === 'auth/web-storage-unsupported') {
-                    alert("❌ Lỗi: Browser không hỗ trợ Web Storage.\n\n💡 Cách fix:\n1. Tắt Incognito/Private mode\n2. Bật cookies\n3. Kiểm tra storage quota");
-                } else if (error.message && error.message.includes('sessionStorage')) {
-                    alert("❌ Lỗi sessionStorage:\n\n💡 Cách fix:\n1. Đóng Incognito mode\n2. Xoá cache browser\n3. Reload trang");
-                } else {
-                    alert("❌ Lỗi đăng nhập: " + error.message);
-                }
-            }
-        };
-
-        window.logoutGoogle = async () => {
-            try {
-                await signOut(auth);
-                alert("Đã đăng xuất!");
-            } catch (error) {
-                alert("❌ Lỗi đăng xuất: " + error.message);
-            }
-        };
-
-        window.uploadToCloud = async (silent = false) => {
-            if (!window.firebaseUser) {
-                if (!silent) alert("⚠️ Bạn cần đăng nhập Google trước khi Upload!");
-                return false;
-            }
-            try {
-                const localData = localStorage.getItem('mgao_v37_db');
-                if (!localData) {
-                    if (!silent) alert("Không có dữ liệu để đồng bộ!");
-                    return false;
-                }
-                const docRef = doc(dbFirestore, "users", window.firebaseUser.uid);
-                const nowISO = new Date().toISOString();
-                await setDoc(docRef, {
-                    studyData: localData,
-                    updatedAt: nowISO
-                });
-                // Cập nhật lại local timestamp để khớp với cloud
-                localStorage.setItem('mgao_v37_updatedAt', nowISO);
-                if (!silent) alert("✅ Đã sao lưu dữ liệu lên Cloud thành công!");
-                return true;
-            } catch (error) {
-                if (!silent) alert("❌ Lỗi sao lưu: " + error.message);
-                else if (window.showSyncToast) window.showSyncToast('❌ Upload thất bại: ' + error.message, true);
-                return false;
-            }
-        };
-
-        // ✅ FIX 6: Real-time Listener với retry khi lỗi offline
-        window.listenToCloudChanges = (userId) => {
-            if (!userId) return;
-            if (cloudDataListener) { cloudDataListener(); cloudDataListener = null; }
-            if (listenerRetryTimer) { clearTimeout(listenerRetryTimer); listenerRetryTimer = null; }
-            
-            // Không khởi tạo listener khi đang offline
-            if (!navigator.onLine) {
-                console.log('📴 Offline - hoãn listener, sẽ khởi động khi có mạng');
-                return;
-            }
-
-            const docRef = doc(dbFirestore, "users", userId);
-            cloudDataListener = onSnapshot(docRef, (docSnap) => {
-                if (!docSnap.exists() || !docSnap.data().studyData) return;
-                if (isIgnoringCloudUpdate) return;
-                
-                const localDateStr = localStorage.getItem('mgao_v37_updatedAt');
-                const localDate = localDateStr ? new Date(localDateStr).getTime() : 0;
-                
-                const data = docSnap.data();
-                const cloudDate = data.updatedAt ? new Date(data.updatedAt).getTime() : 0;
-                
-                // Cloud mới hơn local >= 2 giây → cập nhật
-                if (cloudDate > localDate + 2000) {
-                    console.log('📥 Cloud mới hơn! Cập nhật local...');
-                    localStorage.setItem('mgao_v37_db', data.studyData);
-                    if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
-                    window.showSyncToast('📥 Dữ liệu đã cập nhật từ Cloud!');
-                    
-                    const quizContainer = document.getElementById('quiz-container');
-                    if (!quizContainer || quizContainer.innerHTML === "") {
-                        setTimeout(() => { location.reload(); }, 1500);
-                    }
-                }
-            }, (error) => {
-                // ✅ FIX 6: Retry listener khi lỗi offline
-                const isOffline = error.code === 'unavailable' || (error.message && error.message.includes('offline'));
-                if (isOffline) {
-                    console.warn('📴 Listener offline, sẽ retry khi có mạng...');
-                    cloudDataListener = null;
-                    // online event listener sẽ restart listener
-                } else {
-                    console.error('❌ Listener error:', error);
-                    // Retry sau 10s cho các lỗi khác
-                    listenerRetryTimer = setTimeout(() => {
-                        if (window.firebaseUser && navigator.onLine) {
-                            console.log('🔄 Retry listener...');
-                            window.listenToCloudChanges(userId);
-                        }
-                    }, 10000);
-                }
-            });
-        };
-
-        window.downloadFromCloud = async () => {
-            if (!window.firebaseUser) {
-                alert("⚠️ Bạn cần đăng nhập Google trước khi Download!");
-                return;
-            }
-            try {
-                const docRef = doc(dbFirestore, "users", window.firebaseUser.uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    if (data.studyData) {
-                        if (confirm("⚠️ CẢNH BÁO: Dữ liệu hiện tại trên máy sẽ bị GHI ĐÈ TOÀN BỘ.\nBạn có chắc chắn muốn tải về?")) {
-                            localStorage.setItem('mgao_v37_db', data.studyData);
-                            if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
-                            alert("✅ Đã tải dữ liệu từ Cloud thành công!");
-                            location.reload();
-                        }
-                    } else {
-                        alert("☁️ Không tìm thấy dữ liệu trên Cloud cho tài khoản này.");
-                    }
-                } else {
-                    alert("☁️ Không tìm thấy dữ liệu trên Cloud cho tài khoản này.");
-                }
-            } catch (error) {
-                alert("❌ Lỗi tải dữ liệu: " + error.message);
-            }
-        };
-
-        window.updateSyncModalUI = () => {
-            const statusEl = document.getElementById('fb-auth-status');
-            const loginBtn = document.getElementById('btn-fb-login');
-            const logoutBtn = document.getElementById('btn-fb-logout');
-            const uploadBtn = document.getElementById('btn-fb-upload');
-            const downBtn = document.getElementById('btn-fb-down');
-            
-            const inlineLoginBox = document.getElementById('inline-login-box');
-            const inlineLoginSuccess = document.getElementById('inline-login-success');
-            const inlineLoginEmail = document.getElementById('inline-login-email');
-            
-            if (window.firebaseUser) {
-                if(statusEl) statusEl.innerHTML = `🟢 Đã đăng nhập: <b style="color:var(--success)">${window.firebaseUser.email}</b>`;
-                if(loginBtn) loginBtn.style.display = 'none';
-                if(logoutBtn) logoutBtn.style.display = 'inline-flex';
-                if(uploadBtn) { uploadBtn.disabled = false; uploadBtn.style.opacity = '1'; }
-                if(downBtn) { downBtn.disabled = false; downBtn.style.opacity = '1'; }
-                
-                if(inlineLoginBox) inlineLoginBox.style.display = 'none';
-                if(inlineLoginSuccess) {
-                    inlineLoginSuccess.style.display = 'block';
-                    if(inlineLoginEmail) inlineLoginEmail.innerText = window.firebaseUser.email;
-                }
-            } else {
-                if(statusEl) statusEl.innerHTML = `🔴 Chưa đăng nhập Cloud`;
-                if(loginBtn) loginBtn.style.display = 'inline-flex';
-                if(logoutBtn) logoutBtn.style.display = 'none';
-                if(uploadBtn) { uploadBtn.disabled = true; uploadBtn.style.opacity = '0.5'; }
-                if(downBtn) { downBtn.disabled = true; downBtn.style.opacity = '0.5'; }
-                
-                if(inlineLoginBox) inlineLoginBox.style.display = 'block';
-                if(inlineLoginSuccess) inlineLoginSuccess.style.display = 'none';
-            }
-        };
-    </script>
     
     <style>
         :root {
@@ -557,16 +142,9 @@
 <div id="welcome-screen" style="display: none; position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; align-items: center; justify-content: center; padding: 20px;">
     <div class="modal-content" style="border-color: var(--accent);">
         <h1 style="color: var(--warning);">Chào mừng bạn! 🌸</h1>
-        
-        <button id="welcome-login-btn" onclick="loginGoogle()" class="btn btn-blue" style="width: 100%; background: #4285F4; font-size: 18px; margin-top: 25px; margin-bottom: 15px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;"><path d="M22 12c0-.8-.07-1.5-.2-2H12v4h5.6c-.2 1-1 2.3-2.5 3.3l4 3C21.4 18.1 22 15.3 22 12z" fill="white" stroke="none"/><path d="M12 22c2.8 0 5.2-1 6.9-2.6l-4-3c-1 .6-2.2 1-3 1-2.4 0-4.4-1.6-5.2-3.8H2.6v3C5 19.8 8.2 22 12 22z" fill="white" stroke="none"/><path d="M6.8 13.6C6.6 12.9 6.5 12.2 6.5 11.5s.1-1.4.3-2.1v-3H2.6C1.6 8 1 9.7 1 11.5s.6 3.5 1.6 5.1l4.2-3z" fill="white" stroke="none"/><path d="M12 4.9c1.5 0 2.9.5 4 1.5l3-3C17.2 1.7 14.8.9 12 .9 8.2.9 5 3.1 2.6 6.4l4.2 3c.8-2.2 2.8-3.8 5.2-3.8z" fill="white" stroke="none"/></svg>
-            ĐĂNG NHẬP GOOGLE
-        </button>
-        
-        <div style="color: #94a3b8; font-size: 14px; font-weight: bold; margin-bottom: 15px;">HOẶC ĐIỀN TÊN TRỰC TIẾP</div>
-
+        <p style="color: #cbd5e1; font-size: 15px; margin-bottom: 20px;">Nhập tên để bắt đầu học nào!</p>
         <input type="text" id="user-name-input" placeholder="Tên của bạn..." maxlength="15" style="margin-bottom: 20px;">
-        <button class="btn btn-blue" style="width: 100%; font-size: 20px;" onclick="saveUser()">BẮT ĐẦU</button>
+        <button class="btn btn-blue" style="width: 100%; font-size: 20px;" onclick="saveUser()">BẮT ĐẦU 🌸</button>
     </div>
 </div>
 
@@ -589,7 +167,7 @@
     <div class="menu-lvl1" onclick="toggleSub('n2-sub')">NĂNG LỰC N2 ▼</div>
     <div id="n2-sub" class="sub-menu"><div class="menu-lvl2" onclick="toggleSub('n2-voca')">📚 Từ vựng</div><div id="n2-voca" class="sub-menu"></div><div class="menu-lvl2" onclick="toggleSub('n2-gram')">✍️ Ngữ pháp</div><div id="n2-gram" class="sub-menu"></div></div>
     <div style="padding: 20px; display: grid; gap: 12px; margin-top: 10px; border-top: 1px solid #334155;">
-        <button class="btn btn-blue" style="font-size: 14px; justify-content: center;" onclick="openModal('sync-modal')">☁️ ĐỒNG BỘ DỮ LIỆU</button>
+        <button class="btn btn-blue" style="font-size: 14px; justify-content: center;" onclick="openModal('sync-modal')">💾 SAO LƯU DỮ LIỆU</button>
         <button class="btn btn-danger" style="font-size: 14px; background: #ef4444; justify-content: center;" onclick="resetUserData()">🗑 XOÁ TẤT CẢ DỮ LIỆU</button>
     </div>
 </div>
@@ -607,20 +185,6 @@
         <h2 id="view-title" style="text-align: center; margin-bottom: 5px;">Mục tiêu hôm nay! 🎯</h2>
         <div id="motivational-quote" style="text-align: center; font-size: 16px; color: #cbd5e1; margin-bottom: 20px; line-height: 1.6;"></div>
         <button id="btn-start-lesson" class="btn btn-blue" style="width: 100%; padding: 20px; font-size: 20px; border-radius: 20px; box-shadow: 0 0 20px rgba(59,130,246,0.5); margin-bottom: 10px;" onclick="toggleMenu()">👉 BẤM VÀO ĐÂY ĐỂ CHỌN BÀI HỌC NÀO 👈</button>
-        
-        <div id="inline-login-box" style="margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 16px; border: 1px dashed #cbd5e1; text-align: center; margin-bottom: 20px;">
-            <div style="font-size: 14px; color: #cbd5e1; margin-bottom: 10px; font-weight: bold;">🔐 Đăng nhập để lưu tiến độ học</div>
-            <button onclick="loginGoogle()" class="btn" style="background: #4285F4; width: 100%; border-radius: 15px; font-size: 16px; justify-content: center;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;"><path d="M22 12c0-.8-.07-1.5-.2-2H12v4h5.6c-.2 1-1 2.3-2.5 3.3l4 3C21.4 18.1 22 15.3 22 12z" fill="white" stroke="none"/><path d="M12 22c2.8 0 5.2-1 6.9-2.6l-4-3c-1 .6-2.2 1-3 1-2.4 0-4.4-1.6-5.2-3.8H2.6v3C5 19.8 8.2 22 12 22z" fill="white" stroke="none"/><path d="M6.8 13.6C6.6 12.9 6.5 12.2 6.5 11.5s.1-1.4.3-2.1v-3H2.6C1.6 8 1 9.7 1 11.5s.6 3.5 1.6 5.1l4.2-3z" fill="white" stroke="none"/><path d="M12 4.9c1.5 0 2.9.5 4 1.5l3-3C17.2 1.7 14.8.9 12 .9 8.2.9 5 3.1 2.6 6.4l4.2 3c.8-2.2 2.8-3.8 5.2-3.8z" fill="white" stroke="none"/></svg>
-                ĐĂNG NHẬP GOOGLE
-            </button>
-        </div>
-        <div id="inline-login-success" style="display: none; margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 16px; border: 1px dashed var(--success); text-align: center; margin-bottom: 20px;">
-            <div style="font-size: 14px; color: var(--success); font-weight: bold; margin-bottom: 10px;">✅ <span id="inline-login-email"></span></div>
-            <button onclick="logoutGoogle()" class="btn" style="background: #ef4444; width: 100%; border-radius: 15px; font-size: 16px; justify-content: center;">
-                ĐĂNG XUẤT
-            </button>
-        </div>
 
         <div id="mode-box-container" style="display:none; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 15px; margin-bottom: 20px; border: 1px dashed var(--accent);">
             <div style="text-align: center; color: var(--warning); font-size: 15px; font-weight: 800; margin-bottom: 12px; letter-spacing: 0.5px;">👇 CHỌN 1 TRONG 3 ĐỀ KIỂM TRA 👇</div>
@@ -662,29 +226,42 @@
 </div>
 
 <div id="list-modal" class="modal"><div class="modal-content" style="max-width: 700px;"><h2 style="color: var(--warning);">📖 DANH SÁCH TỪ</h2><div style="max-height: 400px; overflow-y: auto; margin: 20px 0; border: 1px solid var(--accent); border-radius: 15px;"><table style="width:100%; color:white; border-collapse: collapse;"><thead style="background:var(--accent)"><tr><th style="padding:10px">STT</th><th>Từ</th><th>Đọc</th><th>Nghĩa</th></tr></thead><tbody id="voca-list-body"></tbody></table></div><div style="display:flex; gap:10px;"><button class="btn btn-purple" onclick="removeDuplicates()" style="flex:1;">🧹 LỌC TỪ TRÙNG LẶP</button><button class="btn btn-gray" onclick="closeModal('list-modal')" style="flex:1;">ĐÓNG</button></div></div></div>
+
 <div id="add-word-modal" class="modal">
-    <div class="modal-content" style="max-width: 400px; padding: 25px;">
+    <div class="modal-content" style="max-width: 480px; padding: 25px; max-height: 90vh; overflow-y: auto;">
         <h3 style="color:var(--success); margin-bottom: 20px;">➕ THÊM NHANH TỪ MỚI</h3>
         <input type="text" id="add-c1" placeholder="Kanji / Từ vựng..." style="margin-bottom:12px; font-size:18px;">
         <input type="text" id="add-c2" placeholder="Cách đọc (Hiragana)..." style="margin-bottom:12px; font-size:18px;">
-        <input type="text" id="add-c3" placeholder="Ý nghĩa..." style="margin-bottom:20px; font-size:18px;">
-        <div style="display:flex; gap:10px;">
+        <input type="text" id="add-c3" placeholder="Ý nghĩa..." style="margin-bottom:16px; font-size:18px;">
+        <div style="display:flex; gap:10px; margin-bottom:20px;">
             <button class="btn btn-green" style="flex:2;" onclick="quickAddWord()">LƯU TỪ NÀY</button>
-            <button class="btn btn-gray" style="flex:1;" onclick="closeModal('add-word-modal')">HUỶ</button>
+            <button class="btn btn-gray" style="flex:1;" onclick="closeModal('add-word-modal')">ĐÓNG</button>
+        </div>
+
+        <!-- Danh sách từ đã thêm -->
+        <div id="quick-add-list-wrap" style="display:none;">
+            <div style="font-size:11px; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:1.5px; border-bottom:1px solid rgba(59,130,246,.2); padding-bottom:6px; margin-bottom:10px;">
+                📋 Danh sách hiện tại &nbsp;<span id="quick-add-count" style="color:var(--warning);"></span>
+            </div>
+            <div style="max-height:220px; overflow-y:auto; border-radius:10px; border:1px solid rgba(255,255,255,.07);">
+                <table class="wlist-tbl" id="quick-add-table">
+                    <thead><tr><th>#</th><th>Kanji/Từ</th><th>Cách đọc</th><th>Nghĩa</th></tr></thead>
+                    <tbody id="quick-add-tbody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+
 <div id="import-modal" class="modal">
 <div class="modal-content" style="max-width:680px;max-height:92vh;overflow-y:auto;text-align:left;padding:20px 16px;">
   <h3 style="color:var(--warning);text-align:center;margin:0 0 16px;font-size:19px;">📥 NHẬP DỮ LIỆU HÀNG LOẠT</h3>
 
-  <!-- ① DỮ LIỆU -->
   <div class="imp-section">
     <div class="imp-sec-label">① dữ liệu đầu vào</div>
     <button class="paste-btn" onclick="pasteFromClipboard()">📋 Dán từ Clipboard <span style="font-size:13px;opacity:.75;">(nhấn 1 lần)</span></button>
     <textarea id="import-input" oninput="updateImportPreview()" style="height:120px;font-size:15px;text-align:left;border-radius:14px;" placeholder="• Dán từ Excel, Google Sheets, Ghi chú…&#10;• Mỗi từ 1 dòng&#10;• Ví dụ:  食べる / たべる / ăn&#10;          食べる , たべる , ăn&#10;          食べる   たべる   ăn"></textarea>
 
-    <!-- Dấu phân cách -->
     <div class="imp-row">
       <span>Dấu phân cách:</span>
       <div class="sep-pills">
@@ -698,7 +275,6 @@
       </div>
     </div>
 
-    <!-- Thứ tự cột -->
     <div class="imp-row">
       <span>Thứ tự cột:</span>
       <span>Cột 1: <select id="col1" onchange="updateImportPreview()"><option value="c1">Kanji/Từ</option><option value="c2">Cách đọc</option><option value="c3">Nghĩa</option></select></span>
@@ -706,7 +282,6 @@
       <span>Cột 3: <select id="col3" onchange="updateImportPreview()"><option value="c3">Nghĩa</option><option value="c1">Kanji/Từ</option><option value="c2">Cách đọc</option></select></span>
     </div>
 
-    <!-- Tuỳ chọn -->
     <div class="imp-row" style="gap:16px;margin-top:12px;">
       <label class="imp-check"><input type="checkbox" id="skip-header" onchange="updateImportPreview()"> Bỏ qua dòng đầu (tiêu đề)</label>
       <label class="imp-check"><input type="radio" name="imode" value="append" checked> Thêm vào</label>
@@ -714,58 +289,48 @@
     </div>
   </div>
 
-  <!-- ② XEM TRƯỚC -->
   <div class="imp-section">
     <div class="imp-sec-label">② xem trước <span id="prev-count" style="color:var(--success);"></span></div>
     <div class="tbl-wrap"><div id="import-preview"><div class="imp-empty">Dán dữ liệu vào ô trên để xem trước...</div></div></div>
   </div>
 
-  <!-- ③ DANH SÁCH HIỆN TẠI -->
   <div class="imp-section">
-    <div class="imp-sec-label">③ danh sách hiện tại <span id="cur-count" style="color:var(--warning);"></span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+      <div class="imp-sec-label" style="margin-bottom:0;border:none;padding:0;">③ danh sách hiện tại <span id="cur-count" style="color:var(--warning);"></span></div>
+      <button id="btn-chinh-sua" onclick="toggleEditMode()" style="padding:5px 14px;border-radius:20px;border:2px solid #3b82f6;background:transparent;color:#3b82f6;font-family:'Baloo 2';font-size:13px;font-weight:800;cursor:pointer;transition:.15s;">✏️ Chỉnh sửa</button>
+    </div>
     <div class="tbl-wrap"><div id="cur-word-list"><div class="imp-empty">Chưa có từ nào</div></div></div>
   </div>
 
-  <!-- Nút hành động -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;">
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:4px;">
     <button class="btn btn-gray" onclick="closeModal('import-modal')">ĐÓNG</button>
-    <button class="btn btn-green" onclick="processImport()">✅ NHẬP DỮ LIỆU</button>
+    <button class="btn btn-warning" id="btn-cap-nhat" onclick="applyAndSync()" style="color:#0f172a; display:none;">🔄 CẬP NHẬT</button>
+    <button class="btn btn-green" onclick="processImport()" id="btn-nhap-du-lieu">✅ NHẬP DỮ LIỆU</button>
   </div>
 </div>
 </div>
 
+<!-- SYNC MODAL - chỉ còn xuất/nhập file -->
 <div id="sync-modal" class="modal">
     <div class="modal-content" style="max-width: 450px;">
-        <h2 style="color:var(--success); margin-bottom: 15px; font-size: 24px;">☁️ ĐỒNG BỘ & SAO LƯU</h2>
+        <h2 style="color:var(--success); margin-bottom: 15px; font-size: 24px;">💾 SAO LƯU DỮ LIỆU</h2>
         <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 20px; line-height: 1.5;">
-            Lưu ý: Nếu bạn mở file trực tiếp từ máy tính (đường dẫn file:///), tính năng Link sẽ không hoạt động trên máy khác. Khi đó hãy dùng tính năng File nhé.
+            Xuất file để sao lưu dữ liệu ra máy. Nhập file để phục hồi từ bản sao lưu trước đó.
         </p>
 
-        <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px dashed var(--warning);">
-            <h4 style="margin-bottom: 10px; color: var(--warning);">🔥 CÁCH MỚI: CLOUD SYNC (Google)</h4>
-            <div id="fb-auth-status" style="font-size: 14px; color: #cbd5e1; margin-bottom: 10px;">🔴 Đang kiểm tra đăng nhập...</div>
-            <div style="display:flex; gap:10px; margin-bottom: 10px;">
-                <button id="btn-fb-login" class="btn btn-blue" style="flex:1; padding:10px; font-size:14px; justify-content:center;" onclick="loginGoogle()">👤 Đăng Nhập Google</button>
-                <button id="btn-fb-logout" class="btn btn-danger" style="flex:1; padding:10px; font-size:14px; display:none; background:#ef4444; justify-content:center;" onclick="logoutGoogle()">Đăng Xuất</button>
-            </div>
+        <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px dashed var(--accent);">
+            <h4 style="margin-bottom: 15px; color: var(--accent);">📁 XUẤT / NHẬP FILE</h4>
             <div style="display:flex; gap:10px;">
-                <button id="btn-fb-upload" class="btn btn-purple" style="flex:1; padding:10px; font-size:14px; justify-content:center;" onclick="uploadToCloud()">☁️ Lên Cloud</button>
-                <button id="btn-fb-down" class="btn btn-green" style="flex:1; padding:10px; font-size:14px; justify-content:center;" onclick="downloadFromCloud()">📥 Tải Về</button>
-            </div>
-        </div>
-
-        <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px dashed var(--accent);">
-            <h4 style="margin-bottom: 10px; color: var(--accent);">🔗 CÁCH 1: DÙNG LINK ĐỒNG BỘ (Rất tiện)</h4>
-            <button class="btn btn-green" style="width:100%; justify-content:center; font-size:15px; padding:12px;" onclick="generateSyncLink()">🔗 TẠO & COPY LINK ĐỒNG BỘ</button>
-        </div>
-
-        <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px dashed var(--blue);">
-            <h4 style="margin-bottom: 10px; color: var(--blue);">📁 CÁCH 2: DÙNG FILE (Mọi máy đều được)</h4>
-            <div style="display:flex; gap:10px;">
-                <button class="btn btn-blue" style="flex:1; padding:12px; font-size:14px;" onclick="exportFile()">📥 XUẤT FILE</button>
-                <button class="btn btn-purple" style="flex:1; padding:12px; font-size:14px;" onclick="document.getElementById('sync-file-input').click()">📤 NHẬP FILE</button>
+                <button class="btn btn-blue" style="flex:1; padding:14px; font-size:15px; justify-content:center;" onclick="exportFile()">📥 XUẤT FILE</button>
+                <button class="btn btn-purple" style="flex:1; padding:14px; font-size:15px; justify-content:center;" onclick="document.getElementById('sync-file-input').click()">📤 NHẬP FILE</button>
             </div>
             <input type="file" id="sync-file-input" accept=".json" style="display:none;" onchange="importFile(event)">
+        </div>
+
+        <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px dashed var(--accent);">
+            <h4 style="margin-bottom: 15px; color: var(--accent);">🔗 ĐỒNG BỘ QUA LINK</h4>
+            <p style="font-size: 13px; color: #94a3b8; margin-bottom: 12px;">Chỉ dùng được khi app đã được đưa lên website (không dùng được khi mở file trực tiếp).</p>
+            <button class="btn btn-green" style="width:100%; justify-content:center; font-size:15px; padding:12px;" onclick="generateSyncLink()">🔗 TẠO & COPY LINK ĐỒNG BỘ</button>
         </div>
         
         <button class="btn btn-gray" style="width: 100%; justify-content: center;" onclick="closeModal('sync-modal')">ĐÓNG</button>
@@ -776,6 +341,7 @@
     let db = JSON.parse(localStorage.getItem('mgao_v37_db'));
     let userName = localStorage.getItem('mgao_user_v37') || "";
     let curLevel, curType, curDay, seconds = 0, timerInterval = null, currentList = [], currentMode = 0;
+    let pendingDeletes = new Set();
 
     window.onload = () => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -809,20 +375,9 @@
 
     function saveToLocal() { 
         localStorage.setItem('mgao_v37_db', JSON.stringify(db)); 
-        const nowISO = new Date().toISOString();
-        localStorage.setItem('mgao_v37_updatedAt', nowISO);
-        
-        // Auto-sync lên Firebase nếu đã đăng nhập (debounce 2 giây)
-        if (window.firebaseUser) {
-            clearTimeout(autoSyncTimer);
-            autoSyncTimer = setTimeout(async () => {
-                const success = await window.uploadToCloud(true);
-                if (success) {
-                    console.log('✅ Auto-synced to Firebase');
-                }
-            }, 2000); // Đợi 2 giây sau lần save cuối cùng
-        }
+        localStorage.setItem('mgao_v37_updatedAt', new Date().toISOString());
     }
+
     function applyUser() { 
         document.getElementById('header-user-name').innerText = `${userName} cố lên nhé! 🌸`;
         document.getElementById('sidebar-user-name').innerText = `HỌC CÙNG ${userName.toUpperCase()} 🌸`;
@@ -831,6 +386,7 @@
         }
         document.getElementById('motivational-quote').innerHTML = `Chào <b style="color:var(--warning)">${userName}</b> cùng vượt qua lười biếng và chăm chỉ mỗi ngày nhé.<br><span style="color:#f472b6; font-style:italic;">"Lười biếng hôm nay, hối hận ngày mai".</span>`;
     }
+
     function saveUser() { const val = document.getElementById('user-name-input').value.trim(); if(val) { userName = val; localStorage.setItem('mgao_user_v37', val); document.getElementById('welcome-screen').style.display = 'none'; applyUser(); } }
     function resetUserData() { if(confirm("Xóa toàn bộ dữ liệu?")) { localStorage.clear(); location.reload(); } }
 
@@ -839,8 +395,17 @@
     let curSep = 'auto';
     function openModal(id) {
         if(id === 'list-modal') renderListTable();
-        if(id === 'import-modal') { updateImportPreview(); renderCurWordList(); }
-        if(id === 'sync-modal' && window.updateSyncModalUI) window.updateSyncModalUI();
+        if(id === 'add-word-modal') renderQuickAddList();
+        if(id === 'import-modal') {
+            // Reset edit mode khi mở lại modal
+            isEditMode = false;
+            const btnCS = document.getElementById('btn-chinh-sua');
+            if(btnCS) { btnCS.style.background='transparent'; btnCS.style.color='#3b82f6'; btnCS.innerHTML='✏️ Chỉnh sửa'; }
+            const btnCN = document.getElementById('btn-cap-nhat');
+            if(btnCN) btnCN.style.display = 'none';
+            updateImportPreview();
+            renderCurWordList();
+        }
         document.getElementById(id).style.display = 'flex';
     }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
@@ -863,7 +428,6 @@
             const variance = counts.reduce((a,b)=>a+Math.pow(b-avg,2),0)/counts.length;
             if(avg>=1 && variance<=0.6){ const sc=avg*2-variance; if(sc>bestScore){bestScore=sc;best=s;} }
         }
-        // fallback: multiple spaces
         if(bestScore<0 && lines.some(l=>/\s{2,}/.test(l))) return 'spaces';
         return best;
     }
@@ -919,21 +483,83 @@
         } catch(e) { document.getElementById('import-input').focus(); }
     }
 
-    function renderCurWordList() {
-        if(!curDay) return;
-        const list=db[curLevel][curType][curDay].list;
-        document.getElementById('cur-count').textContent=`(${list.length} từ)`;
-        const box=document.getElementById('cur-word-list');
-        if(!list.length){ box.innerHTML='<div class="imp-empty">Chưa có từ nào</div>'; return; }
-        box.innerHTML=`<table class="wlist-tbl"><thead><tr><th>#</th><th>Kanji/Từ</th><th>Cách đọc</th><th>Nghĩa</th><th></th></tr></thead><tbody>`
-            +list.map((w,i)=>`<tr><td style="color:#475569">${i+1}</td><td><b style="color:var(--warning)">${w.c1}</b></td><td>${w.c2}</td><td style="color:#94a3b8">${w.c3}</td><td><button class="wdel" onclick="deleteWord(${i})">🗑</button></td></tr>`).join('')
-            +'</tbody></table>';
+    let isEditMode = false;
+
+    function toggleEditMode() {
+        isEditMode = !isEditMode;
+        const btn = document.getElementById('btn-chinh-sua');
+        const btnCapNhat = document.getElementById('btn-cap-nhat');
+        if(isEditMode) {
+            btn.style.background = '#3b82f6';
+            btn.style.color = '#fff';
+            btn.innerHTML = '✏️ Đang sửa';
+            btnCapNhat.style.display = 'inline-flex';
+        } else {
+            btn.style.background = 'transparent';
+            btn.style.color = '#3b82f6';
+            btn.innerHTML = '✏️ Chỉnh sửa';
+            btnCapNhat.style.display = 'none';
+        }
+        renderCurWordList();
     }
 
-    function deleteWord(idx){
-        db[curLevel][curType][curDay].list.splice(idx,1);
-        saveToLocal(); renderCurWordList(); updateGlobalStats();
-        document.getElementById('cur-count').textContent=`(${db[curLevel][curType][curDay].list.length} từ)`;
+    function renderCurWordList() {
+        if(!curDay) return;
+        const list = db[curLevel][curType][curDay].list;
+        document.getElementById('cur-count').textContent = `(${list.length} từ)`;
+        const box = document.getElementById('cur-word-list');
+        if(!list.length){ box.innerHTML='<div class="imp-empty">Chưa có từ nào</div>'; return; }
+        const showTrash = isEditMode;
+        box.innerHTML = `<table class="wlist-tbl"><thead><tr><th>#</th><th>Kanji/Từ</th><th>Cách đọc</th><th>Nghĩa</th>${showTrash?'<th>Xoá</th>':''}</tr></thead><tbody>`
+            + list.map((w,i) =>
+                `<tr>
+                  <td style="color:#475569">${i+1}</td>
+                  <td><b style="color:var(--warning)">${w.c1}</b></td>
+                  <td>${w.c2}</td>
+                  <td style="color:#94a3b8">${w.c3}</td>
+                  ${showTrash ? `<td><button class="wdel" onclick="directDeleteWord(${i})" title="Xoá từ này">🗑</button></td>` : ''}
+                </tr>`
+            ).join('')
+            + '</tbody></table>';
+    }
+
+    function directDeleteWord(idx) {
+        db[curLevel][curType][curDay].list.splice(idx, 1);
+        saveToLocal();
+        renderCurWordList();
+        // Hiện nút Cập nhật (luôn visible khi editMode)
+        document.getElementById('cur-count').textContent = `(${db[curLevel][curType][curDay].list.length} từ)`;
+    }
+
+    function applyAndSync() {
+        saveToLocal();
+        updateGlobalStats();
+        renderSidebar();
+        currentList = db[curLevel][curType][curDay].list;
+        if(document.getElementById('quiz-container').innerHTML !== '') {
+            renderQuiz();
+        }
+        document.getElementById('submit-container').style.display = currentList.length > 0 ? 'flex' : 'none';
+        document.getElementById('rt-wrapper').style.display = currentList.length > 0 ? 'flex' : 'none';
+
+        // Tắt chế độ chỉnh sửa sau khi cập nhật
+        isEditMode = false;
+        const btnCS = document.getElementById('btn-chinh-sua');
+        btnCS.style.background = 'transparent';
+        btnCS.style.color = '#3b82f6';
+        btnCS.innerHTML = '✏️ Chỉnh sửa';
+        document.getElementById('btn-cap-nhat').style.display = 'none';
+        renderCurWordList();
+
+        const btn = document.getElementById('btn-cap-nhat');
+        btn.innerHTML = '✅ ĐÃ CẬP NHẬT!';
+        btn.style.background = 'var(--success)';
+        btn.style.display = 'inline-flex';
+        setTimeout(() => {
+            btn.innerHTML = '🔄 CẬP NHẬT';
+            btn.style.background = '';
+            btn.style.display = 'none';
+        }, 1500);
     }
 
     function renderSidebar() {
@@ -978,10 +604,6 @@
         document.getElementById('view-title').textContent = (listOverride ? "♻️ " : "📌 ") + day;
         const startBtn = document.getElementById('btn-start-lesson');
         if(startBtn) startBtn.style.display = 'none';
-        const inlineLoginBox = document.getElementById('inline-login-box');
-        if(inlineLoginBox) inlineLoginBox.style.display = 'none';
-        const inlineLoginSuccess = document.getElementById('inline-login-success');
-        if(inlineLoginSuccess) inlineLoginSuccess.style.display = 'none';
         ["btn-add-word", "btn-import", "btn-show-list", "btn-shuffle"].forEach(id => {
             const el = document.getElementById(id);
             if(el) el.style.display = listOverride ? 'none' : 'inline-flex';
@@ -1196,7 +818,6 @@
         
         document.getElementById('congrats-title').innerText = title;
         saveToLocal(); renderSidebar(); openModal('congrats-modal'); updateGlobalStats();
-        if (window.uploadToCloud) window.uploadToCloud(true);
     }
 
     function retryFailedOnly() {
@@ -1211,6 +832,7 @@
     function toggleTimer() { const btn = document.getElementById('timer-btn'); if (timerInterval) { clearInterval(timerInterval); timerInterval = null; btn.innerText = "▶ TIẾP TỤC"; btn.className="btn btn-green"; } else { timerInterval = setInterval(() => { seconds++; updateTime(); }, 1000); btn.innerText = "⏸ TẠM DỪNG"; btn.className="btn btn-danger"; } }
     function resetTimer() { seconds = 0; updateTime(); }
     function updateTime() { const m = Math.floor(seconds/60).toString().padStart(2,'0'), s = (seconds%60).toString().padStart(2,'0'); document.getElementById('timer-display').textContent = document.getElementById('header-timer').textContent = `${m}:${s}`; }
+
     function processImport(){
         const data=parseData(); const valid=data.filter(d=>d.valid);
         if(!valid.length){ alert('⚠️ Không tìm thấy dữ liệu hợp lệ!\nHãy kiểm tra dấu phân cách hoặc định dạng dữ liệu.'); return; }
@@ -1236,15 +858,6 @@
         }
 
         saveToLocal(); renderSidebar(); selectDay(curLevel,curType,curDay);
-        
-        // ✅ FIX: Auto-upload
-        if (window.firebaseUser) {
-            clearTimeout(autoSyncTimer);
-            autoSyncTimer = setTimeout(() => {
-                window.uploadToCloud(true);
-            }, 1500);
-        }
-        
         document.getElementById('import-input').value='';
         updateImportPreview(); renderCurWordList(); updateGlobalStats();
         alert(`✅ Đã nhập ${valid.length} từ! Tổng danh sách: ${db[curLevel][curType][curDay].list.length} từ.`);
@@ -1262,16 +875,8 @@
 
         db[curLevel][curType][curDay].list.push({ count: 0, c1: c1, c2: c2, c3: c3 || c2 });
         saveToLocal();
-        
-        // ✅ FIX: Auto-upload to cloud
-        if (window.firebaseUser) {
-            clearTimeout(autoSyncTimer);
-            autoSyncTimer = setTimeout(() => {
-                window.uploadToCloud(true);
-            }, 1500);
-        }
-        
         updateGlobalStats();
+        renderQuickAddList();
         
         document.getElementById('add-c1').value = '';
         document.getElementById('add-c2').value = '';
@@ -1284,8 +889,34 @@
         
         const btn = document.querySelector('#add-word-modal .btn-green');
         const oldText = btn.innerText;
-        btn.innerText = '✅ ĐÃ LƯU!';
-        setTimeout(() => { btn.innerText = oldText; }, 1000);
+        btn.innerHTML = '✅ ĐÃ LƯU!';
+        setTimeout(() => { btn.innerHTML = oldText; }, 900);
+    }
+
+    function renderQuickAddList() {
+        if(!curDay) return;
+        const list = db[curLevel][curType][curDay].list;
+        const wrap = document.getElementById('quick-add-list-wrap');
+        const tbody = document.getElementById('quick-add-tbody');
+        const countEl = document.getElementById('quick-add-count');
+        if(!wrap) return;
+        if(list.length === 0) { wrap.style.display = 'none'; return; }
+        wrap.style.display = 'block';
+        countEl.textContent = `(${list.length} từ)`;
+        // Hiện danh sách mới nhất ở trên cùng
+        tbody.innerHTML = [...list].reverse().map((w, i) => {
+            const realIdx = list.length - 1 - i;
+            const isNew = i === 0;
+            return `<tr style="${isNew ? 'background:rgba(34,197,94,0.08);' : ''}">
+                <td style="color:#475569">${realIdx + 1}</td>
+                <td><b style="color:${isNew ? 'var(--success)' : 'var(--warning)'}">${w.c1}</b>${isNew ? ' <span style="font-size:10px;background:var(--success);color:#fff;padding:1px 6px;border-radius:10px;font-weight:800;">MỚI</span>' : ''}</td>
+                <td>${w.c2}</td>
+                <td style="color:#94a3b8">${w.c3}</td>
+            </tr>`;
+        }).join('');
+        // Scroll lên đầu để thấy từ mới nhất
+        const scrollEl = wrap.querySelector('div[style*="overflow-y"]');
+        if(scrollEl) scrollEl.scrollTop = 0;
     }
 
     function renderListTable() { document.getElementById('voca-list-body').innerHTML = db[curLevel][curType][curDay].list.map((item, i) => `<tr style="border-bottom:1px solid #334155"><td style="padding:10px">${i+1}</td><td style="font-weight:800; color:var(--warning); display:flex; align-items:center; gap:8px;">${item.c1} <a href="https://www.google.com/search?q=${encodeURIComponent(item.c1 + ' とは')}" target="_blank" style="text-decoration:none; display:inline-flex; align-items:center;" title="Tra cứu trên Google"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></td><td>${item.c2}</td><td>${item.c3}</td></tr>`).join(''); }
@@ -1321,15 +952,6 @@
             db[curLevel][curType][curDay].list = uniqueList;
             currentList = uniqueList;
             saveToLocal();
-            
-            // ✅ FIX: Auto-upload
-            if (window.firebaseUser) {
-                clearTimeout(autoSyncTimer);
-                autoSyncTimer = setTimeout(() => {
-                    window.uploadToCloud(true);
-                }, 1500);
-            }
-            
             renderCurWordList(); 
             renderListTable();
             updateGlobalStats();
@@ -1346,15 +968,6 @@
         if(name) { 
             db[lv][ty][name] = { list: [], done: [false, false, false] }; 
             saveToLocal();
-            
-            // ✅ FIX: Auto-upload
-            if (window.firebaseUser) {
-                clearTimeout(autoSyncTimer);
-                autoSyncTimer = setTimeout(() => {
-                    window.uploadToCloud(true);
-                }, 1500);
-            }
-            
             renderSidebar(); 
             selectDay(lv, ty, name); 
         } 
@@ -1364,18 +977,10 @@
         if(confirm("Xóa?")) { 
             delete db[lv][ty][day]; 
             saveToLocal();
-            
-            // ✅ FIX: Auto-upload
-            if (window.firebaseUser) {
-                clearTimeout(autoSyncTimer);
-                autoSyncTimer = setTimeout(() => {
-                    window.uploadToCloud(true);
-                }, 1500);
-            }
-            
             renderSidebar(); 
         } 
     }
+
     function exportFile() {
         const dataStr = localStorage.getItem('mgao_v37_db');
         if (!dataStr) { alert("Không có dữ liệu để xuất!"); return; }
@@ -1417,19 +1022,20 @@
         const dataStr = localStorage.getItem('mgao_v37_db');
         if(!dataStr) { alert("Không có dữ liệu!"); return; }
         if (window.location.protocol === 'file:') {
-            alert("⚠️ CẢNH BÁO MẠNG:\nBạn đang mở file trực tiếp trên ổ cứng (chưa được đưa lên mạng). Người khác hoặc điện thoại sẽ KHÔNG THỂ truy cập link này!\n\n👉 Tính năng này chỉ dùng được khi bạn đưa file lên website (Vercel, Github Pages...). Hãy dùng tính năng FILE nhé.");
+            alert("⚠️ CẢNH BÁO:\nBạn đang mở file trực tiếp trên ổ cứng. Người khác sẽ KHÔNG THỂ truy cập link này!\n\n👉 Tính năng Link chỉ dùng được khi đưa file lên website. Hãy dùng tính năng XUẤT FILE nhé.");
+            return;
         }
         try {
             const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(dataStr))));
             const link = window.location.origin + window.location.pathname + "?sync=" + encoded;
             if(link.length > 8000) {
-                alert("⚠️ Dữ liệu của bạn quá lớn, đường link sinh ra dài hơn giới hạn cho phép. Vui lòng dùng tính năng xuất FILE.");
+                alert("⚠️ Dữ liệu quá lớn, link vượt giới hạn cho phép. Vui lòng dùng tính năng XUẤT FILE.");
                 return;
             }
             navigator.clipboard.writeText(link).then(() => {
-                alert("✅ ĐÃ COPY LINK ĐỒNG BỘ!\n\nHãy dán link gửi qua Zalo/Mess. Thiết bị khác chỉ cần bấm vào Link là dữ liệu tự động được tải vào!");
+                alert("✅ ĐÃ COPY LINK ĐỒNG BỘ!\n\nDán link gửi qua Zalo/Mess. Thiết bị khác bấm vào Link là tự động nhận dữ liệu!");
             }).catch(() => {
-                prompt("Copy đường link sau để đồng bộ:", link);
+                prompt("Copy đường link sau:", link);
             });
         } catch(e) {
             alert("❌ Lỗi tạo link: Dữ liệu quá lớn hoặc mã hoá lỗi.");
