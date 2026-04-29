@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lộ Trình Học Tập Thông Minh 🌸</title>
+    <title>Vượt lười học mỗi ngày 🌸</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Noto+Sans+JP:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA7DCMQthW8E9-QloZRgVYx0BbcNEr3Mqc",
@@ -26,8 +26,15 @@
         const dbFirestore = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
+        // ✅ FIX: Bật persistence - user không cần login mỗi lần
+        setPersistence(auth, browserLocalPersistence).catch(err => {
+            console.warn("Persistence error:", err);
+        });
+
         window.firebaseUser = null;
         let autoSyncTimer = null; // Debounce timer cho auto-sync
+        let cloudDataListener = null; // ✅ FIX: Real-time listener
+        let isIgnoringCloudUpdate = false; // ✅ FIX: Tránh vòng lặp sync
 
         // Toast không làm phiền - hiện 3 giây rồi tự biến mất
         window.showSyncToast = (msg, isError = false) => {
@@ -53,17 +60,11 @@
                 const localDateStr = localStorage.getItem('mgao_v37_updatedAt');
                 const localDate = localDateStr ? new Date(localDateStr).getTime() : 0;
 
-                console.log('🔍 Checking sync...', {
-                    localTimestamp: localDateStr,
-                    localDate: localDate
-                });
-
                 const docRef = doc(dbFirestore, "users", user.uid);
                 const docSnap = await getDoc(docRef);
 
                 // --- CASE 1: Không có dữ liệu nào trên Cloud ---
                 if (!docSnap.exists() || !docSnap.data().studyData) {
-                    console.log('📤 No cloud data, uploading local data...');
                     if (localData) {
                         // Có dữ liệu local → tự động backup lên cloud
                         await window.uploadToCloud(true);
@@ -74,29 +75,17 @@
 
                 const data = docSnap.data();
                 const cloudDate = data.updatedAt ? new Date(data.updatedAt).getTime() : 0;
-                
-                console.log('☁️ Cloud data found:', {
-                    cloudTimestamp: data.updatedAt,
-                    cloudDate: cloudDate,
-                    diff: cloudDate - localDate
-                });
 
                 // --- CASE 2: Cloud mới hơn local ---
                 if (cloudDate > localDate + 1000) {
-                    // TỰ ĐỘNG TẢI XUỐNG - Không cần hỏi người dùng
-                    console.log('🔄 Cloud data is newer, auto-downloading...');
-                    localStorage.setItem('mgao_v37_db', data.studyData);
-                    if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
-                    
-                    if (!silentEqual) {
-                        alert("✅ Đã đồng bộ dữ liệu mới nhất từ Cloud về máy!");
-                    } else {
-                        window.showSyncToast('☁️ Đã tải dữ liệu mới từ Cloud!');
+                    if (confirm("☁️ Có bản lưu mới hơn trên Cloud!\nBạn có muốn tải về thiết bị này không?")) {
+                        localStorage.setItem('mgao_v37_db', data.studyData);
+                        if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
+                        alert("✅ Đã đồng bộ dữ liệu từ Cloud về máy!");
+                        location.reload();
+                        return true;
                     }
-                    
-                    // Reload để cập nhật UI
-                    setTimeout(() => location.reload(), 1000);
-                    return true;
+                    return false;
                 }
 
                 // --- CASE 3: Local mới hơn cloud, hoặc local chưa có timestamp (dữ liệu cũ) ---
@@ -145,11 +134,19 @@
                 // Đợi DOM sẵn sàng trước khi kiểm tra sync
                 if (document.readyState === 'complete') {
                     await window.checkSyncWithCloud(user, true);
+                    // ✅ FIX: Setup listener
+                    window.listenToCloudChanges(user.uid);
                 } else {
                     window.addEventListener('load', async () => {
                         await window.checkSyncWithCloud(user, true);
+                        // ✅ FIX: Setup listener
+                        window.listenToCloudChanges(user.uid);
                     }, { once: true });
                 }
+            } else if (!user && cloudDataListener) {
+                // User đã logout - hủy listener
+                cloudDataListener();
+                cloudDataListener = null;
             }
         });
 
@@ -216,6 +213,47 @@
             }
         };
 
+        // ✅ FIX #2: Thêm Real-time Listener
+        window.listenToCloudChanges = (userId) => {
+            if (!userId) return;
+            if (cloudDataListener) cloudDataListener();
+            
+            const docRef = doc(dbFirestore, "users", userId);
+            cloudDataListener = onSnapshot(docRef, (docSnap) => {
+                if (!docSnap.exists() || !docSnap.data().studyData) return;
+                
+                if (isIgnoringCloudUpdate) return;
+                
+                const localData = localStorage.getItem('mgao_v37_db');
+                const localDateStr = localStorage.getItem('mgao_v37_updatedAt');
+                const localDate = localDateStr ? new Date(localDateStr).getTime() : 0;
+                
+                const data = docSnap.data();
+                const cloudDate = data.updatedAt ? new Date(data.updatedAt).getTime() : 0;
+                
+                // Cloud mới hơn local >= 2 giây
+                if (cloudDate > localDate + 2000) {
+                    console.log('📥 Cloud mới hơn! Cập nhật local...');
+                    
+                    localStorage.setItem('mgao_v37_db', data.studyData);
+                    if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
+                    
+                    if (window.showSyncToast) {
+                        window.showSyncToast('📥 Dữ liệu đã cập nhật từ Cloud!');
+                    }
+                    
+                    const quizContainer = document.getElementById('quiz-container');
+                    if (!quizContainer || quizContainer.innerHTML === "") {
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    }
+                }
+            }, (error) => {
+                console.error("❌ Listener error:", error);
+            });
+        };
+
         window.downloadFromCloud = async () => {
             if (!window.firebaseUser) {
                 alert("⚠️ Bạn cần đăng nhập Google trước khi Download!");
@@ -242,16 +280,6 @@
             } catch (error) {
                 alert("❌ Lỗi tải dữ liệu: " + error.message);
             }
-        };
-
-        // Force sync ngay lập tức (dùng để debug/test)
-        window.forceSyncNow = async () => {
-            if (!window.firebaseUser) {
-                alert("⚠️ Cần đăng nhập trước!");
-                return;
-            }
-            console.log('🔄 Force syncing...');
-            await window.checkSyncWithCloud(window.firebaseUser, false);
         };
 
         window.updateSyncModalUI = () => {
@@ -1104,6 +1132,15 @@
         }
 
         saveToLocal(); renderSidebar(); selectDay(curLevel,curType,curDay);
+        
+        // ✅ FIX: Auto-upload
+        if (window.firebaseUser) {
+            clearTimeout(autoSyncTimer);
+            autoSyncTimer = setTimeout(() => {
+                window.uploadToCloud(true);
+            }, 1500);
+        }
+        
         document.getElementById('import-input').value='';
         updateImportPreview(); renderCurWordList(); updateGlobalStats();
         alert(`✅ Đã nhập ${valid.length} từ! Tổng danh sách: ${db[curLevel][curType][curDay].list.length} từ.`);
@@ -1121,6 +1158,15 @@
 
         db[curLevel][curType][curDay].list.push({ count: 0, c1: c1, c2: c2, c3: c3 || c2 });
         saveToLocal();
+        
+        // ✅ FIX: Auto-upload to cloud
+        if (window.firebaseUser) {
+            clearTimeout(autoSyncTimer);
+            autoSyncTimer = setTimeout(() => {
+                window.uploadToCloud(true);
+            }, 1500);
+        }
+        
         updateGlobalStats();
         
         document.getElementById('add-c1').value = '';
@@ -1171,6 +1217,15 @@
             db[curLevel][curType][curDay].list = uniqueList;
             currentList = uniqueList;
             saveToLocal();
+            
+            // ✅ FIX: Auto-upload
+            if (window.firebaseUser) {
+                clearTimeout(autoSyncTimer);
+                autoSyncTimer = setTimeout(() => {
+                    window.uploadToCloud(true);
+                }, 1500);
+            }
+            
             renderCurWordList(); 
             renderListTable();
             updateGlobalStats();
@@ -1182,8 +1237,41 @@
         }
     }
 
-    function addDay(lv, ty) { const name = prompt("Tên bài:"); if(name) { db[lv][ty][name] = { list: [], done: [false, false, false] }; saveToLocal(); renderSidebar(); selectDay(lv, ty, name); } }
-    function deleteDay(lv, ty, day) { if(confirm("Xóa?")) { delete db[lv][ty][day]; saveToLocal(); renderSidebar(); } }
+    function addDay(lv, ty) { 
+        const name = prompt("Tên bài:"); 
+        if(name) { 
+            db[lv][ty][name] = { list: [], done: [false, false, false] }; 
+            saveToLocal();
+            
+            // ✅ FIX: Auto-upload
+            if (window.firebaseUser) {
+                clearTimeout(autoSyncTimer);
+                autoSyncTimer = setTimeout(() => {
+                    window.uploadToCloud(true);
+                }, 1500);
+            }
+            
+            renderSidebar(); 
+            selectDay(lv, ty, name); 
+        } 
+    }
+    
+    function deleteDay(lv, ty, day) { 
+        if(confirm("Xóa?")) { 
+            delete db[lv][ty][day]; 
+            saveToLocal();
+            
+            // ✅ FIX: Auto-upload
+            if (window.firebaseUser) {
+                clearTimeout(autoSyncTimer);
+                autoSyncTimer = setTimeout(() => {
+                    window.uploadToCloud(true);
+                }, 1500);
+            }
+            
+            renderSidebar(); 
+        } 
+    }
     function exportFile() {
         const dataStr = localStorage.getItem('mgao_v37_db');
         if (!dataStr) { alert("Không có dữ liệu để xuất!"); return; }
