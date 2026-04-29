@@ -21,8 +21,15 @@
         /* --- SIDEBAR --- */
         .sidebar { width: var(--sidebar-width); background: var(--sidebar-bg); height: 100vh; position: fixed; left: -380px; top: 0; z-index: 2000; transition: 0.3s; overflow-y: auto; border-right: 2px solid var(--accent); padding-bottom: 50px; }
         .sidebar.open { left: 0 !important; }
-        .sidebar-stats { margin: 15px; padding: 15px; background: rgba(59, 130, 246, 0.1); border: 2px dashed var(--accent); border-radius: 20px; text-align: center; }
-        .side-stat-val { font-size: 26px; font-weight: 800; color: var(--warning); display: block; }
+        .sidebar-stats-container { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; border-bottom: 2px dashed rgba(255,255,255,0.1); margin-bottom: 5px; }
+        .stat-box { background: rgba(30,41,59,0.7); border-radius: 16px; padding: 15px 10px; border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .stat-box.voca-box { border-bottom: 4px solid var(--warning); box-shadow: 0 4px 15px rgba(251,191,36,0.1); }
+        .stat-box.gram-box { border-bottom: 4px solid var(--purple); box-shadow: 0 4px 15px rgba(168,85,247,0.1); }
+        .stat-icon { font-size: 32px; margin-bottom: 5px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
+        .stat-info { display: flex; flex-direction: column; }
+        .stat-title { font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; line-height: 1.2; height: 26px; }
+        .stat-val { font-size: 26px; font-weight: 800; color: #fff; line-height: 1; margin: 5px 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .stat-sub { font-size: 11px; color: #cbd5e1; background: rgba(0,0,0,0.4); padding: 4px 8px; border-radius: 10px; display: inline-block; margin-top: auto; border: 1px solid rgba(255,255,255,0.1); }
         
         /* --- HEADER --- */
         .mobile-header { position: fixed; top: 0; left: 0; right: 0; height: 70px; background: var(--sidebar-bg); z-index: 1001; display: flex; align-items: center; padding: 0 20px; border-bottom: 3px solid var(--accent); justify-content: space-between; }
@@ -43,6 +50,7 @@
         .menu-lvl1 { padding: 18px 20px; border-bottom: 1px solid #1e293b; font-weight: 800; color: var(--warning); cursor: pointer; font-size: 20px; }
         .menu-lvl2 { padding: 15px 20px 15px 35px; border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: 700; color: #fff; cursor: pointer; background: #0f172a; font-size: 18px; }
         .menu-lvl3 { padding: 12px 15px 12px 45px; display: flex; align-items: center; justify-content: space-between; color: #cbd5e1; font-size: 17px; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; }
+        .sub-menu { display: none; }
 
         /* --- MODAL --- */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
@@ -158,9 +166,23 @@
 
 <div class="sidebar" id="sidebar">
     <div id="sidebar-user-name" style="padding: 30px 10px; text-align: center; background: #ec4899; color: white; font-weight: 800; font-size: 20px;">HỌC CÙNG BẠN 🌸</div>
-    <div class="sidebar-stats">
-        <div class="side-stat-item"><span id="total-words" class="side-stat-val">0</span><span class="side-stat-label">Câu đã nhập</span></div>
-        <div class="side-stat-item"><span id="master-words" class="side-stat-val">0</span><span class="side-stat-label">Câu đã thuộc (≥5 lần)</span></div>
+    <div class="sidebar-stats-container">
+        <div class="stat-box voca-box">
+            <div class="stat-icon">📚</div>
+            <div class="stat-info">
+                <span class="stat-title">Từ vựng<br>đã nhập</span>
+                <span class="stat-val" id="stat-voca-total">0</span>
+            </div>
+            <div class="stat-sub">Đã thuộc: <b id="stat-voca-master" style="color:var(--success);">0</b></div>
+        </div>
+        <div class="stat-box gram-box">
+            <div class="stat-icon">✍️</div>
+            <div class="stat-info">
+                <span class="stat-title">Ngữ pháp<br>đã học</span>
+                <span class="stat-val" id="stat-gram-total">0</span>
+            </div>
+            <div class="stat-sub">Đã thuộc: <b id="stat-gram-master" style="color:var(--success);">0</b></div>
+        </div>
     </div>
     <div class="menu-lvl1" onclick="toggleSub('n1-sub')">NĂNG LỰC N1 ▼</div>
     <div id="n1-sub" class="sub-menu"><div class="menu-lvl2" onclick="toggleSub('n1-voca')">📚 Từ vựng</div><div id="n1-voca" class="sub-menu"></div><div class="menu-lvl2" onclick="toggleSub('n1-gram')">✍️ Ngữ pháp</div><div id="n1-gram" class="sub-menu"></div></div>
@@ -226,7 +248,7 @@
             <button class="btn btn-purple" id="btn-retry-failed" style="display: none;" onclick="retryFailedOnly()">♻️ LÀM LẠI CÂU QUÊN VÀ SAI</button>
             <button class="btn btn-blue" onclick="closeModal('congrats-modal'); window.scrollTo({top: 0, behavior: 'smooth'});">🔄 CHUYỂN BÀI KHÁC (Cùng ngày)</button>
             <button class="btn btn-warning" onclick="toggleMenu(); closeModal('congrats-modal')">⏭️ CHUYỂN NGÀY KHÁC</button>
-            <button class="btn btn-gray" onclick="closeModal('congrats-modal')">ĐÓNG</button>
+            <button id="btn-close-congrats" class="btn btn-gray" onclick="closeModal('congrats-modal')">ĐÓNG</button>
         </div>
     </div>
 </div>
@@ -246,7 +268,9 @@
             <input type="text" id="add-c1" placeholder="Kanji / Từ vựng..." style="margin-bottom:12px; font-size:18px;">
             <input type="text" id="add-c2" placeholder="Cách đọc (Hiragana)..." style="margin-bottom:12px; font-size:18px;">
             <input type="text" id="add-c3" placeholder="Ý nghĩa..." style="margin-bottom:12px; font-size:18px;">
-            <input type="text" id="add-c4" placeholder="Giải thích ngắn gọn (Không bắt buộc)..." style="margin-bottom:16px; font-size:18px;">
+            <input type="text" id="add-c4" placeholder="Giải thích ngắn gọn (Không bắt buộc)..." style="margin-bottom:12px; font-size:18px;">
+            <input type="text" id="add-c5" placeholder="Đáp án (Dùng để chấm điểm)..." style="margin-bottom:12px; font-size:18px; color:var(--success);">
+            <input type="text" id="add-c6" placeholder="Giải thích (Hiện sau khi nộp)..." style="margin-bottom:16px; font-size:18px; color:#ea580c;">
         </div>
         <div id="add-inputs-quiz" style="display:none;">
             <input type="text" id="add-q" placeholder="Câu hỏi..." style="margin-bottom:12px; font-size:18px; border-color:var(--warning);">
@@ -307,10 +331,12 @@
 
     <div class="imp-row" id="import-col-struct" style="gap:15px; flex-wrap:wrap;">
       <span>Thứ tự cột:</span>
-      <span>Cột 1: <select id="col1" onchange="updateImportPreview()"><option value="c1">Kanji/Từ</option><option value="c2">Cách đọc</option><option value="c3">Nghĩa</option><option value="c4">Giải thích</option></select></span>
-      <span>Cột 2: <select id="col2" onchange="updateImportPreview()"><option value="c2" selected>Cách đọc</option><option value="c1">Kanji/Từ</option><option value="c3">Nghĩa</option><option value="c4">Giải thích</option></select></span>
-      <span>Cột 3: <select id="col3" onchange="updateImportPreview()"><option value="c3" selected>Nghĩa</option><option value="c1">Kanji/Từ</option><option value="c2">Cách đọc</option><option value="c4">Giải thích</option></select></span>
-      <span id="col4-wrap">Cột 4: <select id="col4" onchange="updateImportPreview()"><option value="c4" selected>Giải thích</option><option value="c1">Kanji/Từ</option><option value="c2">Cách đọc</option><option value="c3">Nghĩa</option></select></span>
+      <span>Cột 1: <select id="col1" onchange="updateImportPreview()"><option value="c1">Kanji/Từ/Cấu trúc</option><option value="c2">Cách đọc</option><option value="c3">Nghĩa</option><option value="c4">Ví dụ</option><option value="c5">Đáp án</option><option value="c6">Giải thích</option></select></span>
+      <span>Cột 2: <select id="col2" onchange="updateImportPreview()"><option value="c2" selected>Cách đọc</option><option value="c1">Kanji/Từ/Cấu trúc</option><option value="c3">Nghĩa</option><option value="c4">Ví dụ</option><option value="c5">Đáp án</option><option value="c6">Giải thích</option></select></span>
+      <span>Cột 3: <select id="col3" onchange="updateImportPreview()"><option value="c3" selected>Nghĩa</option><option value="c1">Kanji/Từ/Cấu trúc</option><option value="c2">Cách đọc</option><option value="c4">Ví dụ</option><option value="c5">Đáp án</option><option value="c6">Giải thích</option></select></span>
+      <span id="col4-wrap">Cột 4: <select id="col4" onchange="updateImportPreview()"><option value="c4" selected>Ví dụ</option><option value="c1">Kanji/Từ/Cấu trúc</option><option value="c2">Cách đọc</option><option value="c3">Nghĩa</option><option value="c5">Đáp án</option><option value="c6">Giải thích</option></select></span>
+      <span id="col5-wrap">Cột 5: <select id="col5" onchange="updateImportPreview()"><option value="c5" selected>Đáp án</option><option value="c1">Kanji/Từ/Cấu trúc</option><option value="c2">Cách đọc</option><option value="c3">Nghĩa</option><option value="c4">Ví dụ</option><option value="c6">Giải thích</option></select></span>
+      <span id="col6-wrap">Cột 6: <select id="col6" onchange="updateImportPreview()"><option value="c6" selected>Giải thích</option><option value="c1">Kanji/Từ/Cấu trúc</option><option value="c2">Cách đọc</option><option value="c3">Nghĩa</option><option value="c4">Ví dụ</option><option value="c5">Đáp án</option></select></span>
     </div>
     <div class="imp-row" id="import-col-quiz" style="display:none; color:var(--warning); font-size:13px;">
         💡 Thứ tự cột bắt buộc: Câu hỏi | Đáp án Đúng | Sai 1 | Sai 2 | Sai 3
@@ -440,12 +466,14 @@
         document.getElementById('import-col-struct').style.display = isQuiz ? 'none' : 'flex';
         document.getElementById('import-col-quiz').style.display = isQuiz ? 'block' : 'none';
         const txtArea = document.getElementById('import-input');
-        if(document.getElementById('col4-wrap')) document.getElementById('col4-wrap').style.display = isGram ? 'none' : 'inline-block';
+        if(document.getElementById('col4-wrap')) document.getElementById('col4-wrap').style.display = 'inline-block';
+        if(document.getElementById('col5-wrap')) document.getElementById('col5-wrap').style.display = 'inline-block';
+        if(document.getElementById('col6-wrap')) document.getElementById('col6-wrap').style.display = 'inline-block';
         if (isGram) {
             if (isQuiz) txtArea.placeholder = "• Định dạng trắc nghiệm (6 cột):\n• Câu hỏi | Đáp án 1 | Đáp án 2 | Đáp án 3 | Đáp án 4 | Đáp án đúng\n• VD: ~に違いない | Có lẽ | Không chừng | Chắc chắn | Không thể | Chắc chắn";
-            else txtArea.placeholder = "• Định dạng Cấu trúc:\n• Cấu trúc | Ý nghĩa\n• VD: ~に違いない | Chắc chắn là...";
+            else txtArea.placeholder = "• Định dạng Cấu trúc (Tối đa 6 cột):\n• Cấu trúc | Đọc | Nghĩa | Ví dụ | Đáp án | Giải thích\n• VD: ~に違いない | ni chigainai | Chắc chắn là...";
         } else {
-            txtArea.placeholder = "• Dán từ Excel, Google Sheets...\n• Mỗi từ 1 dòng\n• Ví dụ:  食べる / たべる / ăn / (Ăn cơm)";
+            txtArea.placeholder = "• Dán từ Excel, Google Sheets...\n• Mỗi từ 1 dòng (Tối đa 6 cột)\n• Ví dụ:  食べる / たべる / ăn / (Ăn cơm) / taberu / ...";
         }
         updateImportPreview();
     }
@@ -461,9 +489,17 @@
             document.getElementById('add-inputs-voca-struct').style.display = 'block';
             document.getElementById('add-inputs-quiz').style.display = 'none';
             document.getElementById('add-c1').placeholder = isGram ? "Cấu trúc..." : "Kanji / Từ vựng...";
-            document.getElementById('add-c2').style.display = isGram ? 'none' : 'inline-block';
+            if(document.getElementById('add-c2')) {
+                document.getElementById('add-c2').style.display = 'inline-block';
+                document.getElementById('add-c2').placeholder = isGram ? "Cách đọc..." : "Cách đọc (Hiragana)...";
+            }
             document.getElementById('add-c3').placeholder = isGram ? "Ý nghĩa..." : "Ý nghĩa...";
-            if(document.getElementById('add-c4')) document.getElementById('add-c4').style.display = isGram ? 'none' : 'inline-block';
+            if(document.getElementById('add-c4')) {
+                document.getElementById('add-c4').style.display = 'inline-block';
+                document.getElementById('add-c4').placeholder = isGram ? "Ví dụ..." : "Giải thích ngắn gọn (Không bắt buộc)...";
+            }
+            if(document.getElementById('add-c5')) document.getElementById('add-c5').style.display = 'inline-block';
+            if(document.getElementById('add-c6')) document.getElementById('add-c6').style.display = 'inline-block';
         }
     }
 
@@ -559,6 +595,8 @@
         const c2 = document.getElementById('col2').value;
         const c3 = document.getElementById('col3').value;
         const c4 = document.getElementById('col4') ? document.getElementById('col4').value : 'c4';
+        const c5 = document.getElementById('col5') ? document.getElementById('col5').value : 'c5';
+        const c6 = document.getElementById('col6') ? document.getElementById('col6').value : 'c6';
         return lines.map(line=>{
             const parts = sep==='spaces' ? line.trim().split(/\s{2,}/).map(p=>p.trim()).filter(Boolean) : line.split(sep).map(p=>p.trim());
             const valid = parts.length>=2;
@@ -566,6 +604,8 @@
             if (gramType === 'struct') entry.gramType = 'struct';
             entry[c1]=parts[0]||''; entry[c2]=parts[1]||''; entry[c3]=parts[2]||(parts[1]||'');
             if(parts[3]) entry[c4]=parts[3];
+            if(parts[4]) entry[c5]=parts[4];
+            if(parts[5]) entry[c6]=parts[5];
             return {entry, valid, parts};
         });
     }
@@ -587,9 +627,11 @@
         }
         const c1=document.getElementById('col1').value, c2=document.getElementById('col2').value, c3=document.getElementById('col3').value;
         const c4=document.getElementById('col4')?document.getElementById('col4').value:'c4';
-        const L={c1: (isGram?'Cấu trúc':'Kanji/Từ'), c2:'Cách đọc', c3:'Nghĩa', c4:'Giải thích'};
-        box.innerHTML=`<table class="prev-tbl"><thead><tr><th>#</th><th>${L[c1]}</th><th>${L[c2]}</th><th>${L[c3]}</th>${!isGram ? `<th>${L[c4]}</th>` : ''}</tr></thead><tbody>`
-            +data.map((d,i)=>`<tr class="${d.valid?'':'bad'}"><td style="color:#475569">${i+1}</td><td><b style="color:var(--warning)">${d.entry[c1]||'—'}</b></td><td>${d.entry[c2]||'—'}</td><td style="color:#94a3b8">${d.entry[c3]||'—'}</td>${!isGram ? `<td style="color:#3b82f6">${d.entry[c4]||'—'}</td>` : ''}</tr>`).join('')
+        const c5=document.getElementById('col5')?document.getElementById('col5').value:'c5';
+        const c6=document.getElementById('col6')?document.getElementById('col6').value:'c6';
+        const L={c1: (isGram?'Cấu trúc':'Kanji/Từ'), c2:'Cách đọc', c3:'Nghĩa', c4:'Ví dụ', c5:'Đáp án', c6:'Giải thích'};
+        box.innerHTML=`<table class="prev-tbl" style="font-size:12px;"><thead><tr><th>#</th><th>${L[c1]}</th><th>${L[c2]}</th><th>${L[c3]}</th><th>${L[c4]}</th><th>${L[c5]}</th><th>${L[c6]}</th></tr></thead><tbody>`
+            +data.map((d,i)=>`<tr class="${d.valid?'':'bad'}"><td style="color:#475569">${i+1}</td><td><b style="color:var(--warning)">${d.entry[c1]||'—'}</b></td><td>${d.entry[c2]||'—'}</td><td style="color:#94a3b8">${d.entry[c3]||'—'}</td><td>${d.entry[c4]||'—'}</td><td style="color:var(--success)">${d.entry[c5]||'—'}</td><td style="color:#f97316">${d.entry[c6]||'—'}</td></tr>`).join('')
             +'</tbody></table>';
     }
 
@@ -651,17 +693,28 @@
                     if (showTrash) {
                         return `<tr>
                           <td style="color:#475569">${i+1}</td>
-                          <td><input type="text" value="${(w.c1||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c1', this.value)" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:var(--warning); border:1px solid #3b82f6; border-radius:4px; padding:6px; font-weight:800; font-family:'Baloo 2'; font-size:13px; text-align:left; box-sizing:border-box;"></td>
-                          <td><input type="text" value="${(w.c2||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c2', this.value)" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid #3b82f6; border-radius:4px; padding:6px; font-family:'Baloo 2'; font-size:13px; text-align:left; box-sizing:border-box;"></td>
-                          <td><input type="text" value="${(w.c3||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c3', this.value)" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:#94a3b8; border:1px solid #3b82f6; border-radius:4px; padding:6px; font-family:'Baloo 2'; font-size:13px; text-align:left; box-sizing:border-box;"></td>
+                          <td colspan="3">
+                             <div style="display:flex; flex-direction:column; gap:6px;">
+                                <div style="display:flex; gap:6px;">
+                                    <input type="text" value="${(w.c1||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c1', this.value)" placeholder="Cấu trúc/Từ" style="flex:1; min-width:80px; background:rgba(0,0,0,0.3); color:var(--warning); border:1px solid #3b82f6; border-radius:4px; padding:6px; font-weight:800; font-family:'Baloo 2'; font-size:13px; box-sizing:border-box;">
+                                    <input type="text" value="${(w.c2||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c2', this.value)" placeholder="Cách đọc" style="flex:1; min-width:80px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid #3b82f6; border-radius:4px; padding:6px; font-family:'Baloo 2'; font-size:13px; box-sizing:border-box;">
+                                    <input type="text" value="${(w.c3||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c3', this.value)" placeholder="Ý nghĩa" style="flex:1; min-width:80px; background:rgba(0,0,0,0.3); color:#94a3b8; border:1px solid #3b82f6; border-radius:4px; padding:6px; font-family:'Baloo 2'; font-size:13px; box-sizing:border-box;">
+                                </div>
+                                <div style="display:flex; gap:6px;">
+                                    <input type="text" value="${(w.c4||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c4', this.value)" placeholder="Ví dụ" style="flex:1; min-width:80px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid #3b82f6; border-radius:4px; padding:6px; font-family:'Baloo 2'; font-size:13px; box-sizing:border-box;">
+                                    <input type="text" value="${(w.c5||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c5', this.value)" placeholder="Đáp án" style="flex:1; min-width:80px; background:rgba(34,197,94,0.1); color:var(--success); border:1px solid var(--success); border-radius:4px; padding:6px; font-family:'Baloo 2'; font-size:13px; box-sizing:border-box;">
+                                    <input type="text" value="${(w.c6||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c6', this.value)" placeholder="Giải thích" style="flex:1; min-width:80px; background:rgba(0,0,0,0.3); color:#f97316; border:1px solid #f97316; border-radius:4px; padding:6px; font-family:'Baloo 2'; font-size:13px; box-sizing:border-box;">
+                                </div>
+                             </div>
+                          </td>
                           <td><button class="wdel" onclick="directDeleteWord(${i})" title="Xoá từ này">🗑</button></td>
                         </tr>`;
                     } else {
                         return `<tr>
                           <td style="color:#475569">${i+1}</td>
-                          <td><b style="color:var(--warning)">${w.c1}</b></td>
-                          <td>${w.c2||''}</td>
-                          <td style="color:#94a3b8">${w.c3||''}</td>
+                          <td><b style="color:var(--warning)">${w.c1}</b><br><span style="color:#f97316; font-size:12px;">${w.c6||''}</span></td>
+                          <td>${w.c2||''}<br><span style="color:var(--success); font-size:12px;">${w.c5||''}</span></td>
+                          <td style="color:#94a3b8">${w.c3||''}<br><span style="color:#fff; font-size:12px;">${w.c4||''}</span></td>
                         </tr>`;
                     }
                 }
@@ -1128,6 +1181,9 @@
                 const ans = input ? input.getAttribute('data-ans').trim().toLowerCase() : '';
                 const val = input ? input.value.trim().toLowerCase() : '';
                 
+                const exp = document.getElementById(`explain-${idx}`);
+                if (exp) exp.style.display = 'block';
+                
                 if(card.getAttribute('data-res') === 'ok' || (ans === '' && val === '')) { 
                     ok++; 
                     currentList[idx].count = (currentList[idx].count || 0) + 1; 
@@ -1163,6 +1219,8 @@
         else if(percent >= 90) title = "QUÁ GIỎI! 🌟";
         
         document.getElementById('congrats-title').innerText = title;
+        const btnClose = document.getElementById('btn-close-congrats');
+        if(btnClose) btnClose.innerText = curType === 'gram' ? "ĐÓNG VÀ XEM GIẢI THÍCH" : "ĐÓNG";
         saveToLocal(); renderSidebar(); openModal('congrats-modal'); updateGlobalStats();
     }
 
@@ -1235,18 +1293,22 @@
             const c2 = document.getElementById('add-c2').value.trim();
             const c3 = document.getElementById('add-c3').value.trim();
             const c4 = document.getElementById('add-c4').value.trim();
+            const c5 = document.getElementById('add-c5').value.trim();
+            const c6 = document.getElementById('add-c6').value.trim();
             if(!c1) { alert("Ô đầu tiên không được để trống!"); return; }
             
             const exists = db[curLevel][curType][curDay].list.some(w => (w.c1||'').trim().toLowerCase() === c1.toLowerCase());
             if(exists && !confirm(`⚠️ "${c1}" đã tồn tại trong bài này! Bạn vẫn muốn thêm?`)) return;
 
-            const entry = { count: 0, c1: c1, c2: c2, c3: c3 || c2, c4: c4 };
+            const entry = { count: 0, c1: c1, c2: c2, c3: c3 || c2, c4: c4, c5: c5, c6: c6 };
             if (gramType === 'struct') entry.gramType = 'struct';
             db[curLevel][curType][curDay].list.push(entry);
             document.getElementById('add-c1').value = '';
             document.getElementById('add-c2').value = '';
             document.getElementById('add-c3').value = '';
             document.getElementById('add-c4').value = '';
+            if(document.getElementById('add-c5')) document.getElementById('add-c5').value = '';
+            if(document.getElementById('add-c6')) document.getElementById('add-c6').value = '';
             document.getElementById('add-c1').focus();
         }
         saveToLocal();
@@ -1298,7 +1360,17 @@
     }
 
     function renderListTable() { document.getElementById('voca-list-body').innerHTML = db[curLevel][curType][curDay].list.map((item, i) => `<tr style="border-bottom:1px solid #334155"><td style="padding:10px">${i+1}</td><td style="font-weight:800; color:var(--warning); display:flex; align-items:center; gap:8px;">${item.c1} <a href="https://www.google.com/search?q=${encodeURIComponent(item.c1 + ' とは')}" target="_blank" style="text-decoration:none; display:inline-flex; align-items:center;" title="Tra cứu trên Google"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></td><td>${item.c2}</td><td>${item.c3}</td></tr>`).join(''); }
-    function updateGlobalStats() { let total = 0, mastered = 0; ["n1","n2","n3","bjt"].forEach(lv => ["voca","gram"].forEach(ty => Object.values(db[lv][ty]).forEach(day => { total += day.list.length; day.list.forEach(item => { if(item.count>=5) mastered++; })}))); document.getElementById('total-words').innerText = total; document.getElementById('master-words').innerText = mastered; }
+    function updateGlobalStats() { 
+        let tVoca = 0, mVoca = 0, tGram = 0, mGram = 0;
+        ["n1","n2","n3","bjt"].forEach(lv => {
+            Object.values(db[lv]['voca']).forEach(day => { tVoca += day.list.length; day.list.forEach(item => { if(item.count>=5) mVoca++; }) });
+            Object.values(db[lv]['gram']).forEach(day => { tGram += day.list.length; day.list.forEach(item => { if(item.count>=5) mGram++; }) });
+        });
+        const elTotalVoca = document.getElementById('stat-voca-total'); if(elTotalVoca) elTotalVoca.innerText = tVoca;
+        const elMasterVoca = document.getElementById('stat-voca-master'); if(elMasterVoca) elMasterVoca.innerText = mVoca;
+        const elTotalGram = document.getElementById('stat-gram-total'); if(elTotalGram) elTotalGram.innerText = tGram;
+        const elMasterGram = document.getElementById('stat-gram-master'); if(elMasterGram) elMasterGram.innerText = mGram;
+    }
     function showHint(idx) { 
         const input = document.getElementById(`input-${idx}`); 
         input.value = input.getAttribute('data-ans'); 
@@ -1319,7 +1391,7 @@
         const uniqueList = [];
         let dupCount = 0;
         for (const item of list) {
-            const key = item.c1.trim().toLowerCase(); 
+            const key = (item.c1 || item.q || '').trim().toLowerCase(); 
             if (seen.has(key)) { dupCount++; } else { seen.add(key); uniqueList.push(item); }
         }
         if (dupCount === 0) {
