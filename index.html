@@ -48,9 +48,13 @@
                                 return true;
                             }
                         } else if (localDate > cloudDate + 1000) {
-                            if (!silentEqual || confirm("📱 Dữ liệu trên máy của bạn mới hơn Cloud!\nBạn có muốn đẩy lên Cloud không?")) {
+                            // silentEqual=true (auto check): tự động upload ngầm không hỏi
+                            // silentEqual=false (manual login): hỏi user trước khi upload
+                            if (silentEqual) {
                                 await window.uploadToCloud(true);
-                                if(!silentEqual) alert("✅ Đã đẩy dữ liệu lên Cloud thành công!");
+                            } else if (confirm("📱 Dữ liệu trên máy của bạn mới hơn Cloud!\nBạn có muốn đẩy lên Cloud không?")) {
+                                await window.uploadToCloud(true);
+                                alert("✅ Đã đẩy dữ liệu lên Cloud thành công!");
                             }
                         } else if (!silentEqual) {
                             if (confirm("☁️ Đã tìm thấy dữ liệu trên Cloud!\nBạn có muốn tải về và ghi đè dữ liệu hiện tại trên máy không?")) {
@@ -77,7 +81,14 @@
             
             if (user && !hasCheckedSync) {
                 hasCheckedSync = true;
-                await window.checkSyncWithCloud(user, true);
+                // Đợi DOM sẵn sàng trước khi kiểm tra sync
+                if (document.readyState === 'complete') {
+                    await window.checkSyncWithCloud(user, true);
+                } else {
+                    window.addEventListener('load', async () => {
+                        await window.checkSyncWithCloud(user, true);
+                    }, { once: true });
+                }
             }
         });
 
@@ -128,11 +139,13 @@
                     return;
                 }
                 const docRef = doc(dbFirestore, "users", window.firebaseUser.uid);
-                const localDate = localStorage.getItem('mgao_v37_updatedAt') || new Date().toISOString();
+                const nowISO = new Date().toISOString();
                 await setDoc(docRef, {
                     studyData: localData,
-                    updatedAt: localDate
+                    updatedAt: nowISO
                 });
+                // Cập nhật lại local timestamp để khớp với cloud
+                localStorage.setItem('mgao_v37_updatedAt', nowISO);
                 if (!silent) alert("✅ Đã sao lưu dữ liệu lên Cloud thành công!");
             } catch (error) {
                 if (!silent) alert("❌ Lỗi sao lưu: " + error.message);
