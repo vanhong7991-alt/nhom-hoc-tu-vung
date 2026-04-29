@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vượt lười học mỗi ngày 🌸</title>
+    <title>Lộ Trình Học Tập Thông Minh 🌸</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Noto+Sans+JP:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script type="module">
@@ -26,10 +26,15 @@
         const dbFirestore = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        // ✅ FIX: Bật persistence - user không cần login mỗi lần
-        setPersistence(auth, browserLocalPersistence).catch(err => {
-            console.warn("Persistence error:", err);
-        });
+        // ✅ FIX: Sửa persistence - tránh lỗi sessionStorage
+        // Thử browserLocalPersistence trước, nếu fail thì dùng browser default
+        try {
+            setPersistence(auth, browserLocalPersistence).catch(err => {
+                console.warn("Persistence error, using default:", err);
+            });
+        } catch(e) {
+            console.warn("Persistence setup error:", e);
+        }
 
         window.firebaseUser = null;
         let autoSyncTimer = null; // Debounce timer cho auto-sync
@@ -152,6 +157,12 @@
 
         window.loginGoogle = async () => {
             try {
+                // ✅ FIX: Thêm check sessionStorage
+                if (typeof sessionStorage === 'undefined') {
+                    alert("❌ Lỗi: sessionStorage không khả dụng.\n\n💡 Cách fix:\n1. Đóng Incognito/Private mode\n2. Xoá cache browser\n3. Bật cookies trong settings");
+                    return;
+                }
+
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
                 
@@ -160,7 +171,7 @@
                     nameInput.value = user.displayName;
                 }
 
-                hasCheckedSync = true;
+                // ✅ FIX: Luôn kiểm tra sync khi login
                 const reloaded = await window.checkSyncWithCloud(user, false);
                 
                 if (!reloaded) {
@@ -172,7 +183,18 @@
                     }
                 }
             } catch (error) {
-                alert("❌ Lỗi đăng nhập: " + error.message);
+                console.error("Login error:", error);
+                
+                // ✅ FIX: Xử lý các lỗi cụ thể
+                if (error.code === 'auth/popup-closed-by-user') {
+                    console.log("User đóng popup");
+                } else if (error.code === 'auth/web-storage-unsupported') {
+                    alert("❌ Lỗi: Browser không hỗ trợ Web Storage.\n\n💡 Cách fix:\n1. Tắt Incognito/Private mode\n2. Bật cookies\n3. Kiểm tra storage quota");
+                } else if (error.message && error.message.includes('sessionStorage')) {
+                    alert("❌ Lỗi sessionStorage:\n\n💡 Cách fix:\n1. Đóng Incognito mode\n2. Xoá cache browser\n3. Reload trang");
+                } else {
+                    alert("❌ Lỗi đăng nhập: " + error.message);
+                }
             }
         };
 
