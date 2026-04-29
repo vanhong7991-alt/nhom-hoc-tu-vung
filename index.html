@@ -28,47 +28,89 @@
 
         window.firebaseUser = null;
 
+        // Toast không làm phiền - hiện 3 giây rồi tự biến mất
+        window.showSyncToast = (msg, isError = false) => {
+            let toast = document.getElementById('sync-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'sync-toast';
+                toast.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:12px 20px;border-radius:12px;font-weight:800;font-size:14px;z-index:9999;transition:opacity 0.4s;pointer-events:none;`;
+                document.body.appendChild(toast);
+            }
+            toast.style.background = isError ? '#ef4444' : '#22c55e';
+            toast.style.color = '#fff';
+            toast.style.boxShadow = isError ? '0 4px 15px rgba(239,68,68,0.5)' : '0 4px 15px rgba(34,197,94,0.5)';
+            toast.innerText = msg;
+            toast.style.opacity = '1';
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => { toast.style.opacity = '0'; }, 3000);
+        };
+
         window.checkSyncWithCloud = async (user, silentEqual = true) => {
             try {
+                const localData = localStorage.getItem('mgao_v37_db');
+                const localDateStr = localStorage.getItem('mgao_v37_updatedAt');
+                const localDate = localDateStr ? new Date(localDateStr).getTime() : 0;
+
                 const docRef = doc(dbFirestore, "users", user.uid);
                 const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    if (data.studyData) {
-                        const cloudDate = data.updatedAt ? new Date(data.updatedAt).getTime() : 0;
-                        const localDateStr = localStorage.getItem('mgao_v37_updatedAt');
-                        const localDate = localDateStr ? new Date(localDateStr).getTime() : 0;
-                        
-                        if (cloudDate > localDate + 1000) {
-                            if (confirm("☁️ Có bản lưu mới hơn trên Cloud!\nBạn có muốn tải về thiết bị này không?")) {
-                                localStorage.setItem('mgao_v37_db', data.studyData);
-                                if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
-                                alert("✅ Đã đồng bộ dữ liệu từ Cloud về máy!");
-                                location.reload();
-                                return true;
-                            }
-                        } else if (localDate > cloudDate + 1000) {
-                            // silentEqual=true (auto check): tự động upload ngầm không hỏi
-                            // silentEqual=false (manual login): hỏi user trước khi upload
-                            if (silentEqual) {
-                                await window.uploadToCloud(true);
-                            } else if (confirm("📱 Dữ liệu trên máy của bạn mới hơn Cloud!\nBạn có muốn đẩy lên Cloud không?")) {
-                                await window.uploadToCloud(true);
-                                alert("✅ Đã đẩy dữ liệu lên Cloud thành công!");
-                            }
-                        } else if (!silentEqual) {
-                            if (confirm("☁️ Đã tìm thấy dữ liệu trên Cloud!\nBạn có muốn tải về và ghi đè dữ liệu hiện tại trên máy không?")) {
-                                localStorage.setItem('mgao_v37_db', data.studyData);
-                                if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
-                                alert("✅ Phục hồi dữ liệu từ Cloud thành công!");
-                                location.reload();
-                                return true;
-                            }
-                        }
+
+                // --- CASE 1: Không có dữ liệu nào trên Cloud ---
+                if (!docSnap.exists() || !docSnap.data().studyData) {
+                    if (localData) {
+                        // Có dữ liệu local → tự động backup lên cloud
+                        await window.uploadToCloud(true);
+                        window.showSyncToast('☁️ Đã backup dữ liệu lên Cloud lần đầu!');
+                    }
+                    return false;
+                }
+
+                const data = docSnap.data();
+                const cloudDate = data.updatedAt ? new Date(data.updatedAt).getTime() : 0;
+
+                // --- CASE 2: Cloud mới hơn local ---
+                if (cloudDate > localDate + 1000) {
+                    if (confirm("☁️ Có bản lưu mới hơn trên Cloud!\nBạn có muốn tải về thiết bị này không?")) {
+                        localStorage.setItem('mgao_v37_db', data.studyData);
+                        if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
+                        alert("✅ Đã đồng bộ dữ liệu từ Cloud về máy!");
+                        location.reload();
+                        return true;
+                    }
+                    return false;
+                }
+
+                // --- CASE 3: Local mới hơn cloud, hoặc local chưa có timestamp (dữ liệu cũ) ---
+                const localIsNewer = localDate > cloudDate + 1000;
+                const localHasNoTimestamp = !localDateStr && localData;
+
+                if (localIsNewer || localHasNoTimestamp) {
+                    if (silentEqual) {
+                        // Tự động upload ngầm khi mở app
+                        const ok = await window.uploadToCloud(true);
+                        if (ok !== false) window.showSyncToast('☁️ Đã tự động đẩy dữ liệu lên Cloud!');
+                    } else if (confirm("📱 Dữ liệu trên máy của bạn mới hơn Cloud!\nBạn có muốn đẩy lên Cloud không?")) {
+                        await window.uploadToCloud(true);
+                        alert("✅ Đã đẩy dữ liệu lên Cloud thành công!");
+                    }
+                    return false;
+                }
+
+                // --- CASE 4: Bằng nhau - chỉ hỏi khi manual login ---
+                if (!silentEqual) {
+                    if (confirm("☁️ Dữ liệu đang đồng bộ. Bạn có muốn tải lại từ Cloud không?")) {
+                        localStorage.setItem('mgao_v37_db', data.studyData);
+                        if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
+                        alert("✅ Phục hồi dữ liệu từ Cloud thành công!");
+                        location.reload();
+                        return true;
                     }
                 }
+
             } catch(e) {
                 console.error("Sync error:", e);
+                if (!silentEqual) alert("❌ Lỗi đồng bộ: " + e.message);
+                else window.showSyncToast('⚠️ Lỗi đồng bộ: ' + e.message, true);
             }
             return false;
         };
@@ -130,13 +172,13 @@
         window.uploadToCloud = async (silent = false) => {
             if (!window.firebaseUser) {
                 if (!silent) alert("⚠️ Bạn cần đăng nhập Google trước khi Upload!");
-                return;
+                return false;
             }
             try {
                 const localData = localStorage.getItem('mgao_v37_db');
                 if (!localData) {
                     if (!silent) alert("Không có dữ liệu để đồng bộ!");
-                    return;
+                    return false;
                 }
                 const docRef = doc(dbFirestore, "users", window.firebaseUser.uid);
                 const nowISO = new Date().toISOString();
@@ -147,8 +189,11 @@
                 // Cập nhật lại local timestamp để khớp với cloud
                 localStorage.setItem('mgao_v37_updatedAt', nowISO);
                 if (!silent) alert("✅ Đã sao lưu dữ liệu lên Cloud thành công!");
+                return true;
             } catch (error) {
                 if (!silent) alert("❌ Lỗi sao lưu: " + error.message);
+                else if (window.showSyncToast) window.showSyncToast('❌ Upload thất bại: ' + error.message, true);
+                return false;
             }
         };
 
