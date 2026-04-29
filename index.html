@@ -27,6 +27,7 @@
         const provider = new GoogleAuthProvider();
 
         window.firebaseUser = null;
+        let autoSyncTimer = null; // Debounce timer cho auto-sync
 
         // Toast không làm phiền - hiện 3 giây rồi tự biến mất
         window.showSyncToast = (msg, isError = false) => {
@@ -648,7 +649,19 @@
 
     function saveToLocal() { 
         localStorage.setItem('mgao_v37_db', JSON.stringify(db)); 
-        localStorage.setItem('mgao_v37_updatedAt', new Date().toISOString()); 
+        const nowISO = new Date().toISOString();
+        localStorage.setItem('mgao_v37_updatedAt', nowISO);
+        
+        // Auto-sync lên Firebase nếu đã đăng nhập (debounce 2 giây)
+        if (window.firebaseUser) {
+            clearTimeout(autoSyncTimer);
+            autoSyncTimer = setTimeout(async () => {
+                const success = await window.uploadToCloud(true);
+                if (success) {
+                    console.log('✅ Auto-synced to Firebase');
+                }
+            }, 2000); // Đợi 2 giây sau lần save cuối cùng
+        }
     }
     function applyUser() { 
         document.getElementById('header-user-name').innerText = `${userName} cố lên nhé! 🌸`;
