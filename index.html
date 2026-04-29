@@ -510,17 +510,28 @@
         const box = document.getElementById('cur-word-list');
         if(!list.length){ box.innerHTML='<div class="imp-empty">Chưa có từ nào</div>'; return; }
         const showTrash = isEditMode;
-        box.innerHTML = `<table class="wlist-tbl"><thead><tr><th>#</th><th>Kanji/Từ</th><th>Cách đọc</th><th>Nghĩa</th>${showTrash?'<th>Xoá</th>':''}</tr></thead><tbody>`
+        box.innerHTML = `<table class="wlist-tbl"><thead><tr><th>#</th><th>Kanji/Từ</th><th>Cách đọc</th><th>Nghĩa</th>${showTrash?'<th>Hành động</th>':''}</tr></thead><tbody>`
             + list.map((w,i) =>
+                showTrash ? 
+                `<tr>
+                  <td style="color:#475569">${i+1}</td>
+                  <td><input type="text" value="${(w.c1||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c1', this.value)" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:var(--warning); border:1px solid #3b82f6; border-radius:4px; padding:4px; font-weight:800; font-family:'Baloo 2'; font-size:13px; text-align:left; box-sizing:border-box;"></td>
+                  <td><input type="text" value="${(w.c2||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c2', this.value)" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid #3b82f6; border-radius:4px; padding:4px; font-family:'Baloo 2'; font-size:13px; text-align:left; box-sizing:border-box;"></td>
+                  <td><input type="text" value="${(w.c3||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c3', this.value)" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:#94a3b8; border:1px solid #3b82f6; border-radius:4px; padding:4px; font-family:'Baloo 2'; font-size:13px; text-align:left; box-sizing:border-box;"></td>
+                  <td><button class="wdel" onclick="directDeleteWord(${i})" title="Xoá từ này">🗑</button></td>
+                </tr>` :
                 `<tr>
                   <td style="color:#475569">${i+1}</td>
                   <td><b style="color:var(--warning)">${w.c1}</b></td>
                   <td>${w.c2}</td>
                   <td style="color:#94a3b8">${w.c3}</td>
-                  ${showTrash ? `<td><button class="wdel" onclick="directDeleteWord(${i})" title="Xoá từ này">🗑</button></td>` : ''}
                 </tr>`
             ).join('')
             + '</tbody></table>';
+    }
+
+    function updateWordData(idx, field, value) {
+        db[curLevel][curType][curDay].list[idx][field] = value;
     }
 
     function directDeleteWord(idx) {
@@ -632,7 +643,7 @@
             if(currentMode === 0) { ques = item.c1; ans = item.c2; } else if(currentMode === 1) { ques = item.c1; ans = item.c3; } else { ques = item.c3; ans = item.c1; }
             return `<div class="card" id="q-${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s;">
                 <div style="font-size:26px; font-weight:800; margin-bottom:10px; display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
-                    <span>${ques} ${item.count >= 5 ? '⭐' : ''} <a href="https://www.google.com/search?q=${encodeURIComponent(item.c1 + ' とは')}" target="_blank" style="text-decoration:none; margin-left:8px; display:inline-flex; align-items:center; transition:0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Tra cứu trên Google"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></span>
+                    <span>${ques} ${item.count >= 5 ? '⭐' : ''} <a href="https://www.google.com/search?q=${encodeURIComponent('Giải thích nghĩa của ' + item.c1 + ' và cách sử dụng trong tiếng nhật')}" target="_blank" style="text-decoration:none; margin-left:8px; display:inline-flex; align-items:center; transition:0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Tra cứu trên Google"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></span>
                     <span id="msg-${i}" class="fb-msg"></span>
                 </div>
                 <div style="display:flex; gap:12px;">
