@@ -11,7 +11,7 @@
         :root {
             --bg-dark: #0f172a; --sidebar-bg: #020617; --accent: #3b82f6;
             --text: #f8fafc; --danger: #ef4444; --success: #22c55e; --warning: #fbbf24; --purple: #a855f7;
-            --input-bg: #fefce8; --sidebar-width: 300px;
+            --input-bg: #fefce8; --sidebar-width: 380px;
             --card-bg: rgba(30, 41, 59, 0.9);
         }
 
@@ -19,7 +19,7 @@
         body { font-family: 'Baloo 2', 'Noto Sans JP', cursive; background: var(--bg-dark); color: var(--text); margin: 0; overflow-x: hidden; font-size: 18px; }
 
         /* --- SIDEBAR --- */
-        .sidebar { width: var(--sidebar-width); background: var(--sidebar-bg); height: 100vh; position: fixed; left: -300px; top: 0; z-index: 2000; transition: 0.3s; overflow-y: auto; border-right: 2px solid var(--accent); padding-bottom: 50px; }
+        .sidebar { width: var(--sidebar-width); background: var(--sidebar-bg); height: 100vh; position: fixed; left: -380px; top: 0; z-index: 2000; transition: 0.3s; overflow-y: auto; border-right: 2px solid var(--accent); padding-bottom: 50px; }
         .sidebar.open { left: 0 !important; }
         .sidebar-stats { margin: 15px; padding: 15px; background: rgba(59, 130, 246, 0.1); border: 2px dashed var(--accent); border-radius: 20px; text-align: center; }
         .side-stat-val { font-size: 26px; font-weight: 800; color: var(--warning); display: block; }
@@ -40,9 +40,9 @@
         input.correct { border-color: var(--success) !important; box-shadow: 0 0 25px rgba(34, 197, 94, 0.6) !important; background: #f0fdf4 !important; }
         
         /* --- MENU --- */
-        .menu-lvl1 { padding: 18px 20px; border-bottom: 1px solid #1e293b; font-weight: 800; color: var(--warning); cursor: pointer; }
-        .menu-lvl2 { padding: 12px 20px 12px 35px; border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: 700; color: #fff; cursor: pointer; background: #0f172a; }
-        .menu-lvl3 { padding: 8px 15px 8px 45px; display: flex; align-items: center; justify-content: space-between; color: #cbd5e1; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; }
+        .menu-lvl1 { padding: 18px 20px; border-bottom: 1px solid #1e293b; font-weight: 800; color: var(--warning); cursor: pointer; font-size: 20px; }
+        .menu-lvl2 { padding: 15px 20px 15px 35px; border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: 700; color: #fff; cursor: pointer; background: #0f172a; font-size: 18px; }
+        .menu-lvl3 { padding: 12px 15px 12px 45px; display: flex; align-items: center; justify-content: space-between; color: #cbd5e1; font-size: 17px; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; }
 
         /* --- MODAL --- */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
@@ -166,6 +166,10 @@
     <div id="n1-sub" class="sub-menu"><div class="menu-lvl2" onclick="toggleSub('n1-voca')">📚 Từ vựng</div><div id="n1-voca" class="sub-menu"></div><div class="menu-lvl2" onclick="toggleSub('n1-gram')">✍️ Ngữ pháp</div><div id="n1-gram" class="sub-menu"></div></div>
     <div class="menu-lvl1" onclick="toggleSub('n2-sub')">NĂNG LỰC N2 ▼</div>
     <div id="n2-sub" class="sub-menu"><div class="menu-lvl2" onclick="toggleSub('n2-voca')">📚 Từ vựng</div><div id="n2-voca" class="sub-menu"></div><div class="menu-lvl2" onclick="toggleSub('n2-gram')">✍️ Ngữ pháp</div><div id="n2-gram" class="sub-menu"></div></div>
+    <div class="menu-lvl1" onclick="toggleSub('n3-sub')">TRÌNH ĐỘ N3 ▼</div>
+    <div id="n3-sub" class="sub-menu"><div class="menu-lvl2" onclick="toggleSub('n3-voca')">📚 Từ vựng</div><div id="n3-voca" class="sub-menu"></div><div class="menu-lvl2" onclick="toggleSub('n3-gram')">✍️ Ngữ pháp</div><div id="n3-gram" class="sub-menu"></div></div>
+    <div class="menu-lvl1" onclick="toggleSub('bjt-sub')">BJT ▼</div>
+    <div id="bjt-sub" class="sub-menu"><div class="menu-lvl2" onclick="toggleSub('bjt-voca')">📚 Từ vựng</div><div id="bjt-voca" class="sub-menu"></div><div class="menu-lvl2" onclick="toggleSub('bjt-gram')">✍️ Ngữ pháp</div><div id="bjt-gram" class="sub-menu"></div></div>
     <div style="padding: 20px; display: grid; gap: 12px; margin-top: 10px; border-top: 1px solid #334155;">
         <button class="btn btn-blue" style="font-size: 14px; justify-content: center;" onclick="openModal('sync-modal')">💾 SAO LƯU DỮ LIỆU</button>
         <button class="btn btn-danger" style="font-size: 14px; background: #ef4444; justify-content: center;" onclick="resetUserData()">🗑 XOÁ TẤT CẢ DỮ LIỆU</button>
@@ -199,6 +203,8 @@
             <button id="btn-import" class="btn btn-blue" style="display:none;" onclick="openModal('import-modal')">📥 NHẬP NHIỀU</button>
             <button id="btn-show-list" class="btn btn-warning" style="display:none;" onclick="openModal('list-modal')">📖 DANH SÁCH</button>
             <button id="btn-shuffle" class="btn btn-purple" style="display:none;" onclick="shuffleQuiz()">🔀 TRỘN TỪ</button>
+            <button id="btn-mark-done" class="btn btn-green" style="display:none;" onclick="markAllDone()">✅ ĐÃ HOÀN THÀNH 3 BÀI</button>
+            <button id="btn-unmark-done" class="btn btn-green" style="display:none;" onclick="unmarkAllDone()">❎ HUỶ HOÀN THÀNH</button>
         </div>
     </div>
 
@@ -229,12 +235,27 @@
 
 <div id="add-word-modal" class="modal">
     <div class="modal-content" style="max-width: 480px; padding: 25px; max-height: 90vh; overflow-y: auto;">
-        <h3 style="color:var(--success); margin-bottom: 20px;">➕ THÊM NHANH TỪ MỚI</h3>
-        <input type="text" id="add-c1" placeholder="Kanji / Từ vựng..." style="margin-bottom:12px; font-size:18px;">
-        <input type="text" id="add-c2" placeholder="Cách đọc (Hiragana)..." style="margin-bottom:12px; font-size:18px;">
-        <input type="text" id="add-c3" placeholder="Ý nghĩa..." style="margin-bottom:16px; font-size:18px;">
+        <h3 style="color:var(--success); margin-bottom: 20px;">➕ THÊM NHANH</h3>
+        <div id="add-gram-type-selector" style="display:none; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">
+            <div style="display:flex; gap:15px; flex-wrap:wrap;">
+                <label class="imp-check" style="width:auto;"><input type="radio" name="addGramType" value="struct" checked onchange="updateAddUI()"> Cấu trúc (2 ô)</label>
+                <label class="imp-check" style="width:auto;"><input type="radio" name="addGramType" value="quiz" onchange="updateAddUI()"> Trắc nghiệm (5 ô)</label>
+            </div>
+        </div>
+        <div id="add-inputs-voca-struct">
+            <input type="text" id="add-c1" placeholder="Kanji / Từ vựng..." style="margin-bottom:12px; font-size:18px;">
+            <input type="text" id="add-c2" placeholder="Cách đọc (Hiragana)..." style="margin-bottom:12px; font-size:18px;">
+            <input type="text" id="add-c3" placeholder="Ý nghĩa..." style="margin-bottom:16px; font-size:18px;">
+        </div>
+        <div id="add-inputs-quiz" style="display:none;">
+            <input type="text" id="add-q" placeholder="Câu hỏi..." style="margin-bottom:12px; font-size:18px; border-color:var(--warning);">
+            <input type="text" id="add-ans" placeholder="Đáp án ĐÚNG..." style="margin-bottom:12px; font-size:18px; border-color:var(--success); color:var(--success);">
+            <input type="text" id="add-w1" placeholder="Sai 1..." style="margin-bottom:8px; font-size:16px;">
+            <input type="text" id="add-w2" placeholder="Sai 2..." style="margin-bottom:8px; font-size:16px;">
+            <input type="text" id="add-w3" placeholder="Sai 3..." style="margin-bottom:16px; font-size:16px;">
+        </div>
         <div style="display:flex; gap:10px; margin-bottom:20px;">
-            <button class="btn btn-green" style="flex:2;" onclick="quickAddWord()">LƯU TỪ NÀY</button>
+            <button class="btn btn-green" style="flex:2;" onclick="quickAddWord()">LƯU LẠI</button>
             <button class="btn btn-gray" style="flex:1;" onclick="closeModal('add-word-modal')">ĐÓNG</button>
         </div>
 
@@ -259,8 +280,15 @@
 
   <div class="imp-section">
     <div class="imp-sec-label">① dữ liệu đầu vào</div>
+    <div id="gram-type-selector" style="display:none; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">
+        <span style="font-size:14px; color:var(--warning); margin-bottom:8px; display:block; font-weight:800;">Dạng Ngữ Pháp:</span>
+        <div style="display:flex; gap:15px; flex-wrap:wrap;">
+            <label class="imp-check" style="width:auto;"><input type="radio" name="gramType" value="struct" checked onchange="updateImportUI()"> 2 cột (Cấu trúc & Nghĩa)</label>
+            <label class="imp-check" style="width:auto;"><input type="radio" name="gramType" value="quiz" onchange="updateImportUI()"> Trắc nghiệm (6 cột từ Excel)</label>
+        </div>
+    </div>
     <button class="paste-btn" onclick="pasteFromClipboard()">📋 Dán từ Clipboard <span style="font-size:13px;opacity:.75;">(nhấn 1 lần)</span></button>
-    <textarea id="import-input" oninput="updateImportPreview()" style="height:120px;font-size:15px;text-align:left;border-radius:14px;" placeholder="• Dán từ Excel, Google Sheets, Ghi chú…&#10;• Mỗi từ 1 dòng&#10;• Ví dụ:  食べる / たべる / ăn&#10;          食べる , たべる , ăn&#10;          食べる   たべる   ăn"></textarea>
+    <textarea id="import-input" oninput="updateImportPreview()" style="height:120px;font-size:15px;text-align:left;border-radius:14px;" placeholder="• Dán từ Excel, Google Sheets, Ghi chú…"></textarea>
 
     <div class="imp-row">
       <span>Dấu phân cách:</span>
@@ -268,18 +296,21 @@
         <button class="sep-pill active" data-sep="auto" onclick="setSep('auto')">🔍 Tự động</button>
         <button class="sep-pill" data-sep="tab" onclick="setSep('tab')">Tab (Excel)</button>
         <button class="sep-pill" data-sep="/" onclick="setSep('/')">Gạch chéo /</button>
-        <button class="sep-pill" data-sep="," onclick="setSep(',')" >Phẩy ,</button>
-        <button class="sep-pill" data-sep=";" onclick="setSep(';')" >Chấm phẩy ;</button>
-        <button class="sep-pill" data-sep="|" onclick="setSep('|')" >Pipe |</button>
-        <button class="sep-pill" data-sep=" " onclick="setSep(' ')" >Dấu cách</button>
+        <button class="sep-pill" data-sep="," onclick="setSep(',')">Phẩy ,</button>
+        <button class="sep-pill" data-sep=";" onclick="setSep(';')">Chấm phẩy ;</button>
+        <button class="sep-pill" data-sep="|" onclick="setSep('|')">Pipe |</button>
+        <button class="sep-pill" data-sep=" " onclick="setSep(' ')">Dấu cách</button>
       </div>
     </div>
 
-    <div class="imp-row">
+    <div class="imp-row" id="import-col-struct">
       <span>Thứ tự cột:</span>
       <span>Cột 1: <select id="col1" onchange="updateImportPreview()"><option value="c1">Kanji/Từ</option><option value="c2">Cách đọc</option><option value="c3">Nghĩa</option></select></span>
       <span>Cột 2: <select id="col2" onchange="updateImportPreview()"><option value="c2">Cách đọc</option><option value="c1">Kanji/Từ</option><option value="c3">Nghĩa</option></select></span>
       <span>Cột 3: <select id="col3" onchange="updateImportPreview()"><option value="c3">Nghĩa</option><option value="c1">Kanji/Từ</option><option value="c2">Cách đọc</option></select></span>
+    </div>
+    <div class="imp-row" id="import-col-quiz" style="display:none; color:var(--warning); font-size:13px;">
+        💡 Thứ tự cột bắt buộc: Câu hỏi | Đáp án Đúng | Sai 1 | Sai 2 | Sai 3
     </div>
 
     <div class="imp-row" style="gap:16px;margin-top:12px;">
@@ -352,7 +383,9 @@
                 const parsed = JSON.parse(decoded);
                 if (parsed && parsed.n1 && parsed.n2) {
                     if (confirm("☁️ Phát hiện Link Đồng Bộ!\nBạn có muốn ghi đè dữ liệu hiện tại bằng dữ liệu từ Link này không?")) {
-                        localStorage.setItem('mgao_v37_db', decoded);
+                        if(!parsed.n3) { parsed.n3 = { voca: {}, gram: {} }; ["voca", "gram"].forEach(ty => { for(let i=1; i<=10; i++) parsed.n3[ty][`Ngày ${i}`] = { list: [], done: [false, false, false] }; }); }
+                        if(!parsed.bjt) { parsed.bjt = { voca: {}, gram: {} }; ["voca", "gram"].forEach(ty => { for(let i=1; i<=10; i++) parsed.bjt[ty][`Ngày ${i}`] = { list: [], done: [false, false, false] }; }); }
+                        localStorage.setItem('mgao_v37_db', JSON.stringify(parsed));
                         alert("✅ Phục hồi dữ liệu từ Link thành công!");
                     }
                 }
@@ -362,11 +395,15 @@
 
         let savedDb = localStorage.getItem('mgao_v37_db');
         if(!savedDb) {
-            db = { "n1": { "voca": {}, "gram": {} }, "n2": { "voca": {}, "gram": {} } };
-            ["n1", "n2"].forEach(lv => { ["voca", "gram"].forEach(ty => { for(let i=1; i<=10; i++) db[lv][ty][`Ngày ${i}`] = { list: [], done: [false, false, false] }; }); });
+            db = { "n1": { "voca": {}, "gram": {} }, "n2": { "voca": {}, "gram": {} }, "n3": { "voca": {}, "gram": {} }, "bjt": { "voca": {}, "gram": {} } };
+            ["n1", "n2", "n3", "bjt"].forEach(lv => { ["voca", "gram"].forEach(ty => { for(let i=1; i<=10; i++) db[lv][ty][`Ngày ${i}`] = { list: [], done: [false, false, false] }; }); });
             saveToLocal();
         } else {
             db = JSON.parse(savedDb);
+            let updated = false;
+            if(!db.n3) { db.n3 = { voca: {}, gram: {} }; ["voca", "gram"].forEach(ty => { for(let i=1; i<=10; i++) db.n3[ty][`Ngày ${i}`] = { list: [], done: [false, false, false] }; }); updated = true; }
+            if(!db.bjt) { db.bjt = { voca: {}, gram: {} }; ["voca", "gram"].forEach(ty => { for(let i=1; i<=10; i++) db.bjt[ty][`Ngày ${i}`] = { list: [], done: [false, false, false] }; }); updated = true; }
+            if(updated) saveToLocal();
         }
 
         if(!userName) document.getElementById('welcome-screen').style.display = 'flex'; else applyUser();
@@ -393,17 +430,56 @@
     function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('open'); updateGlobalStats(); }
     function toggleSub(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
     let curSep = 'auto';
+    function updateImportUI() {
+        const isGram = (curType === 'gram');
+        const gramType = isGram ? (document.querySelector('input[name="gramType"]:checked')?.value || 'struct') : 'voca';
+        const isQuiz = (gramType === 'quiz');
+        document.getElementById('import-col-struct').style.display = isQuiz ? 'none' : 'flex';
+        document.getElementById('import-col-quiz').style.display = isQuiz ? 'block' : 'none';
+        const txtArea = document.getElementById('import-input');
+        if (isGram) {
+            if (isQuiz) txtArea.placeholder = "• Định dạng trắc nghiệm (6 cột):\n• Câu hỏi | Đáp án 1 | Đáp án 2 | Đáp án 3 | Đáp án 4 | Đáp án đúng\n• VD: ~に違いない | Có lẽ | Không chừng | Chắc chắn | Không thể | Chắc chắn";
+            else txtArea.placeholder = "• Định dạng Cấu trúc:\n• Cấu trúc | Ý nghĩa\n• VD: ~に違いない | Chắc chắn là...";
+        } else {
+            txtArea.placeholder = "• Dán từ Excel, Google Sheets...\n• Mỗi từ 1 dòng\n• Ví dụ:  食べる / たべる / ăn";
+        }
+        updateImportPreview();
+    }
+
+    function updateAddUI() {
+        const isGram = (curType === 'gram');
+        const gramType = isGram ? (document.querySelector('input[name="addGramType"]:checked')?.value || 'struct') : 'voca';
+        document.getElementById('add-gram-type-selector').style.display = isGram ? 'block' : 'none';
+        if (gramType === 'quiz') {
+            document.getElementById('add-inputs-voca-struct').style.display = 'none';
+            document.getElementById('add-inputs-quiz').style.display = 'block';
+        } else {
+            document.getElementById('add-inputs-voca-struct').style.display = 'block';
+            document.getElementById('add-inputs-quiz').style.display = 'none';
+            document.getElementById('add-c1').placeholder = isGram ? "Cấu trúc..." : "Kanji / Từ vựng...";
+            document.getElementById('add-c2').style.display = isGram ? 'none' : 'inline-block';
+            document.getElementById('add-c3').placeholder = isGram ? "Ý nghĩa..." : "Ý nghĩa...";
+        }
+    }
+
     function openModal(id) {
         if(id === 'list-modal') renderListTable();
-        if(id === 'add-word-modal') renderQuickAddList();
+        if(id === 'add-word-modal') {
+            updateAddUI();
+            renderQuickAddList();
+        }
         if(id === 'import-modal') {
-            // Reset edit mode khi mở lại modal
             isEditMode = false;
             const btnCS = document.getElementById('btn-chinh-sua');
             if(btnCS) { btnCS.style.background='transparent'; btnCS.style.color='#3b82f6'; btnCS.innerHTML='✏️ Chỉnh sửa'; }
             const btnCN = document.getElementById('btn-cap-nhat');
             if(btnCN) btnCN.style.display = 'none';
-            updateImportPreview();
+            if(curType === 'gram') {
+                document.getElementById('gram-type-selector').style.display = 'block';
+            } else {
+                document.getElementById('gram-type-selector').style.display = 'none';
+            }
+            updateImportUI();
             renderCurWordList();
         }
         document.getElementById(id).style.display = 'flex';
@@ -442,18 +518,45 @@
     function parseData() {
         const raw = document.getElementById('import-input').value;
         const skip = document.getElementById('skip-header').checked;
-        const c1 = document.getElementById('col1').value;
-        const c2 = document.getElementById('col2').value;
-        const c3 = document.getElementById('col3').value;
         const sep = getActiveSep(raw);
         let lines = raw.split('\n').filter(l=>l.trim());
         if(skip && lines.length>0) lines=lines.slice(1);
+        const isGram = (curType === 'gram');
+        const gramType = isGram ? (document.querySelector('input[name="gramType"]:checked')?.value || 'struct') : 'voca';
+        if (gramType === 'quiz') {
+            return lines.map(line=>{
+                const parts = sep==='spaces' ? line.trim().split(/\s{2,}/).map(p=>p.trim()).filter(Boolean) : line.split(sep).map(p=>p.trim());
+                const valid = parts.length>=6;
+                let q = parts[0]||'';
+                let opt1 = parts[1]||'', opt2 = parts[2]||'', opt3 = parts[3]||'', opt4 = parts[4]||'';
+                let correctCol = (parts[5]||'').trim().toUpperCase();
+                
+                let ans = opt1, w1 = opt2, w2 = opt3, w3 = opt4;
+                
+                if (correctCol === 'A' || correctCol === '1' || correctCol === opt1.toUpperCase()) {
+                    ans = opt1; w1 = opt2; w2 = opt3; w3 = opt4;
+                } else if (correctCol === 'B' || correctCol === '2' || correctCol === opt2.toUpperCase()) {
+                    ans = opt2; w1 = opt1; w2 = opt3; w3 = opt4;
+                } else if (correctCol === 'C' || correctCol === '3' || correctCol === opt3.toUpperCase()) {
+                    ans = opt3; w1 = opt1; w2 = opt2; w3 = opt4;
+                } else if (correctCol === 'D' || correctCol === '4' || correctCol === opt4.toUpperCase()) {
+                    ans = opt4; w1 = opt1; w2 = opt2; w3 = opt3;
+                } else {
+                    ans = opt1; w1 = opt2; w2 = opt3; w3 = opt4;
+                }
+
+                const entry={ gramType: 'quiz', q, ans, w1, w2, w3, count: 0 };
+                return {entry, valid, parts};
+            });
+        }
+        const c1 = document.getElementById('col1').value;
+        const c2 = document.getElementById('col2').value;
+        const c3 = document.getElementById('col3').value;
         return lines.map(line=>{
-            const parts = sep==='spaces'
-                ? line.trim().split(/\s{2,}/).map(p=>p.trim()).filter(Boolean)
-                : line.split(sep).map(p=>p.trim());
+            const parts = sep==='spaces' ? line.trim().split(/\s{2,}/).map(p=>p.trim()).filter(Boolean) : line.split(sep).map(p=>p.trim());
             const valid = parts.length>=2;
             const entry={count:0};
+            if (gramType === 'struct') entry.gramType = 'struct';
             entry[c1]=parts[0]||''; entry[c2]=parts[1]||''; entry[c3]=parts[2]||(parts[1]||'');
             return {entry, valid, parts};
         });
@@ -464,10 +567,18 @@
         const valid = data.filter(d=>d.valid);
         const cnt = document.getElementById('prev-count');
         const box = document.getElementById('import-preview');
-        cnt.textContent = `(${valid.length} từ hợp lệ${data.length>valid.length?' · '+(data.length-valid.length)+' dòng lỗi':''})` ;
+        cnt.textContent = `(${valid.length} hợp lệ${data.length>valid.length?' · '+(data.length-valid.length)+' dòng lỗi':''})`;
         if(!data.length){ box.innerHTML='<div class="imp-empty">Dán dữ liệu vào ô trên để xem trước...</div>'; return; }
+        const isGram = (curType === 'gram');
+        const gramType = isGram ? (document.querySelector('input[name="gramType"]:checked')?.value || 'struct') : 'voca';
+        if (gramType === 'quiz') {
+            box.innerHTML=`<table class="prev-tbl"><thead><tr><th>#</th><th>Câu hỏi</th><th>Đáp án 1</th><th>Đáp án 2</th><th>Đáp án 3</th><th>Đáp án 4</th><th>ĐA Đúng</th></tr></thead><tbody>`
+                +data.map((d,i)=>`<tr class="${d.valid?'':'bad'}"><td style="color:#475569">${i+1}</td><td><b style="color:var(--warning)">${d.parts[0]||'—'}</b></td><td>${d.parts[1]||'—'}</td><td>${d.parts[2]||'—'}</td><td>${d.parts[3]||'—'}</td><td>${d.parts[4]||'—'}</td><td style="color:var(--success); font-weight:bold;">${d.parts[5]||'—'}</td></tr>`).join('')
+                +'</tbody></table>';
+            return;
+        }
         const c1=document.getElementById('col1').value, c2=document.getElementById('col2').value, c3=document.getElementById('col3').value;
-        const L={c1:'Kanji/Từ',c2:'Cách đọc',c3:'Nghĩa'};
+        const L={c1: (isGram?'Cấu trúc':'Kanji/Từ'), c2:'Cách đọc', c3:'Nghĩa'};
         box.innerHTML=`<table class="prev-tbl"><thead><tr><th>#</th><th>${L[c1]}</th><th>${L[c2]}</th><th>${L[c3]}</th></tr></thead><tbody>`
             +data.map((d,i)=>`<tr class="${d.valid?'':'bad'}"><td style="color:#475569">${i+1}</td><td><b style="color:var(--warning)">${d.entry[c1]||'—'}</b></td><td>${d.entry[c2]||'—'}</td><td style="color:#94a3b8">${d.entry[c3]||'—'}</td></tr>`).join('')
             +'</tbody></table>';
@@ -510,23 +621,42 @@
         const box = document.getElementById('cur-word-list');
         if(!list.length){ box.innerHTML='<div class="imp-empty">Chưa có từ nào</div>'; return; }
         const showTrash = isEditMode;
-        box.innerHTML = `<table class="wlist-tbl"><thead><tr><th>#</th><th>Kanji/Từ</th><th>Cách đọc</th><th>Nghĩa</th>${showTrash?'<th>Hành động</th>':''}</tr></thead><tbody>`
-            + list.map((w,i) =>
-                showTrash ? 
-                `<tr>
-                  <td style="color:#475569">${i+1}</td>
-                  <td><input type="text" value="${(w.c1||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c1', this.value)" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:var(--warning); border:1px solid #3b82f6; border-radius:4px; padding:4px; font-weight:800; font-family:'Baloo 2'; font-size:13px; text-align:left; box-sizing:border-box;"></td>
-                  <td><input type="text" value="${(w.c2||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c2', this.value)" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid #3b82f6; border-radius:4px; padding:4px; font-family:'Baloo 2'; font-size:13px; text-align:left; box-sizing:border-box;"></td>
-                  <td><input type="text" value="${(w.c3||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c3', this.value)" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:#94a3b8; border:1px solid #3b82f6; border-radius:4px; padding:4px; font-family:'Baloo 2'; font-size:13px; text-align:left; box-sizing:border-box;"></td>
-                  <td><button class="wdel" onclick="directDeleteWord(${i})" title="Xoá từ này">🗑</button></td>
-                </tr>` :
-                `<tr>
-                  <td style="color:#475569">${i+1}</td>
-                  <td><b style="color:var(--warning)">${w.c1}</b></td>
-                  <td>${w.c2}</td>
-                  <td style="color:#94a3b8">${w.c3}</td>
-                </tr>`
-            ).join('')
+        box.innerHTML = `<table class="wlist-tbl"><thead><tr><th>#</th><th>Cột 1</th><th>Cột 2</th><th>Cột 3</th>${showTrash?'<th>Hành động</th>':''}</tr></thead><tbody>`
+            + list.map((w,i) => {
+                if (w.gramType === 'quiz') {
+                    if (showTrash) {
+                        return `<tr><td style="color:#475569">${i+1}</td><td colspan="3">
+                        <div style="display:flex; flex-direction:column; gap:6px;">
+                            <input type="text" value="${(w.q||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'q', this.value)" placeholder="Câu hỏi" style="width:100%; background:rgba(0,0,0,0.3); color:var(--warning); border:1px solid #3b82f6; border-radius:4px; padding:6px; font-family:'Baloo 2'; box-sizing:border-box;">
+                            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                <input type="text" value="${(w.ans||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'ans', this.value)" placeholder="ĐA Đúng" style="flex:1; min-width:80px; background:rgba(34,197,94,0.1); color:var(--success); border:1px solid var(--success); border-radius:4px; padding:6px; font-family:'Baloo 2'; box-sizing:border-box;">
+                                <input type="text" value="${(w.w1||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'w1', this.value)" placeholder="Sai 1" style="flex:1; min-width:80px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid #3b82f6; border-radius:4px; padding:6px; font-family:'Baloo 2'; box-sizing:border-box;">
+                                <input type="text" value="${(w.w2||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'w2', this.value)" placeholder="Sai 2" style="flex:1; min-width:80px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid #3b82f6; border-radius:4px; padding:6px; font-family:'Baloo 2'; box-sizing:border-box;">
+                                <input type="text" value="${(w.w3||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'w3', this.value)" placeholder="Sai 3" style="flex:1; min-width:80px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid #3b82f6; border-radius:4px; padding:6px; font-family:'Baloo 2'; box-sizing:border-box;">
+                            </div>
+                        </div></td><td><button class="wdel" onclick="directDeleteWord(${i})" title="Xoá từ này">🗑</button></td></tr>`;
+                    } else {
+                        return `<tr><td style="color:#475569">${i+1}</td><td colspan="3"><b style="color:var(--warning)">${w.q}</b> <br> <span style="color:var(--success)">${w.ans}</span> | <span style="opacity:0.7">${w.w1} | ${w.w2} | ${w.w3}</span></td></tr>`;
+                    }
+                } else {
+                    if (showTrash) {
+                        return `<tr>
+                          <td style="color:#475569">${i+1}</td>
+                          <td><input type="text" value="${(w.c1||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c1', this.value)" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:var(--warning); border:1px solid #3b82f6; border-radius:4px; padding:6px; font-weight:800; font-family:'Baloo 2'; font-size:13px; text-align:left; box-sizing:border-box;"></td>
+                          <td><input type="text" value="${(w.c2||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c2', this.value)" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid #3b82f6; border-radius:4px; padding:6px; font-family:'Baloo 2'; font-size:13px; text-align:left; box-sizing:border-box;"></td>
+                          <td><input type="text" value="${(w.c3||'').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c3', this.value)" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:#94a3b8; border:1px solid #3b82f6; border-radius:4px; padding:6px; font-family:'Baloo 2'; font-size:13px; text-align:left; box-sizing:border-box;"></td>
+                          <td><button class="wdel" onclick="directDeleteWord(${i})" title="Xoá từ này">🗑</button></td>
+                        </tr>`;
+                    } else {
+                        return `<tr>
+                          <td style="color:#475569">${i+1}</td>
+                          <td><b style="color:var(--warning)">${w.c1}</b></td>
+                          <td>${w.c2||''}</td>
+                          <td style="color:#94a3b8">${w.c3||''}</td>
+                        </tr>`;
+                    }
+                }
+            }).join('')
             + '</tbody></table>';
     }
 
@@ -576,17 +706,22 @@
 
     function renderSidebar() {
         const icons = ['🌸', '🍀', '🌻', '🌺', '🌿', '🍄', '🎀', '🧸', '🌷', '🍁', '🌱', '🌼'];
-        ["n1", "n2"].forEach(lv => { ["voca", "gram"].forEach(ty => {
+        ["n1", "n2", "n3", "bjt"].forEach(lv => { ["voca", "gram"].forEach(ty => {
             const container = document.getElementById(`${lv}-${ty}`); container.innerHTML = "";
             Object.keys(db[lv][ty]).forEach((dayKey, idx) => {
                 const isAllDone = db[lv][ty][dayKey].done.every(v => v === true);
+                const wordCount = db[lv][ty][dayKey].list.length;
                 const div = document.createElement("div"); div.className = "menu-lvl3";
                 const rIcon = icons[idx % icons.length];
                 div.innerHTML = `
-                    <span onclick="selectDay('${lv}', '${ty}', '${dayKey}')" style="flex:1;">
-                        ${isAllDone ? '<b class="done-check">✅</b>' : rIcon} ${dayKey}
+                    <span onclick="selectDay('${lv}', '${ty}', '${dayKey}')" style="flex:1; display:flex; align-items:center; gap:8px;">
+                        ${rIcon} <span>${dayKey}</span>
                     </span>
-                    <span style="display:flex;gap:12px;">
+                    <span style="display:flex; align-items:center; gap:8px; margin-right:12px;">
+                        ${isAllDone ? '<b class="done-check" style="font-size:18px;">✅</b>' : ''}
+                        <span style="font-size:13px; font-weight:800; color:var(--accent); border: 1px solid var(--accent); padding: 2px 8px; border-radius: 12px; box-shadow: 0 0 8px rgba(59,130,246,0.5);">${wordCount} từ</span>
+                    </span>
+                    <span style="display:flex; gap:12px; align-items:center;">
                         <span style="color:var(--success)" onclick="exportDayTxt('${lv}', '${ty}', '${dayKey}')" title="Xuất file TXT">📄</span>
                         <span style="color:var(--accent)" onclick="renameDay('${lv}', '${ty}', '${dayKey}')" title="Đổi tên">✏️</span>
                         <span style="color:var(--danger)" onclick="deleteDay('${lv}', '${ty}', '${dayKey}')" title="Xóa">✕</span>
@@ -617,15 +752,33 @@
         document.getElementById('view-title').textContent = (listOverride ? "♻️ " : "📌 ") + day;
         const startBtn = document.getElementById('btn-start-lesson');
         if(startBtn) startBtn.style.display = 'none';
+        const isAllDone = db[lv][ty][day].done.every(v => v === true);
         ["btn-add-word", "btn-import", "btn-show-list", "btn-shuffle"].forEach(id => {
             const el = document.getElementById(id);
             if(el) el.style.display = listOverride ? 'none' : 'inline-flex';
         });
+        
+        const btnMark = document.getElementById('btn-mark-done');
+        const btnUnmark = document.getElementById('btn-unmark-done');
+        if(listOverride) {
+            if(btnMark) btnMark.style.display = 'none';
+            if(btnUnmark) btnUnmark.style.display = 'none';
+        } else {
+            if(btnMark) btnMark.style.display = isAllDone ? 'none' : 'inline-flex';
+            if(btnUnmark) btnUnmark.style.display = isAllDone ? 'inline-flex' : 'none';
+        }
+        
         document.getElementById('mode-box-container').style.display = listOverride ? 'none' : 'block';
         document.getElementById('submit-container').style.display = currentList.length > 0 ? 'flex' : 'none';
         document.getElementById('rt-wrapper').style.display = currentList.length > 0 ? 'flex' : 'none';
         if(document.getElementById('sidebar').classList.contains('open')) toggleMenu();
-        changeMode(0); resetTimer();
+        let bestMode = 0;
+        if (curType === 'gram' && currentList.length > 0) {
+            const hasStruct = currentList.some(w => w.gramType !== 'quiz');
+            if (!hasStruct) bestMode = 2;
+        }
+        changeMode(bestMode); 
+        resetTimer();
     }
 
     function changeMode(m) { 
@@ -634,26 +787,87 @@
             const btn = document.getElementById(`mode-${i}`);
             const isDone = db[curLevel][curType][curDay].done[i];
             btn.className = (i === m) ? 'btn btn-blue' : 'btn btn-gray';
-            btn.innerHTML = (i==0?"CÁCH ĐỌC":i==1?"NGHĨA":"TIẾNG NHẬT") + (isDone ? ' ✅' : '');
+            let txt = "";
+            if (curType === 'voca') {
+                txt = (i==0?"CÁCH ĐỌC":i==1?"NGHĨA":"TIẾNG NHẬT");
+            } else {
+                txt = (i==0?"TÌM NGHĨA":i==1?"TÌM CẤU TRÚC":"TRẮC NGHIỆM");
+            }
+            btn.innerHTML = `<span style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">ĐỀ ${i+1}</span><span>${txt}${isDone ? ' ✅' : ''}</span>`;
         }
         renderQuiz(); 
     }
 
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
     function renderQuiz() {
         document.getElementById('quiz-container').innerHTML = currentList.map((item, i) => {
-            let ques, ans;
-            if(currentMode === 0) { ques = item.c1; ans = item.c2; } else if(currentMode === 1) { ques = item.c1; ans = item.c3; } else { ques = item.c3; ans = item.c1; }
-            return `<div class="card" id="q-${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s;">
-                <div style="font-size:26px; font-weight:800; margin-bottom:10px; display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
-                    <span>${ques} ${item.count >= 5 ? '⭐' : ''} <a href="https://www.google.com/search?q=${encodeURIComponent('Giải thích nghĩa của ' + item.c1 + ' và cách sử dụng trong tiếng nhật')}" target="_blank" style="text-decoration:none; margin-left:8px; display:inline-flex; align-items:center; transition:0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Tra cứu trên Google"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></span>
-                    <span id="msg-${i}" class="fb-msg"></span>
-                </div>
-                <div style="display:flex; gap:12px;">
-                    <input type="text" id="input-${i}" data-ans="${ans}" oninput="check(${i})" onkeydown="handleKey(event, ${i})" autocomplete="off" placeholder="...">
-                    <button class="btn btn-gray" style="width:70px; font-size:24px;" onclick="showHint(${i})">👁️</button>
-                </div>
-            </div>`;
+            const isQuizMode = (curType === 'gram' && currentMode === 2);
+            const isQuizItem = (item.gramType === 'quiz');
+            if (isQuizMode && !isQuizItem) return '';
+            if (!isQuizMode && isQuizItem) return '';
+
+            if (isQuizItem) {
+                let opts = [
+                    { t: item.ans, v: 1 },
+                    { t: item.w1, v: 0 },
+                    { t: item.w2, v: 0 },
+                    { t: item.w3, v: 0 }
+                ].filter(o => o.t);
+                shuffleArray(opts);
+                let optHtml = opts.map((o, idx) => `
+                    <button class="quiz-opt" id="opt-${i}-${idx}" onclick="checkQuiz(${i}, ${idx}, ${o.v})">${o.t}</button>
+                `).join('');
+
+                return `<div class="card" id="q-${i}" data-idx="${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s; padding: 25px; border-radius: 16px; background: linear-gradient(145deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9)); box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+                    <div style="font-size:20px; font-weight:800; margin-bottom:25px; color:#0f172a; background:#f8fafc; padding:20px 25px; border-radius:12px; text-align:left; line-height:1.6; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 6px solid #3b82f6;">
+                        ${item.q}
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;" id="opts-wrap-${i}">
+                        ${optHtml}
+                    </div>
+                    <div id="msg-${i}" class="fb-msg" style="text-align:center; margin-top:15px; font-size:18px;"></div>
+                </div>`;
+            } else {
+                let ques = '', ans = '';
+                if (curType === 'gram') {
+                    if(currentMode === 0) { ques = item.c1||''; ans = item.c3||''; } 
+                    else if(currentMode === 1) { ques = item.c3||''; ans = item.c1||''; }
+                } else {
+                    if(currentMode === 0) { ques = item.c1||''; ans = item.c2||''; } 
+                    else if(currentMode === 1) { ques = item.c1||''; ans = item.c3||''; } 
+                    else { ques = item.c3||''; ans = item.c1||''; }
+                }
+                return `<div class="card" id="q-${i}" data-idx="${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s;">
+                    <div style="font-size:26px; font-weight:800; margin-bottom:10px; display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
+                        <span>${ques} ${item.count >= 5 ? '⭐' : ''} <a href="https://www.google.com/search?q=${encodeURIComponent('Giải thích nghĩa của ' + (item.c1||'') + ' và cách sử dụng trong tiếng nhật')}" target="_blank" style="text-decoration:none; margin-left:8px; display:inline-flex; align-items:center; transition:0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Tra cứu trên Google"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></span>
+                        <span id="msg-${i}" class="fb-msg"></span>
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <input type="text" id="input-${i}" data-ans="${ans}" oninput="check(${i})" onkeydown="handleKey(event, ${i})" autocomplete="off" placeholder="...">
+                        <button class="btn btn-gray" style="width:70px; font-size:24px;" onclick="showHint(${i})">👁️</button>
+                    </div>
+                </div>`;
+            }
         }).join('');
+        
+        if (!document.getElementById('quiz-styles')) {
+            const style = document.createElement('style');
+            style.id = 'quiz-styles';
+            style.innerHTML = `
+            .quiz-opt { background: rgba(30,41,59,0.7); border: 2px solid #3b82f6; border-radius: 12px; padding: 15px; color: white; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: 'Baloo 2', sans-serif; }
+            .quiz-opt:hover { background: rgba(59,130,246,0.3); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(59,130,246,0.4); }
+            .quiz-opt.correct { background: var(--success) !important; border-color: #4ade80 !important; box-shadow: 0 0 20px var(--success) !important; color: #fff; transform: scale(1.02); }
+            .quiz-opt.wrong { background: var(--danger) !important; border-color: #f87171 !important; box-shadow: 0 0 20px var(--danger) !important; animation: shake 0.4s; }
+            `;
+            document.head.appendChild(style);
+        }
         updateChart();
     }
 
@@ -702,6 +916,42 @@
         }
     }
 
+    function checkQuiz(i, btnIdx, isCorrect) {
+        const card = document.getElementById(`q-${i}`);
+        if(card.getAttribute('data-res') === 'ok') return;
+        
+        const btn = document.getElementById(`opt-${i}-${btnIdx}`);
+        const msg = document.getElementById(`msg-${i}`);
+        
+        if (isCorrect) {
+            btn.classList.add('correct');
+            card.setAttribute('data-res', 'ok');
+            card.style.borderLeftColor = 'var(--success)';
+            msg.className = 'fb-msg show ok';
+            msg.innerText = "CHÍNH XÁC! 🎉";
+            playSound('ting');
+            if (currentList[i].count === undefined) currentList[i].count = 0;
+            currentList[i].count++; 
+            updateChart();
+            
+            const wrap = document.getElementById(`opts-wrap-${i}`);
+            wrap.querySelectorAll('.quiz-opt').forEach(b => {
+                b.style.pointerEvents = 'none';
+                if(!b.classList.contains('correct')) b.style.opacity = '0.5';
+            });
+        } else {
+            btn.classList.add('wrong');
+            card.setAttribute('data-res', 'ng');
+            card.style.borderLeftColor = 'var(--danger)';
+            msg.className = 'fb-msg show ng';
+            msg.innerText = "SAI RỒI! ❌";
+            playSound('buzz');
+            setTimeout(() => { btn.classList.remove('wrong'); }, 500);
+            if (currentList[i].count > 0) currentList[i].count--;
+            updateChart();
+        }
+    }
+
     function check(idx, isSubmit = false) {
         const input = document.getElementById(`input-${idx}`), val = input.value.trim().toLowerCase(), ans = input.getAttribute('data-ans').toLowerCase(), card = document.getElementById(`q-${idx}`);
         const prevRes = card.getAttribute('data-res');
@@ -746,8 +996,11 @@
     function updateChart() {
         if(!currentList || currentList.length === 0) return;
         let ok = 0, ng = 0, forgot = 0;
-        const total = currentList.length;
-        document.querySelectorAll('.card[id^="q-"]').forEach(card => {
+        const cards = document.querySelectorAll('.card[id^="q-"]');
+        const total = cards.length;
+        if (total === 0) return;
+
+        cards.forEach(card => {
             const res = card.getAttribute('data-res');
             if(res === 'ok') ok++;
             else if(res === 'ng') ng++;
@@ -812,28 +1065,50 @@
     function submitQuiz() {
         if (timerInterval) toggleTimer();
         let ok = 0, failed = 0;
-        document.querySelectorAll('.card[id^="q-"]').forEach((card, i) => {
-            const input = document.getElementById(`input-${i}`);
-            const ans = input ? input.getAttribute('data-ans').trim().toLowerCase() : '';
-            const val = input ? input.value.trim().toLowerCase() : '';
+        const cards = document.querySelectorAll('.card[id^="q-"]');
+        const total = cards.length;
+        if (total === 0) { alert("Không có câu hỏi nào để chấm!"); return; }
+        
+        cards.forEach((card) => {
+            const idx = card.getAttribute('data-idx');
+            const isQuizItem = (currentList[idx].gramType === 'quiz');
             
-            if(card.getAttribute('data-res') === 'ok' || (ans === '' && val === '')) { 
-                ok++; 
-                currentList[i].count = (currentList[i].count || 0) + 1; 
-                card.setAttribute('data-res', 'ok');
-                if (input) input.classList.add('correct');
-                card.style.borderLeftColor = 'var(--success)';
-            }
-            else { 
-                failed++;
-                if (card.getAttribute('data-res') !== 'forgot') card.setAttribute('data-res', 'ng');
-                if (input) input.classList.add('error-shake');
-                card.style.borderLeftColor = 'var(--danger)';
+            if (isQuizItem) {
+                if(card.getAttribute('data-res') === 'ok') {
+                    ok++;
+                } else {
+                    failed++;
+                    if (card.getAttribute('data-res') !== 'forgot') card.setAttribute('data-res', 'ng');
+                }
+            } else {
+                const input = document.getElementById(`input-${idx}`);
+                const ans = input ? input.getAttribute('data-ans').trim().toLowerCase() : '';
+                const val = input ? input.value.trim().toLowerCase() : '';
+                
+                if(card.getAttribute('data-res') === 'ok' || (ans === '' && val === '')) { 
+                    ok++; 
+                    currentList[idx].count = (currentList[idx].count || 0) + 1; 
+                    card.setAttribute('data-res', 'ok');
+                    if (input) input.classList.add('correct');
+                    card.style.borderLeftColor = 'var(--success)';
+                }
+                else { 
+                    failed++;
+                    if (card.getAttribute('data-res') !== 'forgot') card.setAttribute('data-res', 'ng');
+                    if (input) input.classList.add('error-shake');
+                    card.style.borderLeftColor = 'var(--danger)';
+                }
             }
         });
         
-        const percent = (ok / currentList.length) * 100;
+        const percent = (ok / total) * 100;
         if(percent >= 90) db[curLevel][curType][curDay].done[currentMode] = true;
+        
+        const isAllDone = db[curLevel][curType][curDay].done.every(v => v === true);
+        const btnMark = document.getElementById('btn-mark-done');
+        const btnUnmark = document.getElementById('btn-unmark-done');
+        if(btnMark) btnMark.style.display = isAllDone ? 'none' : 'inline-flex';
+        if(btnUnmark) btnUnmark.style.display = isAllDone ? 'inline-flex' : 'none';
 
         document.getElementById('res-ok').innerText = ok;
         document.getElementById('res-ng').innerText = failed;
@@ -850,8 +1125,9 @@
 
     function retryFailedOnly() {
         const wrongs = [];
-        document.querySelectorAll('.card[id^="q-"]').forEach((card, i) => {
-            if(card.getAttribute('data-res') !== 'ok') wrongs.push(currentList[i]);
+        document.querySelectorAll('.card[id^="q-"]').forEach((card) => {
+            const idx = card.getAttribute('data-idx');
+            if(card.getAttribute('data-res') !== 'ok') wrongs.push(currentList[idx]);
         });
         closeModal('congrats-modal');
         selectDay(curLevel, curType, curDay, wrongs);
@@ -892,24 +1168,44 @@
     }
 
     function quickAddWord() {
-        const c1 = document.getElementById('add-c1').value.trim();
-        const c2 = document.getElementById('add-c2').value.trim();
-        const c3 = document.getElementById('add-c3').value.trim();
-        
-        if(!c1) { alert("Kanji/Từ vựng không được để trống!"); return; }
-        
-        const exists = db[curLevel][curType][curDay].list.some(w => w.c1.trim().toLowerCase() === c1.toLowerCase());
-        if(exists && !confirm(`⚠️ Từ "${c1}" đã tồn tại trong bài này! Bạn vẫn muốn thêm?`)) return;
+        const isGram = (curType === 'gram');
+        const gramType = isGram ? (document.querySelector('input[name="addGramType"]:checked')?.value || 'struct') : 'voca';
 
-        db[curLevel][curType][curDay].list.push({ count: 0, c1: c1, c2: c2, c3: c3 || c2 });
+        if (gramType === 'quiz') {
+            const q = document.getElementById('add-q').value.trim();
+            const ans = document.getElementById('add-ans').value.trim();
+            const w1 = document.getElementById('add-w1').value.trim();
+            const w2 = document.getElementById('add-w2').value.trim();
+            const w3 = document.getElementById('add-w3').value.trim();
+            if(!q || !ans) { alert("Nhập ít nhất câu hỏi và đáp án đúng!"); return; }
+            db[curLevel][curType][curDay].list.push({ gramType: 'quiz', q, ans, w1, w2, w3, count:0 });
+            document.getElementById('add-q').value = '';
+            document.getElementById('add-ans').value = '';
+            document.getElementById('add-w1').value = '';
+            document.getElementById('add-w2').value = '';
+            document.getElementById('add-w3').value = '';
+            document.getElementById('add-q').focus();
+        } else {
+            const c1 = document.getElementById('add-c1').value.trim();
+            const c2 = document.getElementById('add-c2').value.trim();
+            const c3 = document.getElementById('add-c3').value.trim();
+            if(!c1) { alert("Ô đầu tiên không được để trống!"); return; }
+            
+            const exists = db[curLevel][curType][curDay].list.some(w => (w.c1||'').trim().toLowerCase() === c1.toLowerCase());
+            if(exists && !confirm(`⚠️ "${c1}" đã tồn tại trong bài này! Bạn vẫn muốn thêm?`)) return;
+
+            const entry = { count: 0, c1: c1, c2: c2, c3: c3 || c2 };
+            if (gramType === 'struct') entry.gramType = 'struct';
+            db[curLevel][curType][curDay].list.push(entry);
+            document.getElementById('add-c1').value = '';
+            document.getElementById('add-c2').value = '';
+            document.getElementById('add-c3').value = '';
+            document.getElementById('add-c1').focus();
+        }
         saveToLocal();
         updateGlobalStats();
         renderQuickAddList();
-        
-        document.getElementById('add-c1').value = '';
-        document.getElementById('add-c2').value = '';
-        document.getElementById('add-c3').value = '';
-        document.getElementById('add-c1').focus(); 
+        renderSidebar(); 
         
         if (document.getElementById('quiz-container').innerHTML !== "") {
             renderQuiz();
@@ -935,12 +1231,19 @@
         tbody.innerHTML = [...list].reverse().map((w, i) => {
             const realIdx = list.length - 1 - i;
             const isNew = i === 0;
-            return `<tr style="${isNew ? 'background:rgba(34,197,94,0.08);' : ''}">
-                <td style="color:#475569">${realIdx + 1}</td>
-                <td><b style="color:${isNew ? 'var(--success)' : 'var(--warning)'}">${w.c1}</b>${isNew ? ' <span style="font-size:10px;background:var(--success);color:#fff;padding:1px 6px;border-radius:10px;font-weight:800;">MỚI</span>' : ''}</td>
-                <td>${w.c2}</td>
-                <td style="color:#94a3b8">${w.c3}</td>
-            </tr>`;
+            if (w.gramType === 'quiz') {
+                return `<tr style="${isNew ? 'background:rgba(34,197,94,0.08);' : ''}">
+                    <td style="color:#475569">${realIdx + 1}</td>
+                    <td colspan="3"><b style="color:${isNew ? 'var(--success)' : 'var(--warning)'}">${w.q}</b>${isNew ? ' <span style="font-size:10px;background:var(--success);color:#fff;padding:1px 6px;border-radius:10px;font-weight:800;">MỚI</span>' : ''} <br> <span style="color:var(--success)">${w.ans}</span> | ${w.w1}</td>
+                </tr>`;
+            } else {
+                return `<tr style="${isNew ? 'background:rgba(34,197,94,0.08);' : ''}">
+                    <td style="color:#475569">${realIdx + 1}</td>
+                    <td><b style="color:${isNew ? 'var(--success)' : 'var(--warning)'}">${w.c1}</b>${isNew ? ' <span style="font-size:10px;background:var(--success);color:#fff;padding:1px 6px;border-radius:10px;font-weight:800;">MỚI</span>' : ''}</td>
+                    <td>${w.c2||''}</td>
+                    <td style="color:#94a3b8">${w.c3||''}</td>
+                </tr>`;
+            }
         }).join('');
         // Scroll lên đầu để thấy từ mới nhất
         const scrollEl = wrap.querySelector('div[style*="overflow-y"]');
@@ -948,7 +1251,7 @@
     }
 
     function renderListTable() { document.getElementById('voca-list-body').innerHTML = db[curLevel][curType][curDay].list.map((item, i) => `<tr style="border-bottom:1px solid #334155"><td style="padding:10px">${i+1}</td><td style="font-weight:800; color:var(--warning); display:flex; align-items:center; gap:8px;">${item.c1} <a href="https://www.google.com/search?q=${encodeURIComponent(item.c1 + ' とは')}" target="_blank" style="text-decoration:none; display:inline-flex; align-items:center;" title="Tra cứu trên Google"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></td><td>${item.c2}</td><td>${item.c3}</td></tr>`).join(''); }
-    function updateGlobalStats() { let total = 0, mastered = 0; ["n1","n2"].forEach(lv => ["voca","gram"].forEach(ty => Object.values(db[lv][ty]).forEach(day => { total += day.list.length; day.list.forEach(item => { if(item.count>=5) mastered++; })}))); document.getElementById('total-words').innerText = total; document.getElementById('master-words').innerText = mastered; }
+    function updateGlobalStats() { let total = 0, mastered = 0; ["n1","n2","n3","bjt"].forEach(lv => ["voca","gram"].forEach(ty => Object.values(db[lv][ty]).forEach(day => { total += day.list.length; day.list.forEach(item => { if(item.count>=5) mastered++; })}))); document.getElementById('total-words').innerText = total; document.getElementById('master-words').innerText = mastered; }
     function showHint(idx) { 
         const input = document.getElementById(`input-${idx}`); 
         input.value = input.getAttribute('data-ans'); 
@@ -983,11 +1286,36 @@
             renderCurWordList(); 
             renderListTable();
             updateGlobalStats();
+            renderSidebar();
             if (document.getElementById('quiz-container').innerHTML !== "") {
                 renderQuiz();
                 resetTimer();
             }
             alert(`✅ Đã xoá thành công ${dupCount} từ trùng lặp!`);
+        }
+    }
+
+    function markAllDone() {
+        if(confirm("Bạn có chắc chắn muốn đánh dấu đã hoàn thành cả 3 bài cho ngày này không?")) {
+            db[curLevel][curType][curDay].done = [true, true, true];
+            saveToLocal();
+            renderSidebar();
+            changeMode(currentMode);
+            document.getElementById('btn-mark-done').style.display = 'none';
+            document.getElementById('btn-unmark-done').style.display = 'inline-flex';
+            alert("✅ Đã đánh dấu hoàn thành 3 bài!");
+        }
+    }
+
+    function unmarkAllDone() {
+        if(confirm("Bạn muốn hủy bỏ trạng thái đã hoàn thành của ngày này?")) {
+            db[curLevel][curType][curDay].done = [false, false, false];
+            saveToLocal();
+            renderSidebar();
+            changeMode(currentMode);
+            document.getElementById('btn-mark-done').style.display = 'inline-flex';
+            document.getElementById('btn-unmark-done').style.display = 'none';
+            alert("❎ Đã huỷ trạng thái hoàn thành!");
         }
     }
 
@@ -1050,7 +1378,9 @@
                 const parsed = JSON.parse(data);
                 if (parsed && parsed.n1 && parsed.n2) {
                     if(confirm("⚠️ CẢNH BÁO: Dữ liệu hiện tại trên máy này sẽ bị GHI ĐÈ TOÀN BỘ bằng dữ liệu từ File mới.\nBạn có chắc chắn muốn phục hồi không?")) {
-                        localStorage.setItem('mgao_v37_db', data);
+                        if(!parsed.n3) { parsed.n3 = { voca: {}, gram: {} }; ["voca", "gram"].forEach(ty => { for(let i=1; i<=10; i++) parsed.n3[ty][`Ngày ${i}`] = { list: [], done: [false, false, false] }; }); }
+                        if(!parsed.bjt) { parsed.bjt = { voca: {}, gram: {} }; ["voca", "gram"].forEach(ty => { for(let i=1; i<=10; i++) parsed.bjt[ty][`Ngày ${i}`] = { list: [], done: [false, false, false] }; }); }
+                        localStorage.setItem('mgao_v37_db', JSON.stringify(parsed));
                         alert("✅ Phục hồi dữ liệu thành công! Màn hình sẽ tải lại.");
                         location.reload();
                     }
