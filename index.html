@@ -53,11 +53,17 @@
                 const localDateStr = localStorage.getItem('mgao_v37_updatedAt');
                 const localDate = localDateStr ? new Date(localDateStr).getTime() : 0;
 
+                console.log('🔍 Checking sync...', {
+                    localTimestamp: localDateStr,
+                    localDate: localDate
+                });
+
                 const docRef = doc(dbFirestore, "users", user.uid);
                 const docSnap = await getDoc(docRef);
 
                 // --- CASE 1: Không có dữ liệu nào trên Cloud ---
                 if (!docSnap.exists() || !docSnap.data().studyData) {
+                    console.log('📤 No cloud data, uploading local data...');
                     if (localData) {
                         // Có dữ liệu local → tự động backup lên cloud
                         await window.uploadToCloud(true);
@@ -68,17 +74,29 @@
 
                 const data = docSnap.data();
                 const cloudDate = data.updatedAt ? new Date(data.updatedAt).getTime() : 0;
+                
+                console.log('☁️ Cloud data found:', {
+                    cloudTimestamp: data.updatedAt,
+                    cloudDate: cloudDate,
+                    diff: cloudDate - localDate
+                });
 
                 // --- CASE 2: Cloud mới hơn local ---
                 if (cloudDate > localDate + 1000) {
-                    if (confirm("☁️ Có bản lưu mới hơn trên Cloud!\nBạn có muốn tải về thiết bị này không?")) {
-                        localStorage.setItem('mgao_v37_db', data.studyData);
-                        if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
-                        alert("✅ Đã đồng bộ dữ liệu từ Cloud về máy!");
-                        location.reload();
-                        return true;
+                    // TỰ ĐỘNG TẢI XUỐNG - Không cần hỏi người dùng
+                    console.log('🔄 Cloud data is newer, auto-downloading...');
+                    localStorage.setItem('mgao_v37_db', data.studyData);
+                    if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
+                    
+                    if (!silentEqual) {
+                        alert("✅ Đã đồng bộ dữ liệu mới nhất từ Cloud về máy!");
+                    } else {
+                        window.showSyncToast('☁️ Đã tải dữ liệu mới từ Cloud!');
                     }
-                    return false;
+                    
+                    // Reload để cập nhật UI
+                    setTimeout(() => location.reload(), 1000);
+                    return true;
                 }
 
                 // --- CASE 3: Local mới hơn cloud, hoặc local chưa có timestamp (dữ liệu cũ) ---
@@ -224,6 +242,16 @@
             } catch (error) {
                 alert("❌ Lỗi tải dữ liệu: " + error.message);
             }
+        };
+
+        // Force sync ngay lập tức (dùng để debug/test)
+        window.forceSyncNow = async () => {
+            if (!window.firebaseUser) {
+                alert("⚠️ Cần đăng nhập trước!");
+                return;
+            }
+            console.log('🔄 Force syncing...');
+            await window.checkSyncWithCloud(window.firebaseUser, false);
         };
 
         window.updateSyncModalUI = () => {
