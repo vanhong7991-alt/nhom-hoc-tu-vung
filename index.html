@@ -28,9 +28,57 @@
 
         window.firebaseUser = null;
 
+        window.checkSyncWithCloud = async (user, silentEqual = true) => {
+            try {
+                const docRef = doc(dbFirestore, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data.studyData) {
+                        const cloudDate = data.updatedAt ? new Date(data.updatedAt).getTime() : 0;
+                        const localDateStr = localStorage.getItem('mgao_v37_updatedAt');
+                        const localDate = localDateStr ? new Date(localDateStr).getTime() : 0;
+                        
+                        if (cloudDate > localDate + 1000) {
+                            if (confirm("☁️ Có bản lưu mới hơn trên Cloud!\nBạn có muốn tải về thiết bị này không?")) {
+                                localStorage.setItem('mgao_v37_db', data.studyData);
+                                if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
+                                alert("✅ Đã đồng bộ dữ liệu từ Cloud về máy!");
+                                location.reload();
+                                return true;
+                            }
+                        } else if (localDate > cloudDate + 1000) {
+                            if (!silentEqual || confirm("📱 Dữ liệu trên máy của bạn mới hơn Cloud!\nBạn có muốn đẩy lên Cloud không?")) {
+                                await window.uploadToCloud(true);
+                                if(!silentEqual) alert("✅ Đã đẩy dữ liệu lên Cloud thành công!");
+                            }
+                        } else if (!silentEqual) {
+                            if (confirm("☁️ Đã tìm thấy dữ liệu trên Cloud!\nBạn có muốn tải về và ghi đè dữ liệu hiện tại trên máy không?")) {
+                                localStorage.setItem('mgao_v37_db', data.studyData);
+                                if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
+                                alert("✅ Phục hồi dữ liệu từ Cloud thành công!");
+                                location.reload();
+                                return true;
+                            }
+                        }
+                    }
+                }
+            } catch(e) {
+                console.error("Sync error:", e);
+            }
+            return false;
+        };
+
+        let hasCheckedSync = false;
+
         onAuthStateChanged(auth, async (user) => {
             window.firebaseUser = user;
             if (window.updateSyncModalUI) window.updateSyncModalUI();
+            
+            if (user && !hasCheckedSync) {
+                hasCheckedSync = true;
+                await window.checkSyncWithCloud(user, true);
+            }
         });
 
         window.loginGoogle = async () => {
@@ -43,38 +91,8 @@
                     nameInput.value = user.displayName;
                 }
 
-                const docRef = doc(dbFirestore, "users", user.uid);
-                const docSnap = await getDoc(docRef);
-                let reloaded = false;
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    if (data.studyData) {
-                        const cloudDate = data.updatedAt ? new Date(data.updatedAt).getTime() : 0;
-                        const localDateStr = localStorage.getItem('mgao_v37_updatedAt');
-                        const localDate = localDateStr ? new Date(localDateStr).getTime() : 0;
-                        
-                        if (cloudDate > localDate + 1000) {
-                            if (confirm("☁️ Dữ liệu trên Cloud mới hơn máy của bạn!\nBạn có muốn tải về và đồng bộ không?")) {
-                                localStorage.setItem('mgao_v37_db', data.studyData);
-                                if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
-                                alert("✅ Phục hồi dữ liệu từ Cloud thành công!");
-                                location.reload();
-                                reloaded = true;
-                            }
-                        } else if (localDate > cloudDate + 1000) {
-                            if (confirm("📱 Dữ liệu trên máy của bạn mới hơn Cloud!\nBạn có muốn đẩy lên Cloud không?")) {
-                                await window.uploadToCloud(true);
-                                alert("✅ Đã đẩy dữ liệu lên Cloud thành công!");
-                            }
-                        } else if (confirm("☁️ Đã tìm thấy dữ liệu trên Cloud!\nBạn có muốn tải về và ghi đè dữ liệu hiện tại trên máy không?")) {
-                            localStorage.setItem('mgao_v37_db', data.studyData);
-                            if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
-                            alert("✅ Phục hồi dữ liệu từ Cloud thành công!");
-                            location.reload();
-                            reloaded = true;
-                        }
-                    }
-                }
+                hasCheckedSync = true;
+                const reloaded = await window.checkSyncWithCloud(user, false);
                 
                 if (!reloaded) {
                     const welcome = document.getElementById('welcome-screen');
