@@ -9,7 +9,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { getFirestore, enableIndexedDbPersistence, doc, setDoc, getDoc, onSnapshot, enableNetwork } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA7DCMQthW8E9-QloZRgVYx0BbcNEr3Mqc",
@@ -26,8 +26,18 @@
         const dbFirestore = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        // ✅ FIX: Sửa persistence - tránh lỗi sessionStorage
-        // Thử browserLocalPersistence trước, nếu fail thì dùng browser default
+        // ✅ FIX 1: Bật Offline Persistence (IndexedDB) - cache dữ liệu xuống máy
+        enableIndexedDbPersistence(dbFirestore).catch(err => {
+            if (err.code === 'failed-precondition') {
+                console.warn('Offline persistence: nhiều tab đang mở, chỉ 1 tab được cache.');
+            } else if (err.code === 'unimplemented') {
+                console.warn('Offline persistence: browser không hỗ trợ.');
+            } else {
+                console.warn('Offline persistence error:', err);
+            }
+        });
+
+        // ✅ FIX: Auth persistence
         try {
             setPersistence(auth, browserLocalPersistence).catch(err => {
                 console.warn("Persistence error, using default:", err);
@@ -37,9 +47,10 @@
         }
 
         window.firebaseUser = null;
-        let autoSyncTimer = null; // Debounce timer cho auto-sync
-        let cloudDataListener = null; // ✅ FIX: Real-time listener
-        let isIgnoringCloudUpdate = false; // ✅ FIX: Tránh vòng lặp sync
+        let autoSyncTimer = null;
+        let cloudDataListener = null;
+        let isIgnoringCloudUpdate = false;
+        let listenerRetryTimer = null;
 
         // Toast không làm phiền - hiện 3 giây rồi tự biến mất
         window.showSyncToast = (msg, isError = false) => {
@@ -59,19 +70,45 @@
             toast._timer = setTimeout(() => { toast.style.opacity = '0'; }, 3000);
         };
 
+        // ✅ FIX 3: Helper getDoc với retry (exponential backoff)
+        async function getDocWithRetry(docRef, maxRetries = 3) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    return await getDoc(docRef);
+                } catch (e) {
+                    const isOffline = e.code === 'unavailable' || (e.message && e.message.includes('offline'));
+                    if (isOffline && i < maxRetries - 1) {
+                        const delay = 1500 * (i + 1);
+                        console.warn(`Firestore offline, retry ${i+1}/${maxRetries} sau ${delay}ms...`);
+                        await new Promise(r => setTimeout(r, delay));
+                        // Thử kết nối lại
+                        try { await enableNetwork(dbFirestore); } catch(_) {}
+                        continue;
+                    }
+                    throw e;
+                }
+            }
+        }
+
         window.checkSyncWithCloud = async (user, silentEqual = true) => {
+            // ✅ FIX 2: Kiểm tra online trước khi gọi Firestore
+            if (!navigator.onLine) {
+                console.log('📴 Offline - bỏ qua sync');
+                if (!silentEqual) window.showSyncToast('📴 Đang offline - không thể đồng bộ', true);
+                return false;
+            }
             try {
                 const localData = localStorage.getItem('mgao_v37_db');
                 const localDateStr = localStorage.getItem('mgao_v37_updatedAt');
                 const localDate = localDateStr ? new Date(localDateStr).getTime() : 0;
 
                 const docRef = doc(dbFirestore, "users", user.uid);
-                const docSnap = await getDoc(docRef);
+                // ✅ FIX 3: Dùng retry thay vì gọi thẳng
+                const docSnap = await getDocWithRetry(docRef);
 
                 // --- CASE 1: Không có dữ liệu nào trên Cloud ---
                 if (!docSnap.exists() || !docSnap.data().studyData) {
                     if (localData) {
-                        // Có dữ liệu local → tự động backup lên cloud
                         await window.uploadToCloud(true);
                         window.showSyncToast('☁️ Đã backup dữ liệu lên Cloud lần đầu!');
                     }
@@ -93,13 +130,12 @@
                     return false;
                 }
 
-                // --- CASE 3: Local mới hơn cloud, hoặc local chưa có timestamp (dữ liệu cũ) ---
+                // --- CASE 3: Local mới hơn cloud ---
                 const localIsNewer = localDate > cloudDate + 1000;
                 const localHasNoTimestamp = !localDateStr && localData;
 
                 if (localIsNewer || localHasNoTimestamp) {
                     if (silentEqual) {
-                        // Tự động upload ngầm khi mở app
                         const ok = await window.uploadToCloud(true);
                         if (ok !== false) window.showSyncToast('☁️ Đã tự động đẩy dữ liệu lên Cloud!');
                     } else if (confirm("📱 Dữ liệu trên máy của bạn mới hơn Cloud!\nBạn có muốn đẩy lên Cloud không?")) {
@@ -109,7 +145,7 @@
                     return false;
                 }
 
-                // --- CASE 4: Bằng nhau - chỉ hỏi khi manual login ---
+                // --- CASE 4: Bằng nhau ---
                 if (!silentEqual) {
                     if (confirm("☁️ Dữ liệu đang đồng bộ. Bạn có muốn tải lại từ Cloud không?")) {
                         localStorage.setItem('mgao_v37_db', data.studyData);
@@ -122,8 +158,14 @@
 
             } catch(e) {
                 console.error("Sync error:", e);
-                if (!silentEqual) alert("❌ Lỗi đồng bộ: " + e.message);
-                else window.showSyncToast('⚠️ Lỗi đồng bộ: ' + e.message, true);
+                const isOffline = e.code === 'unavailable' || (e.message && e.message.includes('offline'));
+                if (isOffline) {
+                    // Không hiện lỗi phiền khi offline, chỉ toast nhẹ
+                    window.showSyncToast('📴 Đang offline - sẽ đồng bộ khi có mạng', true);
+                } else {
+                    if (!silentEqual) alert("❌ Lỗi đồng bộ: " + e.message);
+                    else window.showSyncToast('⚠️ Lỗi đồng bộ: ' + e.message, true);
+                }
             }
             return false;
         };
@@ -136,23 +178,49 @@
             
             if (user && !hasCheckedSync) {
                 hasCheckedSync = true;
-                // Đợi DOM sẵn sàng trước khi kiểm tra sync
-                if (document.readyState === 'complete') {
+                // ✅ FIX 5: Đợi DOM + thêm delay 2s để Firestore khởi tạo xong
+                const doSync = async () => {
+                    await new Promise(r => setTimeout(r, 2000));
                     await window.checkSyncWithCloud(user, true);
-                    // ✅ FIX: Setup listener
                     window.listenToCloudChanges(user.uid);
+                };
+                if (document.readyState === 'complete') {
+                    doSync();
                 } else {
-                    window.addEventListener('load', async () => {
-                        await window.checkSyncWithCloud(user, true);
-                        // ✅ FIX: Setup listener
-                        window.listenToCloudChanges(user.uid);
-                    }, { once: true });
+                    window.addEventListener('load', doSync, { once: true });
                 }
-            } else if (!user && cloudDataListener) {
-                // User đã logout - hủy listener
-                cloudDataListener();
-                cloudDataListener = null;
+            } else if (!user) {
+                hasCheckedSync = false;
+                if (cloudDataListener) {
+                    cloudDataListener();
+                    cloudDataListener = null;
+                }
+                if (listenerRetryTimer) {
+                    clearTimeout(listenerRetryTimer);
+                    listenerRetryTimer = null;
+                }
             }
+        });
+
+        // ✅ FIX 4: Lắng nghe sự kiện online/offline của browser
+        window.addEventListener('online', async () => {
+            console.log('🌐 Mạng trở lại!');
+            window.showSyncToast('🌐 Đã kết nối mạng - đang đồng bộ...');
+            try { await enableNetwork(dbFirestore); } catch(_) {}
+            if (window.firebaseUser) {
+                setTimeout(async () => {
+                    await window.checkSyncWithCloud(window.firebaseUser, true);
+                    // Restart listener nếu bị mất
+                    if (!cloudDataListener) {
+                        window.listenToCloudChanges(window.firebaseUser.uid);
+                    }
+                }, 1000);
+            }
+        });
+
+        window.addEventListener('offline', () => {
+            console.log('📴 Mất kết nối mạng');
+            window.showSyncToast('📴 Mất kết nối - dữ liệu vẫn được lưu offline', true);
         });
 
         window.loginGoogle = async () => {
@@ -235,44 +303,58 @@
             }
         };
 
-        // ✅ FIX #2: Thêm Real-time Listener
+        // ✅ FIX 6: Real-time Listener với retry khi lỗi offline
         window.listenToCloudChanges = (userId) => {
             if (!userId) return;
-            if (cloudDataListener) cloudDataListener();
+            if (cloudDataListener) { cloudDataListener(); cloudDataListener = null; }
+            if (listenerRetryTimer) { clearTimeout(listenerRetryTimer); listenerRetryTimer = null; }
             
+            // Không khởi tạo listener khi đang offline
+            if (!navigator.onLine) {
+                console.log('📴 Offline - hoãn listener, sẽ khởi động khi có mạng');
+                return;
+            }
+
             const docRef = doc(dbFirestore, "users", userId);
             cloudDataListener = onSnapshot(docRef, (docSnap) => {
                 if (!docSnap.exists() || !docSnap.data().studyData) return;
-                
                 if (isIgnoringCloudUpdate) return;
                 
-                const localData = localStorage.getItem('mgao_v37_db');
                 const localDateStr = localStorage.getItem('mgao_v37_updatedAt');
                 const localDate = localDateStr ? new Date(localDateStr).getTime() : 0;
                 
                 const data = docSnap.data();
                 const cloudDate = data.updatedAt ? new Date(data.updatedAt).getTime() : 0;
                 
-                // Cloud mới hơn local >= 2 giây
+                // Cloud mới hơn local >= 2 giây → cập nhật
                 if (cloudDate > localDate + 2000) {
                     console.log('📥 Cloud mới hơn! Cập nhật local...');
-                    
                     localStorage.setItem('mgao_v37_db', data.studyData);
                     if (data.updatedAt) localStorage.setItem('mgao_v37_updatedAt', data.updatedAt);
-                    
-                    if (window.showSyncToast) {
-                        window.showSyncToast('📥 Dữ liệu đã cập nhật từ Cloud!');
-                    }
+                    window.showSyncToast('📥 Dữ liệu đã cập nhật từ Cloud!');
                     
                     const quizContainer = document.getElementById('quiz-container');
                     if (!quizContainer || quizContainer.innerHTML === "") {
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1500);
+                        setTimeout(() => { location.reload(); }, 1500);
                     }
                 }
             }, (error) => {
-                console.error("❌ Listener error:", error);
+                // ✅ FIX 6: Retry listener khi lỗi offline
+                const isOffline = error.code === 'unavailable' || (error.message && error.message.includes('offline'));
+                if (isOffline) {
+                    console.warn('📴 Listener offline, sẽ retry khi có mạng...');
+                    cloudDataListener = null;
+                    // online event listener sẽ restart listener
+                } else {
+                    console.error('❌ Listener error:', error);
+                    // Retry sau 10s cho các lỗi khác
+                    listenerRetryTimer = setTimeout(() => {
+                        if (window.firebaseUser && navigator.onLine) {
+                            console.log('🔄 Retry listener...');
+                            window.listenToCloudChanges(userId);
+                        }
+                    }, 10000);
+                }
             });
         };
 
