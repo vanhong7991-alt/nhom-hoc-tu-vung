@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lộ Trình Học Tập Thông Minh 🌸</title>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Noto+Sans+JP:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Kosugi+Maru&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
@@ -16,7 +16,7 @@
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Baloo 2', 'Noto Sans JP', cursive; background: var(--bg-dark); color: var(--text); margin: 0; overflow-x: hidden; font-size: 18px; }
+        body { font-family: 'Baloo 2', 'Kosugi Maru', cursive; background: var(--bg-dark); color: var(--text); margin: 0; overflow-x: hidden; font-size: 18px; }
 
         /* --- SIDEBAR --- */
         .sidebar { width: var(--sidebar-width); background: var(--sidebar-bg); height: 100vh; position: fixed; left: -380px; top: 0; z-index: 2000; transition: 0.3s; overflow-y: auto; border-right: 2px solid var(--accent); padding-bottom: 50px; }
@@ -209,7 +209,7 @@
     </div>
 
     <div id="quiz-container"></div>
-    <div id="submit-container" style="display: none; gap: 12px; margin-bottom: 50px;">
+    <div id="submit-container" style="display: none; gap: 12px; position: sticky; bottom: 20px; z-index: 1000; background: rgba(30, 41, 59, 0.95); padding: 15px; border-radius: 20px; box-shadow: 0 -10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
         <button class="btn btn-gray" style="flex: 1; font-size: 16px; padding: 16px; font-weight: 800;" onclick="resetQuiz()">🔄 LÀM LẠI</button>
         <button class="btn btn-blue" style="flex: 2; font-size: 18px; padding: 16px; font-weight: 800;" onclick="submitQuiz()">✅ NỘP BÀI</button>
     </div>
@@ -822,12 +822,13 @@
                 ].filter(o => o.t);
                 shuffleArray(opts);
                 let optHtml = opts.map((o, idx) => `
-                    <button class="quiz-opt" id="opt-${i}-${idx}" onclick="checkQuiz(${i}, ${idx}, ${o.v})">${o.t}</button>
+                    <button class="quiz-opt" id="opt-${i}-${idx}" data-correct="${o.v === 1}" onclick="checkQuiz(${i}, ${idx}, ${o.v === 1})">${o.t}</button>
                 `).join('');
 
                 return `<div class="card" id="q-${i}" data-idx="${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s; padding: 25px; border-radius: 16px; background: linear-gradient(145deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9)); box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
-                    <div style="font-size:20px; font-weight:800; margin-bottom:25px; color:#0f172a; background:#f8fafc; padding:20px 25px; border-radius:12px; text-align:left; line-height:1.6; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 6px solid #3b82f6;">
-                        ${item.q}
+                    <div style="font-size:20px; font-weight:800; margin-bottom:25px; color:#0f172a; background:#f8fafc; padding:20px 25px; border-radius:12px; text-align:left; line-height:1.6; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 6px solid #3b82f6; display:flex; align-items:flex-start; gap:15px;">
+                        <div style="background:var(--accent); color:white; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:bold; flex-shrink:0; box-shadow:0 4px 10px rgba(59,130,246,0.4); border:2px solid #ffffff;">${i + 1}</div>
+                        <div style="flex:1;">${item.q}</div>
                     </div>
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;" id="opts-wrap-${i}">
                         ${optHtml}
@@ -861,10 +862,11 @@
             const style = document.createElement('style');
             style.id = 'quiz-styles';
             style.innerHTML = `
-            .quiz-opt { background: rgba(30,41,59,0.7); border: 2px solid #3b82f6; border-radius: 12px; padding: 15px; color: white; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: 'Baloo 2', sans-serif; }
+            .quiz-opt { background: rgba(30,41,59,0.7); border: 2px solid #3b82f6; border-radius: 12px; padding: 15px; color: white; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: 'Baloo 2', 'Kosugi Maru', sans-serif; }
             .quiz-opt:hover { background: rgba(59,130,246,0.3); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(59,130,246,0.4); }
             .quiz-opt.correct { background: var(--success) !important; border-color: #4ade80 !important; box-shadow: 0 0 20px var(--success) !important; color: #fff; transform: scale(1.02); }
             .quiz-opt.wrong { background: var(--danger) !important; border-color: #f87171 !important; box-shadow: 0 0 20px var(--danger) !important; animation: shake 0.4s; }
+            .quiz-opt.selected { background: rgba(59,130,246,0.6) !important; border-color: #60a5fa !important; box-shadow: 0 0 15px rgba(59,130,246,0.6) !important; transform: scale(1.02); }
             `;
             document.head.appendChild(style);
         }
@@ -905,6 +907,21 @@
         } catch(e) {}
     }
 
+    function checkQuiz(i, btnIdx, isCorrect) {
+        if (!timerInterval) toggleTimer();
+        const card = document.getElementById(`q-${i}`);
+        if(card.getAttribute('data-res') === 'ok' || card.getAttribute('data-res') === 'ng') return;
+        
+        const wrap = document.getElementById(`opts-wrap-${i}`);
+        wrap.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('selected'));
+        
+        const btn = document.getElementById(`opt-${i}-${btnIdx}`);
+        btn.classList.add('selected');
+        
+        card.setAttribute('data-selected-correct', isCorrect);
+        card.setAttribute('data-selected-idx', btnIdx);
+    }
+
     function handleKey(e, idx) {
         if(e.key === 'ArrowDown' || e.key === 'Enter') {
             e.preventDefault();
@@ -916,41 +933,6 @@
         }
     }
 
-    function checkQuiz(i, btnIdx, isCorrect) {
-        const card = document.getElementById(`q-${i}`);
-        if(card.getAttribute('data-res') === 'ok') return;
-        
-        const btn = document.getElementById(`opt-${i}-${btnIdx}`);
-        const msg = document.getElementById(`msg-${i}`);
-        
-        if (isCorrect) {
-            btn.classList.add('correct');
-            card.setAttribute('data-res', 'ok');
-            card.style.borderLeftColor = 'var(--success)';
-            msg.className = 'fb-msg show ok';
-            msg.innerText = "CHÍNH XÁC! 🎉";
-            playSound('ting');
-            if (currentList[i].count === undefined) currentList[i].count = 0;
-            currentList[i].count++; 
-            updateChart();
-            
-            const wrap = document.getElementById(`opts-wrap-${i}`);
-            wrap.querySelectorAll('.quiz-opt').forEach(b => {
-                b.style.pointerEvents = 'none';
-                if(!b.classList.contains('correct')) b.style.opacity = '0.5';
-            });
-        } else {
-            btn.classList.add('wrong');
-            card.setAttribute('data-res', 'ng');
-            card.style.borderLeftColor = 'var(--danger)';
-            msg.className = 'fb-msg show ng';
-            msg.innerText = "SAI RỒI! ❌";
-            playSound('buzz');
-            setTimeout(() => { btn.classList.remove('wrong'); }, 500);
-            if (currentList[i].count > 0) currentList[i].count--;
-            updateChart();
-        }
-    }
 
     function check(idx, isSubmit = false) {
         const input = document.getElementById(`input-${idx}`), val = input.value.trim().toLowerCase(), ans = input.getAttribute('data-ans').toLowerCase(), card = document.getElementById(`q-${idx}`);
@@ -1074,11 +1056,39 @@
             const isQuizItem = (currentList[idx].gramType === 'quiz');
             
             if (isQuizItem) {
-                if(card.getAttribute('data-res') === 'ok') {
+                if (card.getAttribute('data-res') === 'ok') { ok++; return; }
+                const isCorrect = card.getAttribute('data-selected-correct') === 'true';
+                const selectedIdx = card.getAttribute('data-selected-idx');
+                const wrap = document.getElementById(`opts-wrap-${idx}`);
+                const msg = document.getElementById(`msg-${idx}`);
+                
+                wrap.querySelectorAll('.quiz-opt').forEach(b => b.style.pointerEvents = 'none');
+                
+                if (isCorrect) {
                     ok++;
+                    currentList[idx].count = (currentList[idx].count || 0) + 1;
+                    card.setAttribute('data-res', 'ok');
+                    card.style.borderLeftColor = 'var(--success)';
+                    const btn = document.getElementById(`opt-${idx}-${selectedIdx}`);
+                    if(btn) btn.classList.add('correct');
+                    if(msg) { msg.className = 'fb-msg show ok'; msg.innerText = "CHÍNH XÁC! 🎉"; }
                 } else {
                     failed++;
                     if (card.getAttribute('data-res') !== 'forgot') card.setAttribute('data-res', 'ng');
+                    card.style.borderLeftColor = 'var(--danger)';
+                    if (selectedIdx !== null) {
+                        const btn = document.getElementById(`opt-${idx}-${selectedIdx}`);
+                        if(btn) btn.classList.add('wrong');
+                    }
+                    wrap.querySelectorAll('.quiz-opt').forEach(b => {
+                        if(b.getAttribute('data-correct') === 'true') {
+                            b.classList.add('correct');
+                            b.style.opacity = '1';
+                        } else {
+                            b.style.opacity = '0.5';
+                        }
+                    });
+                    if(msg) { msg.className = 'fb-msg show ng'; msg.innerText = "SAI RỒI! ❌"; }
                 }
             } else {
                 const input = document.getElementById(`input-${idx}`);
