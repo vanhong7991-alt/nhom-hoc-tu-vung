@@ -116,6 +116,11 @@
             const logoutBtn = document.getElementById('btn-fb-logout');
             const uploadBtn = document.getElementById('btn-fb-upload');
             const downBtn = document.getElementById('btn-fb-down');
+            const floatingLoginBtn = document.getElementById('floating-login-btn');
+            
+            if (floatingLoginBtn) {
+                floatingLoginBtn.style.display = window.firebaseUser ? 'none' : 'block';
+            }
             
             if (!statusEl) return;
             
@@ -254,6 +259,22 @@
     </style>
 </head>
 <body>
+<button id="floating-login-btn" onclick="loginGoogle()" style="
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #4285F4;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 999;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+">
+  Đăng nhập Google
+</button>
 
 <div id="rt-wrapper" class="rt-widget" onclick="toggleChartWidget()" title="Nhấn để thu gọn/mở rộng">
     <div id="rt-content" style="display: flex; align-items: center; gap: 20px;">
