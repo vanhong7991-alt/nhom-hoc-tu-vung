@@ -134,24 +134,31 @@
             const uploadBtn = document.getElementById('btn-fb-upload');
             const downBtn = document.getElementById('btn-fb-down');
             
-            if (!statusEl) return;
+            const inlineLoginBox = document.getElementById('inline-login-box');
+            const inlineLoginSuccess = document.getElementById('inline-login-success');
+            const inlineLoginEmail = document.getElementById('inline-login-email');
             
             if (window.firebaseUser) {
-                statusEl.innerHTML = `🟢 Đã đăng nhập: <b style="color:var(--success)">${window.firebaseUser.email}</b>`;
-                loginBtn.style.display = 'none';
-                logoutBtn.style.display = 'inline-flex';
-                uploadBtn.disabled = false;
-                uploadBtn.style.opacity = '1';
-                downBtn.disabled = false;
-                downBtn.style.opacity = '1';
+                if(statusEl) statusEl.innerHTML = `🟢 Đã đăng nhập: <b style="color:var(--success)">${window.firebaseUser.email}</b>`;
+                if(loginBtn) loginBtn.style.display = 'none';
+                if(logoutBtn) logoutBtn.style.display = 'inline-flex';
+                if(uploadBtn) { uploadBtn.disabled = false; uploadBtn.style.opacity = '1'; }
+                if(downBtn) { downBtn.disabled = false; downBtn.style.opacity = '1'; }
+                
+                if(inlineLoginBox) inlineLoginBox.style.display = 'none';
+                if(inlineLoginSuccess) {
+                    inlineLoginSuccess.style.display = 'block';
+                    if(inlineLoginEmail) inlineLoginEmail.innerText = window.firebaseUser.email;
+                }
             } else {
-                statusEl.innerHTML = `🔴 Chưa đăng nhập Cloud`;
-                loginBtn.style.display = 'inline-flex';
-                logoutBtn.style.display = 'none';
-                uploadBtn.disabled = true;
-                uploadBtn.style.opacity = '0.5';
-                downBtn.disabled = true;
-                downBtn.style.opacity = '0.5';
+                if(statusEl) statusEl.innerHTML = `🔴 Chưa đăng nhập Cloud`;
+                if(loginBtn) loginBtn.style.display = 'inline-flex';
+                if(logoutBtn) logoutBtn.style.display = 'none';
+                if(uploadBtn) { uploadBtn.disabled = true; uploadBtn.style.opacity = '0.5'; }
+                if(downBtn) { downBtn.disabled = true; downBtn.style.opacity = '0.5'; }
+                
+                if(inlineLoginBox) inlineLoginBox.style.display = 'block';
+                if(inlineLoginSuccess) inlineLoginSuccess.style.display = 'none';
             }
         };
     </script>
@@ -341,6 +348,18 @@
         <h2 id="view-title" style="text-align: center; margin-bottom: 5px;">Mục tiêu hôm nay! 🎯</h2>
         <div id="motivational-quote" style="text-align: center; font-size: 16px; color: #cbd5e1; margin-bottom: 20px; line-height: 1.6;"></div>
         <button id="btn-start-lesson" class="btn btn-blue" style="width: 100%; padding: 20px; font-size: 20px; border-radius: 20px; box-shadow: 0 0 20px rgba(59,130,246,0.5); margin-bottom: 10px;" onclick="toggleMenu()">👉 BẤM VÀO ĐÂY ĐỂ CHỌN BÀI HỌC NÀO 👈</button>
+        
+        <div id="inline-login-box" style="margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 16px; border: 1px dashed #cbd5e1; text-align: center; margin-bottom: 20px;">
+            <div style="font-size: 14px; color: #cbd5e1; margin-bottom: 10px; font-weight: bold;">🔐 Đăng nhập để lưu tiến độ học</div>
+            <button onclick="loginGoogle()" class="btn" style="background: #4285F4; width: 100%; border-radius: 15px; font-size: 16px; justify-content: center;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;"><path d="M22 12c0-.8-.07-1.5-.2-2H12v4h5.6c-.2 1-1 2.3-2.5 3.3l4 3C21.4 18.1 22 15.3 22 12z" fill="white" stroke="none"/><path d="M12 22c2.8 0 5.2-1 6.9-2.6l-4-3c-1 .6-2.2 1-3 1-2.4 0-4.4-1.6-5.2-3.8H2.6v3C5 19.8 8.2 22 12 22z" fill="white" stroke="none"/><path d="M6.8 13.6C6.6 12.9 6.5 12.2 6.5 11.5s.1-1.4.3-2.1v-3H2.6C1.6 8 1 9.7 1 11.5s.6 3.5 1.6 5.1l4.2-3z" fill="white" stroke="none"/><path d="M12 4.9c1.5 0 2.9.5 4 1.5l3-3C17.2 1.7 14.8.9 12 .9 8.2.9 5 3.1 2.6 6.4l4.2 3c.8-2.2 2.8-3.8 5.2-3.8z" fill="white" stroke="none"/></svg>
+                ĐĂNG NHẬP GOOGLE
+            </button>
+        </div>
+        <div id="inline-login-success" style="display: none; margin-top: 15px; font-size: 14px; color: var(--success); font-weight: bold; text-align: center; margin-bottom: 20px;">
+            ✅ Đã đăng nhập: <span id="inline-login-email"></span>
+        </div>
+
         <div id="mode-box-container" style="display:none; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 15px; margin-bottom: 20px; border: 1px dashed var(--accent);">
             <div style="text-align: center; color: var(--warning); font-size: 15px; font-weight: 800; margin-bottom: 12px; letter-spacing: 0.5px;">👇 CHỌN 1 TRONG 3 ĐỀ KIỂM TRA 👇</div>
             <div id="mode-box" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
@@ -682,6 +701,10 @@
         document.getElementById('view-title').textContent = (listOverride ? "♻️ " : "📌 ") + day;
         const startBtn = document.getElementById('btn-start-lesson');
         if(startBtn) startBtn.style.display = 'none';
+        const inlineLoginBox = document.getElementById('inline-login-box');
+        if(inlineLoginBox) inlineLoginBox.style.display = 'none';
+        const inlineLoginSuccess = document.getElementById('inline-login-success');
+        if(inlineLoginSuccess) inlineLoginSuccess.style.display = 'none';
         ["btn-add-word", "btn-import", "btn-show-list", "btn-shuffle"].forEach(id => {
             const el = document.getElementById(id);
             if(el) el.style.display = listOverride ? 'none' : 'inline-flex';
