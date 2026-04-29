@@ -1040,6 +1040,9 @@
             if(el) el.style.display = listOverride ? 'none' : 'inline-flex';
         });
         
+        const journeyCard = document.getElementById('journey-card');
+        if(journeyCard) journeyCard.style.display = 'none';
+        
         const btnMark = document.getElementById('btn-mark-done');
         const btnUnmark = document.getElementById('btn-unmark-done');
         if(listOverride) {
