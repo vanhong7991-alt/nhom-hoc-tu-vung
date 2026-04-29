@@ -245,14 +245,16 @@
         <div id="add-inputs-voca-struct">
             <input type="text" id="add-c1" placeholder="Kanji / Từ vựng..." style="margin-bottom:12px; font-size:18px;">
             <input type="text" id="add-c2" placeholder="Cách đọc (Hiragana)..." style="margin-bottom:12px; font-size:18px;">
-            <input type="text" id="add-c3" placeholder="Ý nghĩa..." style="margin-bottom:16px; font-size:18px;">
+            <input type="text" id="add-c3" placeholder="Ý nghĩa..." style="margin-bottom:12px; font-size:18px;">
+            <input type="text" id="add-c4" placeholder="Giải thích ngắn gọn (Không bắt buộc)..." style="margin-bottom:16px; font-size:18px;">
         </div>
         <div id="add-inputs-quiz" style="display:none;">
             <input type="text" id="add-q" placeholder="Câu hỏi..." style="margin-bottom:12px; font-size:18px; border-color:var(--warning);">
             <input type="text" id="add-ans" placeholder="Đáp án ĐÚNG..." style="margin-bottom:12px; font-size:18px; border-color:var(--success); color:var(--success);">
             <input type="text" id="add-w1" placeholder="Sai 1..." style="margin-bottom:8px; font-size:16px;">
             <input type="text" id="add-w2" placeholder="Sai 2..." style="margin-bottom:8px; font-size:16px;">
-            <input type="text" id="add-w3" placeholder="Sai 3..." style="margin-bottom:16px; font-size:16px;">
+            <input type="text" id="add-w3" placeholder="Sai 3..." style="margin-bottom:12px; font-size:16px;">
+            <input type="text" id="add-q-explain" placeholder="Giải thích (Không bắt buộc)..." style="margin-bottom:16px; font-size:16px; border-color:#f97316;">
         </div>
         <div style="display:flex; gap:10px; margin-bottom:20px;">
             <button class="btn btn-green" style="flex:2;" onclick="quickAddWord()">LƯU LẠI</button>
@@ -275,7 +277,7 @@
 </div>
 
 <div id="import-modal" class="modal">
-<div class="modal-content" style="max-width:680px;max-height:92vh;overflow-y:auto;text-align:left;padding:20px 16px;">
+<div class="modal-content" style="max-width:900px;max-height:92vh;overflow-y:auto;text-align:left;padding:25px;">
   <h3 style="color:var(--warning);text-align:center;margin:0 0 16px;font-size:19px;">📥 NHẬP DỮ LIỆU HÀNG LOẠT</h3>
 
   <div class="imp-section">
@@ -288,7 +290,7 @@
         </div>
     </div>
     <button class="paste-btn" onclick="pasteFromClipboard()">📋 Dán từ Clipboard <span style="font-size:13px;opacity:.75;">(nhấn 1 lần)</span></button>
-    <textarea id="import-input" oninput="updateImportPreview()" style="height:120px;font-size:15px;text-align:left;border-radius:14px;" placeholder="• Dán từ Excel, Google Sheets, Ghi chú…"></textarea>
+    <textarea id="import-input" oninput="updateImportPreview()" style="height:250px;font-size:16px;text-align:left;border-radius:14px;width:100%;padding:15px;margin-top:10px;" placeholder="• Dán từ Excel, Google Sheets, Ghi chú…"></textarea>
 
     <div class="imp-row">
       <span>Dấu phân cách:</span>
@@ -303,11 +305,12 @@
       </div>
     </div>
 
-    <div class="imp-row" id="import-col-struct">
+    <div class="imp-row" id="import-col-struct" style="gap:15px; flex-wrap:wrap;">
       <span>Thứ tự cột:</span>
-      <span>Cột 1: <select id="col1" onchange="updateImportPreview()"><option value="c1">Kanji/Từ</option><option value="c2">Cách đọc</option><option value="c3">Nghĩa</option></select></span>
-      <span>Cột 2: <select id="col2" onchange="updateImportPreview()"><option value="c2">Cách đọc</option><option value="c1">Kanji/Từ</option><option value="c3">Nghĩa</option></select></span>
-      <span>Cột 3: <select id="col3" onchange="updateImportPreview()"><option value="c3">Nghĩa</option><option value="c1">Kanji/Từ</option><option value="c2">Cách đọc</option></select></span>
+      <span>Cột 1: <select id="col1" onchange="updateImportPreview()"><option value="c1">Kanji/Từ</option><option value="c2">Cách đọc</option><option value="c3">Nghĩa</option><option value="c4">Giải thích</option></select></span>
+      <span>Cột 2: <select id="col2" onchange="updateImportPreview()"><option value="c2" selected>Cách đọc</option><option value="c1">Kanji/Từ</option><option value="c3">Nghĩa</option><option value="c4">Giải thích</option></select></span>
+      <span>Cột 3: <select id="col3" onchange="updateImportPreview()"><option value="c3" selected>Nghĩa</option><option value="c1">Kanji/Từ</option><option value="c2">Cách đọc</option><option value="c4">Giải thích</option></select></span>
+      <span id="col4-wrap">Cột 4: <select id="col4" onchange="updateImportPreview()"><option value="c4" selected>Giải thích</option><option value="c1">Kanji/Từ</option><option value="c2">Cách đọc</option><option value="c3">Nghĩa</option></select></span>
     </div>
     <div class="imp-row" id="import-col-quiz" style="display:none; color:var(--warning); font-size:13px;">
         💡 Thứ tự cột bắt buộc: Câu hỏi | Đáp án Đúng | Sai 1 | Sai 2 | Sai 3
@@ -437,11 +440,12 @@
         document.getElementById('import-col-struct').style.display = isQuiz ? 'none' : 'flex';
         document.getElementById('import-col-quiz').style.display = isQuiz ? 'block' : 'none';
         const txtArea = document.getElementById('import-input');
+        if(document.getElementById('col4-wrap')) document.getElementById('col4-wrap').style.display = isGram ? 'none' : 'inline-block';
         if (isGram) {
             if (isQuiz) txtArea.placeholder = "• Định dạng trắc nghiệm (6 cột):\n• Câu hỏi | Đáp án 1 | Đáp án 2 | Đáp án 3 | Đáp án 4 | Đáp án đúng\n• VD: ~に違いない | Có lẽ | Không chừng | Chắc chắn | Không thể | Chắc chắn";
             else txtArea.placeholder = "• Định dạng Cấu trúc:\n• Cấu trúc | Ý nghĩa\n• VD: ~に違いない | Chắc chắn là...";
         } else {
-            txtArea.placeholder = "• Dán từ Excel, Google Sheets...\n• Mỗi từ 1 dòng\n• Ví dụ:  食べる / たべる / ăn";
+            txtArea.placeholder = "• Dán từ Excel, Google Sheets...\n• Mỗi từ 1 dòng\n• Ví dụ:  食べる / たべる / ăn / (Ăn cơm)";
         }
         updateImportPreview();
     }
@@ -459,6 +463,7 @@
             document.getElementById('add-c1').placeholder = isGram ? "Cấu trúc..." : "Kanji / Từ vựng...";
             document.getElementById('add-c2').style.display = isGram ? 'none' : 'inline-block';
             document.getElementById('add-c3').placeholder = isGram ? "Ý nghĩa..." : "Ý nghĩa...";
+            if(document.getElementById('add-c4')) document.getElementById('add-c4').style.display = isGram ? 'none' : 'inline-block';
         }
     }
 
@@ -545,19 +550,22 @@
                     ans = opt1; w1 = opt2; w2 = opt3; w3 = opt4;
                 }
 
-                const entry={ gramType: 'quiz', q, ans, w1, w2, w3, count: 0 };
+                let explain = parts[6] || '';
+                const entry={ gramType: 'quiz', q, ans, w1, w2, w3, count: 0, explain };
                 return {entry, valid, parts};
             });
         }
         const c1 = document.getElementById('col1').value;
         const c2 = document.getElementById('col2').value;
         const c3 = document.getElementById('col3').value;
+        const c4 = document.getElementById('col4') ? document.getElementById('col4').value : 'c4';
         return lines.map(line=>{
             const parts = sep==='spaces' ? line.trim().split(/\s{2,}/).map(p=>p.trim()).filter(Boolean) : line.split(sep).map(p=>p.trim());
             const valid = parts.length>=2;
             const entry={count:0};
             if (gramType === 'struct') entry.gramType = 'struct';
             entry[c1]=parts[0]||''; entry[c2]=parts[1]||''; entry[c3]=parts[2]||(parts[1]||'');
+            if(parts[3]) entry[c4]=parts[3];
             return {entry, valid, parts};
         });
     }
@@ -572,15 +580,16 @@
         const isGram = (curType === 'gram');
         const gramType = isGram ? (document.querySelector('input[name="gramType"]:checked')?.value || 'struct') : 'voca';
         if (gramType === 'quiz') {
-            box.innerHTML=`<table class="prev-tbl"><thead><tr><th>#</th><th>Câu hỏi</th><th>Đáp án 1</th><th>Đáp án 2</th><th>Đáp án 3</th><th>Đáp án 4</th><th>ĐA Đúng</th></tr></thead><tbody>`
-                +data.map((d,i)=>`<tr class="${d.valid?'':'bad'}"><td style="color:#475569">${i+1}</td><td><b style="color:var(--warning)">${d.parts[0]||'—'}</b></td><td>${d.parts[1]||'—'}</td><td>${d.parts[2]||'—'}</td><td>${d.parts[3]||'—'}</td><td>${d.parts[4]||'—'}</td><td style="color:var(--success); font-weight:bold;">${d.parts[5]||'—'}</td></tr>`).join('')
+            box.innerHTML=`<table class="prev-tbl"><thead><tr><th>#</th><th>Câu hỏi</th><th>Đáp án 1</th><th>Đáp án 2</th><th>Đáp án 3</th><th>Đáp án 4</th><th>ĐA Đúng</th><th>Giải thích</th></tr></thead><tbody>`
+                +data.map((d,i)=>`<tr class="${d.valid?'':'bad'}"><td style="color:#475569">${i+1}</td><td><b style="color:var(--warning)">${d.parts[0]||'—'}</b></td><td>${d.parts[1]||'—'}</td><td>${d.parts[2]||'—'}</td><td>${d.parts[3]||'—'}</td><td>${d.parts[4]||'—'}</td><td style="color:var(--success); font-weight:bold;">${d.parts[5]||'—'}</td><td style="color:#f97316;">${d.parts[6]||'—'}</td></tr>`).join('')
                 +'</tbody></table>';
             return;
         }
         const c1=document.getElementById('col1').value, c2=document.getElementById('col2').value, c3=document.getElementById('col3').value;
-        const L={c1: (isGram?'Cấu trúc':'Kanji/Từ'), c2:'Cách đọc', c3:'Nghĩa'};
-        box.innerHTML=`<table class="prev-tbl"><thead><tr><th>#</th><th>${L[c1]}</th><th>${L[c2]}</th><th>${L[c3]}</th></tr></thead><tbody>`
-            +data.map((d,i)=>`<tr class="${d.valid?'':'bad'}"><td style="color:#475569">${i+1}</td><td><b style="color:var(--warning)">${d.entry[c1]||'—'}</b></td><td>${d.entry[c2]||'—'}</td><td style="color:#94a3b8">${d.entry[c3]||'—'}</td></tr>`).join('')
+        const c4=document.getElementById('col4')?document.getElementById('col4').value:'c4';
+        const L={c1: (isGram?'Cấu trúc':'Kanji/Từ'), c2:'Cách đọc', c3:'Nghĩa', c4:'Giải thích'};
+        box.innerHTML=`<table class="prev-tbl"><thead><tr><th>#</th><th>${L[c1]}</th><th>${L[c2]}</th><th>${L[c3]}</th>${!isGram ? `<th>${L[c4]}</th>` : ''}</tr></thead><tbody>`
+            +data.map((d,i)=>`<tr class="${d.valid?'':'bad'}"><td style="color:#475569">${i+1}</td><td><b style="color:var(--warning)">${d.entry[c1]||'—'}</b></td><td>${d.entry[c2]||'—'}</td><td style="color:#94a3b8">${d.entry[c3]||'—'}</td>${!isGram ? `<td style="color:#3b82f6">${d.entry[c4]||'—'}</td>` : ''}</tr>`).join('')
             +'</tbody></table>';
     }
 
@@ -826,14 +835,15 @@
                 `).join('');
 
                 return `<div class="card" id="q-${i}" data-idx="${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s; padding: 25px; border-radius: 16px; background: linear-gradient(145deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9)); box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
-                    <div style="font-size:20px; font-weight:800; margin-bottom:25px; color:#0f172a; background:#f8fafc; padding:20px 25px; border-radius:12px; text-align:left; line-height:1.6; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 6px solid #3b82f6; display:flex; align-items:flex-start; gap:15px;">
-                        <div style="background:var(--accent); color:white; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:bold; flex-shrink:0; box-shadow:0 4px 10px rgba(59,130,246,0.4); border:2px solid #ffffff;">${i + 1}</div>
-                        <div style="flex:1;">${item.q}</div>
+                    <div style="position:relative; font-size:20px; font-weight:800; margin-bottom:25px; color:#0f172a; background:#f8fafc; padding:20px 25px 20px 25px; border-radius:12px; text-align:left; line-height:1.6; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 6px solid #3b82f6;">
+                        <div style="position:absolute; top:-15px; left:-15px; background:var(--accent); color:white; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:bold; box-shadow:0 4px 10px rgba(59,130,246,0.5); border:3px solid #f8fafc;">${i + 1}</div>
+                        <div style="width:100%;">${item.q}</div>
                     </div>
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;" id="opts-wrap-${i}">
                         ${optHtml}
                     </div>
                     <div id="msg-${i}" class="fb-msg" style="text-align:center; margin-top:15px; font-size:18px;"></div>
+                    ${item.explain ? `<div id="explain-${i}" style="display:none; margin-top:15px; background:#fef3c7; color:#0f172a; border:2px solid #ea580c; border-radius:12px; padding:15px; font-size:17px; font-weight:700; text-align:left; line-height:1.5; box-shadow:0 4px 10px rgba(234,88,12,0.2);">💡 <b>Giải thích:</b><br>${item.explain}</div>` : ''}
                 </div>`;
             } else {
                 let ques = '', ans = '';
@@ -850,6 +860,7 @@
                         <span>${ques} ${item.count >= 5 ? '⭐' : ''} <a href="https://www.google.com/search?q=${encodeURIComponent('Giải thích nghĩa của ' + (item.c1||'') + ' và cách sử dụng trong tiếng nhật')}" target="_blank" style="text-decoration:none; margin-left:8px; display:inline-flex; align-items:center; transition:0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Tra cứu trên Google"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></span>
                         <span id="msg-${i}" class="fb-msg"></span>
                     </div>
+                    ${item.c4 ? `<div style="font-size:16px; color:#cbd5e1; margin-bottom:15px; background:rgba(0,0,0,0.2); padding:10px 15px; border-radius:10px; border-left:4px solid var(--warning);">💡 ${item.c4}</div>` : ''}
                     <div style="display:flex; gap:12px;">
                         <input type="text" id="input-${i}" data-ans="${ans}" oninput="check(${i})" onkeydown="handleKey(event, ${i})" autocomplete="off" placeholder="...">
                         <button class="btn btn-gray" style="width:70px; font-size:24px;" onclick="showHint(${i})">👁️</button>
@@ -1064,6 +1075,9 @@
                 
                 wrap.querySelectorAll('.quiz-opt').forEach(b => b.style.pointerEvents = 'none');
                 
+                const exp = document.getElementById(`explain-${idx}`);
+                if (exp) exp.style.display = 'block';
+                
                 if (isCorrect) {
                     ok++;
                     currentList[idx].count = (currentList[idx].count || 0) + 1;
@@ -1187,29 +1201,33 @@
             const w1 = document.getElementById('add-w1').value.trim();
             const w2 = document.getElementById('add-w2').value.trim();
             const w3 = document.getElementById('add-w3').value.trim();
+            const explain = document.getElementById('add-q-explain').value.trim();
             if(!q || !ans) { alert("Nhập ít nhất câu hỏi và đáp án đúng!"); return; }
-            db[curLevel][curType][curDay].list.push({ gramType: 'quiz', q, ans, w1, w2, w3, count:0 });
+            db[curLevel][curType][curDay].list.push({ gramType: 'quiz', q, ans, w1, w2, w3, count:0, explain });
             document.getElementById('add-q').value = '';
             document.getElementById('add-ans').value = '';
             document.getElementById('add-w1').value = '';
             document.getElementById('add-w2').value = '';
             document.getElementById('add-w3').value = '';
+            document.getElementById('add-q-explain').value = '';
             document.getElementById('add-q').focus();
         } else {
             const c1 = document.getElementById('add-c1').value.trim();
             const c2 = document.getElementById('add-c2').value.trim();
             const c3 = document.getElementById('add-c3').value.trim();
+            const c4 = document.getElementById('add-c4').value.trim();
             if(!c1) { alert("Ô đầu tiên không được để trống!"); return; }
             
             const exists = db[curLevel][curType][curDay].list.some(w => (w.c1||'').trim().toLowerCase() === c1.toLowerCase());
             if(exists && !confirm(`⚠️ "${c1}" đã tồn tại trong bài này! Bạn vẫn muốn thêm?`)) return;
 
-            const entry = { count: 0, c1: c1, c2: c2, c3: c3 || c2 };
+            const entry = { count: 0, c1: c1, c2: c2, c3: c3 || c2, c4: c4 };
             if (gramType === 'struct') entry.gramType = 'struct';
             db[curLevel][curType][curDay].list.push(entry);
             document.getElementById('add-c1').value = '';
             document.getElementById('add-c2').value = '';
             document.getElementById('add-c3').value = '';
+            document.getElementById('add-c4').value = '';
             document.getElementById('add-c1').focus();
         }
         saveToLocal();
