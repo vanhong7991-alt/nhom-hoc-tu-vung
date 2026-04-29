@@ -587,8 +587,9 @@
                         ${isAllDone ? '<b class="done-check">✅</b>' : rIcon} ${dayKey}
                     </span>
                     <span style="display:flex;gap:12px;">
-                        <span style="color:var(--accent)" onclick="renameDay('${lv}', '${ty}', '${dayKey}')">✏️</span>
-                        <span style="color:var(--danger)" onclick="deleteDay('${lv}', '${ty}', '${dayKey}')">✕</span>
+                        <span style="color:var(--success)" onclick="exportDayTxt('${lv}', '${ty}', '${dayKey}')" title="Xuất file TXT">📄</span>
+                        <span style="color:var(--accent)" onclick="renameDay('${lv}', '${ty}', '${dayKey}')" title="Đổi tên">✏️</span>
+                        <span style="color:var(--danger)" onclick="deleteDay('${lv}', '${ty}', '${dayKey}')" title="Xóa">✕</span>
                     </span>`;
                 container.appendChild(div);
             });
@@ -707,7 +708,7 @@
         const msg = document.getElementById(`msg-${idx}`);
         input.classList.remove('correct', 'error-shake'); 
         
-        if (val === ans && val !== "") { 
+        if (val === ans) { 
             input.classList.add('correct'); 
             card.setAttribute('data-res', 'ok'); 
             card.style.borderLeftColor = 'var(--success)';
@@ -812,8 +813,23 @@
         if (timerInterval) toggleTimer();
         let ok = 0, failed = 0;
         document.querySelectorAll('.card[id^="q-"]').forEach((card, i) => {
-            if(card.getAttribute('data-res') === 'ok') { ok++; currentList[i].count = (currentList[i].count || 0) + 1; }
-            else failed++;
+            const input = document.getElementById(`input-${i}`);
+            const ans = input ? input.getAttribute('data-ans').trim().toLowerCase() : '';
+            const val = input ? input.value.trim().toLowerCase() : '';
+            
+            if(card.getAttribute('data-res') === 'ok' || (ans === '' && val === '')) { 
+                ok++; 
+                currentList[i].count = (currentList[i].count || 0) + 1; 
+                card.setAttribute('data-res', 'ok');
+                if (input) input.classList.add('correct');
+                card.style.borderLeftColor = 'var(--success)';
+            }
+            else { 
+                failed++;
+                if (card.getAttribute('data-res') !== 'forgot') card.setAttribute('data-res', 'ng');
+                if (input) input.classList.add('error-shake');
+                card.style.borderLeftColor = 'var(--danger)';
+            }
         });
         
         const percent = (ok / currentList.length) * 100;
@@ -992,6 +1008,24 @@
             renderSidebar(); 
             updateGlobalStats();
         } 
+    }
+
+    function exportDayTxt(lv, ty, dayKey) {
+        const list = db[lv][ty][dayKey].list;
+        if(list.length === 0) { alert("Bài này chưa có từ nào để xuất!"); return; }
+        
+        let content = "";
+        list.forEach((item) => {
+            content += `${(item.c1||'')} / ${(item.c2||'')} / ${(item.c3||'')}\n`;
+        });
+        
+        const blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${lv}_${ty}_${dayKey.replace(/ /g, '_')}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
     }
 
     function exportFile() {
