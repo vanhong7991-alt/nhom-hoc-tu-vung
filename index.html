@@ -37,14 +37,31 @@
             try {
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
+                
+                const nameInput = document.getElementById('user-name-input');
+                if (nameInput && !nameInput.value && user.displayName) {
+                    nameInput.value = user.displayName;
+                }
+
                 const docRef = doc(dbFirestore, "users", user.uid);
                 const docSnap = await getDoc(docRef);
+                let reloaded = false;
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     if (data.studyData && confirm("☁️ Đã tìm thấy dữ liệu trên Cloud!\nBạn có muốn tải về và ghi đè dữ liệu hiện tại trên máy không?")) {
                         localStorage.setItem('mgao_v37_db', data.studyData);
                         alert("✅ Phục hồi dữ liệu từ Cloud thành công!");
                         location.reload();
+                        reloaded = true;
+                    }
+                }
+                
+                if (!reloaded) {
+                    const welcome = document.getElementById('welcome-screen');
+                    if (welcome && welcome.style.display !== 'none') {
+                        if (nameInput && nameInput.value && typeof saveUser === 'function') {
+                            saveUser();
+                        }
                     }
                 }
             } catch (error) {
@@ -116,11 +133,6 @@
             const logoutBtn = document.getElementById('btn-fb-logout');
             const uploadBtn = document.getElementById('btn-fb-upload');
             const downBtn = document.getElementById('btn-fb-down');
-            const floatingLoginBtn = document.getElementById('floating-login-btn');
-            
-            if (floatingLoginBtn) {
-                floatingLoginBtn.style.display = window.firebaseUser ? 'none' : 'block';
-            }
             
             if (!statusEl) return;
             
@@ -259,23 +271,6 @@
     </style>
 </head>
 <body>
-<button id="floating-login-btn" onclick="loginGoogle()" style="
-  position: fixed;
-  top: 15px;
-  right: 80px;
-  background: #4285F4;
-  color: white;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  z-index: 2000;
-  font-weight: bold;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-">
-  Đăng nhập Google
-</button>
-
 <div id="rt-wrapper" class="rt-widget" onclick="toggleChartWidget()" title="Nhấn để thu gọn/mở rộng">
     <div id="rt-content" style="display: flex; align-items: center; gap: 20px;">
         <div class="donut-chart" id="rt-donut">
@@ -296,7 +291,15 @@
 <div id="welcome-screen" style="display: none; position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; align-items: center; justify-content: center; padding: 20px;">
     <div class="modal-content" style="border-color: var(--accent);">
         <h1 style="color: var(--warning);">Chào mừng bạn! 🌸</h1>
-        <input type="text" id="user-name-input" placeholder="Tên của bạn..." maxlength="15" style="margin: 25px 0;">
+        
+        <button id="welcome-login-btn" onclick="loginGoogle()" class="btn btn-blue" style="width: 100%; background: #4285F4; font-size: 18px; margin-top: 25px; margin-bottom: 15px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;"><path d="M22 12c0-.8-.07-1.5-.2-2H12v4h5.6c-.2 1-1 2.3-2.5 3.3l4 3C21.4 18.1 22 15.3 22 12z" fill="white" stroke="none"/><path d="M12 22c2.8 0 5.2-1 6.9-2.6l-4-3c-1 .6-2.2 1-3 1-2.4 0-4.4-1.6-5.2-3.8H2.6v3C5 19.8 8.2 22 12 22z" fill="white" stroke="none"/><path d="M6.8 13.6C6.6 12.9 6.5 12.2 6.5 11.5s.1-1.4.3-2.1v-3H2.6C1.6 8 1 9.7 1 11.5s.6 3.5 1.6 5.1l4.2-3z" fill="white" stroke="none"/><path d="M12 4.9c1.5 0 2.9.5 4 1.5l3-3C17.2 1.7 14.8.9 12 .9 8.2.9 5 3.1 2.6 6.4l4.2 3c.8-2.2 2.8-3.8 5.2-3.8z" fill="white" stroke="none"/></svg>
+            ĐĂNG NHẬP GOOGLE
+        </button>
+        
+        <div style="color: #94a3b8; font-size: 14px; font-weight: bold; margin-bottom: 15px;">HOẶC ĐIỀN TÊN TRỰC TIẾP</div>
+
+        <input type="text" id="user-name-input" placeholder="Tên của bạn..." maxlength="15" style="margin-bottom: 20px;">
         <button class="btn btn-blue" style="width: 100%; font-size: 20px;" onclick="saveUser()">BẮT ĐẦU</button>
     </div>
 </div>
