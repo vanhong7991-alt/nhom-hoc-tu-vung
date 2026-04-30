@@ -278,6 +278,18 @@
             display: none;
         }
 
+        /* Active menu item highlight */
+        .menu-lvl3.active-lesson {
+            background: linear-gradient(90deg, rgba(59,130,246,0.25), rgba(168,85,247,0.15)) !important;
+            border-left: 4px solid #3b82f6 !important;
+            color: #fff !important;
+            box-shadow: inset 0 0 12px rgba(59,130,246,0.15);
+        }
+        .menu-lvl3.active-lesson .lesson-name-text {
+            color: #60a5fa !important;
+            font-weight: 900 !important;
+        }
+
         /* --- MODAL --- */
         .modal {
             display: none;
@@ -885,11 +897,22 @@
         </div>
 
         <div class="card" id="top-control-card" style="position: relative;">
-            <button onclick="toggleTopCard()" id="top-card-toggle-btn"
-                style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.1); border: none; color: white; font-size: 16px; cursor: pointer; padding: 5px 12px; border-radius: 12px; font-weight: bold; transition: 0.2s;"
-                title="Thu gọn/Mở rộng">➖ Thu gọn</button>
-            <h2 id="view-title" style="text-align: center; margin-bottom: 5px; margin-top: 0; padding-top: 5px;">Mục
-                tiêu hôm nay! 🎯</h2>
+            <!-- Top row: Back button (left) + Toggle button (right) -->
+            <div id="breadcrumb-bar" style="display:none; flex-direction:column; gap:10px; margin-bottom:14px;">
+                <!-- Row 1: buttons -->
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <button onclick="goBack()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color:#e2e8f0; font-size:14px; font-weight:800; padding:6px 14px; border-radius:10px; cursor:pointer; display:flex; align-items:center; gap:6px; font-family:'Baloo 2'; transition:0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">&#8592; Quay l&#7841;i</button>
+                    <button onclick="toggleTopCard()" id="top-card-toggle-btn" style="background: rgba(255,255,255,0.1); border: none; color: white; font-size: 16px; cursor: pointer; padding: 5px 12px; border-radius: 12px; font-weight: bold; transition: 0.2s;" title="Thu g&#7885;n/M&#7903; r&#7897;ng">&#8722; Thu g&#7885;n</button>
+                </div>
+                <!-- Row 2: breadcrumb pill -->
+                <div id="breadcrumb-text" style="font-size:12px; font-weight:800; padding:6px 14px; border-radius:20px; background: linear-gradient(135deg, rgba(59,130,246,0.3), rgba(168,85,247,0.3)); border: 1px solid rgba(168,85,247,0.4); color:#e2e8f0; text-align:center; letter-spacing:0.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+            </div>
+
+            <!-- Default toggle button (shown when breadcrumb-bar is hidden) -->
+            <button onclick="toggleTopCard()" id="top-card-toggle-btn-default" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.1); border: none; color: white; font-size: 16px; cursor: pointer; padding: 5px 12px; border-radius: 12px; font-weight: bold; transition: 0.2s;" title="Thu g&#7885;n/M&#7903; r&#7897;ng">&#8722; Thu g&#7885;n</button>
+
+            <h2 id="view-title" style="text-align: center; margin-bottom: 5px; margin-top: 0; padding-top: 5px;">M&#7909;c
+                ti&#234;u h&#244;m nay! &#127919;</h2>
 
             <div id="top-card-content">
                 <div id="motivational-quote"
@@ -1028,24 +1051,38 @@
     </div>
 
     <div id="congrats-modal" class="modal">
-        <div class="modal-content">
-            <h1 id="congrats-title" style="color: var(--success); font-size: 35px; margin-bottom: 10px;">KẾT QUẢ</h1>
-            <div style="font-size: 20px; margin: 20px 0; line-height: 1.6;">
-                <p>✅ Đúng: <b id="res-ok" style="color:var(--success)">0</b> | ❌ Sai/Quên: <b id="res-ng"
-                        style="color:var(--danger)">0</b></p>
-                <p>⏱️ Thời gian: <b id="res-time" style="color:var(--warning)">00:00</b></p>
+        <div class="modal-content" id="congrats-modal-content" style="position: relative; overflow: visible; max-width: 450px; padding: 35px 30px 30px;">
+            
+            <div style="position: relative; z-index: 2;">
+                <h1 id="congrats-title" style="font-size: 32px; margin-bottom: 5px; text-shadow: 0 4px 10px rgba(0,0,0,0.5);">KẾT QUẢ</h1>
+                <div id="congrats-subtitle" style="font-size: 16px; color: #cbd5e1; margin-bottom: 25px; font-weight: 700;"></div>
+                
+                <div style="background: rgba(0,0,0,0.3); border-radius: 16px; padding: 20px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="font-size: 20px; margin-bottom: 15px; font-weight: 900; display: flex; justify-content: center; gap: 10px;">
+                        <span style="padding: 6px 16px; background: rgba(34,197,94,0.15); color: #4ade80; border-radius: 12px; border: 1px solid rgba(34,197,94,0.3);">✅ Đúng: <span id="res-ok">0</span></span>
+                        <span style="padding: 6px 16px; background: rgba(239,68,68,0.15); color: #f87171; border-radius: 12px; border: 1px solid rgba(239,68,68,0.3);">❌ Sai: <span id="res-ng">0</span></span>
+                    </div>
+                    <div style="font-size: 16px; color: #94a3b8; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        ⏱️ Thời gian: <span id="res-time" style="color: var(--warning);">00:00</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <button id="btn-close-congrats" class="btn" style="background: linear-gradient(135deg, #10b981, #059669); font-size: 19px; padding: 18px; border-radius: 18px; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); border: 2px solid #34d399; color: white; text-transform: uppercase; letter-spacing: 1px; font-weight: 900; width: 100%; transition: transform 0.2s; cursor: pointer;" onclick="closeModal('congrats-modal')" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">ĐÓNG VÀ XEM ĐÁP ÁN</button>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px;">
+                        <button id="btn-retry-failed" class="btn" style="display: none; background: rgba(255,255,255,0.05); color: #e2e8f0; font-size: 15px; padding: 14px; border-radius: 12px; border: 1px dashed rgba(255,255,255,0.3); width: 100%; font-weight: 800; cursor: pointer;" onclick="retryFailedOnly()" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">♻️ LÀM LẠI CÂU QUÊN VÀ SAI</button>
+                        <button class="btn" style="background: rgba(255,255,255,0.05); color: #94a3b8; font-size: 14px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); width: 100%; font-weight: 700; cursor: pointer;" onclick="closeModal('congrats-modal'); window.scrollTo({top: 0, behavior: 'smooth'});" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">🔄 Chuyển bài khác (Cùng ngày)</button>
+                        <button class="btn" style="background: rgba(255,255,255,0.05); color: #94a3b8; font-size: 14px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); width: 100%; font-weight: 700; cursor: pointer;" onclick="toggleMenu(); closeModal('congrats-modal')" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">⏭️ Chọn ngày khác</button>
+                    </div>
+                </div>
             </div>
-            <div style="display: grid; gap: 12px;">
-                <button class="btn btn-purple" id="btn-retry-failed" style="display: none;"
-                    onclick="retryFailedOnly()">♻️ LÀM LẠI CÂU QUÊN VÀ SAI</button>
-                <button class="btn btn-blue"
-                    onclick="closeModal('congrats-modal'); window.scrollTo({top: 0, behavior: 'smooth'});">🔄 CHUYỂN BÀI
-                    KHÁC (Cùng ngày)</button>
-                <button class="btn btn-warning" onclick="toggleMenu(); closeModal('congrats-modal')">⏭️ CHUYỂN NGÀY
-                    KHÁC</button>
-                <button id="btn-close-congrats" class="btn btn-gray"
-                    onclick="closeModal('congrats-modal')">ĐÓNG</button>
-            </div>
+
+            <!-- 4 corner flowers - always visible -->
+            <div style="position:absolute; top:-14px; left:-14px; font-size:28px; pointer-events:none; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">🌸</div>
+            <div style="position:absolute; top:-14px; right:-14px; font-size:28px; pointer-events:none; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">🌸</div>
+            <div style="position:absolute; bottom:-14px; left:-14px; font-size:28px; pointer-events:none; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">🌸</div>
+            <div style="position:absolute; bottom:-14px; right:-14px; font-size:28px; pointer-events:none; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">🌸</div>
         </div>
     </div>
 
@@ -1339,7 +1376,7 @@
                         div.className = 'menu-lvl3';
                         div.innerHTML = `
                         <span onclick="selectVanDay('${sectionKey}','${sub}',${idx})" style="flex:1;display:flex;align-items:center;gap:8px;">
-                            ${rIcon} <span>${lesson.name}</span>
+                            ${rIcon} <span class="lesson-name-text">${lesson.name}</span>
                         </span>
                         <span style="display:flex;align-items:center;gap:8px;margin-right:12px;">
                             ${isAllDone ? '<b class="done-check" style="font-size:18px;">✅</b>' : ''}
@@ -1384,6 +1421,12 @@
             if (curType === 'voca_quiz' || curType === 'gram_quiz') bestMode = 2;
             changeMode(bestMode);
             resetTimer();
+
+            // Breadcrumb & back button
+            const secLabel = {'n1voca':'N1 Từ Vựng','n2gram':'N2 Ngữ Pháp','bjtvoca':'BJT Từ Vựng'}[sectionKey] || sectionKey;
+            const subLabel = sub === 'struct' ? 'Từ đơn' : 'Trắc nghiệm';
+            setBreadcrumb(`${secLabel} / ${subLabel} / ${lesson.name}`, true);
+            setActiveMenuItem(lesson.name);
         }
 
         function fT(text) {
@@ -1399,15 +1442,57 @@
 
         function toggleTopCard() {
             const content = document.getElementById('top-card-content');
-            const btn = document.getElementById('top-card-toggle-btn');
+            // sync both possible toggle buttons
+            const btns = [document.getElementById('top-card-toggle-btn'), document.getElementById('top-card-toggle-btn-default')];
             if (content.style.display === 'none') {
                 content.style.display = 'block';
-                btn.innerHTML = '➖ Thu gọn';
+                btns.forEach(b => { if (b) b.innerHTML = '&#8722; Thu g&#7885;n'; });
             } else {
                 content.style.display = 'none';
-                btn.innerHTML = '➕ Mở rộng';
+                btns.forEach(b => { if (b) b.innerHTML = '&#43; M&#7903; r&#7897;ng'; });
             }
         }
+
+        /* ===== BREADCRUMB & BACK BUTTON HELPERS ===== */
+        let _lastBackContext = null; // {sectionId, parentId}
+
+        function setBreadcrumb(path, isVan) {
+            const bar = document.getElementById('breadcrumb-bar');
+            const txt = document.getElementById('breadcrumb-text');
+            const defBtn = document.getElementById('top-card-toggle-btn-default');
+            if (!bar || !txt) return;
+            bar.style.display = 'flex';
+            txt.innerHTML = (isVan ? '🌸 Góc của Vân&nbsp;&nbsp;❯&nbsp;&nbsp;' : '') + path.replace(/ \/ /g, '&nbsp;&nbsp;❯&nbsp;&nbsp;');
+            // hide the default toggle (now inside breadcrumb-bar)
+            if (defBtn) defBtn.style.display = 'none';
+        }
+
+        function setActiveMenuItem(dayName) {
+            // remove all previous active highlights
+            document.querySelectorAll('.menu-lvl3.active-lesson').forEach(el => el.classList.remove('active-lesson'));
+            // find by text content matching
+            document.querySelectorAll('.menu-lvl3').forEach(el => {
+                const nameEl = el.querySelector('.lesson-name-text');
+                const label = nameEl ? nameEl.textContent.trim() : el.textContent.trim();
+                if (label === dayName || label.includes(dayName)) {
+                    el.classList.add('active-lesson');
+                    // auto-expand parents
+                    let parent = el.parentElement;
+                    while (parent && parent.id !== 'sidebar') {
+                        if (parent.classList.contains('sub-menu')) {
+                            parent.style.display = 'block';
+                        }
+                        parent = parent.parentElement;
+                    }
+                    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        }
+
+        function goBack() {
+            toggleMenu();
+        }
+        /* ============================================= */
         let db = JSON.parse(localStorage.getItem('mgao_v37_db'));
         let userName = localStorage.getItem('mgao_user_v37') || "";
         let curLevel, curType, curDay, seconds = 0, timerInterval = null, currentList = [], currentMode = 0;
@@ -1929,7 +2014,7 @@
                         const rIcon = icons[idx % icons.length];
                         div.innerHTML = `
                     <span onclick="selectDay('${lv}', '${ty}', '${dayKey}')" style="flex:1; display:flex; align-items:center; gap:8px;">
-                        ${rIcon} <span>${dayKey}</span>
+                        ${rIcon} <span class="lesson-name-text">${dayKey}</span>
                     </span>
                     <span style="display:flex; align-items:center; gap:8px; margin-right:12px;">
                         ${isAllDone ? '<b class="done-check" style="font-size:18px;">✅</b>' : ''}
@@ -1963,7 +2048,7 @@
         }
 
         function selectDay(lv, ty, day, listOverride = null) {
-            curVanMode = false; // reset khi chọn bài user
+            curVanMode = false;
             curLevel = lv; curType = ty; curDay = day; currentList = listOverride || db[lv][ty][day].list;
             document.getElementById('view-title').textContent = (listOverride ? "♻️ " : "📌 ") + day;
             const startBtn = document.getElementById('btn-start-lesson');
@@ -1995,6 +2080,12 @@
             if (curType === 'voca_quiz' || curType === 'gram_quiz') bestMode = 2;
             changeMode(bestMode);
             resetTimer();
+
+            // Breadcrumb & back button
+            const lvLabel = {'n1':'Năng lực N1','n2':'Năng lực N2','n3':'Trình độ N3','bjt':'BJT'}[lv] || lv;
+            const tyLabel = {'voca':'Từ vựng','gram':'Ngữ pháp','voca_quiz':'Từ vựng (TN)','gram_quiz':'Ngữ pháp (TN)'}[ty] || ty;
+            setBreadcrumb(`${lvLabel} / ${tyLabel} / ${day}`, false);
+            setActiveMenuItem(day);
         }
 
         function changeMode(m) {
@@ -2443,10 +2534,29 @@
             document.getElementById('btn-retry-failed').style.display = failed > 0 ? 'block' : 'none';
 
             let title = "CỐ GẮNG THÊM 💪";
-            if (percent === 100) { title = "XUẤT SẮC! 🏆"; confetti({ particleCount: 200, spread: 70 }); }
-            else if (percent >= 90) title = "QUÁ GIỎI! 🌟";
+            let subtitle = "Bạn đã rất cố gắng nhưng hãy làm thêm lần nữa nhé.";
+            let titleColor = "var(--danger)";
+            let showDecor = false;
 
-            document.getElementById('congrats-title').innerText = title;
+            if (percent === 100) { 
+                title = "XUẤT SẮC! 🏆"; 
+                subtitle = "Bạn thật xuất sắc, hãy phát huy nhé.";
+                titleColor = "var(--success)";
+                showDecor = true;
+                confetti({ particleCount: 200, spread: 70 }); 
+            }
+            else if (percent >= 90) {
+                title = "QUÁ GIỎI! 🌟";
+                subtitle = "Giỏi quá, cố thêm lần nữa nhé.";
+                titleColor = "var(--warning)";
+            }
+
+            const titleEl = document.getElementById('congrats-title');
+            titleEl.innerText = title;
+            titleEl.style.color = titleColor;
+            
+            document.getElementById('congrats-subtitle').innerText = subtitle;
+
             const btnClose = document.getElementById('btn-close-congrats');
             if (btnClose) btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN";
             openModal('congrats-modal');
