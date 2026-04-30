@@ -467,7 +467,8 @@
         return String(text)
             .replace(/\\n/g, '<br>')
             .replace(/\n/g, '<br>')
-            .replace(/(?<!🇻🇳\s)Dịch:/g, '<br><span style="color:#059669; font-weight:900;">🇻🇳 Dịch:</span>')
+            .replace(/(?:[\uD83C\uDDFB\uD83C\uDDF3\u2600-\u26FF\u2700-\u27BF\u1F300-\u1F5FF\u1F600-\u1F64F\u1F680-\u1F6FF\u1F900-\u1F9FF\u1FA70-\u1FAFF\u1F1E6-\u1F1FF]+)?\s*Dịch\s*:/gi, 'Dịch:')
+            .replace(/Dịch:/g, '<br><span style="color:#059669; font-weight:900;">&#x1F1FB;&#x1F1F3; Dịch:</span>')
             .replace(/\[\[(.*?)\]\]/g, '<span style="color: #ef4444; font-weight: 900; text-decoration: underline; text-underline-offset: 4px;">$1</span>')
             .replace(/\(\((.*?)\)\)/g, '<span style="color: #ef4444; font-weight: 900; text-decoration: underline; text-underline-offset: 4px;">$1</span>');
     }
