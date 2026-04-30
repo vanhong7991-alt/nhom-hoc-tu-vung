@@ -94,12 +94,35 @@
             .sidebar { width: 100vw; }
             .main-wrapper { margin-left: 0; }
             body:not(.sidebar-hidden) .main-wrapper { display: none; }
+            #mobile-menu-fab { display: flex !important; }
         }
         @media (min-width: 481px) and (max-width: 768px) {
             :root { --sidebar-width: 90vw; }
             .sidebar { width: 90vw; }
             .main-wrapper { margin-left: 90vw; }
         }
+
+        /* Floating mobile menu button */
+        #mobile-menu-fab {
+            display: none;
+            position: fixed;
+            bottom: 24px;
+            right: 20px;
+            z-index: 9000;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            font-size: 24px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(59,130,246,0.6);
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        #mobile-menu-fab:active { transform: scale(0.92); }
 
         .sidebar-stats-container {
             padding: 15px;
@@ -815,6 +838,9 @@
             <button class="btn btn-blue" style="width: 100%; font-size: 20px;" onclick="saveUser()">BẮT ĐẦU 🌸</button>
         </div>
     </div>
+
+    <!-- Floating button to reopen menu on mobile (shown only when sidebar is hidden on small screens) -->
+    <button id="mobile-menu-fab" onclick="toggleMenu()" title="Mở menu">☰</button>
 
     <div id="app-layout">
     <div class="mobile-header">
@@ -1738,7 +1764,30 @@
             // save preference
             localStorage.setItem('sidebar_hidden', document.body.classList.contains('sidebar-hidden') ? '1' : '0');
             updateGlobalStats();
+            // Show/hide FAB on mobile
+            const fab = document.getElementById('mobile-menu-fab');
+            if (fab) fab.style.display = document.body.classList.contains('sidebar-hidden') ? 'flex' : 'none';
         }
+
+        // ── Touch swipe to open/close sidebar on mobile ──
+        (function() {
+            let touchStartX = 0, touchStartY = 0;
+            const SWIPE_THRESHOLD = 50;
+            document.addEventListener('touchstart', e => {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+            document.addEventListener('touchend', e => {
+                const dx = e.changedTouches[0].clientX - touchStartX;
+                const dy = e.changedTouches[0].clientY - touchStartY;
+                if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dy) > Math.abs(dx) * 1.5) return; // ignore small / vertical swipes
+                const isSidebarHidden = document.body.classList.contains('sidebar-hidden');
+                // Swipe right from left edge → open sidebar
+                if (dx > 0 && touchStartX < 40 && isSidebarHidden) { toggleMenu(); return; }
+                // Swipe left anywhere on sidebar → close
+                if (dx < 0 && !isSidebarHidden) { toggleMenu(); return; }
+            }, { passive: true });
+        })();
         function toggleSub(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
         let curSep = 'auto';
         function updateImportUI() {
