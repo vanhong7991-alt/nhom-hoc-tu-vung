@@ -942,10 +942,20 @@
     <div class="main-wrapper">
     <div class="main">
         <div class="card" style="text-align: center;">
-            <div id="timer-display">00:00</div>
+            <div style="display:flex; align-items:center; justify-content:center; gap:24px; flex-wrap:wrap;">
+                <div style="text-align:center;">
+                    <div style="font-size:11px; font-weight:800; color:#64748b; letter-spacing:1px; text-transform:uppercase; margin-bottom:2px;">⏱ BÀI NÀY</div>
+                    <div id="timer-display" style="font-size:inherit;">00:00</div>
+                </div>
+                <div style="width:1px; height:40px; background:rgba(255,255,255,0.1);"></div>
+                <div style="text-align:center;">
+                    <div style="font-size:11px; font-weight:800; color:#64748b; letter-spacing:1px; text-transform:uppercase; margin-bottom:2px;">🕐 TỔNG</div>
+                    <div id="total-timer-display" style="font-size:inherit; color:var(--warning);">00:00</div>
+                </div>
+            </div>
             <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
                 <button class="btn btn-green" id="timer-btn" onclick="toggleTimer()">▶ BẮT ĐẦU</button>
-                <button class="btn btn-gray" onclick="resetTimer()">🔄 RESET GIỜ</button>
+                <button class="btn btn-gray" onclick="resetLessonTimer()">🔄 RESET BÀI</button>
             </div>
         </div>
 
@@ -1121,6 +1131,9 @@
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Next lesson button (shown when there's a next lesson) -->
+                    <button id="btn-next-lesson" class="btn" style="display:none; background: linear-gradient(135deg, #3b82f6, #8b5cf6); font-size: 19px; padding: 18px; border-radius: 18px; box-shadow: 0 10px 25px rgba(59,130,246,0.5); border: 2px solid #60a5fa; color: white; text-transform: uppercase; letter-spacing: 1px; font-weight: 900; width: 100%; transition: transform 0.2s; cursor: pointer; animation: pulse-glow 1.5s ease-in-out infinite;" onclick="goNextLesson()" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">→ SANG BÀI TIẾP THEO</button>
+
                     <button id="btn-close-congrats" class="btn" style="background: linear-gradient(135deg, #10b981, #059669); font-size: 19px; padding: 18px; border-radius: 18px; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); border: 2px solid #34d399; color: white; text-transform: uppercase; letter-spacing: 1px; font-weight: 900; width: 100%; transition: transform 0.2s; cursor: pointer;" onclick="closeModal('congrats-modal')" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">ĐÓNG VÀ XEM ĐÁP ÁN</button>
                     
                     <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px;">
@@ -1563,6 +1576,9 @@
         let db = JSON.parse(localStorage.getItem('mgao_v37_db'));
         let userName = localStorage.getItem('mgao_user_v37') || "";
         let curLevel, curType, curDay, seconds = 0, timerInterval = null, currentList = [], currentMode = 0;
+        let totalSeconds = 0, totalTimerInterval = null;
+        let lessonTimes = []; // stores time (seconds) for each completed lesson
+        let sessionScores = []; // stores {ok, total, mode} for each lesson
         var showAnswerImmediately = false;
         let pendingDeletes = new Set();
 
@@ -2156,7 +2172,10 @@
             let bestMode = 0;
             if (curType === 'voca_quiz' || curType === 'gram_quiz') bestMode = 2;
             changeMode(bestMode);
-            resetTimer();
+            resetLessonTimer();
+            resetTotalTimer();
+            lessonTimes = [];
+            sessionScores = [];
 
             // Breadcrumb & back button
             const lvLabel = {'n1':'Năng lực N1','n2':'Năng lực N2','n3':'Trình độ N3','bjt':'BJT'}[lv] || lv;
@@ -2226,6 +2245,10 @@
             // Always clear quiz container first to prevent stale content from previous selection
             document.getElementById('quiz-container').innerHTML = '';
             if (currentList.length > 0) renderQuiz();
+
+            // Auto-start timer for new lesson
+            if (!timerInterval && currentList.length > 0) toggleTimer();
+            if (!totalTimerInterval && currentList.length > 0) startTotalTimer();
         }
 
         function shuffleArray(array) {
@@ -2512,6 +2535,7 @@
         }
 
         function submitQuiz() {
+            // Stop lesson timer, save lesson time
             if (timerInterval) toggleTimer();
             let ok = 0, failed = 0;
             const cards = document.querySelectorAll('.card[id^="q-"]');
@@ -2636,8 +2660,31 @@
             
             document.getElementById('congrats-subtitle').innerText = subtitle;
 
+            // Save this lesson's score
+            lessonTimes.push(seconds);
+            sessionScores.push({ ok, total, mode: currentMode });
+
+            // Show/hide "Next lesson" button
+            const maxMode = getMaxModeForType();
+            const btnNext = document.getElementById('btn-next-lesson');
             const btnClose = document.getElementById('btn-close-congrats');
-            if (btnClose) btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN";
+            if (currentMode < maxMode - 1 && !curVanMode) {
+                const modeLabels = { 0: 'Bài 1', 1: 'Bài 2', 2: 'Bài 3' };
+                if (btnNext) { btnNext.style.display = 'block'; btnNext.textContent = `→ SANG ${modeLabels[currentMode + 1] || 'BÀI TIẾP THEO'}`; }
+                if (btnClose) { btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; btnClose.onclick = () => closeModal('congrats-modal'); }
+            } else if (!curVanMode && sessionScores.length > 0) {
+                // Last lesson — close button shows completion screen
+                if (btnNext) btnNext.style.display = 'none';
+                if (btnClose) {
+                    btnClose.innerText = "🎉 XEM KẾT QUẢ TỔNG";
+                    btnClose.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                    btnClose.style.boxShadow = '0 10px 25px rgba(245,158,11,0.5)';
+                    btnClose.onclick = () => { closeModal('congrats-modal'); setTimeout(showCompletionScreen, 300); };
+                }
+            } else {
+                if (btnNext) btnNext.style.display = 'none';
+                if (btnClose) { btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; btnClose.onclick = () => closeModal('congrats-modal'); }
+            }
             openModal('congrats-modal');
         }
 
@@ -2651,9 +2698,119 @@
             selectDay(curLevel, curType, curDay, wrongs);
         }
 
-        function toggleTimer() { const btn = document.getElementById('timer-btn'); if (timerInterval) { clearInterval(timerInterval); timerInterval = null; btn.innerText = "▶ TIẾP TỤC"; btn.className = "btn btn-green"; } else { timerInterval = setInterval(() => { seconds++; updateTime(); }, 1000); btn.innerText = "⏸ TẠM DỪNG"; btn.className = "btn btn-danger"; } }
-        function resetTimer() { seconds = 0; updateTime(); }
-        function updateTime() { const m = Math.floor(seconds / 60).toString().padStart(2, '0'), s = (seconds % 60).toString().padStart(2, '0'); document.getElementById('timer-display').textContent = document.getElementById('header-timer').textContent = `${m}:${s}`; }
+        function toggleTimer() {
+            const btn = document.getElementById('timer-btn');
+            if (timerInterval) {
+                clearInterval(timerInterval); timerInterval = null;
+                btn.innerText = "▶ TIẾP TỤC"; btn.className = "btn btn-green";
+            } else {
+                timerInterval = setInterval(() => { seconds++; updateLessonTime(); }, 1000);
+                btn.innerText = "⏸ TẠM DỪNG"; btn.className = "btn btn-danger";
+            }
+        }
+        function startTotalTimer() {
+            if (totalTimerInterval) return;
+            totalTimerInterval = setInterval(() => { totalSeconds++; updateTotalTime(); }, 1000);
+        }
+        function resetLessonTimer() { seconds = 0; updateLessonTime(); }
+        function resetTotalTimer() { if (totalTimerInterval) { clearInterval(totalTimerInterval); totalTimerInterval = null; } totalSeconds = 0; updateTotalTime(); }
+        // Keep resetTimer as alias for backward compat
+        function resetTimer() { resetLessonTimer(); }
+        function updateLessonTime() {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0'), s = (seconds % 60).toString().padStart(2, '0');
+            const t = `${m}:${s}`;
+            const d = document.getElementById('timer-display'); if (d) d.textContent = t;
+            const h = document.getElementById('header-timer'); if (h) h.textContent = t;
+        }
+        function updateTotalTime() {
+            const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0'), s = (totalSeconds % 60).toString().padStart(2, '0');
+            const d = document.getElementById('total-timer-display'); if (d) d.textContent = `${m}:${s}`;
+        }
+        function updateTime() { updateLessonTime(); } // backward compat alias
+
+        function getMaxModeForType() {
+            if (curType === 'voca_quiz' || curType === 'gram_quiz') return 1;
+            if (curType === 'gram') return 2;
+            return 3; // voca
+        }
+
+        function goNextLesson() {
+            const nextMode = currentMode + 1;
+            closeModal('congrats-modal');
+            // Save current lesson time before switching
+            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+            // Reset lesson timer for new lesson
+            seconds = 0; updateLessonTime();
+            // Switch to next mode (changeMode auto-starts timer)
+            changeMode(nextMode);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function markDayComplete() {
+            if (!curLevel || !curType || !curDay || !db[curLevel]?.[curType]?.[curDay]) return;
+            db[curLevel][curType][curDay].done = [true, true, true];
+            saveToLocal();
+            renderSidebar();
+        }
+
+        function showCompletionScreen() {
+            if (totalTimerInterval) { clearInterval(totalTimerInterval); totalTimerInterval = null; }
+            const totalOk = sessionScores.reduce((a, s) => a + s.ok, 0);
+            const totalQ = sessionScores.reduce((a, s) => a + s.total, 0);
+            const pct = totalQ > 0 ? Math.round((totalOk / totalQ) * 100) : 0;
+            const modeNames = { 0: 'Bài 1 (Cách đọc)', 1: 'Bài 2 (Nghĩa)', 2: 'Bài 3 (Tiếng Nhật)' };
+            const toTime = s => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
+            const breakdownHtml = lessonTimes.map((t, i) => {
+                const sc = sessionScores[i];
+                return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+                    <span style="color:#94a3b8;font-weight:700;">${modeNames[sc?.mode ?? i] || 'Bài '+(i+1)}</span>
+                    <span>${sc ? `<b style="color:#4ade80">${sc.ok}</b>/<span style="color:#94a3b8">${sc.total}</span>` : ''} &nbsp;<span style="color:var(--warning);font-weight:800;">${toTime(t)}</span></span>
+                </div>`;
+            }).join('');
+
+            // Rating & custom motivational message
+            let rating, ratingColor, motivMsg;
+            if (pct === 100) {
+                rating = '🏆 TUYỆT VỜI!';
+                ratingColor = '#4ade80';
+                motivMsg = 'Bạn đã hoàn thành xuất sắc rồi, tiếp tục phát huy nhé! 🌟';
+            } else if (pct >= 90) {
+                rating = '🌟 XUẤT SẮC!';
+                ratingColor = '#fbbf24';
+                motivMsg = 'Bạn làm tốt lắm nhưng sẽ tốt hơn nếu bạn cố thêm để điểm cao hơn đấy 💪';
+            } else {
+                rating = pct >= 70 ? '👍 KHÁ TỐT!' : '💪 CỐ THÊM NHÉ!';
+                ratingColor = pct >= 70 ? '#60a5fa' : '#f87171';
+                motivMsg = 'Mình biết bạn cũng đã cố gắng rồi, nhưng bạn hãy cố gắng thêm xíu nữa nhé 🥰';
+            }
+
+            const overlay = document.createElement('div');
+            overlay.id = 'completion-overlay';
+            overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);';
+            overlay.innerHTML = `
+                <div style="background:linear-gradient(145deg,#1e293b,#0f172a);border:1px solid rgba(255,255,255,0.1);border-radius:28px;padding:40px 36px;max-width:500px;width:92%;box-shadow:0 30px 80px rgba(0,0,0,0.6);text-align:center;position:relative;">
+                    <div style="font-size:60px;margin-bottom:12px;">🎉</div>
+                    <h1 style="font-size:28px;color:${ratingColor};margin:0 0 8px;text-shadow:0 0 20px ${ratingColor}40;">${rating}</h1>
+                    <div style="color:#cbd5e1;font-size:15px;font-weight:700;margin-bottom:24px;line-height:1.6;padding:0 8px;">${motivMsg}</div>
+
+                    <div style="background:rgba(0,0,0,0.3);border-radius:16px;padding:16px 20px;margin-bottom:20px;border:1px solid rgba(255,255,255,0.06);">
+                        <div style="display:flex;justify-content:center;gap:20px;margin-bottom:16px;">
+                            <div style="text-align:center;"><div style="font-size:34px;font-weight:900;color:#4ade80;">${totalOk}</div><div style="font-size:11px;color:#64748b;font-weight:700;">ĐÚNG</div></div>
+                            <div style="text-align:center;"><div style="font-size:34px;font-weight:900;color:#f87171;">${totalQ - totalOk}</div><div style="font-size:11px;color:#64748b;font-weight:700;">SAI</div></div>
+                            <div style="text-align:center;"><div style="font-size:34px;font-weight:900;color:var(--warning);">${pct}%</div><div style="font-size:11px;color:#64748b;font-weight:700;">ĐIỂM</div></div>
+                            <div style="text-align:center;"><div style="font-size:34px;font-weight:900;color:#a78bfa;">${toTime(totalSeconds)}</div><div style="font-size:11px;color:#64748b;font-weight:700;">TỔNG GIỜ</div></div>
+                        </div>
+                        <div style="text-align:left;">${breakdownHtml}</div>
+                    </div>
+
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <button onclick="markDayComplete(); document.getElementById('completion-overlay').remove(); confetti({particleCount:250,spread:80});" style="padding:16px;border-radius:14px;background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:17px;font-weight:900;border:none;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 20px rgba(16,185,129,0.4);">✅ HOÀN THÀNH NGÀY HỌC!</button>
+                        <button onclick="document.getElementById('completion-overlay').remove(); selectDay(curLevel, curType, curDay);" style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);color:#94a3b8;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.08);cursor:pointer;">🔄 Làm lại từ đầu</button>
+                    </div>
+                </div>`;
+            document.body.appendChild(overlay);
+            confetti({ particleCount: 300, spread: 100, origin: { y: 0.6 } });
+        }
 
         function processImport() {
             // Guard: must have a day selected
