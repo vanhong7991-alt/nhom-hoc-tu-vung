@@ -20,7 +20,7 @@
             --warning: #fbbf24;
             --purple: #a855f7;
             --input-bg: #fefce8;
-            --sidebar-width: 380px;
+            --sidebar-width: 420px;
             --card-bg: rgba(30, 41, 59, 0.9);
         }
 
@@ -86,6 +86,19 @@
             flex: 1;
             transition: margin-left 0.3s;
             min-width: 0;
+        }
+
+        /* --- RESPONSIVE: phone screens --- */
+        @media (max-width: 480px) {
+            :root { --sidebar-width: 100vw; }
+            .sidebar { width: 100vw; }
+            .main-wrapper { margin-left: 0; }
+            body:not(.sidebar-hidden) .main-wrapper { display: none; }
+        }
+        @media (min-width: 481px) and (max-width: 768px) {
+            :root { --sidebar-width: 90vw; }
+            .sidebar { width: 90vw; }
+            .main-wrapper { margin-left: 90vw; }
         }
 
         .sidebar-stats-container {
