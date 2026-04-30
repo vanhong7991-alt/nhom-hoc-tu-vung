@@ -48,23 +48,44 @@
             pointer-events: none;
         }
 
+        /* --- LAYOUT WRAPPER --- */
+        #app-layout {
+            display: flex;
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+
         /* --- SIDEBAR --- */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--sidebar-bg);
             height: 100vh;
             position: fixed;
-            left: -380px;
+            left: 0;
             top: 0;
             z-index: 2000;
-            transition: 0.3s;
+            transition: transform 0.3s, width 0.3s;
             overflow-y: auto;
+            overflow-x: hidden;
             border-right: 2px solid var(--accent);
             padding-bottom: 50px;
+            flex-shrink: 0;
         }
 
-        .sidebar.open {
-            left: 0 !important;
+        /* Sidebar hidden state */
+        body.sidebar-hidden .sidebar {
+            transform: translateX(-100%);
+        }
+        body.sidebar-hidden .main-wrapper {
+            margin-left: 0 !important;
+        }
+
+        /* Main wrapper shifts right when sidebar is visible */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            transition: margin-left 0.3s;
+            min-width: 0;
         }
 
         .sidebar-stats-container {
@@ -157,16 +178,7 @@
         }
 
         .overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 1500;
-            display: none;
-            backdrop-filter: blur(5px);
-        }
-
-        .overlay.open {
-            display: block !important;
+            display: none; /* never shown in desktop mode */
         }
 
         /* --- UI COMPONENTS --- */
@@ -174,6 +186,23 @@
             padding: 90px 15px 120px 15px;
             max-width: 800px;
             margin: 0 auto;
+        }
+
+        /* Toggle sidebar button in topbar */
+        #sidebar-toggle-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            transition: 0.2s;
+            line-height: 1;
+        }
+        #sidebar-toggle-btn:hover {
+            background: rgba(255,255,255,0.2);
         }
 
         .card {
@@ -254,24 +283,41 @@
         }
 
         .menu-lvl2 {
-            padding: 15px 20px 15px 35px;
+            padding: 14px 20px 14px 50px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             font-weight: 700;
-            color: #fff;
+            color: #e2e8f0;
             cursor: pointer;
-            background: #0f172a;
-            font-size: 18px;
+            background: rgba(30, 41, 59, 0.4);
+            font-size: 17px;
+            position: relative;
+        }
+        
+        .menu-lvl2::before {
+            content: "└";
+            position: absolute;
+            left: 28px;
+            color: rgba(255, 255, 255, 0.2);
         }
 
         .menu-lvl3 {
-            padding: 12px 15px 12px 45px;
+            padding: 12px 15px 12px 75px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             color: #cbd5e1;
-            font-size: 17px;
+            font-size: 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             cursor: pointer;
+            background: rgba(15, 23, 42, 0.3);
+            position: relative;
+        }
+        
+        .menu-lvl3::before {
+            content: "└";
+            position: absolute;
+            left: 55px;
+            color: rgba(255, 255, 255, 0.15);
         }
 
         .sub-menu {
@@ -757,17 +803,23 @@
         </div>
     </div>
 
+    <div id="app-layout">
     <div class="mobile-header">
-        <button onclick="toggleMenu()" class="btn btn-blue">☰ MENU</button>
+        <button id="sidebar-toggle-btn" onclick="toggleMenu()" title="Ẩn/Hiện menu">☰</button>
         <div id="header-user-name" style="font-weight: 800; color: var(--warning);">Cố lên! 🌸</div>
         <div id="header-timer" style="font-weight: 800; color: var(--warning); font-size: 22px;">00:00</div>
     </div>
 
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="overlay" id="overlay"></div>
 
     <div class="sidebar" id="sidebar">
         <div id="sidebar-user-name"
-            style="padding: 22px 10px; text-align: center; background: url('anhbanner.png') center/cover; color: white; font-weight: 800; font-size: 20px; height: 68px;">
+            style="padding: 22px 10px; text-align: center; background: url('anhbanner.png') center/cover; color: white; font-weight: 800; font-size: 20px; height: 68px; position: relative;">
+            <!-- Close sidebar button -->
+            <button onclick="toggleMenu()" title="Đóng menu"
+                style="position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.45); border:none; color:#fff; font-size:18px; width:30px; height:30px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; transition:0.2s; z-index:10;"
+                onmouseover="this.style.background='rgba(239,68,68,0.8)'"
+                onmouseout="this.style.background='rgba(0,0,0,0.45)'">✕</button>
         </div>
         <div id="sidebar-journey-text"
             style="padding: 8px 10px; text-align: center; color: #fbbf24; font-weight: bold; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2);">
@@ -887,6 +939,7 @@
         </div>
     </div>
 
+    <div class="main-wrapper">
     <div class="main">
         <div class="card" style="text-align: center;">
             <div id="timer-display">00:00</div>
@@ -1416,7 +1469,7 @@
             document.getElementById('mode-box-container').style.display = currentList.length > 0 ? 'block' : 'none';
             document.getElementById('submit-container').style.display = currentList.length > 0 ? 'flex' : 'none';
             document.getElementById('rt-wrapper').style.display = currentList.length > 0 ? 'flex' : 'none';
-            if (document.getElementById('sidebar').classList.contains('open')) toggleMenu();
+            // Sidebar stays open (persistent layout)
             let bestMode = 0;
             if (curType === 'voca_quiz' || curType === 'gram_quiz') bestMode = 2;
             changeMode(bestMode);
@@ -1468,15 +1521,15 @@
         }
 
         function setActiveMenuItem(dayName) {
-            // remove all previous active highlights
+            // Remove all previous highlights
             document.querySelectorAll('.menu-lvl3.active-lesson').forEach(el => el.classList.remove('active-lesson'));
-            // find by text content matching
+            // Strict equality match only (prevent "Ngày 1" matching "Ngày 10")
             document.querySelectorAll('.menu-lvl3').forEach(el => {
                 const nameEl = el.querySelector('.lesson-name-text');
                 const label = nameEl ? nameEl.textContent.trim() : el.textContent.trim();
-                if (label === dayName || label.includes(dayName)) {
+                if (label === dayName) {
                     el.classList.add('active-lesson');
-                    // auto-expand parents
+                    // Auto-expand all parent sub-menus
                     let parent = el.parentElement;
                     while (parent && parent.id !== 'sidebar') {
                         if (parent.classList.contains('sub-menu')) {
@@ -1484,13 +1537,27 @@
                         }
                         parent = parent.parentElement;
                     }
-                    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }
             });
         }
 
+        function scrollToActiveItem() {
+            const activeEl = document.querySelector('.menu-lvl3.active-lesson');
+            if (activeEl) {
+                // Small delay to let sidebar open animation finish
+                setTimeout(() => {
+                    activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 250);
+            }
+        }
+
         function goBack() {
-            toggleMenu();
+            // If sidebar was hidden, show it first
+            if (document.body.classList.contains('sidebar-hidden')) {
+                document.body.classList.remove('sidebar-hidden');
+                localStorage.setItem('sidebar_hidden', '0');
+            }
+            scrollToActiveItem();
         }
         /* ============================================= */
         let db = JSON.parse(localStorage.getItem('mgao_v37_db'));
@@ -1500,6 +1567,11 @@
         let pendingDeletes = new Set();
 
         window.onload = () => {
+            // Restore sidebar state (default: visible)
+            if (localStorage.getItem('sidebar_hidden') === '1') {
+                document.body.classList.add('sidebar-hidden');
+            }
+
             const urlParams = new URLSearchParams(window.location.search);
             const syncData = urlParams.get('sync');
             if (syncData) {
@@ -1632,7 +1704,12 @@
         function saveUser() { const val = document.getElementById('user-name-input').value.trim(); if (val) { userName = val; localStorage.setItem('mgao_user_v37', val); document.getElementById('welcome-screen').style.display = 'none'; applyUser(); } }
         function resetUserData() { if (confirm("Xóa toàn bộ dữ liệu?")) { localStorage.clear(); location.reload(); } }
 
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('open'); updateGlobalStats(); }
+        function toggleMenu() {
+            document.body.classList.toggle('sidebar-hidden');
+            // save preference
+            localStorage.setItem('sidebar_hidden', document.body.classList.contains('sidebar-hidden') ? '1' : '0');
+            updateGlobalStats();
+        }
         function toggleSub(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
         let curSep = 'auto';
         function updateImportUI() {
@@ -2075,7 +2152,7 @@
             document.getElementById('mode-box-container').style.display = listOverride ? 'none' : 'block';
             document.getElementById('submit-container').style.display = currentList.length > 0 ? 'flex' : 'none';
             document.getElementById('rt-wrapper').style.display = currentList.length > 0 ? 'flex' : 'none';
-            if (document.getElementById('sidebar').classList.contains('open')) toggleMenu();
+            // Sidebar stays open (persistent layout)
             let bestMode = 0;
             if (curType === 'voca_quiz' || curType === 'gram_quiz') bestMode = 2;
             changeMode(bestMode);
@@ -2146,6 +2223,8 @@
                     btn.innerHTML = `<span style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">ĐỀ ${i + 1}</span><span>${txt}${isDone ? ' ✅' : ''}</span>`;
                 }
             }
+            // Always clear quiz container first to prevent stale content from previous selection
+            document.getElementById('quiz-container').innerHTML = '';
             if (currentList.length > 0) renderQuiz();
         }
 
@@ -2577,33 +2656,61 @@
         function updateTime() { const m = Math.floor(seconds / 60).toString().padStart(2, '0'), s = (seconds % 60).toString().padStart(2, '0'); document.getElementById('timer-display').textContent = document.getElementById('header-timer').textContent = `${m}:${s}`; }
 
         function processImport() {
-            const data = parseData(); const valid = data.filter(d => d.valid);
-            if (!valid.length) { alert('⚠️ Không tìm thấy dữ liệu hợp lệ!\nHãy kiểm tra dấu phân cách hoặc định dạng dữ liệu.'); return; }
-            const mode = document.querySelector('input[name="imode"]:checked').value;
-            if (mode === 'replace') {
-                if (!confirm(`Thay thế TOÀN BỘ ${db[curLevel][curType][curDay].list.length} từ hiện có bằng ${valid.length} từ mới?`)) return;
-                db[curLevel][curType][curDay].list = valid.map(d => d.entry);
-            } else {
-                db[curLevel][curType][curDay].list.push(...valid.map(d => d.entry));
+            // Guard: must have a day selected
+            if (!curLevel || !curType || !curDay) {
+                alert('⚠️ Bạn chưa chọn bài học!\nHãy click vào một ngày ở menu bên trái trước khi nhập dữ liệu.');
+                return;
+            }
+            if (!db[curLevel] || !db[curLevel][curType] || !db[curLevel][curType][curDay]) {
+                alert('⚠️ Lỗi: Bài học không tồn tại trong dữ liệu. Hãy thử chọn lại bài học.');
+                return;
             }
 
-            let dupCount = 0;
-            const seen = new Set();
-            const uniqueList = [];
-            for (const item of db[curLevel][curType][curDay].list) {
-                const key = (item.c1 || item.q || '').trim().toLowerCase();
-                if (seen.has(key)) { dupCount++; } else { seen.add(key); uniqueList.push(item); }
-            }
-            if (dupCount > 0) {
-                if (confirm(`⚠️ Phát hiện ${dupCount} từ bị TRÙNG LẶP (giống Kanji/Từ).\nBạn có muốn tự động xoá các từ trùng và chỉ giữ lại 1 từ không?`)) {
-                    db[curLevel][curType][curDay].list = uniqueList;
+            try {
+                const data = parseData();
+                const valid = data.filter(d => d.valid);
+                if (!valid.length) { alert('⚠️ Không tìm thấy dữ liệu hợp lệ!\nHãy kiểm tra dấu phân cách hoặc định dạng dữ liệu.'); return; }
+                const imodeEl = document.querySelector('input[name="imode"]:checked');
+                const mode = imodeEl ? imodeEl.value : 'append';
+                if (mode === 'replace') {
+                    if (!confirm(`Thay thế TOÀN BỘ ${db[curLevel][curType][curDay].list.length} mục hiện có bằng ${valid.length} mục mới?`)) return;
+                    db[curLevel][curType][curDay].list = valid.map(d => d.entry);
+                } else {
+                    db[curLevel][curType][curDay].list.push(...valid.map(d => d.entry));
                 }
-            }
 
-            saveToLocal(); renderSidebar(); selectDay(curLevel, curType, curDay);
-            document.getElementById('import-input').value = '';
-            updateImportPreview(); renderCurWordList(); updateGlobalStats();
-            alert(`✅ Đã nhập ${valid.length} từ! Tổng danh sách: ${db[curLevel][curType][curDay].list.length} từ.`);
+                let dupCount = 0;
+                const seen = new Set();
+                const uniqueList = [];
+                for (const item of db[curLevel][curType][curDay].list) {
+                    const key = (item.c1 || item.q || '').trim().toLowerCase();
+                    if (seen.has(key)) { dupCount++; } else { seen.add(key); uniqueList.push(item); }
+                }
+                if (dupCount > 0) {
+                    if (confirm(`⚠️ Phát hiện ${dupCount} mục bị TRÙNG LẶP.\nBạn có muốn tự động xoá các mục trùng và chỉ giữ lại 1 không?`)) {
+                        db[curLevel][curType][curDay].list = uniqueList;
+                    }
+                }
+
+                saveToLocal();
+                renderSidebar();
+                // Update currentList BEFORE changeMode so buttons aren't grayed out
+                currentList = db[curLevel][curType][curDay].list;
+                // Determine best mode for current type
+                const bestMode = (curType === 'voca_quiz' || curType === 'gram_quiz') ? 2 : currentMode;
+                changeMode(bestMode);
+                document.getElementById('mode-box-container').style.display = 'block';
+                document.getElementById('submit-container').style.display = currentList.length > 0 ? 'flex' : 'none';
+                document.getElementById('rt-wrapper').style.display = currentList.length > 0 ? 'flex' : 'none';
+                document.getElementById('import-input').value = '';
+                updateImportPreview();
+                renderCurWordList();
+                updateGlobalStats();
+                alert(`✅ Đã nhập ${valid.length} mục! Tổng danh sách: ${db[curLevel][curType][curDay].list.length} mục.`);
+            } catch(e) {
+                console.error('processImport error:', e);
+                alert('❌ Lỗi khi nhập dữ liệu: ' + e.message);
+            }
         }
 
         function quickAddWord() {
@@ -2950,6 +3057,9 @@
             }
         }
     </script>
+    </div><!-- /main-wrapper -->
+    </div><!-- /app-layout -->
 </body>
+
 
 </html>
