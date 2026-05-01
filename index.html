@@ -980,7 +980,7 @@
 
     <div class="main-wrapper">
     <div class="main">
-        <div class="card" style="text-align: center;">
+        <div id="main-timer-box" class="card" style="text-align: center; display: none;">
             <div style="display:flex; align-items:center; justify-content:center; gap:24px; flex-wrap:wrap;">
                 <div style="text-align:center;">
                     <div style="font-size:11px; font-weight:800; color:#64748b; letter-spacing:1px; text-transform:uppercase; margin-bottom:2px;">⏱ BÀI NÀY</div>
@@ -1473,7 +1473,10 @@
                     lessons.forEach((lesson, idx) => {
                         const progressKey = 'van_' + sectionKey + '_' + sub + '_' + lesson.name;
                         const progress = JSON.parse(localStorage.getItem(progressKey) || '{"done":[false,false,false]}');
-                        const isAllDone = progress.done.every(v => v === true);
+                        let maxMode = 3;
+                        if (vanType === 'gram') maxMode = 2;
+                        else if (vanType === 'voca_quiz' || vanType === 'gram_quiz') maxMode = 1;
+                        const isAllDone = progress.done.slice(0, maxMode).every(v => v === true);
                         const wordCount = lesson.list.length;
                         const unitText = (vanType === 'voca_quiz' || vanType === 'gram_quiz') ? 'câu' : (vanType === 'gram' ? 'mẫu' : 'từ');
                         const rIcon = icons[idx % icons.length];
@@ -1499,7 +1502,7 @@
             }
         }
 
-        function selectVanDay(sectionKey, sub, lessonIdx) {
+        function selectVanDay(sectionKey, sub, lessonIdx, listOverride = null, targetMode = null) {
             const lesson = vanData[sectionKey][sub][lessonIdx];
             if (!lesson) return;
             curVanSection = sectionKey; curVanSub = sub; curVanIdx = lessonIdx;
@@ -1507,8 +1510,8 @@
             const containers = VAN_CONTAINERS[sectionKey];
             curType = containers[sub === 'struct' ? 'type_struct' : 'type_quiz'];
             curLevel = sectionKey; curDay = lesson.name;
-            currentList = [...lesson.list];
-            document.getElementById('view-title').textContent = '👑 ' + lesson.name + ' (Vân)';
+            currentList = listOverride || [...lesson.list];
+            document.getElementById('view-title').textContent = (listOverride ? "♻️ " : "👑 ") + lesson.name + ' (Vân)';
             const startBtn = document.getElementById('btn-start-lesson');
             if (startBtn) startBtn.style.display = 'none';
             ['btn-add-word', 'btn-import', 'btn-show-list', 'btn-shuffle', 'btn-mark-done', 'btn-unmark-done'].forEach(id => {
@@ -1518,12 +1521,15 @@
             window._vanProgressKey = progressKey;
             window._vanProgress = JSON.parse(localStorage.getItem(progressKey) || '{"done":[false,false,false]}');
             document.getElementById('journey-card').style.display = 'none';
-            document.getElementById('mode-box-container').style.display = currentList.length > 0 ? 'block' : 'none';
+            const mainTimerBox = document.getElementById('main-timer-box');
+            if (mainTimerBox) mainTimerBox.style.display = 'block';
+            document.getElementById('mode-box-container').style.display = listOverride ? 'none' : (currentList.length > 0 ? 'block' : 'none');
             document.getElementById('submit-container').style.display = currentList.length > 0 ? 'flex' : 'none';
             document.getElementById('rt-wrapper').style.display = currentList.length > 0 ? 'flex' : 'none';
             // Sidebar stays open (persistent layout)
             let bestMode = 0;
             if (curType === 'voca_quiz' || curType === 'gram_quiz') bestMode = 2;
+            if (targetMode !== null) bestMode = targetMode;
             changeMode(bestMode);
             resetTimer();
 
@@ -2162,7 +2168,10 @@
                 ["voca", "voca_quiz", "gram", "gram_quiz"].forEach(ty => {
                     const container = document.getElementById(`${lv}-${ty}`); container.innerHTML = "";
                     Object.keys(db[lv][ty]).forEach((dayKey, idx) => {
-                        const isAllDone = db[lv][ty][dayKey].done.every(v => v === true);
+                        let maxMode = 3;
+                        if (ty === 'gram') maxMode = 2;
+                        else if (ty === 'voca_quiz' || ty === 'gram_quiz') maxMode = 1;
+                        const isAllDone = db[lv][ty][dayKey].done.slice(0, maxMode).every(v => v === true);
                         const wordCount = db[lv][ty][dayKey].list.length;
                         const unitText = (ty === 'voca_quiz' || ty === 'gram_quiz') ? "câu" : (ty === 'gram' ? "mẫu" : "từ");
                         const div = document.createElement("div"); div.className = "menu-lvl3";
@@ -2202,13 +2211,14 @@
             if (curDay === newDay) selectDay(lv, ty, newDay);
         }
 
-        function selectDay(lv, ty, day, listOverride = null) {
+        function selectDay(lv, ty, day, listOverride = null, targetMode = null) {
             curVanMode = false;
             curLevel = lv; curType = ty; curDay = day; currentList = listOverride || db[lv][ty][day].list;
             document.getElementById('view-title').textContent = (listOverride ? "♻️ " : "📌 ") + day;
             const startBtn = document.getElementById('btn-start-lesson');
             if (startBtn) startBtn.style.display = 'none';
-            const isAllDone = db[lv][ty][day].done.every(v => v === true);
+            const maxMode = getMaxModeForType();
+            const isAllDone = db[lv][ty][day].done.slice(0, maxMode).every(v => v === true);
             ["btn-add-word", "btn-import", "btn-show-list", "btn-shuffle"].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = listOverride ? 'none' : 'inline-flex';
@@ -2216,6 +2226,9 @@
 
             const journeyCard = document.getElementById('journey-card');
             if (journeyCard) journeyCard.style.display = 'none';
+
+            const mainTimerBox = document.getElementById('main-timer-box');
+            if (mainTimerBox) mainTimerBox.style.display = 'block';
 
             const btnMark = document.getElementById('btn-mark-done');
             const btnUnmark = document.getElementById('btn-unmark-done');
@@ -2233,6 +2246,7 @@
             // Sidebar stays open (persistent layout)
             let bestMode = 0;
             if (curType === 'voca_quiz' || curType === 'gram_quiz') bestMode = 2;
+            if (targetMode !== null) bestMode = targetMode;
             changeMode(bestMode);
             resetLessonTimer();
             resetTotalTimer();
@@ -2685,7 +2699,8 @@
                 if (btnUnmark) btnUnmark.style.display = 'none';
             } else {
                 if (percent >= 90) db[curLevel][curType][curDay].done[currentMode] = true;
-                const isAllDone = db[curLevel][curType][curDay].done.every(v => v === true);
+                const maxMode = getMaxModeForType();
+                const isAllDone = db[curLevel][curType][curDay].done.slice(0, maxMode).every(v => v === true);
                 const btnMark = document.getElementById('btn-mark-done');
                 const btnUnmark = document.getElementById('btn-unmark-done');
                 if (btnMark) btnMark.style.display = isAllDone ? 'none' : 'inline-flex';
@@ -2730,12 +2745,14 @@
             const maxMode = getMaxModeForType();
             const btnNext = document.getElementById('btn-next-lesson');
             const btnClose = document.getElementById('btn-close-congrats');
+            const uniqueCompletedModes = new Set(sessionScores.map(s => s.mode)).size;
+
             if (currentMode < maxMode - 1 && !curVanMode) {
                 const modeLabels = { 0: 'Bài 1', 1: 'Bài 2', 2: 'Bài 3' };
                 if (btnNext) { btnNext.style.display = 'block'; btnNext.textContent = `→ SANG ${modeLabels[currentMode + 1] || 'BÀI TIẾP THEO'}`; }
                 if (btnClose) { btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; btnClose.onclick = () => closeModal('congrats-modal'); }
-            } else if (!curVanMode && sessionScores.length > 0) {
-                // Last lesson — close button shows completion screen
+            } else if (!curVanMode && uniqueCompletedModes === maxMode) {
+                // Đã làm đủ số test yêu cầu — hiện nút Xem kết quả tổng
                 if (btnNext) btnNext.style.display = 'none';
                 if (btnClose) {
                     btnClose.innerText = "🎉 XEM KẾT QUẢ TỔNG";
@@ -2752,12 +2769,17 @@
 
         function retryFailedOnly() {
             const wrongs = [];
+            const oldMode = currentMode;
             document.querySelectorAll('.card[id^="q-"]').forEach((card) => {
                 const idx = card.getAttribute('data-idx');
                 if (card.getAttribute('data-res') !== 'ok') wrongs.push(currentList[idx]);
             });
             closeModal('congrats-modal');
-            selectDay(curLevel, curType, curDay, wrongs);
+            if (curVanMode) {
+                selectVanDay(curVanSection, curVanSub, curVanIdx, wrongs, oldMode);
+            } else {
+                selectDay(curLevel, curType, curDay, wrongs, oldMode);
+            }
         }
 
         function toggleTimer() {
@@ -2810,7 +2832,8 @@
 
         function markDayComplete() {
             if (!curLevel || !curType || !curDay || !db[curLevel]?.[curType]?.[curDay]) return;
-            db[curLevel][curType][curDay].done = [true, true, true];
+            const maxMode = getMaxModeForType();
+            for (let i = 0; i < maxMode; i++) db[curLevel][curType][curDay].done[i] = true;
             saveToLocal();
             renderSidebar();
         }
@@ -2820,7 +2843,12 @@
             const totalOk = sessionScores.reduce((a, s) => a + s.ok, 0);
             const totalQ = sessionScores.reduce((a, s) => a + s.total, 0);
             const pct = totalQ > 0 ? Math.round((totalOk / totalQ) * 100) : 0;
-            const modeNames = { 0: 'Bài 1 (Cách đọc)', 1: 'Bài 2 (Nghĩa)', 2: 'Bài 3 (Tiếng Nhật)' };
+            let modeNames = { 0: 'Bài 1 (Cách đọc)', 1: 'Bài 2 (Nghĩa)', 2: 'Bài 3 (Tiếng Nhật)' };
+            if (curType === 'gram') {
+                modeNames = { 0: 'Bài 1 (Tìm nghĩa)', 1: 'Bài 2 (Tìm cấu trúc)' };
+            } else if (curType === 'voca_quiz' || curType === 'gram_quiz') {
+                modeNames = { 0: 'Trắc nghiệm' };
+            }
             const toTime = s => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
             const breakdownHtml = lessonTimes.map((t, i) => {
                 const sc = sessionScores[i];
@@ -3152,8 +3180,9 @@
         }
 
         function markAllDone() {
-            if (confirm("Bạn có chắc chắn muốn đánh dấu đã hoàn thành cả 3 bài cho ngày này không?")) {
-                db[curLevel][curType][curDay].done = [true, true, true];
+            const maxMode = getMaxModeForType();
+            if (confirm(`Bạn có chắc chắn muốn đánh dấu đã hoàn thành cả ${maxMode} bài cho ngày này không?`)) {
+                for (let i = 0; i < maxMode; i++) db[curLevel][curType][curDay].done[i] = true;
                 saveToLocal();
                 renderSidebar();
                 changeMode(currentMode);
@@ -3275,6 +3304,42 @@
                 alert("❌ Lỗi tạo link: Dữ liệu quá lớn hoặc mã hoá lỗi.");
             }
         }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // 1. Nếu có modal nào đang mở thì đóng lại
+                const modals = document.querySelectorAll('.modal');
+                let closedAny = false;
+                modals.forEach(m => {
+                    if (m.style.display === 'flex' || m.style.display === 'block') {
+                        m.style.display = 'none';
+                        closedAny = true;
+                    }
+                });
+                if (closedAny) return;
+
+                // 2. Nếu có màn hình hoàn thành đang mở thì đóng
+                const overlay = document.getElementById('completion-overlay');
+                if (overlay) {
+                    overlay.remove();
+                    return;
+                }
+
+                // 3. Nếu đang nhập text thì bỏ focus
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                    document.activeElement.blur();
+                    return;
+                }
+
+                // 4. Nếu đang ở trong bài học (chưa phải màn hình home) thì hỏi thoát
+                const homeView = document.getElementById('home-view');
+                if (homeView && homeView.style.display === 'none') {
+                    if (confirm("🚪 Bạn có muốn thoát bài học hiện tại và quay về trang chủ không?")) {
+                        location.reload();
+                    }
+                }
+            }
+        });
     </script>
     </div><!-- /main-wrapper -->
     </div><!-- /app-layout -->
