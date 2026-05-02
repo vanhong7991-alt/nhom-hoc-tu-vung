@@ -255,7 +255,7 @@
             border-radius: 15px;
             border: none;
             cursor: pointer;
-            font-weight: 700;
+            font-weight: 800;
             color: white;
             font-size: 15px;
             display: inline-flex;
@@ -263,28 +263,48 @@
             gap: 8px;
             justify-content: center;
             font-family: 'Baloo 2';
-            transition: 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            filter: brightness(0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
         .btn-blue {
-            background: var(--accent);
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            box-shadow: 0 4px 15px rgba(59,130,246,0.4);
         }
 
         .btn-gray {
-            background: #475569;
+            background: linear-gradient(135deg, #94a3b8, #475569);
+            box-shadow: 0 4px 15px rgba(100,116,139,0.4);
         }
 
         .btn-green {
-            background: var(--success);
+            background: linear-gradient(135deg, #84cc16, #10b981);
+            box-shadow: 0 4px 15px rgba(16,185,129,0.4);
         }
 
         .btn-purple {
-            background: var(--purple);
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            box-shadow: 0 4px 15px rgba(139,92,246,0.4);
         }
 
         .btn-warning {
-            background: var(--warning);
-            color: #0f172a;
+            background: linear-gradient(135deg, #facc15, #f97316);
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(249,115,22,0.4);
         }
 
         /* --- INPUTS --- */
@@ -1024,65 +1044,81 @@
                     style="width: 100%; padding: 20px; font-size: 20px; border-radius: 20px; box-shadow: 0 0 20px rgba(59,130,246,0.5); margin-bottom: 10px;"
                     onclick="toggleMenu()">👉 BẤM VÀO ĐÂY ĐỂ CHỌN BÀI HỌC NÀO 👈</button>
 
-                <div id="mode-box-container"
-                    style="display:none; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 15px; margin-bottom: 20px; border: 1px dashed var(--accent);">
-                    <div id="mode-box-title"
-                        style="text-align: center; color: var(--warning); font-size: 15px; font-weight: 800; margin-bottom: 12px; letter-spacing: 0.5px;">
-                        👇 CHỌN 1 TRONG 3 ĐỀ KIỂM TRA 👇</div>
-                    <div id="mode-box" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
-                        <button class="btn btn-gray" id="mode-0" onclick="changeMode(0)"
-                            style="flex-direction: column; padding: 10px 5px;"><span
-                                style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">ĐỀ 1</span><span>CÁCH
-                                ĐỌC</span></button>
-                        <button class="btn btn-gray" id="mode-1" onclick="changeMode(1)"
-                            style="flex-direction: column; padding: 10px 5px;"><span
-                                style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">ĐỀ
-                                2</span><span>NGHĨA</span></button>
-                        <button class="btn btn-gray" id="mode-2" onclick="changeMode(2)"
-                            style="flex-direction: column; padding: 10px 5px;"><span
-                                style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">ĐỀ 3</span><span>TIẾNG
-                                NHẬT</span></button>
-                    </div>
+                <!-- ========== 3-GROUP LESSON CONTROL PANEL ========== -->
+                <div id="mode-box-container" style="display:none; margin-top: 16px;">
 
-                    <div id="voca-quiz-options" style="display: none; flex-direction: column; gap: 15px;">
-                        <button id="mode-voca-quiz-btn" class="btn btn-blue"
-                            onclick="if(!timerInterval) toggleTimer(); window.scrollTo({top: document.getElementById('quiz-container').offsetTop - 20, behavior: 'smooth'});"
-                            style="width: 100%; padding: 15px; font-size: 18px; font-weight: 800; justify-content: center; box-shadow: 0 0 15px rgba(59,130,246,0.5); letter-spacing: 1px;">🚀
-                            BẮT ĐẦU LÀM BÀI</button>
-                        <div
-                            style="display: flex; gap: 15px; justify-content: center; align-items: center; font-size: 14px; color: #cbd5e1; flex-wrap: wrap; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px;">
-                            <span style="font-weight: bold; color: var(--warning);">Hiển thị kết quả:</span>
-                            <label
-                                style="display: flex; align-items: center; gap: 5px; cursor: pointer; user-select: none;">
-                                <input type="radio" name="checkMode" value="immediate"
-                                    onchange="showAnswerImmediately = true;"
-                                    style="accent-color: var(--success); width: 16px; height: 16px; cursor: pointer;">
-                                Hiện đáp án luôn
-                            </label>
-                            <label
-                                style="display: flex; align-items: center; gap: 5px; cursor: pointer; user-select: none;">
-                                <input type="radio" name="checkMode" value="after"
-                                    onchange="showAnswerImmediately = false;" checked
-                                    style="accent-color: var(--success); width: 16px; height: 16px; cursor: pointer;">
-                                Hiện sau khi hoàn thành
-                            </label>
+                    <!-- ═══ NHÓM 1: QUẢN LÝ DỮ LIỆU ═══ -->
+                    <div id="group-1" style="background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(59,130,246,0.08)); border: 1px solid rgba(59,130,246,0.4); border-radius: 16px; padding: 16px; margin-bottom: 12px;">
+                        <div style="margin-bottom:12px; display:flex; align-items:center;">
+                            <div id="group-1-title" style="background: rgba(59,130,246,0.3); color: #bfdbfe; font-size:12px; font-weight:900; letter-spacing:1px; text-transform:uppercase; padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(59,130,246,0.5); display:inline-flex; align-items:center; gap:6px;">
+                                ⚙️ NHÓM 1 — QUẢN LÝ DỮ LIỆU
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button id="btn-add-word" class="btn btn-green" style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:10px 12px;" onclick="openModal('add-word-modal')">➕ NHẬP NHANH</button>
+                            <button id="btn-import" class="btn btn-blue" style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:10px 12px;" onclick="openImportModal()">📥 NHẬP HÀNG LOẠT</button>
+                            <button id="btn-edit-list" class="btn btn-warning" style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:10px 12px;" onclick="openEditModal()">✏️ CHỈNH SỬA TỪ</button>
                         </div>
                     </div>
+
+                    <!-- ═══ NHÓM 2: ÔN TẬP ═══ -->
+                    <div id="group-2" style="background: linear-gradient(135deg, rgba(168,85,247,0.1), rgba(236,72,153,0.08)); border: 1px solid rgba(168,85,247,0.45); border-radius: 16px; padding: 16px; margin-bottom: 12px;">
+                        <div style="margin-bottom:12px; display:flex; align-items:center;">
+                            <div id="group-2-title" style="background: rgba(168,85,247,0.3); color: #e9d5ff; font-size:12px; font-weight:900; letter-spacing:1px; text-transform:uppercase; padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(168,85,247,0.5); display:inline-flex; align-items:center; gap:6px;">
+                                📚 NHÓM 2 — ÔN TẬP & XEM LẠI
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button id="btn-flashcard" class="btn btn-purple" style="display:none; flex:1; min-width:140px; justify-content:center; font-size:13px; padding:12px 14px;" onclick="openFlashcard()">📇 HỌC TẬP (Flashcard)</button>
+                            <button id="btn-show-list" class="btn btn-gray" style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:12px 14px;" onclick="openModal('list-modal')">📖 DANH SÁCH TỪ</button>
+                        </div>
+                    </div>
+
+                    <!-- ═══ NHÓM 3: LÀM BÀI KIỂM TRA ═══ -->
+                    <div id="group-3" style="background: linear-gradient(135deg, rgba(6,182,212,0.1), rgba(59,130,246,0.08)); border: 1px solid rgba(6,182,212,0.45); border-radius: 16px; padding: 16px; margin-bottom: 12px;">
+                        <div style="margin-bottom:12px; display:flex; align-items:center;">
+                            <div id="group-3-title" style="background: rgba(6,182,212,0.3); color: #cffafe; font-size:12px; font-weight:900; letter-spacing:1px; text-transform:uppercase; padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(6,182,212,0.5); display:inline-flex; align-items:center; gap:6px;">
+                                📝 NHÓM 3 — LÀM BÀI KIỂM TRA
+                            </div>
+                        </div>
+
+                        <!-- 3 đề (cho từ đơn) -->
+                        <div id="mode-box" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom:10px;">
+                            <button class="btn btn-gray" id="mode-0" onclick="changeMode(0)" style="flex-direction: column; padding: 10px 5px;"><span style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">ĐỀ 1</span><span>CÁCH ĐỌC</span></button>
+                            <button class="btn btn-gray" id="mode-1" onclick="changeMode(1)" style="flex-direction: column; padding: 10px 5px;"><span style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">ĐỀ 2</span><span>NGHĨA</span></button>
+                            <button class="btn btn-gray" id="mode-2" onclick="changeMode(2)" style="flex-direction: column; padding: 10px 5px;"><span style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">ĐỀ 3</span><span>TIẾNG NHẬT</span></button>
+                        </div>
+
+                        <!-- Cho trắc nghiệm (quiz) -->
+                        <div id="voca-quiz-options" style="display: none; flex-direction: column; gap: 10px;">
+                            <button id="mode-voca-quiz-btn" class="btn btn-blue"
+                                onclick="if(!timerInterval) toggleTimer(); window.scrollTo({top: document.getElementById('quiz-container').offsetTop - 20, behavior: 'smooth'});"
+                                style="width: 100%; padding: 15px; font-size: 18px; justify-content: center; letter-spacing: 1px;">🚀 BẮT ĐẦU LÀM BÀI</button>
+                        </div>
+
+                        <!-- Tùy chọn hiển thị đáp án -->
+                        <div style="display: flex; gap: 10px; justify-content: center; align-items: center; font-size: 13px; color: #cbd5e1; flex-wrap: wrap; background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 10px; margin-top:10px;">
+                            <span style="font-weight:800; color: #fbbf24;">Hiển thị đáp án:</span>
+                            <label style="display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none;">
+                                <input type="radio" name="checkMode" value="immediate" onchange="showAnswerImmediately = true;" style="accent-color: var(--success); width:16px; height:16px; cursor:pointer;"> Hiện ngay
+                            </label>
+                            <label style="display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none;">
+                                <input type="radio" name="checkMode" value="after" onchange="showAnswerImmediately = false;" checked style="accent-color: var(--success); width:16px; height:16px; cursor:pointer;"> Hiện sau khi nộp
+                            </label>
+                        </div>
+
+                        <!-- Trộn từ + Hoàn thành -->
+                        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+                            <button id="btn-shuffle" class="btn btn-purple" style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:10px 12px;" onclick="shuffleQuiz()">🔀 TRỘN TỪ</button>
+                            <button id="btn-mark-done" class="btn btn-green" style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:10px 12px;" onclick="markAllDone()">✅ ĐÃ HOÀN THÀNH</button>
+                            <button id="btn-unmark-done" class="btn btn-green" style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:10px 12px;" onclick="unmarkAllDone()">❎ HUỶ HOÀN THÀNH</button>
+                        </div>
+                    </div>
+
                 </div>
-                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                    <button id="btn-add-word" class="btn btn-green" style="display:none;"
-                        onclick="openModal('add-word-modal')">➕ THÊM NHANH</button>
-                    <button id="btn-import" class="btn btn-blue" style="display:none;"
-                        onclick="openModal('import-modal')">📥 NHẬP NHIỀU</button>
-                    <button id="btn-show-list" class="btn btn-warning" style="display:none;"
-                        onclick="openModal('list-modal')">📖 DANH SÁCH</button>
-                    <button id="btn-shuffle" class="btn btn-purple" style="display:none;" onclick="shuffleQuiz()">🔀
-                        TRỘN TỪ</button>
-                    <button id="btn-mark-done" class="btn btn-green" style="display:none;" onclick="markAllDone()">✅ ĐÃ
-                        HOÀN THÀNH</button>
-                    <button id="btn-unmark-done" class="btn btn-green" style="display:none;" onclick="unmarkAllDone()">❎
-                        HUỶ HOÀN THÀNH</button>
-                </div>
+
+                <!-- Wrapper ẩn (tương thích ngược, dùng để show/hide action buttons) -->
+                <div id="action-buttons-wrapper" style="display:none;"></div>
             </div>
         </div>
 
@@ -1192,25 +1228,25 @@
     </div>
 
     <div id="list-modal" class="modal">
-        <div class="modal-content" style="max-width: 700px;">
+        <div class="modal-content" style="max-width: 900px; width: 95%;">
             <h2 style="color: var(--warning);">📖 DANH SÁCH TỪ</h2>
-            <div
-                style="max-height: 400px; overflow-y: auto; margin: 20px 0; border: 1px solid var(--accent); border-radius: 15px;">
-                <table style="width:100%; color:white; border-collapse: collapse;">
+            <div style="max-height: 500px; overflow-y: auto; overflow-x: auto; margin: 20px 0; border: 1px solid var(--accent); border-radius: 15px;">
+                <table style="width:100%; min-width: 700px; color:white; border-collapse: collapse;">
                     <thead style="background:var(--accent)">
                         <tr>
-                            <th style="padding:10px">STT</th>
-                            <th>Từ</th>
-                            <th>Đọc</th>
-                            <th>Nghĩa</th>
+                            <th style="padding:10px; width: 50px; text-align: center;">STT</th>
+                            <th style="text-align: left; padding: 10px;">Từ</th>
+                            <th style="text-align: left; padding: 10px;">Đọc</th>
+                            <th style="text-align: left; padding: 10px;">Nghĩa</th>
                         </tr>
                     </thead>
                     <tbody id="voca-list-body"></tbody>
                 </table>
             </div>
-            <div style="display:flex; gap:10px;"><button class="btn btn-purple" onclick="removeDuplicates()"
-                    style="flex:1;">🧹 LỌC TỪ TRÙNG LẶP</button><button class="btn btn-gray"
-                    onclick="closeModal('list-modal')" style="flex:1;">ĐÓNG</button></div>
+            <div style="display:flex; gap:10px;">
+                <button id="btn-filter-dups" class="btn btn-purple" onclick="removeDuplicates()" style="flex:1;">🧹 LỌC TỪ TRÙNG LẶP</button>
+                <button class="btn btn-gray" onclick="closeModal('list-modal')" style="flex:1;">ĐÓNG</button>
+            </div>
         </div>
     </div>
 
@@ -1282,10 +1318,10 @@
     <div id="import-modal" class="modal">
         <div class="modal-content"
             style="max-width:900px;max-height:92vh;overflow-y:auto;text-align:left;padding:25px;">
-            <h3 style="color:var(--warning);text-align:center;margin:0 0 16px;font-size:19px;">📥 NHẬP DỮ LIỆU HÀNG LOẠT
+            <h3 id="import-modal-title" style="color:var(--warning);text-align:center;margin:0 0 16px;font-size:19px;">📥 NHẬP DỮ LIỆU HÀNG LOẠT
             </h3>
 
-            <div class="imp-section">
+            <div class="imp-section" id="import-section-input">
                 <div class="imp-sec-label">① dữ liệu đầu vào</div>
                 <div id="gram-type-selector"
                     style="display:none; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">
@@ -1381,7 +1417,7 @@
                 </div>
             </div>
 
-            <div class="imp-section">
+            <div class="imp-section" id="import-section-preview">
                 <div class="imp-sec-label">② xem trước <span id="prev-count" style="color:var(--success);"></span></div>
                 <div class="tbl-wrap">
                     <div id="import-preview">
@@ -1390,7 +1426,7 @@
                 </div>
             </div>
 
-            <div class="imp-section">
+            <div class="imp-section" id="import-section-current">
                 <div
                     style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
                     <div class="imp-sec-label" style="margin-bottom:0;border:none;padding:0;">③ danh sách hiện tại <span
@@ -1412,6 +1448,53 @@
                     style="color:#0f172a; display:none;">🔄 CẬP NHẬT</button>
                 <button class="btn btn-green" onclick="processImport()" id="btn-nhap-du-lieu">✅ NHẬP DỮ LIỆU</button>
             </div>
+        </div>
+    </div>
+
+    <!-- FLASHCARD MODAL -->
+    <div id="flashcard-modal" class="modal">
+        <div class="modal-content" style="max-width: 500px; padding: 25px; background: #0f172a; position: relative; overflow: hidden;">
+            <h2 style="color: var(--warning); margin-top: 0; margin-bottom: 20px;">📇 ÔN TẬP TRƯỚC KHI LÀM</h2>
+            
+            <div id="fc-main-view">
+                <div id="flashcard-container" style="perspective: 1000px; width: 100%; height: 280px; margin-bottom: 25px; cursor: pointer; position: relative;" onclick="flipFlashcard()">
+                    
+                    <div id="fc-star-btn" onclick="toggleFcStar(event)" style="position: absolute; top: 15px; right: 15px; font-size: 32px; cursor: pointer; z-index: 20; color: #64748b; transition: all 0.2s;" title="Đánh dấu câu khó">☆</div>
+                    
+                    <div id="flashcard-inner" style="width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative;">
+                        <!-- Mặt trước -->
+                        <div id="flashcard-front" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #1e293b; border: 3px solid var(--accent); border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                            <div id="fc-front-text" style="font-size: 28px; font-weight: 900; color: white; padding-right: 20px; text-align: center;"></div>
+                            <div style="font-size: 14px; color: #94a3b8; margin-top: 20px; font-weight: bold; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 12px;">👆 Chạm để lật 👆</div>
+                        </div>
+
+                        <!-- Mặt sau -->
+                        <div id="flashcard-back" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #1e293b; border: 3px solid var(--success); border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transform: rotateY(180deg);">
+                            <div id="fc-back-reading" style="font-size: 22px; color: #fbcfe8; margin-bottom: 10px; font-weight: bold; text-align: center; padding-right: 20px;"></div>
+                            <div id="fc-back-meaning" style="font-size: 26px; font-weight: 900; color: var(--success); margin-bottom: 10px; text-align: center;"></div>
+                            <div id="fc-back-example" style="font-size: 16px; color: #cbd5e1; font-style: italic; text-align: center;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                    <button class="btn btn-blue" style="padding: 12px 20px; font-size: 18px;" onclick="prevFlashcard()">⬅️ Trước</button>
+                    <div id="flashcard-progress" style="font-size: 18px; font-weight: bold; color: white;">1 / 10</div>
+                    <button class="btn btn-blue" style="padding: 12px 20px; font-size: 18px;" onclick="nextFlashcard()">Sau ➡️</button>
+                </div>
+
+                <button class="btn btn-gray" style="width: 100%; font-size: 18px; padding: 15px; justify-content: center;" onclick="closeModal('flashcard-modal')">ĐÓNG</button>
+            </div>
+
+            <div id="fc-end-screen" style="display:none; flex-direction: column; align-items: center; justify-content: center; padding: 10px;">
+                <div style="font-size: 60px; margin-bottom: 10px;">🎉</div>
+                <h3 style="color: var(--success); margin-bottom: 25px; font-size: 22px; text-align: center;">BẠN ĐÃ HOÀN THÀNH VÒNG LẶP NÀY!</h3>
+                <button class="btn btn-blue" style="width:100%; margin-bottom:15px; padding:15px; justify-content:center; font-size:16px;" onclick="restartFcAll()">🔄 Học lại tất cả</button>
+                <button id="btn-fc-restart-star" class="btn btn-warning" style="width:100%; margin-bottom:20px; padding:15px; justify-content:center; font-size:16px;" onclick="restartFcStarred()">⭐ Học lại các câu đánh dấu sao (<span id="fc-star-count">0</span>)</button>
+                
+                <button class="btn btn-gray" style="width: 100%; font-size: 16px; padding: 12px; justify-content: center; margin-top: 10px;" onclick="closeModal('flashcard-modal')">ĐÓNG</button>
+            </div>
+            
         </div>
     </div>
 
@@ -1514,9 +1597,8 @@
             document.getElementById('view-title').textContent = (listOverride ? "♻️ " : "👑 ") + lesson.name + ' (Vân)';
             const startBtn = document.getElementById('btn-start-lesson');
             if (startBtn) startBtn.style.display = 'none';
-            ['btn-add-word', 'btn-import', 'btn-show-list', 'btn-shuffle', 'btn-mark-done', 'btn-unmark-done'].forEach(id => {
-                const el = document.getElementById(id); if (el) el.style.display = 'none';
-            });
+            const actionWrapper = document.getElementById('action-buttons-wrapper');
+            if (actionWrapper) actionWrapper.style.display = 'none';
             const progressKey = 'van_' + sectionKey + '_' + sub + '_' + lesson.name;
             window._vanProgressKey = progressKey;
             window._vanProgress = JSON.parse(localStorage.getItem(progressKey) || '{"done":[false,false,false]}');
@@ -1526,6 +1608,22 @@
             document.getElementById('mode-box-container').style.display = listOverride ? 'none' : (currentList.length > 0 ? 'block' : 'none');
             document.getElementById('submit-container').style.display = currentList.length > 0 ? 'flex' : 'none';
             document.getElementById('rt-wrapper').style.display = currentList.length > 0 ? 'flex' : 'none';
+            document.getElementById('btn-flashcard').style.display = (listOverride || sub === 'quiz') ? 'none' : (currentList.length > 0 ? 'flex' : 'none');
+            
+            const group1 = document.getElementById('group-1');
+            if (group1) group1.style.display = 'none'; // Góc của Vân KHÔNG có nhóm 1
+            const group2 = document.getElementById('group-2');
+            if (group2) group2.style.display = (listOverride) ? 'none' : 'block';
+            
+            const g2Title = document.getElementById('group-2-title');
+            if (g2Title) g2Title.innerHTML = '📚 ÔN TẬP';
+            const g3Title = document.getElementById('group-3-title');
+            if (g3Title) g3Title.innerHTML = '📝 KIỂM TRA';
+            
+            ["btn-show-list", "btn-shuffle"].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = (listOverride || sub === 'quiz') ? 'none' : 'inline-flex';
+            });
             // Sidebar stays open (persistent layout)
             let bestMode = 0;
             if (curType === 'voca_quiz' || curType === 'gram_quiz') bestMode = 2;
@@ -1626,6 +1724,137 @@
         let sessionScores = []; // stores {ok, total, mode} for each lesson
         var showAnswerImmediately = false;
         let pendingDeletes = new Set();
+
+        let currentFlashcardIndex = 0;
+        let isFlashcardFlipped = false;
+        let fcList = [];
+        let fcStarred = new Set();
+
+        function openFlashcard() {
+            if (currentList.length === 0) return;
+            fcList = [...currentList];
+            fcStarred.clear();
+            currentFlashcardIndex = 0;
+            
+            document.getElementById('fc-main-view').style.display = 'block';
+            document.getElementById('fc-end-screen').style.display = 'none';
+
+            updateFlashcardUI();
+            openModal('flashcard-modal');
+        }
+
+        function updateFlashcardUI() {
+            const item = fcList[currentFlashcardIndex];
+            if (!item) return;
+
+            const inner = document.getElementById('flashcard-inner');
+            isFlashcardFlipped = false;
+            inner.style.transform = 'rotateY(0deg)';
+
+            const isGram = (curType === 'gram');
+            let gramType = 'voca';
+            if (curType === 'voca_quiz' || curType === 'gram_quiz') gramType = 'quiz';
+            else if (isGram) gramType = 'struct';
+
+            const frontText = document.getElementById('fc-front-text');
+            const backReading = document.getElementById('fc-back-reading');
+            const backMeaning = document.getElementById('fc-back-meaning');
+            const backExample = document.getElementById('fc-back-example');
+
+            if (gramType === 'quiz') {
+                frontText.innerHTML = fT(item.q || item.c1 || '');
+                backReading.innerHTML = '';
+                backMeaning.innerHTML = fT(item.ans || item.c5 || '');
+                backExample.innerHTML = fT(item.explain || item.c6 || '');
+            } else if (gramType === 'struct') {
+                frontText.innerHTML = fT(item.c1 || '');
+                backReading.innerHTML = '';
+                backMeaning.innerHTML = fT(item.c3 || '');
+                backExample.innerHTML = fT(item.c4 || '');
+            } else {
+                frontText.innerHTML = fT(item.c1 || '');
+                backReading.innerHTML = fT(item.c2 || '');
+                backMeaning.innerHTML = fT(item.c3 || '');
+                backExample.innerHTML = fT(item.c4 || '');
+            }
+            
+            const starBtn = document.getElementById('fc-star-btn');
+            if (fcStarred.has(item)) {
+                starBtn.innerHTML = '⭐';
+                starBtn.style.color = '#fbbf24';
+            } else {
+                starBtn.innerHTML = '☆';
+                starBtn.style.color = '#64748b';
+            }
+
+            document.getElementById('flashcard-progress').innerText = `${currentFlashcardIndex + 1} / ${fcList.length}`;
+        }
+        
+        function toggleFcStar(e) {
+            e.stopPropagation();
+            const item = fcList[currentFlashcardIndex];
+            if (!item) return;
+            
+            if (fcStarred.has(item)) {
+                fcStarred.delete(item);
+            } else {
+                fcStarred.add(item);
+            }
+            updateFlashcardUI();
+        }
+
+        function flipFlashcard() {
+            isFlashcardFlipped = !isFlashcardFlipped;
+            const inner = document.getElementById('flashcard-inner');
+            inner.style.transform = isFlashcardFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+        }
+
+        function prevFlashcard() {
+            if (currentFlashcardIndex > 0) {
+                currentFlashcardIndex--;
+                updateFlashcardUI();
+            }
+        }
+
+        function nextFlashcard() {
+            if (currentFlashcardIndex < fcList.length - 1) {
+                currentFlashcardIndex++;
+                updateFlashcardUI();
+            } else {
+                document.getElementById('fc-main-view').style.display = 'none';
+                document.getElementById('fc-star-count').innerText = fcStarred.size;
+                
+                const btnRestartStar = document.getElementById('btn-fc-restart-star');
+                if (fcStarred.size === 0) {
+                    btnRestartStar.disabled = true;
+                    btnRestartStar.style.opacity = '0.5';
+                    btnRestartStar.style.cursor = 'not-allowed';
+                } else {
+                    btnRestartStar.disabled = false;
+                    btnRestartStar.style.opacity = '1';
+                    btnRestartStar.style.cursor = 'pointer';
+                }
+                
+                document.getElementById('fc-end-screen').style.display = 'flex';
+            }
+        }
+        
+        function restartFcAll() {
+            fcList = [...currentList];
+            currentFlashcardIndex = 0;
+            document.getElementById('fc-end-screen').style.display = 'none';
+            document.getElementById('fc-main-view').style.display = 'block';
+            updateFlashcardUI();
+        }
+        
+        function restartFcStarred() {
+            if (fcStarred.size === 0) return;
+            fcList = Array.from(fcStarred);
+            currentFlashcardIndex = 0;
+            document.getElementById('fc-end-screen').style.display = 'none';
+            document.getElementById('fc-main-view').style.display = 'block';
+            updateFlashcardUI();
+        }
 
         window.onload = () => {
             // Restore sidebar state (default: visible)
@@ -1855,24 +2084,51 @@
         }
 
         function openModal(id) {
-            if (id === 'list-modal') renderListTable();
+            if (id === 'list-modal') {
+                renderListTable();
+                const btnFilter = document.getElementById('btn-filter-dups');
+                if (btnFilter) btnFilter.style.display = curVanMode ? 'none' : 'block';
+            }
             if (id === 'add-word-modal') {
                 updateAddUI();
                 renderQuickAddList();
             }
-            if (id === 'import-modal') {
-                isEditMode = false;
-                const btnCS = document.getElementById('btn-chinh-sua');
-                if (btnCS) { btnCS.style.background = 'transparent'; btnCS.style.color = '#3b82f6'; btnCS.innerHTML = '✏️ Chỉnh sửa'; }
-                const btnCN = document.getElementById('btn-cap-nhat');
-                if (btnCN) btnCN.style.display = 'none';
-                document.getElementById('gram-type-selector').style.display = 'none';
-                updateImportUI();
-                renderCurWordList();
-            }
             document.getElementById(id).style.display = 'flex';
         }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function openImportModal() {
+            isEditMode = false;
+            document.getElementById('import-modal-title').innerHTML = '📥 NHẬP DỮ LIỆU HÀNG LOẠT';
+            document.getElementById('import-section-input').style.display = 'block';
+            document.getElementById('import-section-preview').style.display = 'block';
+            document.getElementById('btn-nhap-du-lieu').style.display = 'inline-flex';
+            
+            const btnCS = document.getElementById('btn-chinh-sua');
+            if (btnCS) { btnCS.style.display = 'inline-flex'; btnCS.style.background = 'transparent'; btnCS.style.color = '#3b82f6'; btnCS.innerHTML = '✏️ Chỉnh sửa'; }
+            const btnCN = document.getElementById('btn-cap-nhat');
+            if (btnCN) btnCN.style.display = 'none';
+            document.getElementById('gram-type-selector').style.display = 'none';
+            updateImportUI();
+            renderCurWordList();
+            document.getElementById('import-modal').style.display = 'flex';
+        }
+
+        function openEditModal() {
+            isEditMode = true;
+            document.getElementById('import-modal-title').innerHTML = '✏️ CHỈNH SỬA DANH SÁCH TỪ';
+            document.getElementById('import-section-input').style.display = 'none';
+            document.getElementById('import-section-preview').style.display = 'none';
+            document.getElementById('btn-nhap-du-lieu').style.display = 'none';
+            
+            const btnCS = document.getElementById('btn-chinh-sua');
+            if (btnCS) { btnCS.style.display = 'none'; }
+            const btnCN = document.getElementById('btn-cap-nhat');
+            if (btnCN) btnCN.style.display = 'inline-flex';
+            
+            renderCurWordList();
+            document.getElementById('import-modal').style.display = 'flex';
+        }
 
         function setSep(s) {
             curSep = s;
@@ -2219,11 +2475,25 @@
             if (startBtn) startBtn.style.display = 'none';
             const maxMode = getMaxModeForType();
             const isAllDone = db[lv][ty][day].done.slice(0, maxMode).every(v => v === true);
-            ["btn-add-word", "btn-import", "btn-show-list", "btn-shuffle"].forEach(id => {
+            const isVoca = (ty === 'voca' || ty === 'gram');
+            ["btn-add-word", "btn-import", "btn-edit-list", "btn-show-list"].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = listOverride ? 'none' : 'inline-flex';
             });
+            ["btn-shuffle", "btn-flashcard"].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = (listOverride || !isVoca) ? 'none' : 'inline-flex';
+            });
+            const group1 = document.getElementById('group-1');
+            if (group1) group1.style.display = listOverride ? 'none' : 'block';
+            const group2 = document.getElementById('group-2');
+            if (group2) group2.style.display = listOverride ? 'none' : 'block';
 
+            const g2Title = document.getElementById('group-2-title');
+            if (g2Title) g2Title.innerHTML = '📚 NHÓM 2 — ÔN TẬP & XEM LẠI';
+            const g3Title = document.getElementById('group-3-title');
+            if (g3Title) g3Title.innerHTML = '📝 NHÓM 3 — LÀM BÀI KIỂM TRA';
+            
             const journeyCard = document.getElementById('journey-card');
             if (journeyCard) journeyCard.style.display = 'none';
 
@@ -2263,19 +2533,13 @@
         function changeMode(m) {
             currentMode = m;
 
-            const modeTitle = document.getElementById('mode-box-title');
             const modeBox = document.getElementById('mode-box');
             const vocaQuizOpts = document.getElementById('voca-quiz-options');
 
             if (curType === 'voca_quiz' || curType === 'gram_quiz') {
-                if (modeTitle) modeTitle.style.display = 'none';
                 if (modeBox) modeBox.style.display = 'none';
                 if (vocaQuizOpts) vocaQuizOpts.style.display = 'flex';
             } else {
-                if (modeTitle) {
-                    modeTitle.style.display = 'block';
-                    modeTitle.innerHTML = curType === 'gram' ? "👇 CHỌN 1 TRONG 2 ĐỀ KIỂM TRA 👇" : "👇 CHỌN 1 TRONG 3 ĐỀ KIỂM TRA 👇";
-                }
                 if (modeBox) {
                     modeBox.style.display = 'grid';
                     modeBox.style.gridTemplateColumns = curType === 'gram' ? "1fr 1fr" : "1fr 1fr 1fr";
@@ -3081,7 +3345,8 @@
         }
 
         function renderListTable() {
-            document.getElementById('voca-list-body').innerHTML = db[curLevel][curType][curDay].list.map((item, i) => {
+            const listToRender = currentList || [];
+            document.getElementById('voca-list-body').innerHTML = listToRender.map((item, i) => {
                 const isGram = (curType === 'gram');
                 const isQuiz = item.gramType === 'quiz';
 
@@ -3091,7 +3356,7 @@
                     text2 = fT(item.ans);
                     text3 = fT(item.w1 ? item.w1 + ' | ' + (item.w2 || '') + ' | ' + (item.w3 || '') : '');
                     const text4 = fT(item.explain || '');
-                    return `<tr style="border-bottom:1px solid #334155"><td style="padding:10px">${i + 1}</td><td style="font-weight:800; color:var(--warning); display:flex; align-items:center; gap:8px;">${text1}</td><td>${text2}</td><td>${text3}</td><td style="color:#f97316; font-size:12px;">${text4}</td></tr>`;
+                    return `<tr style="border-bottom:1px solid #334155"><td style="padding:10px; text-align: center;">${i + 1}</td><td style="font-weight:800; color:var(--warning); text-align: left; padding: 10px;">${text1}</td><td style="text-align: left; padding: 10px;">${text2}</td><td style="text-align: left; padding: 10px;">${text3}</td><td style="color:#f97316; font-size:12px; text-align: left; padding: 10px;">${text4}</td></tr>`;
                 } else if (isGram) {
                     text1 = fT(item.c1);
                     text2 = fT(item.c3);
@@ -3105,9 +3370,9 @@
 
                 if (!isQuiz) {
                     if (isGram) {
-                        return `<tr style="border-bottom:1px solid #334155"><td style="padding:10px">${i + 1}</td><td style="font-weight:800; color:var(--warning); display:flex; align-items:center; gap:8px;">${text1} <a href="https://www.google.com/search?q=${encodeURIComponent((searchQ || '') + ' とは')}" target="_blank" style="text-decoration:none; display:inline-flex; align-items:center;" title="Tra cứu trên Google"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></td><td colspan="2">${text2}</td></tr>`;
+                        return `<tr style="border-bottom:1px solid #334155"><td style="padding:10px; text-align: center;">${i + 1}</td><td style="font-weight:800; color:var(--warning); padding: 10px;"><div style="display:flex; align-items:center; gap:8px;">${text1} <a href="https://www.google.com/search?q=${encodeURIComponent((searchQ || '') + ' とは')}" target="_blank" style="text-decoration:none; display:inline-flex; align-items:center;" title="Tra cứu trên Google"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></div></td><td colspan="2" style="text-align: left; padding: 10px;">${text2}</td></tr>`;
                     } else {
-                        return `<tr style="border-bottom:1px solid #334155"><td style="padding:10px">${i + 1}</td><td style="font-weight:800; color:var(--warning); display:flex; align-items:center; gap:8px;">${text1} <a href="https://www.google.com/search?q=${encodeURIComponent((searchQ || '') + ' とは')}" target="_blank" style="text-decoration:none; display:inline-flex; align-items:center;" title="Tra cứu trên Google"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></td><td>${text2}</td><td>${text3}</td></tr>`;
+                        return `<tr style="border-bottom:1px solid #334155"><td style="padding:10px; text-align: center;">${i + 1}</td><td style="font-weight:800; color:var(--warning); padding: 10px;"><div style="display:flex; align-items:center; gap:8px;">${text1} <a href="https://www.google.com/search?q=${encodeURIComponent((searchQ || '') + ' とは')}" target="_blank" style="text-decoration:none; display:inline-flex; align-items:center;" title="Tra cứu trên Google"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></div></td><td style="text-align: left; padding: 10px;">${text2}</td><td style="text-align: left; padding: 10px;">${text3}</td></tr>`;
                     }
                 }
             }).join('');
@@ -3115,11 +3380,11 @@
             const listHeaderRow = document.querySelector('#list-modal thead tr');
             if (listHeaderRow) {
                 if (curType === 'voca_quiz' || curType === 'gram_quiz') {
-                    listHeaderRow.innerHTML = '<th style="padding:10px">STT</th><th style="text-align:left;">Câu hỏi</th><th style="text-align:left;">ĐA Đúng</th><th style="text-align:left;">Các ĐA Sai</th><th style="text-align:left;">Giải thích</th>';
+                    listHeaderRow.innerHTML = '<th style="padding:10px; width:50px; text-align:center;">STT</th><th style="text-align:left; padding: 10px;">Câu hỏi</th><th style="text-align:left; padding: 10px;">ĐA Đúng</th><th style="text-align:left; padding: 10px;">Các ĐA Sai</th><th style="text-align:left; padding: 10px;">Giải thích</th>';
                 } else if (curType === 'gram') {
-                    listHeaderRow.innerHTML = '<th style="padding:10px">STT</th><th style="text-align:left;">Cấu trúc</th><th style="text-align:left;" colspan="2">Ý nghĩa tiếng việt</th>';
+                    listHeaderRow.innerHTML = '<th style="padding:10px; width:50px; text-align:center;">STT</th><th style="text-align:left; padding: 10px;">Cấu trúc</th><th style="text-align:left; padding: 10px;" colspan="2">Ý nghĩa tiếng việt</th>';
                 } else {
-                    listHeaderRow.innerHTML = '<th style="padding:10px">STT</th><th style="text-align:left;">Kanji/Từ</th><th style="text-align:left;">Cách đọc</th><th style="text-align:left;">Nghĩa</th>';
+                    listHeaderRow.innerHTML = '<th style="padding:10px; width:50px; text-align:center;">STT</th><th style="text-align:left; padding: 10px;">Kanji/Từ</th><th style="text-align:left; padding: 10px;">Cách đọc</th><th style="text-align:left; padding: 10px;">Nghĩa</th>';
                 }
             }
         }
