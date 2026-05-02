@@ -427,6 +427,54 @@
             font-weight: 800;
         }
 
+        /* MATCH GAME STYLES */
+        .mg-item {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 60px;
+            user-select: none;
+            color: #f8fafc;
+        }
+        .mg-item:hover {
+            background: rgba(51, 65, 85, 0.8);
+            transform: translateY(-2px);
+        }
+        .mg-item.selected {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+            transform: scale(1.02);
+        }
+        .mg-item.matched {
+            animation: matchAnim 0.8s forwards;
+            pointer-events: none;
+            color: #fff;
+        }
+        @keyframes matchAnim {
+            0% { background: rgba(16, 185, 129, 0.5); border-color: #fbbf24; box-shadow: 0 0 20px rgba(251, 191, 36, 0.8); transform: scale(1.05); }
+            40% { background: rgba(16, 185, 129, 0.9); border-color: #fbbf24; box-shadow: 0 0 30px rgba(251, 191, 36, 1); transform: scale(1.1); }
+            100% { opacity: 0; transform: scale(0.5); visibility: hidden; }
+        }
+        .mg-item.error {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            animation: shake 0.4s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
         /* ── IMPORT MODAL ── */
         .imp-section {
             margin-bottom: 16px;
@@ -1070,7 +1118,8 @@
                         </div>
                         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                             <button id="btn-flashcard" class="btn btn-purple" style="display:none; flex:1; min-width:140px; justify-content:center; font-size:13px; padding:12px 14px;" onclick="openFlashcard()">📇 HỌC TẬP (Flashcard)</button>
-                            <button id="btn-show-list" class="btn btn-gray" style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:12px 14px;" onclick="openModal('list-modal')">📖 DANH SÁCH TỪ</button>
+                            <button id="btn-match-game" class="btn" style="background: linear-gradient(135deg, #f43f5e, #f97316); color: white; display:none; flex:1; min-width:140px; justify-content:center; font-size:13px; padding:12px 14px; box-shadow: 0 4px 15px rgba(244,63,94,0.4); border: none; font-weight: bold; cursor: pointer; border-radius: 12px;" onclick="openMatchGame()">🎮 GAME NỐI TỪ</button>
+                            <button id="btn-show-list" class="btn btn-warning" style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:12px 14px;" onclick="openModal('list-modal')">📖 DANH SÁCH TỪ</button>
                         </div>
                     </div>
 
@@ -1451,6 +1500,62 @@
         </div>
     </div>
 
+    <!-- MATCH GAME MODAL -->
+    <div id="match-game-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px; width: 95%; padding: 25px; background: #0f172a; position: relative; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: #f97316; margin: 0; font-size: 22px;">🎮 NỐI TỪ</h2>
+                <div style="display: flex; gap: 10px; font-weight: bold; font-size: 13px;">
+                    <div style="background: rgba(249, 115, 22, 0.2); padding: 5px 10px; border-radius: 8px; color: #fdba74;">Tiến độ: <span id="mg-progress">0/0</span></div>
+                    <div style="background: rgba(16, 185, 129, 0.2); padding: 5px 10px; border-radius: 8px; color: #6ee7b7;">Điểm: <span id="mg-score">0</span></div>
+                    <div style="background: rgba(59, 130, 246, 0.2); padding: 5px 10px; border-radius: 8px; color: #93c5fd;">⏳ <span id="mg-timer">00:00</span></div>
+                </div>
+            </div>
+
+            <div id="mg-board" style="display: flex; gap: 20px; flex: 1; overflow-y: auto; margin-bottom: 20px;">
+                <!-- Left Column (Japanese) -->
+                <div id="mg-left-col" style="flex: 1; display: flex; flex-direction: column; gap: 10px;"></div>
+                <!-- Right Column (Vietnamese) -->
+                <div id="mg-right-col" style="flex: 1; display: flex; flex-direction: column; gap: 10px;"></div>
+            </div>
+
+            <!-- End Screen -->
+            <div id="mg-end-screen" style="display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; margin-bottom: 20px;">
+                <h2 style="color: #10b981; font-size: 28px; margin-bottom: 10px;">🎉 CHÚC MỪNG BẠN!</h2>
+                <p style="color: #cbd5e1; font-size: 16px; margin-bottom: 20px; text-align: center;">Bạn đã hoàn thành trò chơi.</p>
+                <div style="display: flex; gap: 20px; margin-bottom: 30px;">
+                    <div style="background: rgba(16, 185, 129, 0.2); padding: 15px 25px; border-radius: 12px; text-align: center;">
+                        <div style="color: #6ee7b7; font-size: 14px; margin-bottom: 5px;">TỔNG ĐIỂM</div>
+                        <div style="color: #fff; font-size: 24px; font-weight: bold;" id="mg-final-score">0</div>
+                    </div>
+                    <div style="background: rgba(59, 130, 246, 0.2); padding: 15px 25px; border-radius: 12px; text-align: center;">
+                        <div style="color: #93c5fd; font-size: 14px; margin-bottom: 5px;">THỜI GIAN</div>
+                        <div style="color: #fff; font-size: 24px; font-weight: bold;" id="mg-final-time">00:00</div>
+                    </div>
+                </div>
+                <button class="btn" style="background: linear-gradient(135deg, #f43f5e, #f97316); color: white; padding: 15px 30px; font-size: 16px; border-radius: 12px; font-weight: bold; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(244,63,94,0.4);" onclick="startMatchGame()">🔄 CHƠI LẠI</button>
+            </div>
+
+            <button class="btn btn-gray" style="width: 100%; font-size: 16px; padding: 15px; justify-content: center;" onclick="closeMatchGame()">ĐÓNG GAME</button>
+        </div>
+    </div>
+
+    <!-- EDIT DAY MODAL -->
+    <div id="edit-day-modal" class="modal">
+        <div class="modal-content" style="max-width: 400px; padding: 25px;">
+            <h3 style="color:var(--accent); text-align:center; margin-top:0;">✏️ TÙY CHỈNH BÀI HỌC</h3>
+            <div style="margin-bottom: 20px;">
+                <label style="color:#94a3b8; font-size:14px; margin-bottom:8px; display:block;">Tên bài học hiện tại:</label>
+                <input type="text" id="edit-day-name-input" class="w-full p-2 border rounded" style="background:#0f172a; color:#fff; border:1px solid #334155; width: 100%; box-sizing: border-box; outline: none; border-radius: 8px;">
+            </div>
+            <div style="display:flex; gap:10px; flex-direction:column;">
+                <button class="btn btn-accent" style="width:100%; justify-content:center; padding:12px;" onclick="applyRenameDay()">LƯU TÊN MỚI</button>
+                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white; width:100%; justify-content:center; padding:12px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer;" onclick="applyDeleteDay()">🗑️ XÓA BÀI NÀY</button>
+                <button class="btn btn-gray" style="width:100%; justify-content:center; padding:12px;" onclick="closeModal('edit-day-modal')">HỦY BỎ</button>
+            </div>
+        </div>
+    </div>
+
     <!-- FLASHCARD MODAL -->
     <div id="flashcard-modal" class="modal">
         <div class="modal-content" style="max-width: 500px; padding: 25px; background: #0f172a; position: relative; overflow: hidden;">
@@ -1620,7 +1725,7 @@
             const g3Title = document.getElementById('group-3-title');
             if (g3Title) g3Title.innerHTML = '📝 KIỂM TRA';
             
-            ["btn-show-list", "btn-shuffle"].forEach(id => {
+            ["btn-show-list", "btn-shuffle", "btn-match-game"].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = (listOverride || sub === 'quiz') ? 'none' : 'inline-flex';
             });
@@ -1729,6 +1834,232 @@
         let isFlashcardFlipped = false;
         let fcList = [];
         let fcStarred = new Set();
+
+        /* --- MATCH GAME LOGIC --- */
+        let mgData = [];
+        let mgChunks = [];
+        let mgCurrentChunkIdx = 0;
+        let mgLeftItems = [];
+        let mgRightItems = [];
+        let mgSelectedLeft = null;
+        let mgSelectedRight = null;
+        let mgScore = 0;
+        let mgTimer = 0;
+        let mgInterval = null;
+        let mgMatchedPairsInChunk = 0;
+
+        function openMatchGame() {
+            mgData = currentList.filter(item => item.c1 && item.c3 && item.c1.trim() !== '' && item.c3.trim() !== '').map((item, index) => ({
+                id: index,
+                c1: item.c1,
+                c3: item.c3
+            }));
+            
+            if (mgData.length === 0) {
+                alert("Bài học này không có đủ dữ liệu từ vựng/ngữ pháp để chơi game nối từ!");
+                return;
+            }
+
+            mgData.sort(() => Math.random() - 0.5);
+
+            mgChunks = [];
+            for (let i = 0; i < mgData.length; i += 6) {
+                mgChunks.push(mgData.slice(i, i + 6));
+            }
+
+            document.getElementById('match-game-modal').style.display = 'flex';
+            startMatchGame();
+        }
+
+        function closeMatchGame() {
+            document.getElementById('match-game-modal').style.display = 'none';
+            clearInterval(mgInterval);
+        }
+
+        function startMatchGame() {
+            mgCurrentChunkIdx = 0;
+            mgScore = 0;
+            mgTimer = 0;
+            document.getElementById('mg-score').innerText = '0';
+            document.getElementById('mg-timer').innerText = '00:00';
+            document.getElementById('mg-end-screen').style.display = 'none';
+            document.getElementById('mg-board').style.display = 'flex';
+            
+            clearInterval(mgInterval);
+            mgInterval = setInterval(() => {
+                mgTimer++;
+                const mins = Math.floor(mgTimer / 60).toString().padStart(2, '0');
+                const secs = (mgTimer % 60).toString().padStart(2, '0');
+                document.getElementById('mg-timer').innerText = `${mins}:${secs}`;
+            }, 1000);
+
+            loadMgChunk();
+        }
+
+        function loadMgChunk() {
+            if (mgCurrentChunkIdx >= mgChunks.length) {
+                endMatchGame();
+                return;
+            }
+
+            const currentChunk = mgChunks[mgCurrentChunkIdx];
+            mgMatchedPairsInChunk = 0;
+            mgSelectedLeft = null;
+            mgSelectedRight = null;
+
+            document.getElementById('mg-progress').innerText = `${mgCurrentChunkIdx + 1}/${mgChunks.length}`;
+
+            mgLeftItems = currentChunk.map(item => ({ id: item.id, text: item.c1 }));
+            mgRightItems = currentChunk.map(item => ({ id: item.id, text: item.c3 }));
+
+            mgLeftItems.sort(() => Math.random() - 0.5);
+            mgRightItems.sort(() => Math.random() - 0.5);
+
+            renderMgBoard();
+        }
+
+        function renderMgBoard() {
+            const leftCol = document.getElementById('mg-left-col');
+            const rightCol = document.getElementById('mg-right-col');
+            leftCol.innerHTML = '';
+            rightCol.innerHTML = '';
+
+            mgLeftItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'mg-item';
+                div.id = `mg-left-${item.id}`;
+                div.innerText = item.text;
+                div.onclick = () => selectMgItem('left', item.id, div);
+                leftCol.appendChild(div);
+            });
+
+            mgRightItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'mg-item';
+                div.id = `mg-right-${item.id}`;
+                div.innerText = item.text;
+                div.onclick = () => selectMgItem('right', item.id, div);
+                rightCol.appendChild(div);
+            });
+        }
+
+        function selectMgItem(side, id, el) {
+            if (side === 'left') {
+                if (mgSelectedLeft === id) {
+                    mgSelectedLeft = null;
+                    el.classList.remove('selected');
+                    return;
+                }
+                if (mgSelectedLeft !== null) {
+                    const oldEl = document.getElementById(`mg-left-${mgSelectedLeft}`);
+                    if(oldEl) oldEl.classList.remove('selected');
+                }
+                mgSelectedLeft = id;
+                el.classList.add('selected');
+            } else {
+                if (mgSelectedRight === id) {
+                    mgSelectedRight = null;
+                    el.classList.remove('selected');
+                    return;
+                }
+                if (mgSelectedRight !== null) {
+                    const oldEl = document.getElementById(`mg-right-${mgSelectedRight}`);
+                    if(oldEl) oldEl.classList.remove('selected');
+                }
+                mgSelectedRight = id;
+                el.classList.add('selected');
+            }
+
+            checkMgMatch();
+        }
+
+        function checkMgMatch() {
+            if (mgSelectedLeft !== null && mgSelectedRight !== null) {
+                const leftEl = document.getElementById(`mg-left-${mgSelectedLeft}`);
+                const rightEl = document.getElementById(`mg-right-${mgSelectedRight}`);
+
+                if (mgSelectedLeft === mgSelectedRight) {
+                    // Đúng
+                    leftEl.classList.remove('selected');
+                    rightEl.classList.remove('selected');
+                    leftEl.classList.add('matched');
+                    rightEl.classList.add('matched');
+                    
+                    if (typeof confetti === 'function') {
+                        const rL = leftEl.getBoundingClientRect();
+                        const rR = rightEl.getBoundingClientRect();
+                        confetti({ zIndex: 9999, particleCount: 40, spread: 50, origin: { x: (rL.left + rL.width/2)/window.innerWidth, y: (rL.top + rL.height/2)/window.innerHeight }});
+                        confetti({ zIndex: 9999, particleCount: 40, spread: 50, origin: { x: (rR.left + rR.width/2)/window.innerWidth, y: (rR.top + rR.height/2)/window.innerHeight }});
+                    }
+
+                    try {
+                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                        osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+                        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.2);
+                    } catch(e) {}
+
+                    mgScore += 10;
+                    document.getElementById('mg-score').innerText = mgScore;
+                    mgMatchedPairsInChunk++;
+
+                    mgSelectedLeft = null;
+                    mgSelectedRight = null;
+
+                    if (mgMatchedPairsInChunk === mgChunks[mgCurrentChunkIdx].length) {
+                        setTimeout(() => {
+                            mgCurrentChunkIdx++;
+                            loadMgChunk();
+                        }, 800);
+                    }
+                } else {
+                    // Sai
+                    leftEl.classList.remove('selected');
+                    rightEl.classList.remove('selected');
+                    leftEl.classList.add('error');
+                    rightEl.classList.add('error');
+
+                    mgScore = Math.max(0, mgScore - 2);
+                    document.getElementById('mg-score').innerText = mgScore;
+
+                    setTimeout(() => {
+                        leftEl.classList.remove('error');
+                        rightEl.classList.remove('error');
+                    }, 400);
+
+                    mgSelectedLeft = null;
+                    mgSelectedRight = null;
+                }
+            }
+        }
+
+        function endMatchGame() {
+            clearInterval(mgInterval);
+            document.getElementById('mg-board').style.display = 'none';
+            document.getElementById('mg-end-screen').style.display = 'flex';
+            document.getElementById('mg-final-score').innerText = mgScore;
+            
+            const mins = Math.floor(mgTimer / 60).toString().padStart(2, '0');
+            const secs = (mgTimer % 60).toString().padStart(2, '0');
+            document.getElementById('mg-final-time').innerText = `${mins}:${secs}`;
+            
+            if (typeof confetti === 'function') {
+                confetti({
+                    zIndex: 9999,
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
 
         function openFlashcard() {
             if (currentList.length === 0) return;
@@ -2443,7 +2774,6 @@
                     <span style="display:flex; gap:12px; align-items:center;">
                         <span style="color:var(--success)" onclick="exportDayTxt('${lv}', '${ty}', '${dayKey}')" title="Xuất file TXT">📄</span>
                         <span style="color:var(--accent)" onclick="renameDay('${lv}', '${ty}', '${dayKey}')" title="Đổi tên">✏️</span>
-                        <span style="color:var(--danger)" onclick="deleteDay('${lv}', '${ty}', '${dayKey}')" title="Xóa">✕</span>
                     </span>`;
                         container.appendChild(div);
                     });
@@ -2452,9 +2782,22 @@
             });
         }
 
+        let curEditDayInfo = null;
+
         function renameDay(lv, ty, oldDay) {
-            const newDay = prompt("Nhập tên bài mới:", oldDay);
-            if (!newDay || newDay === oldDay) return;
+            curEditDayInfo = { lv, ty, oldDay };
+            document.getElementById('edit-day-name-input').value = oldDay;
+            openModal('edit-day-modal');
+        }
+
+        function applyRenameDay() {
+            if(!curEditDayInfo) return;
+            const { lv, ty, oldDay } = curEditDayInfo;
+            const newDay = document.getElementById('edit-day-name-input').value.trim();
+            if (!newDay || newDay === oldDay) {
+                closeModal('edit-day-modal');
+                return;
+            }
             if (db[lv][ty][newDay]) { alert("Tên bài này đã tồn tại!"); return; }
             const newObj = {};
             for (let key in db[lv][ty]) {
@@ -2465,6 +2808,16 @@
             if (curDay === oldDay && curLevel === lv && curType === ty) curDay = newDay;
             saveToLocal(); renderSidebar();
             if (curDay === newDay) selectDay(lv, ty, newDay);
+            closeModal('edit-day-modal');
+        }
+
+        function applyDeleteDay() {
+            if(!curEditDayInfo) return;
+            const { lv, ty, oldDay } = curEditDayInfo;
+            if(confirm(`Bạn có chắc muốn xoá hoàn toàn bài "${oldDay}" không?\nHành động này không thể hoàn tác.`)) {
+                deleteDay(lv, ty, oldDay);
+                closeModal('edit-day-modal');
+            }
         }
 
         function selectDay(lv, ty, day, listOverride = null, targetMode = null) {
@@ -2480,7 +2833,7 @@
                 const el = document.getElementById(id);
                 if (el) el.style.display = listOverride ? 'none' : 'inline-flex';
             });
-            ["btn-shuffle", "btn-flashcard"].forEach(id => {
+            ["btn-shuffle", "btn-flashcard", "btn-match-game"].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = (listOverride || !isVoca) ? 'none' : 'inline-flex';
             });
@@ -3163,7 +3516,7 @@
                     </div>
                 </div>`;
             document.body.appendChild(overlay);
-            confetti({ particleCount: 300, spread: 100, origin: { y: 0.6 } });
+            confetti({ zIndex: 9999, particleCount: 300, spread: 100, origin: { y: 0.6 } });
         }
 
         function processImport() {
