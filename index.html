@@ -875,6 +875,316 @@
         .van-menu-lvl1:hover {
             background: rgba(124, 58, 237, 0.18);
         }
+
+        /* ── CUSTOM QUIZ MODAL ── */
+        .cq-section {
+            margin-bottom: 16px;
+        }
+        .cq-section-label {
+            font-size: 11px;
+            font-weight: 900;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .cq-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+        .cq-chip {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 2px solid #334155;
+            background: transparent;
+            color: #94a3b8;
+            font-family: 'Baloo 2', cursive;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.18s;
+            user-select: none;
+        }
+        .cq-chip:hover { border-color: #64748b; color: #e2e8f0; }
+        .cq-chip.active {
+            border-color: var(--accent);
+            background: rgba(59,130,246,0.2);
+            color: #60a5fa;
+        }
+        .cq-chip.active-green {
+            border-color: var(--success);
+            background: rgba(34,197,94,0.15);
+            color: #4ade80;
+        }
+        .cq-chip.active-purple {
+            border-color: #a855f7;
+            background: rgba(168,85,247,0.15);
+            color: #c084fc;
+        }
+        .cq-chip.active-orange {
+            border-color: #f97316;
+            background: rgba(249,115,22,0.15);
+            color: #fb923c;
+        }
+        .cq-lesson-list {
+            max-height: 160px;
+            overflow-y: auto;
+            border: 1px solid #1e293b;
+            border-radius: 10px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: rgba(0,0,0,0.2);
+        }
+        .cq-lesson-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 13px;
+            font-weight: 700;
+            color: #cbd5e1;
+        }
+        .cq-lesson-item:hover { background: rgba(59,130,246,0.1); }
+        .cq-lesson-item input[type=checkbox] {
+            accent-color: var(--accent);
+            width: 15px; height: 15px;
+            cursor: pointer;
+        }
+        .cq-preview-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(59,130,246,0.1);
+            border: 1px solid rgba(59,130,246,0.3);
+            border-radius: 12px;
+            padding: 10px 16px;
+            margin-bottom: 14px;
+        }
+        .cq-preview-count {
+            font-size: 16px;
+            font-weight: 900;
+            color: #60a5fa;
+        }
+        .cq-preview-detail {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        /* ── SIDEBAR GROUP DIVIDERS ── */
+        .sidebar-group-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px 8px;
+            margin-top: 4px;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .sidebar-group-header::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: currentColor;
+            opacity: 0.3;
+        }
+
+        .sidebar-group-header.jlpt {
+            color: #818cf8;
+        }
+
+        .sidebar-group-header.bjt {
+            color: #fb923c;
+        }
+
+        .sidebar-group-header.jlpt-user {
+            color: #60a5fa;
+        }
+
+        .sidebar-group-header.bjt-user {
+            color: #fb923c;
+        }
+
+        /* ── REACTION GAME MODAL ── */
+        #reaction-game-modal .rg-wrap {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(180deg, #f3e5f5 0%, #ffdae9 100%);
+            border-radius: 28px;
+        }
+        #reaction-game-modal .rg-header {
+            width: 100%; padding: 14px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; flex-shrink: 0;
+        }
+        #reaction-game-modal .rg-stat-box {
+            background: rgba(255,255,255,0.85);
+            padding: 8px 18px; border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            font-weight: bold; font-size: 1rem;
+            backdrop-filter: blur(5px);
+            border: 2px solid #fff;
+            min-width: 100px; text-align: center;
+            color: #4e342e;
+        }
+        #reaction-game-modal .rg-timer-display { color: #ff85a2; font-size: 1.1rem; }
+        #rg-question-container {
+            position: absolute; top: 44%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center; z-index: 50;
+            width: 92%; max-width: 520px;
+            pointer-events: none;
+        }
+        #rg-question-text {
+            font-size: 2.4rem;
+            background: rgba(255,255,255,0.95);
+            padding: 18px 40px; border-radius: 60px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            border: 5px solid #ff85a2;
+            margin-bottom: 18px; display: inline-block;
+            color: #ff85a2; font-weight: 900; line-height: 1.3;
+        }
+        #rg-progress-text {
+            font-size: 1rem; margin-bottom: 8px;
+            font-weight: bold; color: #4e342e;
+            background: rgba(255,255,255,0.5);
+            display: inline-block; padding: 4px 12px; border-radius: 12px;
+        }
+        #rg-timer-wrapper {
+            width: 260px; height: 15px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 10px; margin: 0 auto;
+            overflow: hidden; border: 2px solid #fff;
+        }
+        #rg-timer-bar {
+            width: 100%; height: 100%;
+            background: #ff85a2;
+            transition: width 0.1s linear;
+        }
+        #rg-timer-bar.rg-warning {
+            background: #ff5252;
+            animation: rgPulse 0.5s infinite;
+        }
+        @keyframes rgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        #rg-canvas {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 60; pointer-events: none;
+        }
+        .rg-flower {
+            position: absolute; pointer-events: auto; cursor: pointer;
+            width: 105px; height: 105px;
+            display: flex; justify-content: center; align-items: center;
+            text-align: center; padding: 8px;
+            font-weight: 900; font-size: 1.05rem;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+            transition: transform 0.2s ease, opacity 0.3s ease;
+            color: #4e342e; word-break: break-all;
+        }
+        .rg-flower::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="32" r="28"/><circle cx="68" cy="40" r="28"/><circle cx="68" cy="60" r="28"/><circle cx="50" cy="68" r="28"/><circle cx="32" cy="60" r="28"/><circle cx="32" cy="40" r="28"/><circle cx="50" cy="50" r="30"/></svg>');
+            mask-repeat: no-repeat; mask-size: contain;
+            -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="32" r="28"/><circle cx="68" cy="40" r="28"/><circle cx="68" cy="60" r="28"/><circle cx="50" cy="68" r="28"/><circle cx="32" cy="60" r="28"/><circle cx="32" cy="40" r="28"/><circle cx="50" cy="50" r="30"/></svg>');
+            -webkit-mask-repeat: no-repeat; -webkit-mask-size: contain;
+            z-index: -1;
+        }
+        .rg-flower.rg-type-1::before { background: radial-gradient(circle, #ffcce0, #ff85a2); }
+        .rg-flower.rg-type-2::before { background: radial-gradient(circle, #f3e5f5, #ba68c8); }
+        .rg-flower.rg-type-3::before { background: radial-gradient(circle, #e3f2fd, #64b5f6); }
+        .rg-flower.rg-type-4::before { background: radial-gradient(circle, #e8f5e9, #81c784); }
+        .rg-flower.rg-type-5::before { background: radial-gradient(circle, #fff3e0, #ffb74d); }
+        .rg-flower.rg-correct {
+            animation: rgFloatUp 0.6s forwards ease-in;
+            filter: drop-shadow(0 0 28px #ffd700) brightness(1.3);
+        }
+        .rg-flower.rg-wrong {
+            animation: rgShake 0.4s forwards; opacity: 0.6;
+        }
+        @keyframes rgFloatUp {
+            to { transform: translateY(-400px) scale(2); opacity: 0; }
+        }
+        @keyframes rgShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-18px); }
+            75% { transform: translateX(18px); }
+        }
+        #rg-feedback-text {
+            position: absolute; top: 18%; left: 50%; transform: translateX(-50%);
+            font-size: 3rem; font-weight: 900; color: #ff85a2;
+            pointer-events: none; z-index: 200;
+            text-shadow: 4px 4px 0 white; opacity: 0;
+        }
+        .rg-show-feedback { animation: rgFeedbackAnim 0.6s ease-out forwards; }
+        @keyframes rgFeedbackAnim {
+            0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
+            50% { transform: translate(-50%, -18px) scale(1.1); opacity: 1; }
+            100% { transform: translate(-50%, -55px) scale(1); opacity: 0; }
+        }
+        .rg-bg-petal {
+            position: absolute; background: rgba(255, 182, 193, 0.4);
+            border-radius: 50% 0 50% 0; pointer-events: none; z-index: 1;
+            animation: rgFallBg linear infinite;
+        }
+        @keyframes rgFallBg {
+            0% { transform: translate(0, -10%) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.7; }
+            100% { transform: translate(160px, 110%) rotate(540deg); opacity: 0; }
+        }
+        #reaction-game-modal .rg-modal-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.94);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 300; padding: 24px; text-align: center;
+            backdrop-filter: blur(10px); border-radius: 28px;
+        }
+        #reaction-game-modal .rg-modal-overlay h2 {
+            color: #ff85a2; font-size: 2.2rem; margin-bottom: 8px;
+        }
+        #reaction-game-modal .rg-modal-overlay p {
+            font-size: 1.1rem; color: #4e342e; margin-bottom: 6px;
+        }
+        #reaction-game-modal .rg-btn {
+            background: #ff85a2; color: white; border: none;
+            padding: 14px 45px; font-size: 1.4rem; border-radius: 50px;
+            cursor: pointer; box-shadow: 0 6px 0 #d81b60;
+            transition: all 0.15s; margin-top: 20px; font-weight: 900;
+            font-family: 'Baloo 2', cursive;
+        }
+        #reaction-game-modal .rg-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 #d81b60; }
+        #reaction-game-modal .rg-close-btn {
+            position: absolute; top: 12px; right: 14px;
+            background: rgba(0,0,0,0.15); border: none; color: #fff;
+            width: 32px; height: 32px; border-radius: 50%;
+            font-size: 16px; cursor: pointer; z-index: 400;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        #reaction-game-modal .rg-close-btn:hover { background: rgba(239,68,68,0.7); }
     </style>
 </head>
 
@@ -960,6 +1270,10 @@
             <span id="van-section-arrow" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size:16px; color: white; text-shadow: 0 0 5px rgba(0,0,0,0.8);">▼</span>
         </div>
         <div id="van-section">
+
+            <!-- ▸ NHÓM JLPT -->
+            <div class="sidebar-group-header jlpt">🎌 JLPT</div>
+
             <!-- N1 Từ Vựng -->
             <div class="van-menu-lvl1" onclick="toggleSub('van-n1voca-sub')">&#x1F4DA; N1 Từ Vựng ▼</div>
             <div id="van-n1voca-sub" class="sub-menu">
@@ -976,6 +1290,10 @@
                 <div class="menu-lvl2" onclick="toggleSub('van-n2gram-quiz')">🎯 Trắc nghiệm</div>
                 <div id="van-n2gram-quiz" class="sub-menu"></div>
             </div>
+
+            <!-- ▸ NHÓM BJT -->
+            <div class="sidebar-group-header bjt">💼 BJT</div>
+
             <!-- BJT Từ Vựng -->
             <div class="van-menu-lvl1" onclick="toggleSub('van-bjtvoca-sub')">&#x1F4BC; BJT Từ Vựng ▼</div>
             <div id="van-bjtvoca-sub" class="sub-menu">
@@ -992,6 +1310,10 @@
             <span id="user-section-arrow" style="font-size:12px;">▼</span>
         </div>
         <div id="user-section">
+
+            <!-- ▸ NHÓM JLPT -->
+            <div class="sidebar-group-header jlpt-user">🎌 JLPT</div>
+
             <div class="menu-lvl1" onclick="toggleSub('n1-sub')">NĂNG LỰC N1 ▼</div>
             <div id="n1-sub" class="sub-menu">
                 <div class="menu-lvl2" onclick="toggleSub('n1-voca')">📚 Luyện tập từ đơn</div>
@@ -1025,6 +1347,10 @@
                 <div class="menu-lvl2" onclick="toggleSub('n3-gram_quiz')">🎯 Ngữ pháp trắc nghiệm</div>
                 <div id="n3-gram_quiz" class="sub-menu"></div>
             </div>
+
+            <!-- ▸ NHÓM BJT -->
+            <div class="sidebar-group-header bjt-user">💼 BJT</div>
+
             <div class="menu-lvl1" onclick="toggleSub('bjt-sub')">BJT ▼</div>
             <div id="bjt-sub" class="sub-menu">
                 <div class="menu-lvl2" onclick="toggleSub('bjt-voca')">📚 Luyện tập từ đơn</div>
@@ -1039,6 +1365,9 @@
         </div>
 
         <div style="padding: 20px; display: grid; gap: 12px; margin-top: 10px; border-top: 1px solid #334155;">
+            <button class="btn" id="btn-custom-quiz"
+                style="background: linear-gradient(135deg, #7c3aed, #ec4899); font-size: 14px; justify-content: center; box-shadow: 0 4px 15px rgba(124,58,237,0.5);"
+                onclick="openCustomQuizModal()">🎲 TẠO ĐỀ TUỲ Ý</button>
             <button class="btn btn-blue" style="font-size: 14px; justify-content: center;"
                 onclick="openModal('sync-modal')">💾 SAO LƯU DỮ LIỆU</button>
             <button class="btn btn-danger" style="font-size: 14px; background: #ef4444; justify-content: center;"
@@ -1119,6 +1448,7 @@
                         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                             <button id="btn-flashcard" class="btn btn-purple" style="display:none; flex:1; min-width:140px; justify-content:center; font-size:13px; padding:12px 14px;" onclick="openFlashcard()">📇 HỌC TẬP (Flashcard)</button>
                             <button id="btn-match-game" class="btn" style="background: linear-gradient(135deg, #f43f5e, #f97316); color: white; display:none; flex:1; min-width:140px; justify-content:center; font-size:13px; padding:12px 14px; box-shadow: 0 4px 15px rgba(244,63,94,0.4); border: none; font-weight: bold; cursor: pointer; border-radius: 12px;" onclick="openMatchGame()">🎮 GAME NỐI TỪ</button>
+                            <button id="btn-reaction-game" class="btn" style="background: linear-gradient(135deg, #ec4899, #a855f7); color: white; display:none; flex:1; min-width:140px; justify-content:center; font-size:13px; padding:12px 14px; box-shadow: 0 4px 15px rgba(168,85,247,0.4); border: none; font-weight: bold; cursor: pointer; border-radius: 12px;" onclick="openReactionGame()">⚡ PHẢN XẠ NHANH</button>
                             <button id="btn-show-list" class="btn btn-warning" style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:12px 14px;" onclick="openModal('list-modal')">📖 DANH SÁCH TỪ</button>
                         </div>
                     </div>
@@ -1638,6 +1968,50 @@
         </div>
     </div>
 
+    <!-- REACTION GAME MODAL -->
+    <div id="reaction-game-modal" class="modal" style="padding: 0; background: rgba(0,0,0,0.85);">
+        <div class="rg-wrap" style="max-width: 820px; width: 96%; max-height: 92vh; height: 92vh; margin: auto; position: relative;">
+            <button class="rg-close-btn" onclick="closeReactionGame()">✕</button>
+
+            <!-- Header -->
+            <div class="rg-header">
+                <div class="rg-stat-box">Điểm: <span id="rg-score-val">0</span></div>
+                <div class="rg-stat-box rg-timer-display">⏱ <span id="rg-time-val">60</span>s</div>
+            </div>
+
+            <!-- Question Area -->
+            <div id="rg-question-container" style="display:none;">
+                <div id="rg-progress-text">Câu: 1/20</div><br>
+                <div id="rg-question-text">Sẵn sàng!</div>
+                <div id="rg-timer-wrapper"><div id="rg-timer-bar"></div></div>
+            </div>
+
+            <!-- Flower Canvas -->
+            <div id="rg-canvas"></div>
+
+            <!-- Feedback -->
+            <div id="rg-feedback-text">CHÍNH XÁC! ✨</div>
+
+            <!-- Start Screen -->
+            <div id="rg-start-screen" class="rg-modal-overlay">
+                <h2>🌸 Game Phản Xạ Nhanh</h2>
+                <p>Chọn đúng <b>nghĩa tiếng Việt</b> (hoặc cách đọc) của từ vựng xuất hiện!</p>
+                <p style="color:#888; font-size:0.95rem;">Bông hoa rơi = đáp án. Chọn đúng → sang câu tiếp. Chọn sai → kết thúc!</p>
+                <p id="rg-word-count-info" style="color:#ec4899; font-weight:900;"></p>
+                <button class="rg-btn" onclick="startReactionGame()">🌸 Bắt đầu ngay!</button>
+            </div>
+
+            <!-- End Screen -->
+            <div id="rg-end-screen" class="rg-modal-overlay" style="display:none;">
+                <h2 id="rg-result-title">Kết thúc!</h2>
+                <p id="rg-final-stats" style="font-size:1.4rem;">Hoàn thành: 0/0 câu</p>
+                <p id="rg-final-score" style="font-size:2rem; color:#ff85a2; font-weight:900;">Điểm: 0</p>
+                <button class="rg-btn" onclick="startReactionGame()">🔄 Chơi lại</button>
+                <button class="rg-btn" style="background:#94a3b8; box-shadow: 0 6px 0 #64748b; margin-left: 12px;" onclick="closeReactionGame()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
     <script src="vanData.js"></script>
     <script>
         const VAN_CONTAINERS = {
@@ -1725,7 +2099,7 @@
             const g3Title = document.getElementById('group-3-title');
             if (g3Title) g3Title.innerHTML = '📝 KIỂM TRA';
             
-            ["btn-show-list", "btn-shuffle", "btn-match-game"].forEach(id => {
+            ["btn-show-list", "btn-shuffle", "btn-match-game", "btn-reaction-game"].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = (listOverride || sub === 'quiz') ? 'none' : 'inline-flex';
             });
@@ -1748,7 +2122,7 @@
             return String(text)
                 .replace(/\\n/g, '<br>')
                 .replace(/\n/g, '<br>')
-                .replace(/(?:[\uD83C\uDDFB\uD83C\uDDF3\u2600-\u26FF\u2700-\u27BF\u1F300-\u1F5FF\u1F600-\u1F64F\u1F680-\u1F6FF\u1F900-\u1F9FF\u1FA70-\u1FAFF\u1F1E6-\u1F1FF]+)?\s*Dịch\s*:/gi, 'Dịch:')
+                .replace(/(?:🇻🇳)?\s*Dịch\s*:/gi, 'Dịch:')
                 .replace(/Dịch:/g, '<br><span style="color:#059669; font-weight:900;">&#x1F1FB;&#x1F1F3; Dịch:</span>')
                 .replace(/\[\[(.*?)\]\]/g, '<span style="color: #ef4444; font-weight: 900; text-decoration: underline; text-underline-offset: 4px;">$1</span>')
                 .replace(/\(\((.*?)\)\)/g, '<span style="color: #ef4444; font-weight: 900; text-decoration: underline; text-underline-offset: 4px;">$1</span>');
@@ -1823,7 +2197,7 @@
         /* ============================================= */
         let db = JSON.parse(localStorage.getItem('mgao_v37_db'));
         let userName = localStorage.getItem('mgao_user_v37') || "";
-        let curLevel, curType, curDay, seconds = 0, timerInterval = null, currentList = [], currentMode = 0;
+        let curLevel, curType, curDay, seconds = 0, timerInterval = null, currentMode = 0; let currentList = []; Object.defineProperty(window, "appCurrentList", { get: function() { return currentList; } });
         let totalSeconds = 0, totalTimerInterval = null;
         let lessonTimes = []; // stores time (seconds) for each completed lesson
         let sessionScores = []; // stores {ok, total, mode} for each lesson
@@ -2125,12 +2499,15 @@
             e.stopPropagation();
             const item = fcList[currentFlashcardIndex];
             if (!item) return;
-            
+            const key = _itemKey(item);
             if (fcStarred.has(item)) {
                 fcStarred.delete(item);
+                fcStarredKeys.delete(key);
             } else {
                 fcStarred.add(item);
+                fcStarredKeys.add(key);
             }
+            saveFcStarred();
             updateFlashcardUI();
         }
 
@@ -2833,7 +3210,7 @@
                 const el = document.getElementById(id);
                 if (el) el.style.display = listOverride ? 'none' : 'inline-flex';
             });
-            ["btn-shuffle", "btn-flashcard", "btn-match-game"].forEach(id => {
+            ["btn-shuffle", "btn-flashcard", "btn-match-game", "btn-reaction-game"].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = (listOverride || !isVoca) ? 'none' : 'inline-flex';
             });
@@ -2881,6 +3258,63 @@
             const tyLabel = {'voca':'Từ vựng','gram':'Ngữ pháp','voca_quiz':'Từ vựng (TN)','gram_quiz':'Ngữ pháp (TN)'}[ty] || ty;
             setBreadcrumb(`${lvLabel} / ${tyLabel} / ${day}`, false);
             setActiveMenuItem(day);
+        }
+
+        function changeMode(m) {
+            currentMode = m;
+
+            const modeBox = document.getElementById('mode-box');
+            const vocaQuizOpts = document.getElementById('voca-quiz-options');
+
+            // Guard: curLevel='custom' — don’t read db[custom]
+            const isCustom = (curLevel === 'custom');
+
+            if (curType === 'voca_quiz' || curType === 'gram_quiz') {
+                if (modeBox) modeBox.style.display = 'none';
+                if (vocaQuizOpts) vocaQuizOpts.style.display = 'flex';
+            } else {
+                if (modeBox) {
+                    modeBox.style.display = 'grid';
+                    modeBox.style.gridTemplateColumns = curType === 'gram' ? "1fr 1fr" : "1fr 1fr 1fr";
+                    const mode2 = document.getElementById('mode-2');
+                    if (curType === 'gram') mode2.style.display = 'none';
+                    else mode2.style.display = 'flex';
+                }
+                if (vocaQuizOpts) vocaQuizOpts.style.display = 'none';
+            }
+
+            for (let i = 0; i < 3; i++) {
+                const btn = document.getElementById(`mode-${i}`);
+                const isDone = curVanMode
+                    ? (window._vanProgress && window._vanProgress.done[i])
+                    : (!isCustom && db[curLevel] && db[curLevel][curType] && db[curLevel][curType][curDay] && db[curLevel][curType][curDay].done[i]);
+
+                let disabled = false;
+                if (currentList.length === 0) disabled = true;
+                if (curType === 'gram' && i === 2) disabled = true;
+
+                if (disabled) {
+                    btn.className = 'btn btn-gray';
+                    btn.style.opacity = '0.3';
+                    btn.style.pointerEvents = 'none';
+                } else {
+                    btn.className = (i === m) ? 'btn btn-blue' : 'btn btn-gray';
+                    btn.style.opacity = '1';
+                    btn.style.pointerEvents = 'auto';
+                }
+
+                let txt = "";
+                if (curType === 'voca' || isCustom) {
+                    txt = (i == 0 ? "CÁCH ĐỌC" : i == 1 ? "NGHĨA" : "TIẾNG NHẬT");
+                } else if (curType === 'voca_quiz' || curType === 'gram_quiz') {
+                    txt = "TRẮc NGHIỆM";
+                } else if (curType === 'gram') {
+                    txt = (i == 0 ? "TÌM NGHĨA" : i == 1 ? "TÌM CẤU TRÚC" : "");
+                }
+                if (txt) {
+                    btn.innerHTML = `<span style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">ĐỀ ${i + 1}</span><span>${txt}${isDone ? ' ✅' : ''}</span>`;
+                }
+            };
         }
 
         function changeMode(m) {
@@ -3010,7 +3444,7 @@
                 const style = document.createElement('style');
                 style.id = 'quiz-styles';
                 style.innerHTML = `
-            .quiz-opt { background: rgba(30,41,59,0.7); border: 2px solid #3b82f6; border-radius: 12px; padding: 15px; color: white; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: 'Baloo 2', 'Kosugi Maru', sans-serif; }
+            .quiz-opt { background: rgba(30,41,59,0.7); border: 2px solid #3b82f6; border-radius: 12px; padding: 15px; color: white; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: 'Baloo 2', 'Kosugi Maru', sans-serif; text-align: left; }
             .quiz-opt:hover { background: rgba(59,130,246,0.3); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(59,130,246,0.4); }
             .quiz-opt.correct { background: var(--success) !important; border-color: #4ade80 !important; box-shadow: 0 0 20px var(--success) !important; color: #fff; transform: scale(1.02); }
             .quiz-opt.wrong { background: var(--danger) !important; border-color: #f87171 !important; box-shadow: 0 0 20px var(--danger) !important; animation: shake 0.4s; }
@@ -3153,6 +3587,8 @@
                     msg.className = 'fb-msg show ng';
                     msg.innerText = 'Sai rồi tiếc quá 😢';
                     setTimeout(() => input.classList.remove('error-shake'), 400);
+                    // Track sai
+                    if (currentList[idx]) trackWrong(currentList[idx]);
                 }
             }
             updateChart();
@@ -3764,6 +4200,8 @@
             const msg = document.getElementById(`msg-${idx}`);
             msg.className = 'fb-msg show forgot';
             msg.innerText = 'Từ này bạn quên à 😅';
+            // Track quên
+            if (currentList[idx]) trackForgot(currentList[idx]);
             updateChart();
         }
 
@@ -3958,10 +4396,520 @@
                 }
             }
         });
+        // ══════════════════════════════════════════
+        // STARRED PERSISTENCE (fcStarred saved by c1/q key)
+        // ══════════════════════════════════════════
+        let fcStarredKeys = new Set(JSON.parse(localStorage.getItem('fc_starred_keys') || '[]'));
+
+        function _itemKey(item) {
+            return (item.q || item.c1 || '').trim();
+        }
+        function saveFcStarred() {
+            localStorage.setItem('fc_starred_keys', JSON.stringify([...fcStarredKeys]));
+        }
+
+        // ══════════════════════════════════════════
+        // WRONG / FORGOT COUNT TRACKING (per-item, saved in db or vanData localStorage)
+        // ══════════════════════════════════════════
+        function trackWrong(item) {
+            item.wrongCount = (item.wrongCount || 0) + 1;
+            if (!curVanMode) saveToLocal();
+            else saveVanItemExtra(item);
+        }
+        function trackForgot(item) {
+            item.forgotCount = (item.forgotCount || 0) + 1;
+            if (!curVanMode) saveToLocal();
+            else saveVanItemExtra(item);
+        }
+        function saveVanItemExtra(item) {
+            // For vanData items: persist wrongCount/forgotCount by c1/q key
+            const key = 'vanextra_' + _itemKey(item);
+            localStorage.setItem(key, JSON.stringify({ wrongCount: item.wrongCount || 0, forgotCount: item.forgotCount || 0 }));
+        }
+        function loadVanItemExtra(item) {
+            const key = 'vanextra_' + _itemKey(item);
+            const saved = JSON.parse(localStorage.getItem(key) || 'null');
+            if (saved) { item.wrongCount = saved.wrongCount || 0; item.forgotCount = saved.forgotCount || 0; }
+        }
+
+        // ══════════════════════════════════════════
+        // CUSTOM QUIZ MODAL LOGIC
+        // ══════════════════════════════════════════
+
+        // chip helpers
+        function cqToggleChip(el, group, activeClass) {
+            el.classList.toggle(activeClass);
+            cqRefresh();
+        }
+        function cqSingleSelect(el, group, activeClass) {
+            document.querySelectorAll(`[id^="${group}-"]`).forEach(c => c.classList.remove(activeClass));
+            el.classList.add(activeClass);
+        }
+        function cqIsActive(id) {
+            const el = document.getElementById(id);
+            if (!el) return false;
+            return el.className.includes('active');
+        }
+        function cqSelectAllLessons(val) {
+            document.querySelectorAll('#cq-lesson-list input[type=checkbox]').forEach(cb => cb.checked = val);
+            cqRefresh();
+        }
+
+        function openCustomQuizModal() {
+            cqRefresh();
+            openModal('custom-quiz-modal');
+        }
+
+        // Build list of source entries matching current filters
+        function cqGetSelectedLessons() {
+            return [...document.querySelectorAll('#cq-lesson-list input[type=checkbox]:checked')].map(cb => cb.value);
+        }
+
+        function cqRefresh() {
+            const useVan  = cqIsActive('cq-src-van');
+            const useUser = cqIsActive('cq-src-user');
+            const lvs  = ['n1','n2','n3','bjt'].filter(l => cqIsActive('cq-lv-'+l));
+            const types = [];
+            if (cqIsActive('cq-type-voca')) types.push('voca');
+            if (cqIsActive('cq-type-gram')) types.push('gram');
+            const isStruct = cqIsActive('cq-mode-struct');
+            const isQuiz   = cqIsActive('cq-mode-quiz');
+
+            // Build lesson list
+            const listEl = document.getElementById('cq-lesson-list');
+            let lessons = []; // {id, label, items_struct, items_quiz, src}
+
+            // --- Góc của Bạn ---
+            if (useUser) {
+                lvs.forEach(lv => {
+                    types.forEach(ty => {
+                        const structTy = ty; // 'voca' or 'gram'
+                        const quizTy = ty + '_quiz';
+                        const lvLabel = {n1:'N1',n2:'N2',n3:'N3',bjt:'BJT'}[lv];
+                        const tyLabel = ty === 'voca' ? 'Từ vựng' : 'Ngữ pháp';
+                        if (db[lv]) {
+                            Object.keys(db[lv][structTy] || {}).forEach(dayKey => {
+                                const structItems = (db[lv][structTy][dayKey]?.list || []).filter(it => !it.gramType);
+                                const quizItems  = (db[lv][quizTy]?.[dayKey]?.list || []).filter(it => it.gramType === 'quiz');
+                                if (structItems.length > 0 || quizItems.length > 0) {
+                                    lessons.push({ id: `user|${lv}|${ty}|${dayKey}`, label: `[${lvLabel} ${tyLabel}] ${dayKey}`, structItems, quizItems, src:'user' });
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            // --- Góc của Vân ---
+            if (useVan) {
+                const VAN_MAP = {
+                    n1voca: { lvs: ['n1'], types: ['voca'], label: 'N1 Từ vựng' },
+                    n2gram: { lvs: ['n2'], types: ['gram'], label: 'N2 Ngữ pháp' },
+                    bjtvoca:{ lvs: ['bjt'], types: ['voca'], label: 'BJT Từ vựng' }
+                };
+                Object.entries(VAN_MAP).forEach(([sectionKey, meta]) => {
+                    if (!lvs.some(l => meta.lvs.includes(l))) return;
+                    if (!types.some(t => meta.types.includes(t))) return;
+                    const ty = meta.types[0];
+                    const sectionData = vanData[sectionKey];
+                    if (!sectionData) return;
+                    sectionData.struct?.forEach((lesson, idx) => {
+                        const items = lesson.list || [];
+                        // pre-load extra stats
+                        items.forEach(loadVanItemExtra);
+                        if (items.length > 0)
+                            lessons.push({ id: `van|${sectionKey}|struct|${idx}`, label: `[Van ${meta.label}] ${lesson.name}`, structItems: items, quizItems: [], src:'van' });
+                    });
+                    sectionData.quiz?.forEach((lesson, idx) => {
+                        const items = lesson.list || [];
+                        items.forEach(loadVanItemExtra);
+                        if (items.length > 0)
+                            lessons.push({ id: `van|${sectionKey}|quiz|${idx}`, label: `[Van ${meta.label} TN] ${lesson.name}`, structItems: [], quizItems: items, src:'van' });
+                    });
+                });
+            }
+
+            // Remove empty & deduplicate ids
+            const seen = new Set();
+            lessons = lessons.filter(l => { if (seen.has(l.id)) return false; seen.add(l.id); return true; });
+
+            // Re-render lesson checklist preserving existing checked state
+            const prevChecked = new Set(cqGetSelectedLessons());
+            listEl.innerHTML = lessons.length === 0
+                ? `<div style="padding:12px; color:#475569; text-align:center; font-size:13px; font-style:italic;">Không có bài nào phù hợp với bộ lọc.</div>`
+                : lessons.map(l => {
+                    const checked = prevChecked.size === 0 || prevChecked.has(l.id) ? 'checked' : '';
+                    return `<label class="cq-lesson-item">
+                        <input type="checkbox" value="${l.id}" ${checked} onchange="cqUpdateCount()">
+                        <span>${l.label}</span>
+                    </label>`;
+                }).join('');
+
+            // Store lesson map for count computation
+            window._cqLessons = lessons;
+            cqUpdateCount();
+        }
+
+        function cqUpdateCount() {
+            const lessons = window._cqLessons || [];
+            const selected = new Set(cqGetSelectedLessons());
+            const filterWrong  = cqIsActive('cq-f-wrong');
+            const filterForgot = cqIsActive('cq-f-forgot');
+            const filterStar   = cqIsActive('cq-f-star');
+            const isStruct = cqIsActive('cq-mode-struct');
+            const isQuiz   = cqIsActive('cq-mode-quiz');
+
+            let total = 0;
+            lessons.filter(l => selected.has(l.id)).forEach(l => {
+                const itemsS = applySpecialFilters(l.structItems || [], filterWrong, filterForgot, filterStar);
+                const itemsQ = applySpecialFilters(l.quizItems  || [], filterWrong, filterForgot, filterStar);
+                if (isStruct) total += itemsS.length;
+                else if (isQuiz) total += itemsQ.length;
+                else total += itemsS.length + itemsQ.length;
+            });
+
+            document.getElementById('cq-count').textContent = total;
+            const sel = lessons.filter(l => selected.has(l.id)).length;
+            document.getElementById('cq-detail').textContent =
+                total > 0 ? `Từ ${sel} bài được chọn` : 'Không có câu/từ phù hợp';
+        }
+
+        function applySpecialFilters(items, filterWrong, filterForgot, filterStar) {
+            if (!filterWrong && !filterForgot && !filterStar) return items;
+            return items.filter(item => {
+                if (filterWrong  && (item.wrongCount  || 0) > 2) return true;
+                if (filterForgot && (item.forgotCount || 0) > 2) return true;
+                if (filterStar   && fcStarredKeys.has(_itemKey(item))) return true;
+                return false;
+            });
+        }
+
+        function openCustomQuiz(forceMode) {
+            const lessons = window._cqLessons || [];
+            const selected = new Set(cqGetSelectedLessons());
+            const filterWrong  = cqIsActive('cq-f-wrong');
+            const filterForgot = cqIsActive('cq-f-forgot');
+            const filterStar   = cqIsActive('cq-f-star');
+
+            const wantStruct = forceMode === 'struct';
+            const wantQuiz   = forceMode === 'quiz';
+
+            let finalList = [];
+            lessons.filter(l => selected.has(l.id)).forEach(l => {
+                if (wantStruct) {
+                    finalList.push(...applySpecialFilters(l.structItems || [], filterWrong, filterForgot, filterStar));
+                } else if (wantQuiz) {
+                    finalList.push(...applySpecialFilters(l.quizItems   || [], filterWrong, filterForgot, filterStar));
+                }
+            });
+
+            if (finalList.length === 0) {
+                alert('⚠️ Không có câu/từ nào phù hợp với bộ lọc đã chọn!\nVui lòng thử lại với bộ lọc khác.');
+                return;
+            }
+
+            // Xác định curType để renderQuiz hoạt động đúng
+            const hasQuizItems = finalList.some(it => it.gramType === 'quiz');
+            const hasGramItems = finalList.some(it => !it.gramType && it.c1 && !it.c2);
+            let detectedType;
+            if (wantQuiz && hasQuizItems) {
+                // check if gram or voca quiz
+                detectedType = 'voca_quiz'; // default; will render correctly either way
+            } else if (hasGramItems) {
+                detectedType = 'gram';
+            } else {
+                detectedType = 'voca';
+            }
+
+            closeModal('custom-quiz-modal');
+
+            // Temporarily override state for rendering
+            curVanMode = false;
+            curLevel = 'custom';
+            curType = detectedType;
+            curDay = 'Đề tuỳ ý';
+            currentList = finalList;
+
+            // Show main area
+            document.getElementById('view-title').textContent = `🎲 Đề Tuỳ Ý (${finalList.length} câu)`;
+            const startBtn = document.getElementById('btn-start-lesson');
+            if (startBtn) startBtn.style.display = 'none';
+            document.getElementById('journey-card').style.display = 'none';
+            const mainTimerBox = document.getElementById('main-timer-box');
+            if (mainTimerBox) mainTimerBox.style.display = 'block';
+
+            // Hide group-1 (data management buttons)
+            const g1 = document.getElementById('group-1');
+            if (g1) g1.style.display = 'none';
+            const g2 = document.getElementById('group-2');
+            if (g2) g2.style.display = 'block';
+            const g3Title = document.getElementById('group-3-title');
+            if (g3Title) g3Title.innerHTML = '📝 LÀM BÀI';
+
+            ['btn-add-word','btn-import','btn-edit-list'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+            ['btn-show-list','btn-shuffle'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'inline-flex';
+            });
+            ['btn-flashcard','btn-match-game','btn-reaction-game'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = wantStruct ? 'inline-flex' : 'none';
+            });
+
+            document.getElementById('mode-box-container').style.display = 'block';
+            document.getElementById('submit-container').style.display = 'flex';
+            document.getElementById('rt-wrapper').style.display = 'flex';
+
+            const btnMark = document.getElementById('btn-mark-done');
+            const btnUnmark = document.getElementById('btn-unmark-done');
+            if (btnMark) btnMark.style.display = 'none';
+            if (btnUnmark) btnUnmark.style.display = 'none';
+
+            setBreadcrumb('Đề Tuỳ Ý', false);
+
+            let bestMode = 0;
+            if (wantQuiz) bestMode = 2; // renders quiz layout
+            changeMode(bestMode);
+            resetLessonTimer();
+            resetTotalTimer();
+            lessonTimes = [];
+            sessionScores = [];
+
+            // Show/hide reaction game button (only for voca/gram - not quiz type)
+            const btnRg = document.getElementById('btn-reaction-game');
+            if (btnRg) btnRg.style.display = (listOverride || !isVoca) ? 'none' : 'inline-flex';
+
+            // Close sidebar on mobile
+            if (window.innerWidth <= 480) {
+                document.body.classList.add('sidebar-hidden');
+                localStorage.setItem('sidebar_hidden', '1');
+            }
+        }
+
     </script>
     </div><!-- /main-wrapper -->
     </div><!-- /app-layout -->
-</body>
+    <!-- ===== CUSTOM QUIZ MODAL ===== -->
+    <div id="custom-quiz-modal" class="modal" style="z-index:6000; align-items:flex-start; overflow-y:auto; padding:20px 10px;">
+        <div class="modal-content" style="max-width:560px; width:100%; border-color:#7c3aed; background:#0f172a; padding:28px; border-radius:28px; position:relative; margin:auto;">
+            <!-- Header -->
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+                <div>
+                    <h2 style="margin:0; color:#c084fc; font-size:22px;">🎲 TẠO ĐỀ TUỲ Ý</h2>
+                    <div style="font-size:12px; color:#64748b; margin-top:3px;">Lọc và ghép câu hỏi từ nhiều nguồn</div>
+                </div>
+                <button onclick="closeModal('custom-quiz-modal')" style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); color:#fff; font-size:18px; width:34px; height:34px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+            </div>
 
+            <!-- NGUỒN DỮ LIỆU -->
+            <div class="cq-section">
+                <div class="cq-section-label">📦 Nguồn dữ liệu</div>
+                <div class="cq-chips">
+                    <div class="cq-chip active-purple" id="cq-src-van" onclick="cqToggleChip(this,'cq-src','active-purple')">🌸 Góc của Vân</div>
+                    <div class="cq-chip active" id="cq-src-user" onclick="cqToggleChip(this,'cq-src','active')">🌐 Góc của Bạn</div>
+                </div>
+            </div>
+
+            <!-- CẤP ĐỘ -->
+            <div class="cq-section">
+                <div class="cq-section-label">🎯 Cấp độ</div>
+                <div class="cq-chips">
+                    <div class="cq-chip active" id="cq-lv-n1" onclick="cqToggleChip(this,'cq-lv','active'); cqRefresh()">N1</div>
+                    <div class="cq-chip active" id="cq-lv-n2" onclick="cqToggleChip(this,'cq-lv','active'); cqRefresh()">N2</div>
+                    <div class="cq-chip active" id="cq-lv-n3" onclick="cqToggleChip(this,'cq-lv','active'); cqRefresh()">N3</div>
+                    <div class="cq-chip active" id="cq-lv-bjt" onclick="cqToggleChip(this,'cq-lv','active'); cqRefresh()">BJT</div>
+                </div>
+            </div>
+
+            <!-- LOẠI BÀI -->
+            <div class="cq-section">
+                <div class="cq-section-label">📚 Loại bài</div>
+                <div class="cq-chips">
+                    <div class="cq-chip active-green" id="cq-type-voca" onclick="cqToggleChip(this,'cq-type','active-green'); cqRefresh()">📖 Từ vựng</div>
+                    <div class="cq-chip active-green" id="cq-type-gram" onclick="cqToggleChip(this,'cq-type','active-green'); cqRefresh()">✍️ Ngữ pháp</div>
+                </div>
+            </div>
+
+            <!-- DẠNG BÀI -->
+            <div class="cq-section">
+                <div class="cq-section-label">🗂 Dạng bài <span style="color:#ef4444; font-size:10px;">(chọn 1 — tách 2 đề nếu cần)</span></div>
+                <div class="cq-chips">
+                    <div class="cq-chip active" id="cq-mode-struct" onclick="cqSingleSelect(this,'cq-mode','active'); cqRefresh()">📝 Từ đơn (tự luận)</div>
+                    <div class="cq-chip" id="cq-mode-quiz" onclick="cqSingleSelect(this,'cq-mode','active'); cqRefresh()">🔘 Trắc nghiệm</div>
+                </div>
+            </div>
+
+            <!-- BỘ LỌC ĐẶC BIỆT -->
+            <div class="cq-section">
+                <div class="cq-section-label">⚡ Bộ lọc đặc biệt <span style="color:#64748b; font-size:10px;">(nếu chọn → chỉ lấy câu thỏa điều kiện)</span></div>
+                <div class="cq-chips">
+                    <div class="cq-chip" id="cq-f-wrong" onclick="cqToggleChip(this,'cq-f','active-orange'); cqRefresh()">❌ Hay sai (&gt;2 lần)</div>
+                    <div class="cq-chip" id="cq-f-forgot" onclick="cqToggleChip(this,'cq-f','active-orange'); cqRefresh()">😅 Hay quên (&gt;2 lần)</div>
+                    <div class="cq-chip" id="cq-f-star" onclick="cqToggleChip(this,'cq-f','active-orange'); cqRefresh()">⭐ Đánh dấu sao</div>
+                </div>
+            </div>
+
+            <!-- CHỌN BÀI -->
+            <div class="cq-section">
+                <div class="cq-section-label" style="justify-content:space-between;">
+                    <span>📅 Chọn bài học</span>
+                    <button onclick="cqSelectAllLessons(true)" style="background:rgba(59,130,246,0.15); border:1px solid #3b82f6; color:#60a5fa; border-radius:8px; padding:2px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Tất cả</button>
+                    <button onclick="cqSelectAllLessons(false)" style="background:rgba(100,116,139,0.15); border:1px solid #475569; color:#94a3b8; border-radius:8px; padding:2px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Bỏ chọn</button>
+                </div>
+                <div class="cq-lesson-list" id="cq-lesson-list">
+                    <div style="padding:12px; color:#475569; text-align:center; font-size:13px; font-style:italic;">Chọn bộ lọc ở trên để xem danh sách bài...</div>
+                </div>
+            </div>
+
+            <!-- PREVIEW -->
+            <div class="cq-preview-bar">
+                <div>
+                    <div class="cq-preview-count">📊 <span id="cq-count">0</span> câu/từ</div>
+                    <div class="cq-preview-detail" id="cq-detail">Chưa có dữ liệu phù hợp</div>
+                </div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button class="btn btn-purple" style="padding:10px 18px; font-size:14px;" onclick="openCustomQuiz('struct')">📝 Làm từ đơn</button>
+                    <button class="btn btn-blue" style="padding:10px 18px; font-size:14px;" onclick="openCustomQuiz('quiz')">🔘 Làm trắc nghiệm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== REACTION GAME SCRIPT ===== -->
+    <script>
+    (function() {
+        var rgScore=0,rgCurrentIdx=0,rgTimeLeft=60,rgTotalTime=60;
+        var rgGameActive=false,rgTimerInterval=null,rgAudioCtx=null;
+        var rgQuestions=[],rgCurrentQuestion=null,rgPetalInterval=null;
+        var rgActiveFlowers=[];
+        function $rg(id){return document.getElementById(id);}
+
+        function rgInitAudio(){if(!rgAudioCtx)rgAudioCtx=new(window.AudioContext||window.webkitAudioContext)();}
+        function rgPlaySound(type){
+            if(!rgAudioCtx)return;
+            try{
+                var osc=rgAudioCtx.createOscillator(),gain=rgAudioCtx.createGain(),now=rgAudioCtx.currentTime;
+                osc.connect(gain);gain.connect(rgAudioCtx.destination);
+                if(type==='pop'){osc.type='sine';osc.frequency.setValueAtTime(500,now);osc.frequency.exponentialRampToValueAtTime(1100,now+0.12);gain.gain.setValueAtTime(0.22,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.12);osc.start();osc.stop(now+0.12);}
+                else if(type==='miss'){osc.type='sawtooth';osc.frequency.setValueAtTime(160,now);osc.frequency.linearRampToValueAtTime(40,now+0.4);gain.gain.setValueAtTime(0.1,now);gain.gain.linearRampToValueAtTime(0.01,now+0.4);osc.start();osc.stop(now+0.4);}
+                else if(type==='win'){osc.type='sine';osc.frequency.setValueAtTime(600,now);osc.frequency.exponentialRampToValueAtTime(1300,now+0.3);gain.gain.setValueAtTime(0.2,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.3);osc.start();osc.stop(now+0.3);}
+            }catch(e){}
+        }
+        function rgCreatePetal(){
+            var wrap=document.querySelector('#reaction-game-modal .rg-wrap');
+            if(!wrap||!rgGameActive)return;
+            var petal=document.createElement('div');petal.className='rg-bg-petal';
+            var size=Math.random()*18+12;
+            petal.style.cssText='width:'+size+'px;height:'+size+'px;left:'+(Math.random()*100)+'%;animation-duration:'+(Math.random()*5+5)+'s;top:-30px;';
+            wrap.appendChild(petal);setTimeout(function(){petal.remove();},11000);
+        }
+        window.openReactionGame=function(){
+            rgQuestions=(window.appCurrentList||[]).filter(function(item){
+                if(item.gramType==='quiz')return false;
+                return item.c1&&(item.c3||item.c2);
+            }).map(function(item){return{q:item.c1,a:item.c3||item.c2};});
+            if(rgQuestions.length<2){alert('B\u00e0i h\u1ecdc c\u1ea7n c\u00f3 \u00edt nh\u1ea5t 2 t\u1eeb v\u1ef1ng \u0111\u1ec3 ch\u01a1i Game Ph\u1ea3n X\u1ea1 Nhanh!');return;}
+            rgQuestions=rgQuestions.sort(function(){return Math.random()-0.5;});
+            var info=$rg('rg-word-count-info');if(info)info.textContent='\ud83d\udcda '+rgQuestions.length+' t\u1eeb trong b\u00e0i h\u1ecdc hi\u1ec7n t\u1ea1i';
+            $rg('reaction-game-modal').style.display='flex';
+            $rg('rg-start-screen').style.display='flex';
+            $rg('rg-end-screen').style.display='none';
+            $rg('rg-question-container').style.display='none';
+            $rg('rg-canvas').innerHTML='';
+            $rg('rg-score-val').textContent='0';$rg('rg-time-val').textContent='60';
+        };
+        window.closeReactionGame=function(){
+            rgGameActive=false;clearInterval(rgTimerInterval);clearInterval(rgPetalInterval);
+            rgActiveFlowers.forEach(function(f){f._dead=true;});rgActiveFlowers=[];
+            $rg('reaction-game-modal').style.display='none';$rg('rg-canvas').innerHTML='';
+        };
+        window.startReactionGame=function(){
+            rgInitAudio();rgScore=0;rgCurrentIdx=0;
+            rgTimeLeft=rgTotalTime=Math.min(60+Math.floor(rgQuestions.length/2)*5,90);
+            rgGameActive=true;
+            $rg('rg-score-val').textContent='0';$rg('rg-time-val').textContent=rgTimeLeft;
+            $rg('rg-start-screen').style.display='none';$rg('rg-end-screen').style.display='none';
+            $rg('rg-question-container').style.display='block';$rg('rg-canvas').innerHTML='';rgActiveFlowers=[];
+            $rg('rg-timer-bar').style.width='100%';$rg('rg-timer-bar').classList.remove('rg-warning');
+            clearInterval(rgTimerInterval);
+            rgTimerInterval=setInterval(function(){
+                rgTimeLeft-=0.1;
+                if(rgTimeLeft<=0){rgTimeLeft=0;rgEndGame('H\u1ebft th\u1eddi gian! \u23F3');}
+                rgUpdateUI();
+            },100);
+            clearInterval(rgPetalInterval);rgPetalInterval=setInterval(rgCreatePetal,650);
+            rgNextQuestion();
+        };
+        function rgUpdateUI(){
+            $rg('rg-time-val').textContent=Math.max(0,Math.ceil(rgTimeLeft));
+            $rg('rg-timer-bar').style.width=((rgTimeLeft/rgTotalTime)*100)+'%';
+            if(rgTimeLeft<=10)$rg('rg-timer-bar').classList.add('rg-warning');
+            else $rg('rg-timer-bar').classList.remove('rg-warning');
+        }
+        function rgNextQuestion(){
+            if(!rgGameActive)return;
+            $rg('rg-canvas').innerHTML='';rgActiveFlowers.forEach(function(f){f._dead=true;});rgActiveFlowers=[];
+            if(rgCurrentIdx>=rgQuestions.length){rgEndGame('Xu\u1ea5t s\u1eafc! \ud83c\udfc6 H\u1ebft t\u1eeb r\u1ed3i!');return;}
+            rgCurrentQuestion=rgQuestions[rgCurrentIdx];
+            $rg('rg-progress-text').textContent='Cau: '+(rgCurrentIdx+1)+'/'+rgQuestions.length;
+            $rg('rg-question-text').textContent=rgCurrentQuestion.q;
+            var allA=rgQuestions.map(function(q){return q.a;});
+            var wrongPool=allA.filter(function(a){return a!==rgCurrentQuestion.a;}).sort(function(){return Math.random()-0.5;}).slice(0,5);
+            var finalAnswers=[{text:rgCurrentQuestion.a,isCorrect:true}].concat(wrongPool.map(function(a){return{text:a,isCorrect:false};})).sort(function(){return Math.random()-0.5;});
+            finalAnswers.forEach(function(ans,i){rgCreateFlower(ans.text,ans.isCorrect,i,finalAnswers.length);});
+        }
+        function rgCreateFlower(text,isCorrect,posIdx,total){
+            var canvas=$rg('rg-canvas');
+            var flower=document.createElement('div');
+            flower.className='rg-flower rg-type-'+((posIdx%5)+1);
+            flower.textContent=text;
+            var laneW=100/total;flower.style.left=((laneW*posIdx)+(laneW/2)-7)+'%';
+            var pos=-150-Math.random()*180,sway=Math.random()*10,swaySpeed=0.02+Math.random()*0.03;
+            flower._dead=false;
+            function fall(){
+                if(flower._dead||flower.classList.contains('rg-correct'))return;
+                pos+=2+(posIdx%2*0.25);sway+=swaySpeed;
+                flower.style.transform='translateY('+pos+'px) translateX('+(Math.sin(sway)*38)+'px) rotate('+(Math.sin(sway)*9)+'deg)';
+                if(pos>(canvas.offsetHeight||600)&&isCorrect&&rgGameActive)pos=-150;
+                if(!flower._dead)requestAnimationFrame(fall);
+            }
+            flower.onclick=function(e){e.stopPropagation();if(!rgGameActive||flower._dead)return;rgHandleAnswer(isCorrect,flower);};
+            canvas.appendChild(flower);rgActiveFlowers.push(flower);requestAnimationFrame(fall);
+        }
+        function rgHandleAnswer(isCorrect,el){
+            if(!rgGameActive)return;
+            if(isCorrect){
+                rgScore+=Math.ceil(rgTimeLeft*3);rgCurrentIdx++;
+                el.classList.add('rg-correct');el._dead=true;
+                $rg('rg-score-val').textContent=rgScore;
+                rgPlaySound('pop');rgShowFeedback('CH\u00cdNH X\u00c1C! \u2728');
+                setTimeout(rgNextQuestion,420);
+            }else{
+                el.classList.add('rg-wrong');rgPlaySound('miss');rgShowFeedback('SAI R\u1ed2I! \ud83d\udc94');
+                setTimeout(function(){rgEndGame('C\u1ed1 l\u00ean l\u1ea7n sau! \ud83c\udf38');},520);
+            }
+        }
+        function rgShowFeedback(text){
+            var fb=$rg('rg-feedback-text');fb.textContent=text;
+            fb.classList.remove('rg-show-feedback');void fb.offsetWidth;fb.classList.add('rg-show-feedback');
+        }
+        function rgEndGame(title){
+            rgGameActive=false;clearInterval(rgTimerInterval);clearInterval(rgPetalInterval);
+            rgActiveFlowers.forEach(function(f){f._dead=true;});rgActiveFlowers=[];
+            rgPlaySound('win');
+            $rg('rg-result-title').textContent=title;
+            $rg('rg-final-stats').textContent='Ho\u00e0n th\u00e0nh: '+rgCurrentIdx+'/'+rgQuestions.length+' c\u00e2u';
+            $rg('rg-final-score').textContent='\u0110i\u1ec3m: '+rgScore;
+            $rg('rg-end-screen').style.display='flex';
+            $rg('rg-question-container').style.display='none';
+            $rg('rg-canvas').innerHTML='';
+            if(typeof confetti==='function'&&rgCurrentIdx===rgQuestions.length){confetti({particleCount:130,spread:75,origin:{y:0.5},zIndex:9999});}
+        }
+    })();
+    </script>
+</body>
 
 </html>
