@@ -1095,13 +1095,13 @@
         }
         .rg-flower {
             position: absolute; pointer-events: auto; cursor: pointer;
-            width: 105px; height: 105px;
+            /* dynamic width/height */
             display: flex; justify-content: center; align-items: center;
             text-align: center; padding: 8px;
             font-weight: 900; font-size: 1.05rem;
             filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
             transition: transform 0.2s ease, opacity 0.3s ease;
-            color: #4e342e; word-break: break-all;
+            color: #4e342e; word-break: normal; overflow-wrap: normal; hyphens: none; overflow: visible;
         }
         .rg-flower::before {
             content: ''; position: absolute;
@@ -1999,6 +1999,13 @@
                 <p style="color:#888; font-size:0.95rem;">Bông hoa rơi = đáp án. Chọn đúng → sang câu tiếp. Chọn sai → kết thúc!</p>
                 <p id="rg-word-count-info" style="color:#ec4899; font-weight:900;"></p>
                 <button class="rg-btn" onclick="startReactionGame()">🌸 Bắt đầu ngay!</button>
+                <div style="margin-top: 15px;">
+                    <label style="font-weight:700; color:#4e342e; margin-right:10px;">Tốc độ rơi:</label>
+                    <select id="rg-speed-select" style="padding:8px 16px; border-radius:12px; border:2px solid #ff85a2; font-weight:700; font-family:'Baloo 2'; color:#4e342e; outline:none; cursor:pointer;">
+                        <option value="medium">Vừa (Bình thường)</option>
+                        <option value="fast">Nhanh (Thử thách)</option>
+                    </select>
+                </div>
             </div>
 
             <!-- End Screen -->
@@ -4781,7 +4788,7 @@
     <!-- ===== REACTION GAME SCRIPT ===== -->
     <script>
     (function() {
-        var rgScore=0,rgCurrentIdx=0,rgTimeLeft=60,rgTotalTime=60;
+        var rgScore=0,rgCurrentIdx=0,rgTimeLeft=60,rgTotalTime=60,rgSpeedMode='medium';
         var rgGameActive=false,rgTimerInterval=null,rgAudioCtx=null;
         var rgQuestions=[],rgCurrentQuestion=null,rgPetalInterval=null;
         var rgActiveFlowers=[];
@@ -4827,6 +4834,8 @@
             $rg('reaction-game-modal').style.display='none';$rg('rg-canvas').innerHTML='';
         };
         window.startReactionGame=function(){
+            var spdSel=$rg('rg-speed-select');
+            if(spdSel) rgSpeedMode=spdSel.value;
             rgInitAudio();rgScore=0;rgCurrentIdx=0;
             rgTimeLeft=rgTotalTime=Math.min(60+Math.floor(rgQuestions.length/2)*5,90);
             rgGameActive=true;
@@ -4866,12 +4875,29 @@
             var flower=document.createElement('div');
             flower.className='rg-flower rg-type-'+((posIdx%5)+1);
             flower.textContent=text;
-            var laneW=100/total;flower.style.left=((laneW*posIdx)+(laneW/2)-7)+'%';
-            var pos=-150-Math.random()*180,sway=Math.random()*10,swaySpeed=0.02+Math.random()*0.03;
+
+            var charLen=text.length;
+            var fontSize=16.8; 
+            var charW=fontSize*0.62;
+            var words=text.split(' ');
+            var longestWord=words.reduce(function(a,b){return a.length>b.length?a:b},'');
+            var longestWordPx=longestWord.length*charW;
+            var halfTextPx=(charLen*charW)/2;
+            var neededChord=Math.max(longestWordPx, halfTextPx);
+            var rawSize=Math.ceil(neededChord/0.68)+32;
+            var size=Math.max(120, Math.min(240, rawSize));
+            
+            flower.style.width=size+'px';
+            flower.style.height=size+'px';
+
+            var laneW=100/total;
+            flower.style.left='calc('+((laneW*posIdx)+(laneW/2))+'% - '+(size/2)+'px)';
+            var pos=-size-Math.random()*180,sway=Math.random()*10,swaySpeed=0.02+Math.random()*0.03;
             flower._dead=false;
+            var fallSpd = rgSpeedMode === 'fast' ? (4.2 + Math.random() * 1.5) : (2 + (posIdx%2*0.25));
             function fall(){
                 if(flower._dead||flower.classList.contains('rg-correct'))return;
-                pos+=2+(posIdx%2*0.25);sway+=swaySpeed;
+                pos+=fallSpd;sway+=swaySpeed;
                 flower.style.transform='translateY('+pos+'px) translateX('+(Math.sin(sway)*38)+'px) rotate('+(Math.sin(sway)*9)+'deg)';
                 if(pos>(canvas.offsetHeight||600)&&isCorrect&&rgGameActive)pos=-150;
                 if(!flower._dead)requestAnimationFrame(fall);
