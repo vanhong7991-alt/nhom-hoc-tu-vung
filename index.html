@@ -1897,6 +1897,41 @@
                 </div>
             </div>
 
+            <!-- ===== FLOATING ACTION BUTTONS (Van Mode) ===== -->
+            <div id="van-fab-group" style="display:none; position:fixed; bottom:28px; right:24px; z-index:3500; display:none; flex-direction:column; gap:12px; align-items:flex-end;">
+                <!-- Lịch sử làm bài -->
+                <button id="van-fab-history" onclick="openVanHistory()"
+                    title="Lịch sử làm bài"
+                    style="display:flex; align-items:center; gap:8px; padding:12px 18px; border:none; border-radius:50px; cursor:pointer; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:14px; color:#fff; background:linear-gradient(135deg,#7c3aed,#a855f7); box-shadow:0 6px 20px rgba(124,58,237,0.55); transition:transform 0.15s,box-shadow 0.15s;"
+                    onmouseenter="this.style.transform='scale(1.07)';this.style.boxShadow='0 8px 28px rgba(124,58,237,0.75)'"
+                    onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='0 6px 20px rgba(124,58,237,0.55)'">
+                    📋 Lịch sử làm bài
+                </button>
+                <!-- Scroll to top -->
+                <button id="van-fab-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"
+                    title="Di chuyển đến đầu trang"
+                    style="display:flex; align-items:center; gap:8px; padding:12px 18px; border:none; border-radius:50px; cursor:pointer; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:14px; color:#fff; background:linear-gradient(135deg,#0ea5e9,#38bdf8); box-shadow:0 6px 20px rgba(14,165,233,0.55); transition:transform 0.15s,box-shadow 0.15s;"
+                    onmouseenter="this.style.transform='scale(1.07)';this.style.boxShadow='0 8px 28px rgba(14,165,233,0.75)'"
+                    onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='0 6px 20px rgba(14,165,233,0.55)'">
+                    ⬆️ Đầu trang
+                </button>
+            </div>
+
+            <!-- ===== VAN HISTORY MODAL ===== -->
+            <div id="van-history-modal" class="modal" style="display:none;">
+                <div class="modal-content" style="max-width:560px; padding:30px 28px 24px; position:relative;">
+                    <button onclick="document.getElementById('van-history-modal').style.display='none'"
+                        style="position:absolute;top:14px;right:16px;background:none;border:none;color:#94a3b8;font-size:22px;cursor:pointer;line-height:1;">✕</button>
+                    <h2 style="margin:0 0 6px; font-size:22px; color:#e2e8f0;">📋 Lịch sử làm bài</h2>
+                    <p id="van-history-lesson-label" style="margin:0 0 18px; font-size:13px; color:#94a3b8; font-style:italic;"></p>
+                    <div id="van-history-list" style="display:flex; flex-direction:column; gap:10px; max-height:420px; overflow-y:auto;"></div>
+                    <div id="van-history-empty" style="text-align:center; padding:30px 0; color:#475569; font-size:15px; display:none;">Chưa có lịch sử nào cho bài này.</div>
+                    <div style="margin-top:20px; text-align:right;">
+                        <button onclick="clearVanHistory()" style="padding:8px 18px; border-radius:10px; border:1px solid #ef4444; background:transparent; color:#f87171; font-family:'Baloo 2'; font-weight:700; font-size:13px; cursor:pointer;">🗑 Xoá lịch sử</button>
+                    </div>
+                </div>
+            </div>
+
             <div id="congrats-modal" class="modal">
                 <div class="modal-content" id="congrats-modal-content"
                     style="position: relative; overflow: visible; max-width: 450px; padding: 35px 30px 30px;">
@@ -2572,6 +2607,7 @@
                     if (targetMode !== null) bestMode = targetMode;
                     changeMode(bestMode);
                     resetTimer();
+                    updateVanFab();
 
                     // Breadcrumb & back button
                     const secLabel = { 'n1voca': 'N1 Từ Vựng', 'n2gram': 'N2 Ngữ Pháp', 'bjtvoca': 'BJT Từ Vựng' }[sectionKey] || sectionKey;
@@ -3662,6 +3698,7 @@
 
                 function selectDay(lv, ty, day, listOverride = null, targetMode = null) {
                     curVanMode = false;
+                    updateVanFab();
                     curLevel = lv; curType = ty; curDay = day; currentList = listOverride || db[lv][ty][day].list;
                     document.getElementById('view-title').textContent = (listOverride ? "♻️ " : "📌 ") + day;
                     const startBtn = document.getElementById('btn-start-lesson');
@@ -4209,6 +4246,19 @@
                             localStorage.setItem(window._vanProgressKey, JSON.stringify(window._vanProgress));
                             renderVanSidebar();
                         }
+                        // === Ghi lịch sử làm bài ===
+                        const _histKey = 'van_history_' + (window._vanProgressKey || 'unknown');
+                        const _histArr = JSON.parse(localStorage.getItem(_histKey) || '[]');
+                        const _timerTxt = document.getElementById('timer-display') ? document.getElementById('timer-display').textContent : '--:--';
+                        _histArr.unshift({
+                            time: new Date().toLocaleString('vi-VN', { hour12: false }),
+                            ok, failed, total,
+                            percent: Math.round(percent),
+                            duration: _timerTxt,
+                            mode: currentMode
+                        });
+                        if (_histArr.length > 50) _histArr.length = 50; // giữ tối đa 50 lần
+                        localStorage.setItem(_histKey, JSON.stringify(_histArr));
                         const btnMark = document.getElementById('btn-mark-done');
                         const btnUnmark = document.getElementById('btn-unmark-done');
                         if (btnMark) btnMark.style.display = 'none';
@@ -4281,6 +4331,66 @@
                         if (btnClose) { btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; btnClose.onclick = () => closeModal('congrats-modal'); }
                     }
                     openModal('congrats-modal');
+                }
+
+                // ===== VAN FLOATING BUTTONS HELPERS =====
+                function updateVanFab() {
+                    const fab = document.getElementById('van-fab-group');
+                    if (!fab) return;
+                    fab.style.display = curVanMode ? 'flex' : 'none';
+                }
+
+                function openVanHistory() {
+                    const modal = document.getElementById('van-history-modal');
+                    const list = document.getElementById('van-history-list');
+                    const empty = document.getElementById('van-history-empty');
+                    const label = document.getElementById('van-history-lesson-label');
+                    if (!modal) return;
+
+                    // Build label
+                    const lessonName = (curVanSection && curVanSub !== null && curVanIdx !== null)
+                        ? (vanData[curVanSection]?.[curVanSub]?.[curVanIdx]?.name || '')
+                        : '';
+                    label.textContent = lessonName ? ('Bài: ' + lessonName) : 'Tất cả bài học';
+
+                    const histKey = 'van_history_' + (window._vanProgressKey || '');
+                    const histArr = JSON.parse(localStorage.getItem(histKey) || '[]');
+
+                    list.innerHTML = '';
+                    if (histArr.length === 0) {
+                        empty.style.display = 'block';
+                        list.style.display = 'none';
+                    } else {
+                        empty.style.display = 'none';
+                        list.style.display = 'flex';
+                        const modeLabels = ['Đề 1', 'Đề 2', 'Đề 3'];
+                        histArr.forEach((entry, i) => {
+                            const pct = entry.percent;
+                            const pctColor = pct >= 90 ? '#4ade80' : pct >= 70 ? '#fbbf24' : '#f87171';
+                            const pctBg   = pct >= 90 ? 'rgba(34,197,94,0.12)' : pct >= 70 ? 'rgba(251,191,36,0.12)' : 'rgba(239,68,68,0.12)';
+                            const row = document.createElement('div');
+                            row.style.cssText = `display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:rgba(30,41,59,0.7);border:1px solid rgba(255,255,255,0.06);`;
+                            row.innerHTML = `
+                                <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;flex-shrink:0;">${histArr.length - i}</div>
+                                <div style="flex:1;min-width:0;">
+                                    <div style="font-size:13px;font-weight:800;color:#e2e8f0;margin-bottom:2px;">${entry.time}</div>
+                                    <div style="font-size:12px;color:#94a3b8;">${modeLabels[entry.mode] || ''} &nbsp;·&nbsp; ⏱ ${entry.duration}</div>
+                                </div>
+                                <div style="text-align:right;flex-shrink:0;">
+                                    <div style="font-size:15px;font-weight:900;color:${pctColor};background:${pctBg};padding:3px 10px;border-radius:10px;border:1px solid ${pctColor}40;">${pct}%</div>
+                                    <div style="font-size:11px;color:#64748b;margin-top:2px;">✅${entry.ok} ❌${entry.failed}/${entry.total}</div>
+                                </div>`;
+                            list.appendChild(row);
+                        });
+                    }
+                    modal.style.display = 'flex';
+                }
+
+                function clearVanHistory() {
+                    if (!confirm('Xoá toàn bộ lịch sử bài này?')) return;
+                    const histKey = 'van_history_' + (window._vanProgressKey || '');
+                    localStorage.removeItem(histKey);
+                    openVanHistory(); // refresh
                 }
 
                 function retryFailedOnly() {
@@ -5088,6 +5198,7 @@
 
                     // Temporarily override state for rendering
                     curVanMode = false;
+                    updateVanFab();
                     curLevel = 'custom';
                     curType = detectedType;
                     curDay = 'Đề tuỳ ý';
