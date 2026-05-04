@@ -886,6 +886,31 @@
             box-shadow: 0 4px 10px rgba(168, 85, 247, 0.3);
         }
 
+        /* --- ANSWER REVEAL (correct answer shown after wrong submission) --- */
+        .answer-reveal {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            padding: 8px 14px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.13), rgba(34,197,94,0.13));
+            border: 1.5px solid rgba(34,197,94,0.45);
+            font-size: 14px;
+            font-weight: 700;
+            color: #d1fae5;
+            letter-spacing: 0.3px;
+            animation: revealPop 0.35s cubic-bezier(0.175,0.885,0.32,1.275) both;
+        }
+        .answer-reveal b {
+            color: #4ade80;
+            font-weight: 900;
+        }
+        @keyframes revealPop {
+            from { opacity: 0; transform: translateY(6px) scale(0.92); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
         /* --- VAN SECTION --- */
         .section-header-van {
             padding: 12px 20px;
@@ -1897,24 +1922,35 @@
                 </div>
             </div>
 
-            <!-- ===== FLOATING ACTION BUTTONS (Van Mode) ===== -->
-            <div id="van-fab-group" style="display:none; position:fixed; bottom:28px; right:24px; z-index:3500; display:none; flex-direction:column; gap:12px; align-items:flex-end;">
-                <!-- Lịch sử làm bài -->
-                <button id="van-fab-history" onclick="openVanHistory()"
-                    title="Lịch sử làm bài"
-                    style="display:flex; align-items:center; gap:8px; padding:12px 18px; border:none; border-radius:50px; cursor:pointer; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:14px; color:#fff; background:linear-gradient(135deg,#7c3aed,#a855f7); box-shadow:0 6px 20px rgba(124,58,237,0.55); transition:transform 0.15s,box-shadow 0.15s;"
-                    onmouseenter="this.style.transform='scale(1.07)';this.style.boxShadow='0 8px 28px rgba(124,58,237,0.75)'"
-                    onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='0 6px 20px rgba(124,58,237,0.55)'">
-                    📋 Lịch sử làm bài
-                </button>
-                <!-- Scroll to top -->
-                <button id="van-fab-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"
-                    title="Di chuyển đến đầu trang"
-                    style="display:flex; align-items:center; gap:8px; padding:12px 18px; border:none; border-radius:50px; cursor:pointer; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:14px; color:#fff; background:linear-gradient(135deg,#0ea5e9,#38bdf8); box-shadow:0 6px 20px rgba(14,165,233,0.55); transition:transform 0.15s,box-shadow 0.15s;"
-                    onmouseenter="this.style.transform='scale(1.07)';this.style.boxShadow='0 8px 28px rgba(14,165,233,0.75)'"
-                    onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='0 6px 20px rgba(14,165,233,0.55)'">
-                    ⬆️ Đầu trang
-                </button>
+            <!-- ===== SPEED DIAL FAB (Van Mode) ===== -->
+            <div id="van-fab-group" style="display:none;">
+                <!-- Backdrop khi mở -->
+                <div id="van-fab-backdrop" onclick="vanFabClose()" style="display:none;position:fixed;inset:0;z-index:3490;background:rgba(0,0,0,0.25);backdrop-filter:blur(2px);transition:opacity 0.25s;opacity:0;"></div>
+
+                <!-- Speed Dial wrapper -->
+                <div id="van-fab-dial" style="position:fixed;bottom:24px;right:20px;z-index:3500;display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
+
+                    <!-- Action items (ẩn mặc định) -->
+                    <div id="van-fab-items" style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;pointer-events:none;opacity:0;transform:translateY(12px);transition:opacity 0.25s,transform 0.25s;">
+                        <!-- Lịch sử -->
+                        <div class="van-fab-item" onclick="openVanHistory();vanFabClose()" style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+                            <span style="background:rgba(30,41,59,0.9);color:#fff;padding:6px 12px;border-radius:8px;font-size:13px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,0.3);letter-spacing:0.3px;">Lịch sử làm bài</span>
+                            <button style="width:44px;height:44px;border-radius:50%;border:none;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(124,58,237,0.6);pointer-events:none;">📋</button>
+                        </div>
+
+                        <!-- Đầu trang -->
+                        <div class="van-fab-item" onclick="window.scrollTo({top:0,behavior:'smooth'});vanFabClose()" style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+                            <span style="background:rgba(30,41,59,0.9);color:#fff;padding:6px 12px;border-radius:8px;font-size:13px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,0.3);letter-spacing:0.3px;">Đầu trang</span>
+                            <button style="width:44px;height:44px;border-radius:50%;border:none;background:linear-gradient(135deg,#0ea5e9,#38bdf8);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(14,165,233,0.6);pointer-events:none;">⬆️</button>
+                        </div>
+                    </div>
+
+                    <!-- Main toggle button -->
+                    <button id="van-fab-toggle" onclick="vanFabToggle()" aria-label="Menu nhanh"
+                        style="width:54px;height:54px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,#ec4899,#a855f7);color:#fff;box-shadow:0 6px 22px rgba(168,85,247,0.65);display:flex;align-items:center;justify-content:center;font-size:24px;transition:transform 0.3s,box-shadow 0.3s;position:relative;z-index:1;">
+                        <span id="van-fab-toggle-icon" style="display:inline-block;transition:transform 0.35s;line-height:1;">✨</span>
+                    </button>
+                </div>
             </div>
 
             <!-- ===== VAN HISTORY MODAL ===== -->
@@ -4086,6 +4122,13 @@
                             card.style.borderLeftColor = 'var(--danger)';
                             msg.className = 'fb-msg show ng';
                             msg.innerText = 'Sai rồi tiếc quá 😢';
+                            // Hiển thị .answer-reveal riêng
+                            const _ans_display = input.getAttribute('data-ans').trim();
+                            if (_ans_display) {
+                                let _solEl3 = card.querySelector('.answer-reveal');
+                                if (!_solEl3) { _solEl3 = document.createElement('div'); _solEl3.className = 'answer-reveal'; card.appendChild(_solEl3); }
+                                _solEl3.innerHTML = '✅ Đáp án đúng: <b>' + _ans_display + '</b>';
+                            }
                             setTimeout(() => input.classList.remove('error-shake'), 400);
                             // Track sai
                             if (currentList[idx]) trackWrong(currentList[idx]);
@@ -4212,6 +4255,12 @@
                                     }
                                 });
                                 if (msg) { msg.className = 'fb-msg show ng'; msg.innerText = "SAI RỒI! ❌"; }
+                                // Hiển thị đáp án đúng
+                                const _correctBtn = wrap.querySelector('.quiz-opt[data-correct="true"]');
+                                const _correctText = _correctBtn ? _correctBtn.textContent.trim() : currentList[idx].ans;
+                                let _solEl = wrap.parentElement.querySelector('.answer-reveal');
+                                if (!_solEl) { _solEl = document.createElement('div'); _solEl.className = 'answer-reveal'; wrap.parentElement.appendChild(_solEl); }
+                                _solEl.innerHTML = '✅ Đáp án đúng: <b>' + _correctText + '</b>';
                             }
                         } else {
                             const input = document.getElementById(`input-${idx}`);
@@ -4233,6 +4282,15 @@
                                 if (card.getAttribute('data-res') !== 'forgot') card.setAttribute('data-res', 'ng');
                                 if (input) input.classList.add('error-shake');
                                 card.style.borderLeftColor = 'var(--danger)';
+                                // Hiển thị msg đỏ đơn giản + .answer-reveal riêng
+                                const _origAns = input ? input.getAttribute('data-ans').trim() : '';
+                                const _msgEl = document.getElementById('msg-' + idx);
+                                if (_msgEl) { _msgEl.className = 'fb-msg show ng'; _msgEl.innerText = 'Sai rồi tiếc quá 😢'; }
+                                if (_origAns) {
+                                    let _solEl2 = card.querySelector('.answer-reveal');
+                                    if (!_solEl2) { _solEl2 = document.createElement('div'); _solEl2.className = 'answer-reveal'; card.appendChild(_solEl2); }
+                                    _solEl2.innerHTML = '✅ Đáp án đúng: <b>' + _origAns + '</b>';
+                                }
                             }
                         }
                     });
@@ -4316,7 +4374,7 @@
                     if (currentMode < maxMode - 1 && !curVanMode) {
                         const modeLabels = { 0: 'Bài 1', 1: 'Bài 2', 2: 'Bài 3' };
                         if (btnNext) { btnNext.style.display = 'block'; btnNext.textContent = `→ SANG ${modeLabels[currentMode + 1] || 'BÀI TIẾP THEO'}`; }
-                        if (btnClose) { btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; btnClose.onclick = () => closeModal('congrats-modal'); }
+                        if (btnClose) { btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; btnClose.onclick = () => { showAllAnswers(); closeModal('congrats-modal'); }; }
                     } else if (!curVanMode && uniqueCompletedModes === maxMode) {
                         // Đã làm đủ số test yêu cầu — hiện nút Xem kết quả tổng
                         if (btnNext) btnNext.style.display = 'none';
@@ -4328,16 +4386,47 @@
                         }
                     } else {
                         if (btnNext) btnNext.style.display = 'none';
-                        if (btnClose) { btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; btnClose.onclick = () => closeModal('congrats-modal'); }
+                        if (btnClose) { btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; btnClose.onclick = () => { showAllAnswers(); closeModal('congrats-modal'); }; }
                     }
                     openModal('congrats-modal');
                 }
 
-                // ===== VAN FLOATING BUTTONS HELPERS =====
+                // ===== VAN SPEED DIAL FAB HELPERS =====
+                let _vanFabOpen = false;
+
                 function updateVanFab() {
                     const fab = document.getElementById('van-fab-group');
                     if (!fab) return;
-                    fab.style.display = curVanMode ? 'flex' : 'none';
+                    fab.style.display = curVanMode ? 'block' : 'none';
+                    if (!curVanMode && _vanFabOpen) vanFabClose();
+                }
+
+                function vanFabToggle() {
+                    _vanFabOpen ? vanFabClose() : vanFabOpen();
+                }
+
+                function vanFabOpen() {
+                    _vanFabOpen = true;
+                    const items = document.getElementById('van-fab-items');
+                    const icon  = document.getElementById('van-fab-toggle-icon');
+                    const bd    = document.getElementById('van-fab-backdrop');
+                    const btn   = document.getElementById('van-fab-toggle');
+                    if (items) { items.style.pointerEvents = 'auto'; items.style.opacity = '1'; items.style.transform = 'translateY(0)'; }
+                    if (icon)  { icon.style.transform = 'rotate(135deg)'; icon.textContent = '✕'; }
+                    if (bd)    { bd.style.display = 'block'; requestAnimationFrame(() => bd.style.opacity = '1'); }
+                    if (btn)   { btn.style.transform = 'scale(1.08)'; btn.style.boxShadow = '0 8px 28px rgba(168,85,247,0.85)'; }
+                }
+
+                function vanFabClose() {
+                    _vanFabOpen = false;
+                    const items = document.getElementById('van-fab-items');
+                    const icon  = document.getElementById('van-fab-toggle-icon');
+                    const bd    = document.getElementById('van-fab-backdrop');
+                    const btn   = document.getElementById('van-fab-toggle');
+                    if (items) { items.style.pointerEvents = 'none'; items.style.opacity = '0'; items.style.transform = 'translateY(12px)'; }
+                    if (icon)  { icon.style.transform = 'rotate(0deg)'; icon.textContent = '✨'; }
+                    if (bd)    { bd.style.opacity = '0'; setTimeout(() => { if (!_vanFabOpen && bd) bd.style.display = 'none'; }, 250); }
+                    if (btn)   { btn.style.transform = 'scale(1)'; btn.style.boxShadow = '0 6px 22px rgba(168,85,247,0.65)'; }
                 }
 
                 function openVanHistory() {
@@ -4391,6 +4480,76 @@
                     const histKey = 'van_history_' + (window._vanProgressKey || '');
                     localStorage.removeItem(histKey);
                     openVanHistory(); // refresh
+                }
+
+                // ===== SHOW ALL ANSWERS on modal close =====
+                function showAllAnswers() {
+                    const cards = document.querySelectorAll('.card[id^="q-"]');
+                    cards.forEach(card => {
+                        const idx = card.getAttribute('data-idx');
+                        if (!currentList[idx]) return;
+                        const item = currentList[idx];
+                        const isQuizItem = (item.gramType === 'quiz');
+                        const res = card.getAttribute('data-res');
+
+                        if (isQuizItem) {
+                            // Trắc nghiệm: hiện answer-reveal cho câu sai / chưa chọn
+                            if (res === 'ok') return; // đã đúng, không cần
+                            const wrap = document.getElementById('opts-wrap-' + idx);
+                            if (!wrap) return;
+                            // Lock buttons & highlight correct
+                            wrap.querySelectorAll('.quiz-opt').forEach(b => {
+                                b.style.pointerEvents = 'none';
+                                if (b.getAttribute('data-correct') === 'true') {
+                                    b.classList.add('correct'); b.style.opacity = '1';
+                                } else { b.style.opacity = '0.5'; }
+                            });
+                            // Show msg if not yet shown
+                            const msg = document.getElementById('msg-' + idx);
+                            if (msg && !msg.classList.contains('show')) {
+                                msg.className = 'fb-msg show ng'; msg.innerText = 'SAI RỒI! ❌';
+                            }
+                            // Show answer-reveal
+                            const _correctBtn = wrap.querySelector('.quiz-opt[data-correct="true"]');
+                            const _correctText = _correctBtn ? _correctBtn.textContent.trim() : item.ans;
+                            let _solEl = card.querySelector('.answer-reveal');
+                            if (!_solEl && _correctText) {
+                                _solEl = document.createElement('div');
+                                _solEl.className = 'answer-reveal';
+                                card.appendChild(_solEl);
+                            }
+                            if (_solEl && _correctText) _solEl.innerHTML = '✅ Đáp án đúng: <b>' + _correctText + '</b>';
+                            // Show explain
+                            const exp = document.getElementById('explain-' + idx);
+                            if (exp) exp.style.display = 'block';
+
+                        } else {
+                            // Từ đơn / Struct: hiện answer-reveal cho câu sai / chưa điền
+                            if (res === 'ok') return;
+                            const input = document.getElementById('input-' + idx);
+                            if (!input) return;
+                            const origAns = input.getAttribute('data-ans').trim();
+                            // Lock input
+                            input.style.pointerEvents = 'none';
+                            card.style.borderLeftColor = 'var(--danger)';
+                            // Show msg
+                            const msgEl = document.getElementById('msg-' + idx);
+                            if (msgEl && !msgEl.classList.contains('show')) {
+                                msgEl.className = 'fb-msg show ng'; msgEl.innerText = 'Sai rồi tiếc quá 😢';
+                            }
+                            // Show answer-reveal
+                            let solEl = card.querySelector('.answer-reveal');
+                            if (!solEl && origAns) {
+                                solEl = document.createElement('div');
+                                solEl.className = 'answer-reveal';
+                                card.appendChild(solEl);
+                            }
+                            if (solEl && origAns) solEl.innerHTML = '✅ Đáp án đúng: <b>' + origAns + '</b>';
+                            // Show explain
+                            const exp = document.getElementById('explain-' + idx);
+                            if (exp) exp.style.display = 'block';
+                        }
+                    });
                 }
 
                 function retryFailedOnly() {
