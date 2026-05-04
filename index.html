@@ -4264,34 +4264,60 @@
                             }
                         } else {
                             const input = document.getElementById(`input-${idx}`);
-                            const ans = input ? input.getAttribute('data-ans').trim().toLowerCase() : '';
-                            const val = input ? input.value.trim().toLowerCase() : '';
+                            const ans = input ? input.getAttribute('data-ans').trim() : '';
+                            const ansLower = ans.toLowerCase();
+                            const val = input ? input.value.trim() : '';
+                            const valLower = val.toLowerCase();
 
                             const exp = document.getElementById(`explain-${idx}`);
                             if (exp) exp.style.display = 'block';
 
-                            if (card.getAttribute('data-res') === 'ok' || (ans === '' && val === '')) {
+                            // Câu đúng: data-res đã là 'ok' (đã gõ đúng trước đó)
+                            if (card.getAttribute('data-res') === 'ok') {
+                                ok++;
+                                currentList[idx].count = (currentList[idx].count || 0) + 1;
+                                if (input) input.classList.add('correct');
+                                card.style.borderLeftColor = 'var(--success)';
+                                // Hiện badge xanh 'Tuyệt vời'
+                                const _msgOk = document.getElementById('msg-' + idx);
+                                if (_msgOk) { _msgOk.className = 'fb-msg show ok'; _msgOk.innerText = 'Tuyệt vời, chính xác! 🎉'; }
+                                // Hiển thị đáp án đúng
+                                if (ans) {
+                                    let _solOk = card.querySelector('.answer-reveal');
+                                    if (!_solOk) { _solOk = document.createElement('div'); _solOk.className = 'answer-reveal'; card.appendChild(_solOk); }
+                                    _solOk.innerHTML = '✅ Đáp án đúng: <b>' + ans + '</b>';
+                                    _solOk.style.borderColor = 'var(--success)';
+                                    _solOk.style.color = '#15803d';
+                                }
+                            }
+                            // Câu không có đáp án định nghĩa và chưa điền → bỏ qua (tính đúng)
+                            else if (ans === '' && val === '') {
                                 ok++;
                                 currentList[idx].count = (currentList[idx].count || 0) + 1;
                                 card.setAttribute('data-res', 'ok');
                                 if (input) input.classList.add('correct');
                                 card.style.borderLeftColor = 'var(--success)';
+                                const _msgSkip = document.getElementById('msg-' + idx);
+                                if (_msgSkip) { _msgSkip.className = 'fb-msg show ok'; _msgSkip.innerText = 'Tuyệt vời, chính xác! 🎉'; }
                             }
+                            // Câu sai hoặc chưa điền (val === '' nhưng ans !== '')
                             else {
                                 failed++;
                                 if (card.getAttribute('data-res') !== 'forgot') card.setAttribute('data-res', 'ng');
-                                if (input) input.classList.add('error-shake');
+                                if (input) { input.classList.add('error-shake'); }
                                 card.style.borderLeftColor = 'var(--danger)';
-                                // Hiển thị msg đỏ đơn giản + .answer-reveal riêng
-                                const _origAns = input ? input.getAttribute('data-ans').trim() : '';
+                                // Hiển thị msg đỏ + .answer-reveal
                                 const _msgEl = document.getElementById('msg-' + idx);
-                                if (_msgEl) { _msgEl.className = 'fb-msg show ng'; _msgEl.innerText = 'Sai rồi tiếc quá 😢'; }
-                                if (_origAns) {
+                                if (_msgEl) { _msgEl.className = 'fb-msg show ng'; _msgEl.innerText = 'Tiếc quá sai rồi 😢'; }
+                                if (ans) {
                                     let _solEl2 = card.querySelector('.answer-reveal');
                                     if (!_solEl2) { _solEl2 = document.createElement('div'); _solEl2.className = 'answer-reveal'; card.appendChild(_solEl2); }
-                                    _solEl2.innerHTML = '✅ Đáp án đúng: <b>' + _origAns + '</b>';
+                                    _solEl2.innerHTML = '✅ Đáp án đúng: <b>' + ans + '</b>';
                                 }
+                                // Track sai
+                                if (currentList[idx]) trackWrong(currentList[idx]);
                             }
+
                         }
                     });
 
