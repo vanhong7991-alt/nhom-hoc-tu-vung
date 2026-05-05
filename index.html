@@ -1555,6 +1555,14 @@
             background: linear-gradient(90deg, #fbbf24, #f59e0b);
         }
 
+        .stats-kpi-card.kpi-cyan::before {
+            background: linear-gradient(90deg, #06b6d4, #22d3ee);
+        }
+
+        .stats-kpi-card.kpi-orange::before {
+            background: linear-gradient(90deg, #f97316, #fb923c);
+        }
+
         .stats-kpi-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -1666,7 +1674,8 @@
         }
 
         /* Wrong table rows */
-        #stats-wrong-tbody tr, #stats-forgot-tbody tr {
+        #stats-wrong-tbody tr,
+        #stats-forgot-tbody tr {
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             transition: background 0.15s;
         }
@@ -1674,11 +1683,13 @@
         #stats-wrong-tbody tr:hover {
             background: rgba(239, 68, 68, 0.05);
         }
+
         #stats-forgot-tbody tr:hover {
             background: rgba(245, 158, 11, 0.05);
         }
 
-        #stats-wrong-tbody td, #stats-forgot-tbody td {
+        #stats-wrong-tbody td,
+        #stats-forgot-tbody td {
             padding: 9px 10px;
             color: #e2e8f0;
         }
@@ -1744,10 +1755,8 @@
                 cursor: pointer;
                 display: flex; align-items: center; justify-content: center;
                 transition: background 0.2s, color 0.2s;
-            "
-            onmouseover="this.style.background='rgba(239,68,68,0.25)';this.style.color='#f87171';"
-            onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='#94a3b8';"
-            >×</button>
+            " onmouseover="this.style.background='rgba(239,68,68,0.25)';this.style.color='#f87171';"
+                onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='#94a3b8';">×</button>
             <!-- Lock icon -->
             <div style="
                 width: 70px; height: 70px;
@@ -1762,8 +1771,12 @@
 
             <h2 style="margin: 0 0 6px; font-size: 22px; font-weight: 900; color: #e2e8f0; letter-spacing: 0.5px;">Xác
                 nhận mã truy cập</h2>
-            <p style="margin: 0 0 28px; font-size: 14px; color: #64748b; font-weight: 600; line-height: 1.5;">Nhập mã để bắt đầu học bài<br>
-                <span style="font-size: 12.5px; font-weight: 500; color: #c4b5fd; display: inline-block; margin-top: 8px; font-style: italic;">🌸 Nếu bạn chưa có mã thì hãy nhắn cho nhóm trưởng để kiểm tra xem bạn có chăm chỉ học không nha, sau đó mình cùng học tiếp nhá!</span>
+            <p style="margin: 0 0 28px; font-size: 14px; color: #64748b; font-weight: 600; line-height: 1.5;">Nhập mã để
+                bắt đầu học bài<br>
+                <span
+                    style="font-size: 12.5px; font-weight: 500; color: #c4b5fd; display: inline-block; margin-top: 8px; font-style: italic;">🌸
+                    Nếu bạn chưa có mã thì hãy nhắn cho nhóm trưởng để kiểm tra xem bạn có chăm chỉ học không nha, sau
+                    đó mình cùng học tiếp nhá!</span>
             </p>
 
             <!-- PIN dots display -->
@@ -2275,39 +2288,49 @@
                         padding: 18px;
                         margin-bottom: 20px;
                     ">
-                    <div id="stats-kpi-grid"
-                        style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;">
-                        <div class="stats-kpi-card" id="kpi-total-words">
-                            <div class="kpi-icon">📖</div>
-                            <div class="kpi-val" id="kpi-total-words-val" style="color:#c7d2fe;">0</div>
-                            <div class="kpi-label" style="color:#6366f1;">Tổng từ đã nhập</div>
+                        <div id="stats-kpi-grid"
+                            style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;">
+                            <div class="stats-kpi-card" id="kpi-total-words">
+                                <div class="kpi-icon">📖</div>
+                                <div class="kpi-val" id="kpi-total-words-val" style="color:#c7d2fe;">0</div>
+                                <div class="kpi-label" style="color:#6366f1;">Tổng từ đã nhập</div>
+                            </div>
+                            <div class="stats-kpi-card kpi-green" id="kpi-learned">
+                                <div class="kpi-icon">✅</div>
+                                <div class="kpi-val" id="kpi-learned-val" style="color:#bbf7d0;">0</div>
+                                <div class="kpi-label" style="color:#16a34a;">Đã học (≥1 lần đúng)</div>
+                            </div>
+                            <div class="stats-kpi-card kpi-perfect" id="kpi-perfect">
+                                <div class="kpi-icon">🏆</div>
+                                <div class="kpi-val" id="kpi-perfect-val" style="color:#fef08a;">0</div>
+                                <div class="kpi-label" style="color:#a16207;">Làm đúng 100%</div>
+                            </div>
+                            <div class="stats-kpi-card kpi-red" id="kpi-wrong">
+                                <div class="kpi-icon">💀</div>
+                                <div class="kpi-val" id="kpi-wrong-val" style="color:#fecaca;">0</div>
+                                <div class="kpi-label" style="color:#b91c1c;">Hay sai (&gt;3 lần)</div>
+                            </div>
+                            <div class="stats-kpi-card kpi-purple" id="kpi-sessions">
+                                <div class="kpi-icon">📝</div>
+                                <div class="kpi-val" id="kpi-sessions-val" style="color:#e9d5ff;">0</div>
+                                <div class="kpi-label" style="color:#7e22ce;">Lần làm bài</div>
+                            </div>
+                            <div class="stats-kpi-card kpi-gold" id="kpi-pass90">
+                                <div class="kpi-icon">🌟</div>
+                                <div class="kpi-val" id="kpi-pass90-val" style="color:#fde68a;">0</div>
+                                <div class="kpi-label" style="color:#b45309;">Đạt &gt;90% điểm</div>
+                            </div>
+                            <div class="stats-kpi-card kpi-cyan" id="kpi-mastered">
+                                <div class="kpi-icon">🎓</div>
+                                <div class="kpi-val" id="kpi-mastered-val" style="color:#67e8f9;">0</div>
+                                <div class="kpi-label" style="color:#0891b2;">Thành thạo (&gt;10 lần đúng)</div>
+                            </div>
+                            <div class="stats-kpi-card kpi-orange" id="kpi-forgot-many">
+                                <div class="kpi-icon">😵</div>
+                                <div class="kpi-val" id="kpi-forgot-many-val" style="color:#fdba74;">0</div>
+                                <div class="kpi-label" style="color:#c2410c;">Hay quên (&gt;3 lần quên)</div>
+                            </div>
                         </div>
-                        <div class="stats-kpi-card kpi-green" id="kpi-learned">
-                            <div class="kpi-icon">✅</div>
-                            <div class="kpi-val" id="kpi-learned-val" style="color:#bbf7d0;">0</div>
-                            <div class="kpi-label" style="color:#16a34a;">Đã học (≥1 lần đúng)</div>
-                        </div>
-                        <div class="stats-kpi-card kpi-perfect" id="kpi-perfect">
-                            <div class="kpi-icon">🏆</div>
-                            <div class="kpi-val" id="kpi-perfect-val" style="color:#fef08a;">0</div>
-                            <div class="kpi-label" style="color:#a16207;">Làm đúng 100%</div>
-                        </div>
-                        <div class="stats-kpi-card kpi-red" id="kpi-wrong">
-                            <div class="kpi-icon">💀</div>
-                            <div class="kpi-val" id="kpi-wrong-val" style="color:#fecaca;">0</div>
-                            <div class="kpi-label" style="color:#b91c1c;">Hay sai (&gt;3 lần)</div>
-                        </div>
-                        <div class="stats-kpi-card kpi-purple" id="kpi-sessions">
-                            <div class="kpi-icon">📝</div>
-                            <div class="kpi-val" id="kpi-sessions-val" style="color:#e9d5ff;">0</div>
-                            <div class="kpi-label" style="color:#7e22ce;">Lần làm bài</div>
-                        </div>
-                        <div class="stats-kpi-card kpi-gold" id="kpi-pass90">
-                            <div class="kpi-icon">🌟</div>
-                            <div class="kpi-val" id="kpi-pass90-val" style="color:#fde68a;">0</div>
-                            <div class="kpi-label" style="color:#b45309;">Đạt &gt;90% điểm</div>
-                        </div>
-                    </div>
                     </div>
 
                     <!-- 4-WEEK HEATMAP + DAILY TIME + SESSION -->
@@ -2349,9 +2372,14 @@
                         <div class="stats-card">
                             <div class="stats-card-title">📈 Câu đúng & Câu sai theo ngày</div>
                             <!-- Legend -->
-                            <div style="display:flex;gap:16px;margin-top:8px;margin-bottom:4px;font-size:11px;font-weight:700;">
-                                <span style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:14px;height:3px;background:#34d399;border-radius:2px;"></span><span style="color:#34d399;">Câu đúng</span></span>
-                                <span style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:14px;height:3px;background:#f87171;border-radius:2px;"></span><span style="color:#f87171;">Câu sai</span></span>
+                            <div
+                                style="display:flex;gap:16px;margin-top:8px;margin-bottom:4px;font-size:11px;font-weight:700;">
+                                <span style="display:flex;align-items:center;gap:5px;"><span
+                                        style="display:inline-block;width:14px;height:3px;background:#34d399;border-radius:2px;"></span><span
+                                        style="color:#34d399;">Câu đúng</span></span>
+                                <span style="display:flex;align-items:center;gap:5px;"><span
+                                        style="display:inline-block;width:14px;height:3px;background:#f87171;border-radius:2px;"></span><span
+                                        style="color:#f87171;">Câu sai</span></span>
                             </div>
                             <div id="stats-session-chart" style="margin-top:4px;overflow:hidden;">
                                 <svg id="stats-linechart-svg" width="100%" height="130" style="display:block;"></svg>
@@ -3279,7 +3307,7 @@
                 // ║         🔐 MÃ TRUY CẬP ỨNG DỤNG         ║
                 // ║   Thay đổi giá trị ACCESS_CODE bên dưới  ║
                 // ╚══════════════════════════════════════════╝
-                const ACCESS_CODE = '0505';   // <-- ĐỔI MÃ Ở ĐÂY
+                const ACCESS_CODE = '200124';   // <-- ĐỔI MÃ Ở ĐÂY
 
                 // 🔓 CẤU HÌNH KHÓA (Chỉ áp dụng cho Góc của Vân)
                 // Sửa thành true (cần mã) hoặc false (vào tự do không cần mã)
@@ -3287,7 +3315,7 @@
                     goc_cua_van: true  // Góc của Vân (Đang khoá)
                 };
 
-                let _appUnlocked = (sessionStorage.getItem('mgao_unlocked') === '1');
+                let _appUnlocked = false;
 
                 /* ============================================= */
                 let db = JSON.parse(localStorage.getItem('mgao_v37_db'));
@@ -3588,6 +3616,34 @@
                     }
 
                     document.getElementById('flashcard-progress').innerText = `${currentFlashcardIndex + 1} / ${fcList.length}`;
+                }
+                function toggleListStar(index, btnId, e) {
+                    if(e) e.stopPropagation();
+                    const item = currentList[index];
+                    if (!item) return;
+                    const key = _itemKey(item);
+                    
+                    let isStarred = fcStarredKeys.has(key);
+                    if (isStarred) {
+                        fcStarredKeys.delete(key);
+                        let toRemove = null;
+                        fcStarred.forEach(it => { if(_itemKey(it) === key) toRemove = it; });
+                        if(toRemove) fcStarred.delete(toRemove);
+                    } else {
+                        fcStarredKeys.add(key);
+                        fcStarred.add(item);
+                    }
+                    saveFcStarred();
+                    
+                    const btn = document.getElementById(btnId);
+                    if (btn) {
+                        const nowStarred = fcStarredKeys.has(key);
+                        btn.innerHTML = nowStarred ? '⭐' : '☆';
+                        btn.style.color = nowStarred ? '#fbbf24' : '#64748b';
+                        btn.style.textShadow = nowStarred ? '0 0 10px rgba(251,191,36,0.5)' : 'none';
+                    }
+                    const countEl = document.getElementById('fc-star-count');
+                    if (countEl) countEl.innerText = fcStarredKeys.size;
                 }
 
                 function toggleFcStar(e) {
@@ -4324,7 +4380,6 @@
                     if (!inp) return;
                     if (inp.value === ACCESS_CODE) {
                         _appUnlocked = true;
-                        sessionStorage.setItem('mgao_unlocked', '1');
                         const overlay = document.getElementById('lockscreen-overlay');
                         if (overlay) {
                             overlay.style.transition = 'opacity 0.4s';
@@ -4585,7 +4640,8 @@
                 `).join('');
 
                             return `<div class="card" id="q-${i}" data-idx="${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s; padding: 25px; border-radius: 16px; background: linear-gradient(145deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9)); box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
-                    <div style="position:relative; font-size:20px; font-weight:800; margin-bottom:25px; color:#0f172a; background:#f8fafc; padding:20px 25px 20px 25px; border-radius:12px; text-align:left; line-height:1.6; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 6px solid #3b82f6;">
+                    <div style="position:relative; font-size:20px; font-weight:800; margin-bottom:25px; color:#0f172a; background:#f8fafc; padding:20px 50px 20px 25px; border-radius:12px; text-align:left; line-height:1.6; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 6px solid #3b82f6;">
+                        <button id="star-btn-${i}" onclick="toggleListStar(${i}, 'star-btn-${i}', event)" style="position:absolute; top:15px; right:15px; background:transparent; border:none; font-size:24px; cursor:pointer; color:${fcStarredKeys.has(_itemKey(item)) ? '#fbbf24' : '#94a3b8'}; text-shadow:${fcStarredKeys.has(_itemKey(item)) ? '0 0 10px rgba(251,191,36,0.5)' : 'none'}; padding:0;" title="Đánh dấu sao (Lưu ý)">${fcStarredKeys.has(_itemKey(item)) ? '⭐' : '☆'}</button>
                         <div style="position:absolute; top:-15px; left:-15px; background:var(--accent); color:white; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:bold; box-shadow:0 4px 10px rgba(59,130,246,0.5); border:3px solid #f8fafc;">${i + 1}</div>
                         <div style="width:100%;">${fT(item.q)}</div>
                     </div>
@@ -4605,7 +4661,8 @@
                                 else if (currentMode === 1) { ques = item.c1 || ''; ans = item.c3 || ''; }
                                 else { ques = item.c3 || ''; ans = item.c1 || ''; }
                             }
-                            return `<div class="card" id="q-${i}" data-idx="${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s;">
+                            return `<div class="card" id="q-${i}" data-idx="${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s; position:relative; padding-right:50px;">
+                    <button id="star-btn-${i}" onclick="toggleListStar(${i}, 'star-btn-${i}', event)" style="position:absolute; top:20px; right:20px; background:transparent; border:none; font-size:28px; cursor:pointer; color:${fcStarredKeys.has(_itemKey(item)) ? '#fbbf24' : '#64748b'}; text-shadow:${fcStarredKeys.has(_itemKey(item)) ? '0 0 10px rgba(251,191,36,0.5)' : 'none'}; padding:0;" title="Đánh dấu sao (Lưu ý)">${fcStarredKeys.has(_itemKey(item)) ? '⭐' : '☆'}</button>
                     <div style="font-size:26px; font-weight:800; margin-bottom:10px; display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
                         <span>${fT(ques)} ${item.count >= 5 ? '⭐' : ''} <a href="https://www.google.com/search?q=${encodeURIComponent('Giải thích nghĩa của ' + (item.c1 || '') + ' và cách sử dụng trong tiếng nhật')}" target="_blank" style="text-decoration:none; margin-left:8px; display:inline-flex; align-items:center; transition:0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Tra cứu trên Google"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></span>
                         <span id="msg-${i}" class="fb-msg"></span>
@@ -6446,7 +6503,8 @@
             var learned = items.filter(function (it) { return (it.count || 0) >= 1; }).length;
             var perfect = items.filter(function (it) { return (it.count || 0) >= 1 && (it.wrongCount || 0) === 0; }).length;
             var wrongMany = items.filter(function (it) { return (it.wrongCount || 0) > 3; }).length;
-
+            var mastered = items.filter(function (it) { return (it.count || 0) > 10; }).length;
+            var forgotMany = items.filter(function (it) { return (it.forgotCount || 0) > 3; }).length;
             var log = JSON.parse(localStorage.getItem('mgao_daily_log') || '[]');
             var sessions_total = log.length;
             var pass90 = log.filter(function (e) { return e.total > 0 && (e.ok / e.total) >= 0.9; }).length;
@@ -6461,7 +6519,7 @@
                 .sort(function (a, b) { return (b.forgotCount || 0) - (a.forgotCount || 0); })
                 .slice(0, 15);
 
-            return { total, learned, perfect, wrongMany, sessions_total, pass90, log, wrongItems, forgotItems };
+            return { total, learned, perfect, wrongMany, mastered, forgotMany, sessions_total, pass90, log, wrongItems, forgotItems };
         }
 
 
@@ -6557,6 +6615,8 @@
             document.getElementById('kpi-learned-val').textContent = stats.learned.toLocaleString();
             document.getElementById('kpi-perfect-val').textContent = stats.perfect.toLocaleString();
             document.getElementById('kpi-wrong-val').textContent = stats.wrongMany.toLocaleString();
+            document.getElementById('kpi-mastered-val').textContent = stats.mastered.toLocaleString();
+            document.getElementById('kpi-forgot-many-val').textContent = stats.forgotMany.toLocaleString();
             document.getElementById('kpi-sessions-val').textContent = stats.sessions_total.toLocaleString();
             document.getElementById('kpi-pass90-val').textContent = stats.pass90.toLocaleString();
 
@@ -6696,12 +6756,12 @@
             }
             log.forEach(function (e) {
                 if (okMap.hasOwnProperty(e.date)) {
-                    okMap[e.date]    += (e.ok     || 0);
+                    okMap[e.date] += (e.ok || 0);
                     wrongMap[e.date] += (e.failed || 0);
                 }
             });
 
-            var oks    = days.map(function (dk) { return okMap[dk]; });
+            var oks = days.map(function (dk) { return okMap[dk]; });
             var wrongs = days.map(function (dk) { return wrongMap[dk]; });
             var maxVal = Math.max(Math.max.apply(null, oks), Math.max.apply(null, wrongs), 1);
 
@@ -6750,7 +6810,7 @@
             aOk.setAttribute('points',
                 padL.toFixed(1) + ',' + (padT + chartH).toFixed(1) + ' ' +
                 ptOk + ' ' +
-                (padL + (N-1)*step).toFixed(1) + ',' + (padT + chartH).toFixed(1));
+                (padL + (N - 1) * step).toFixed(1) + ',' + (padT + chartH).toFixed(1));
             aOk.setAttribute('fill', 'rgba(52,211,153,0.12)');
             svg.appendChild(aOk);
 
@@ -6760,7 +6820,7 @@
             aWrong.setAttribute('points',
                 padL.toFixed(1) + ',' + (padT + chartH).toFixed(1) + ' ' +
                 ptWrong + ' ' +
-                (padL + (N-1)*step).toFixed(1) + ',' + (padT + chartH).toFixed(1));
+                (padL + (N - 1) * step).toFixed(1) + ',' + (padT + chartH).toFixed(1));
             aWrong.setAttribute('fill', 'rgba(248,113,113,0.1)');
             svg.appendChild(aWrong);
 
