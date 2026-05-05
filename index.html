@@ -2090,28 +2090,41 @@
                                 </div>
                             </div>
 
-                            <!-- ═══ NHÓM 2: ÔN TẬP ═══ -->
-                            <div id="group-2"
+                            <!-- ═══ NHÓM 2A: HỌC TẬP ═══ -->
+                            <div id="group-2a"
                                 style="background: linear-gradient(135deg, rgba(168,85,247,0.1), rgba(236,72,153,0.08)); border: 1px solid rgba(168,85,247,0.45); border-radius: 16px; padding: 16px; margin-bottom: 12px;">
                                 <div style="margin-bottom:12px; display:flex; align-items:center;">
-                                    <div id="group-2-title"
+                                    <div id="group-2a-title"
                                         style="background: rgba(168,85,247,0.3); color: #e9d5ff; font-size:12px; font-weight:900; letter-spacing:1px; text-transform:uppercase; padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(168,85,247,0.5); display:inline-flex; align-items:center; gap:6px;">
-                                        📚 NHÓM 2 — ÔN TẬP & XEM LẠI
+                                        📚 HỌC TẬP & DANH SÁCH TỪ
                                     </div>
                                 </div>
                                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                     <button id="btn-flashcard" class="btn btn-purple"
                                         style="display:none; flex:1; min-width:140px; justify-content:center; font-size:13px; padding:12px 14px;"
                                         onclick="openFlashcard()">📇 HỌC TẬP (Flashcard)</button>
-                                    <button id="btn-match-game" class="btn"
-                                        style="background: linear-gradient(135deg, #f43f5e, #f97316); color: white; display:none; flex:1; min-width:140px; justify-content:center; font-size:13px; padding:12px 14px; box-shadow: 0 4px 15px rgba(244,63,94,0.4); border: none; font-weight: bold; cursor: pointer; border-radius: 12px;"
-                                        onclick="openMatchGame()">🎮 GAME NỐI TỪ</button>
-                                    <button id="btn-reaction-game" class="btn"
-                                        style="background: linear-gradient(135deg, #ec4899, #a855f7); color: white; display:none; flex:1; min-width:140px; justify-content:center; font-size:13px; padding:12px 14px; box-shadow: 0 4px 15px rgba(168,85,247,0.4); border: none; font-weight: bold; cursor: pointer; border-radius: 12px;"
-                                        onclick="openReactionGame()">⚡ PHẢN XẠ NHANH</button>
                                     <button id="btn-show-list" class="btn btn-warning"
                                         style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:12px 14px;"
                                         onclick="openModal('list-modal')">📖 DANH SÁCH TỪ</button>
+                                </div>
+                            </div>
+
+                            <!-- ═══ NHÓM 2B: TRÒ CHƠI ═══ -->
+                            <div id="group-2b"
+                                style="background: linear-gradient(135deg, rgba(244,63,94,0.1), rgba(249,115,22,0.08)); border: 1px solid rgba(244,63,94,0.45); border-radius: 16px; padding: 16px; margin-bottom: 12px;">
+                                <div style="margin-bottom:12px; display:flex; align-items:center;">
+                                    <div id="group-2b-title"
+                                        style="background: rgba(244,63,94,0.3); color: #ffe4e6; font-size:12px; font-weight:900; letter-spacing:1px; text-transform:uppercase; padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(244,63,94,0.5); display:inline-flex; align-items:center; gap:6px;">
+                                        🎮 TRÒ CHƠI ÔN TẬP
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <button id="btn-reaction-game" class="btn"
+                                        style="background: linear-gradient(135deg, #ec4899, #a855f7); color: white; display:none; flex:1; min-width:140px; justify-content:center; font-size:13px; padding:12px 14px; box-shadow: 0 4px 15px rgba(168,85,247,0.4); border: none; font-weight: bold; cursor: pointer; border-radius: 12px;"
+                                        onclick="openReactionGame()">⚡ PHẢN XẠ NHANH</button>
+                                    <button id="btn-match-game" class="btn"
+                                        style="background: linear-gradient(135deg, #f43f5e, #f97316); color: white; display:none; flex:1; min-width:140px; justify-content:center; font-size:13px; padding:12px 14px; box-shadow: 0 4px 15px rgba(244,63,94,0.4); border: none; font-weight: bold; cursor: pointer; border-radius: 12px;"
+                                        onclick="openMatchGame()">🧩 GAME NỐI TỪ</button>
                                 </div>
                             </div>
 
@@ -2629,10 +2642,14 @@
                             <tbody id="voca-list-body"></tbody>
                         </table>
                     </div>
-                    <div style="display:flex; gap:10px;">
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button id="btn-export-pdf" class="btn" onclick="exportListToPdf()"
+                            style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; border: none; flex: 1; min-width:140px; font-weight: bold; border-radius: 8px;">📕 XUẤT PDF</button>
+                        <button id="btn-export-txt" class="btn" onclick="exportListToTxt()"
+                            style="background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; flex: 1; min-width:140px; font-weight: bold; border-radius: 8px;">💾 XUẤT TXT</button>
                         <button id="btn-filter-dups" class="btn btn-purple" onclick="removeDuplicates()"
-                            style="flex:1;">🧹 LỌC TỪ TRÙNG LẶP</button>
-                        <button class="btn btn-gray" onclick="closeModal('list-modal')" style="flex:1;">ĐÓNG</button>
+                            style="flex:1; min-width:140px;">🧹 LỌC TỪ TRÙNG LẶP</button>
+                        <button class="btn btn-gray" onclick="closeModal('list-modal')" style="flex:1; min-width:140px;">ĐÓNG</button>
                     </div>
                 </div>
             </div>
@@ -3202,11 +3219,15 @@
 
                     const group1 = document.getElementById('group-1');
                     if (group1) group1.style.display = 'none'; // Góc của Vân KHÔNG có nhóm 1
-                    const group2 = document.getElementById('group-2');
-                    if (group2) group2.style.display = (listOverride) ? 'none' : 'block';
+                    const group2a = document.getElementById('group-2a');
+                    if (group2a) group2a.style.display = (listOverride) ? 'none' : 'block';
+                    const group2b = document.getElementById('group-2b');
+                    if (group2b) group2b.style.display = (listOverride) ? 'none' : 'block';
 
-                    const g2Title = document.getElementById('group-2-title');
-                    if (g2Title) g2Title.innerHTML = '📚 ÔN TẬP';
+                    const g2aTitle = document.getElementById('group-2a-title');
+                    if (g2aTitle) g2aTitle.innerHTML = '📚 HỌC TẬP & DANH SÁCH TỪ';
+                    const g2bTitle = document.getElementById('group-2b-title');
+                    if (g2bTitle) g2bTitle.innerHTML = '🎮 TRÒ CHƠI ÔN TẬP';
                     const g3Title = document.getElementById('group-3-title');
                     if (g3Title) g3Title.innerHTML = '📝 KIỂM TRA';
 
@@ -4455,11 +4476,15 @@
                     });
                     const group1 = document.getElementById('group-1');
                     if (group1) group1.style.display = listOverride ? 'none' : 'block';
-                    const group2 = document.getElementById('group-2');
-                    if (group2) group2.style.display = listOverride ? 'none' : 'block';
+                    const group2a = document.getElementById('group-2a');
+                    if (group2a) group2a.style.display = listOverride ? 'none' : 'block';
+                    const group2b = document.getElementById('group-2b');
+                    if (group2b) group2b.style.display = listOverride ? 'none' : 'block';
 
-                    const g2Title = document.getElementById('group-2-title');
-                    if (g2Title) g2Title.innerHTML = '📚 NHÓM 2 — ÔN TẬP & XEM LẠI';
+                    const g2aTitle = document.getElementById('group-2a-title');
+                    if (g2aTitle) g2aTitle.innerHTML = '📚 HỌC TẬP & DANH SÁCH TỪ';
+                    const g2bTitle = document.getElementById('group-2b-title');
+                    if (g2bTitle) g2bTitle.innerHTML = '🎮 TRÒ CHƠI ÔN TẬP';
                     const g3Title = document.getElementById('group-3-title');
                     if (g3Title) g3Title.innerHTML = '📝 NHÓM 3 — LÀM BÀI KIỂM TRA';
 
@@ -5704,6 +5729,116 @@
                     updateChart();
                 }
 
+                function exportListToPdf() {
+                    if (!currentList || currentList.length === 0) {
+                        alert("Danh sách trống!");
+                        return;
+                    }
+                    
+                    const titleText = document.getElementById('view-title') ? document.getElementById('view-title').textContent.trim() : 'Danh Sách Học Tập';
+                    
+                    let html = `
+                    <html>
+                    <head>
+                        <title>${titleText}</title>
+                        <style>
+                            @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Inter:wght@400;600&display=swap');
+                            body { font-family: 'Inter', sans-serif; padding: 20px; color: #1e293b; background: white; }
+                            .header { text-align: center; border-bottom: 3px solid #8b5cf6; padding-bottom: 10px; margin-bottom: 20px; }
+                            h1 { font-family: 'Baloo 2', cursive; color: #6d28d9; font-size: 28px; margin: 0 0 5px 0; }
+                            .meta { font-size: 14px; color: #64748b; font-weight: 600; }
+                            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                            th { background-color: #8b5cf6; color: white; padding: 10px; text-align: left; font-size: 14px; border: 1px solid #7c3aed; }
+                            td { padding: 10px; border: 1px solid #cbd5e1; font-size: 14px; }
+                            tr:nth-child(even) { background-color: #f8fafc; }
+                            @media print {
+                                @page { margin: 15mm; size: A4; }
+                                body { padding: 0; }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="header">
+                            <h1>${titleText}</h1>
+                            <div class="meta">Tổng số: ${currentList.length} câu | Ngày xuất: ${new Date().toLocaleDateString('vi-VN')}</div>
+                        </div>
+                        <table>
+                            <thead>
+                    `;
+                    
+                    const hasC1 = currentList.some(it => it.c1 !== undefined);
+                    if (hasC1) {
+                        html += `<tr><th style="width:40px; text-align:center;">STT</th><th>Từ vựng / Cấu trúc</th><th>Cách đọc</th><th>Ý nghĩa</th></tr></thead><tbody>`;
+                    } else {
+                        html += `<tr><th style="width:40px; text-align:center;">STT</th><th>Câu hỏi</th><th>Đáp án</th></tr></thead><tbody>`;
+                    }
+                    
+                    currentList.forEach((item, index) => {
+                        html += `<tr><td style="text-align:center; font-weight:bold;">${index + 1}</td>`;
+                        if (item.c1 !== undefined) {
+                            html += `<td>${item.c1 || ''}</td><td>${item.c2 || ''}</td><td>${item.c3 || ''}</td>`;
+                        } else if (item.q !== undefined) {
+                            html += `<td>${item.q || ''}</td><td>${item.ans || ''}</td>`;
+                        } else {
+                            html += `<td colspan="3">${JSON.stringify(item)}</td>`;
+                        }
+                        html += `</tr>`;
+                    });
+                    
+                    html += `</tbody></table></body></html>`;
+                    
+                    const iframe = document.createElement('iframe');
+                    iframe.style.display = 'none';
+                    document.body.appendChild(iframe);
+                    
+                    iframe.contentWindow.document.open();
+                    iframe.contentWindow.document.write(html);
+                    iframe.contentWindow.document.close();
+                    
+                    setTimeout(() => {
+                        iframe.contentWindow.focus();
+                        iframe.contentWindow.print();
+                        setTimeout(() => { document.body.removeChild(iframe); }, 1000);
+                    }, 500);
+                }
+
+                function exportListToTxt() {
+                    if (!currentList || currentList.length === 0) {
+                        alert("Danh sách trống!");
+                        return;
+                    }
+                    
+                    let content = `DANH SÁCH HỌC TẬP\n`;
+                    const titleText = document.getElementById('view-title') ? document.getElementById('view-title').textContent : 'Danh Sach';
+                    content += `Bài: ${titleText.trim()}\n`;
+                    content += `Tổng số: ${currentList.length} câu\n`;
+                    content += `-------------------------\n\n`;
+                    
+                    currentList.forEach((item, index) => {
+                        let line = `${index + 1}. `;
+                        if (item.c1 !== undefined) {
+                            line += `${item.c1} | ${item.c2} | ${item.c3}`;
+                        } else if (item.q !== undefined) {
+                            line += `${item.q} => ${item.ans}`;
+                        } else {
+                            line += JSON.stringify(item);
+                        }
+                        line = line.replace(/<[^>]*>?/gm, ''); // Remove HTML tags
+                        content += line + "\n";
+                    });
+                    
+                    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    const fileName = titleText.replace(/[^a-zA-Z0-9_ -]/g, '').trim().replace(/\s+/g, '_') || 'DanhSach';
+                    a.download = `${fileName}.txt`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }
+
                 function removeDuplicates() {
                     const list = db[curLevel][curType][curDay].list;
                     if (list.length === 0) return;
@@ -6049,6 +6184,43 @@
                     cqUpdateCount();
                 }
 
+                function cqFilterLessonUI() {
+                    const txt = document.getElementById('cq-search-lesson').value.toLowerCase();
+                    const items = document.querySelectorAll('.cq-lesson-item');
+                    items.forEach(el => {
+                        const label = el.querySelector('span').innerText.toLowerCase();
+                        el.style.display = label.includes(txt) ? 'flex' : 'none';
+                    });
+                }
+
+                function cqApplyRange() {
+                    const startVal = parseInt(document.getElementById('cq-range-start').value);
+                    const endVal = parseInt(document.getElementById('cq-range-end').value);
+                    if (isNaN(startVal) || isNaN(endVal) || startVal > endVal) {
+                        alert("Khoảng không hợp lệ! Vui lòng nhập số hợp lệ.");
+                        return;
+                    }
+                    
+                    const items = document.querySelectorAll('.cq-lesson-item');
+                    items.forEach(el => {
+                        const input = el.querySelector('input');
+                        const label = el.querySelector('span').innerText;
+                        
+                        const matches = label.match(/\d+/g);
+                        if (matches && matches.length > 0) {
+                            const lastNum = parseInt(matches[matches.length - 1]);
+                            if (lastNum >= startVal && lastNum <= endVal) {
+                                input.checked = true;
+                            } else {
+                                input.checked = false;
+                            }
+                        } else {
+                            input.checked = false;
+                        }
+                    });
+                    cqUpdateCount();
+                }
+
                 function cqUpdateCount() {
                     const lessons = window._cqLessons || [];
                     const selected = new Set(cqGetSelectedLessons());
@@ -6141,8 +6313,10 @@
                     // Hide group-1 (data management buttons)
                     const g1 = document.getElementById('group-1');
                     if (g1) g1.style.display = 'none';
-                    const g2 = document.getElementById('group-2');
-                    if (g2) g2.style.display = 'block';
+                    const g2a = document.getElementById('group-2a');
+                    if (g2a) g2a.style.display = 'block';
+                    const g2b = document.getElementById('group-2b');
+                    if (g2b) g2b.style.display = 'block';
                     const g3Title = document.getElementById('group-3-title');
                     if (g3Title) g3Title.innerHTML = '📝 LÀM BÀI';
 
@@ -6272,15 +6446,32 @@
 
             <!-- CHỌN BÀI -->
             <div class="cq-section">
-                <div class="cq-section-label" style="justify-content:space-between;">
+                <div class="cq-section-label" style="justify-content:space-between; margin-bottom:8px;">
                     <span>📅 Chọn bài học</span>
-                    <button onclick="cqSelectAllLessons(true)"
-                        style="background:rgba(59,130,246,0.15); border:1px solid #3b82f6; color:#60a5fa; border-radius:8px; padding:2px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Tất
-                        cả</button>
-                    <button onclick="cqSelectAllLessons(false)"
-                        style="background:rgba(100,116,139,0.15); border:1px solid #475569; color:#94a3b8; border-radius:8px; padding:2px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Bỏ
-                        chọn</button>
+                    <div style="display:flex; gap:6px;">
+                        <button onclick="cqSelectAllLessons(true)"
+                            style="background:rgba(59,130,246,0.15); border:1px solid #3b82f6; color:#60a5fa; border-radius:8px; padding:2px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Tất cả</button>
+                        <button onclick="cqSelectAllLessons(false)"
+                            style="background:rgba(100,116,139,0.15); border:1px solid #475569; color:#94a3b8; border-radius:8px; padding:2px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Bỏ chọn</button>
+                    </div>
                 </div>
+                
+                <!-- Thanh công cụ lọc & chọn khoảng -->
+                <div style="background:rgba(0,0,0,0.15); border:1px solid rgba(255,255,255,0.05); border-radius:8px; padding:10px; margin-bottom:10px; display:flex; flex-direction:column; gap:8px;">
+                    <!-- Lọc tên -->
+                    <div style="display:flex; align-items:center;">
+                        <input type="text" id="cq-search-lesson" placeholder="🔍 Gõ số bài hoặc ngày (vd: 5)..." style="flex:1; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:6px; padding:6px 10px; font-size:13px; outline:none;" oninput="cqFilterLessonUI()">
+                    </div>
+                    <!-- Chọn khoảng bài -->
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:12px; color:#94a3b8; font-weight:600;">Chọn nhanh khoảng (Ngày/Bài):</span>
+                        <input type="number" id="cq-range-start" placeholder="1" style="width:50px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px; padding:4px 6px; font-size:13px; outline:none;" min="1">
+                        <span style="font-size:12px; color:#64748b;">đến</span>
+                        <input type="number" id="cq-range-end" placeholder="10" style="width:50px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px; padding:4px 6px; font-size:13px; outline:none;" min="1">
+                        <button onclick="cqApplyRange()" style="background:#8b5cf6; color:#fff; border:none; border-radius:4px; padding:5px 12px; font-size:12px; font-weight:bold; cursor:pointer; margin-left:auto; transition:0.2s;" onmouseover="this.style.background='#a78bfa'" onmouseout="this.style.background='#8b5cf6'">Áp dụng</button>
+                    </div>
+                </div>
+
                 <div class="cq-lesson-list" id="cq-lesson-list">
                     <div style="padding:12px; color:#475569; text-align:center; font-size:13px; font-style:italic;">Chọn
                         bộ lọc ở trên để xem danh sách bài...</div>
