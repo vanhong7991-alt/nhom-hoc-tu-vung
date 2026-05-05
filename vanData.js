@@ -8,7 +8,9 @@ const vanData = {
     n1voca: {
         struct: [
             {
-                name: "Bài 1 (Câu 1-24)", list: [
+                name: "Bài 1 (Câu 1-24)",
+                free: true,
+                list: [
                     { c1: "身内", c2: "みうち", c3: "người thân trong gia đình", c4: "", c5: "", c6: "", count: 0 },
                     { c1: "配偶者", c2: "はいぐうしゃ", c3: "vợ/chồng", c4: "", c5: "", c6: "", count: 0 },
                     { c1: "温もり", c2: "ぬくもり", c3: "sự ấm áp", c4: "", c5: "", c6: "", count: 0 },
@@ -38,7 +40,8 @@ const vanData = {
         ],
         quiz: [
             {
-                name: "Bài 1 (Câu 1-25)", list: [
+                name: "Bài 1 (Câu 1-25)",
+                free: true, list: [
                     { gramType: "quiz", q: "コツコツという足音が廊下に( ________)。", ans: "ひびいた", w1: "ないた", w2: "わいた", w3: "なびいた", explain: "「響く（ひびく）」＝ âm thanh vang, dội lại → Dịch: Tiếng bước chân “cộc cộc” vang lên trong hành lang", count: 0 },
                     { gramType: "quiz", q: "過ぎ去ったことを( ________)仕方がない。前を向いて生きていこう。", ans: "くやんで", w1: "なやんで", w2: "うらやんで", w3: "はやんで", explain: "「悔やむ（くやむ）」＝ hối hận, tiếc nuối → Dịch: Dù có hối hận về chuyện đã qua cũng vô ích. Hãy hướng về phía trước mà sống", count: 0 },
                     { gramType: "quiz", q: "ここは12階で周りのビルより高いので、視界を( ________)ものは何もない。", ans: "さえぎる", w1: "かすめる", w2: "とどめる", w3: "つきる", explain: "「遮る（さえぎる）」＝ che chắn, cản trở → Dịch: Vì ở tầng 12 và cao hơn các tòa nhà xung quanh nên không có gì che khuất tầm nhìn", count: 0 },
@@ -71,7 +74,8 @@ const vanData = {
     n2gram: {
         struct: [
             {
-                name: "Bài 1 (Câu 1-10)", list: [
+                name: "Bài 1 (Câu 1-10)",
+                free: true, list: [
                     { c1: "～ぐらい（くらい）", c2: "", c3: "đến mức, đến độ", count: 0 },
                     { c1: "～わけだ", c2: "", c3: "thảo nào, bảo sao (kết quả hợp lý)", count: 0 },
                     { c1: "～はずだ", c2: "", c3: "chắc chắn, lẽ ra phải", count: 0 },
@@ -87,7 +91,8 @@ const vanData = {
         ],
         quiz: [
             {
-                name: "Bài 1 (Câu 1-10)", list: [
+                name: "Bài 1 (Câu 1-10)",
+                free: true, list: [
                     { gramType: "quiz", q: "1．専門家に( ________)、そんな環境は快適どころか一歩間違えると「危なくてしょうがない家」になってしまうかもしれないという。", ans: "言われたら", w1: "言われば", w2: "言わせると", w3: "言わせて", explain: "「〜に言われたら」＝ nếu bị/được nói bởi → giả định theo ý chuyên gia → Dịch: Nếu theo lời chuyên gia thì môi trường như vậy không những không thoải mái mà chỉ cần sai một bước có thể trở thành “ngôi nhà nguy hiểm không chịu nổi”", count: 0 },
                     { gramType: "quiz", q: "2．実際にたばこをやめた人間( ________)、事前準備さえしっかりとできていれば、禁煙は中距離どころか短距離走にもなり得ると思います。", ans: "から言わせてもらえば", w1: "に言わせていれば", w2: "から言わせてやれば", w3: "に言わせてあげれば", explain: "「〜から言わせてもらえば」＝ cho phép tôi nói từ góc nhìn → dùng để nêu ý kiến cá nhân → Dịch: Nếu nói từ góc nhìn của người đã bỏ thuốc, chỉ cần chuẩn bị tốt thì việc cai thuốc không phải chạy đường dài mà có thể là chạy ngắn", count: 0 },
                     { gramType: "quiz", q: "3．正直動画を見終わっても何の会社なのかは分からないのですが、最後まで( ________)力のある動画をトップページに採用しています。", ans: "見させてしまう", w1: "見させてみる", w2: "見られてしまう", w3: "見られてみる", explain: "「〜させてしまう」＝ khiến người khác vô thức làm → video có sức hút → Dịch: Thành thật mà nói dù xem xong vẫn không biết công ty gì, nhưng họ dùng video có sức hút khiến người ta xem đến cuối", count: 0 },
@@ -101,7 +106,8 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 2 (Câu 1-10)", list: [
+                name: "Bài 2 (Câu 1-10)",
+                free: true, list: [
                     { gramType: "quiz", q: "一回失敗したぐらいで、(★) ____ ____ ____いいだろう。\n① 言わなくても　② なにも　③ 悪く　④ そこまで", ans: "② → ④ → ③ → ①", w1: "① → ③ → ④ → ②", w2: "④ → ② → ① → ③", w3: "③ → ① → ② → ④", explain: "Đáp án: ② → ④ → ③ → ①\nCâu hoàn chỉnh: 一回失敗したぐらいで、なにもそこまで悪く言わなくてもいいだろう。\nDịch: Chỉ vì thất bại một lần thôi, đâu cần phải nói nặng đến mức đó", count: 0 },
                     { gramType: "quiz", q: "会社は倒産するのだろうか。支払われる__ (★) ____ ____いない。\n① 給料を　② 受け取って　③ べき　④ 今月はまだ", ans: "③ → ① → ④ → ②", w1: "① → ③ → ② → ④", w2: "④ → ① → ③ → ②", w3: "② → ④ → ① → ③", explain: "Đáp án: ③ → ① → ④ → ②\nCâu hoàn chỉnh: 会社は倒産するのだろうか。支払われるべき給料を今月はまだ受け取っていない。\nDịch: Không biết công ty có phá sản không, lương đáng lẽ phải được trả thì tháng này vẫn chưa nhận được", count: 0 },
                     { gramType: "quiz", q: "何年ぶりかで家族全員揃って、__ __ (★) __なあ。\n① かのようだ　② 一緒に　③ やってきた　④ 盆と正月が", ans: "④ → ② → ③ → ①", w1: "① → ③ → ② → ④", w2: "② → ④ → ① → ③", w3: "③ → ① → ④ → ②", explain: "Đáp án: ④ → ② → ③ → ①\nCâu hoàn chỉnh: 何年ぶりかで家族全員揃って、盆と正月が一緒にやってきたかのようだなあ。\nDịch: Lâu lắm rồi cả gia đình mới tụ họp đông đủ, cứ như Tết và lễ hội cùng đến một lúc", count: 0 },
@@ -119,7 +125,8 @@ const vanData = {
     bjtvoca: {
         struct: [
             {
-                name: "Bài 1", list: [
+                name: "Bài 1",
+                free: true, list: [
                     { c1: "アイコン", c2: "", c3: "biểu tượng", c4: "", c5: "", c6: "", count: 0 },
                     { c1: "デザイン", c2: "", c3: "thiết kế", c4: "", c5: "", c6: "", count: 0 },
                     { c1: "ウェブ", c2: "", c3: "web", c4: "", c5: "", c6: "", count: 0 },
@@ -270,7 +277,8 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 4", list: [
+                name: "Bài 4",
+                free: true, list: [
                     { c1: "一層", c2: "いっそう", c3: "hơn nữa, thêm nữa", c4: "", c5: "", c6: "", count: 0 },
                     { c1: "一切", c2: "いっさい", c3: "toàn bộ, tất cả", c4: "", c5: "", c6: "", count: 0 },
                     { c1: "一斉", c2: "いっせい", c3: "đồng loạt", c4: "", c5: "", c6: "", count: 0 },
@@ -372,7 +380,8 @@ const vanData = {
         ],
         quiz: [
             {
-                name: "Bài 1 (Câu 1-25)", list: [
+                name: "Bài 1 (Câu 1-25)",
+                free: true, list: [
                     { gramType: "quiz", q: "コンピュータマウスを使用してスクリーンで( ________)を動かし、メニューからコマンドを選択する。", ans: "アイコン", w1: "デザイン", w2: "ウェブ", w3: "サイト", explain: "「アイコン」＝ biểu tượng → Dịch: Di chuyển biểu tượng trên màn hình bằng chuột và chọn lệnh từ menu", count: 0 },
                     { gramType: "quiz", q: "A社の西村さんにはいつもお世話になっているので、一度( ________)に行ったほうがいいだろう。", ans: "挨拶", w1: "失礼", w2: "相談", w3: "お詫び", explain: "「挨拶」＝ chào hỏi → Dịch: Vì luôn được anh Nishimura giúp đỡ nên nên đi chào hỏi một lần", count: 0 },
                     { gramType: "quiz", q: "われわれは( ________)の100議席に対して250議席を獲得した。", ans: "相手", w1: "相談", w2: "相毛", w3: "相対", explain: "「相手」＝ đối phương → Dịch: Chúng tôi giành được 250 ghế so với 100 ghế của đối phương", count: 0 },
@@ -401,7 +410,8 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 2 (Câu 26-50)", list: [
+                name: "Bài 2 (Câu 26-50)",
+                free: true, list: [
                     { gramType: "quiz", q: "発売後しばらくは好調だったが、この製品もそろそろ（___________）らしい。", ans: "頭打ち", w1: "背打ち", w2: "耳打ち", w3: "骨打ち", explain: "頭打ち（あたまうち）: đạt đến giới hạn, không tăng thêm nữa\n背打ち（せうち）: không dùng thực tế\n耳打ち（みみうち）: thì thầm, nói nhỏ vào tai\n骨打ち（ほねうち）: không dùng tự nhiên\nDịch: Sau khi ra mắt một thời gian thì bán tốt, nhưng có vẻ sắp chững lại.", count: 0 },
                     { gramType: "quiz", q: "佐藤さんの後任がなかなか決まらなくて、本当に（___________）。", ans: "頭が痛い", w1: "足が痛い", w2: "背が痛い", w3: "骨が痛い", explain: "足が痛い（あしがいたい）: đau chân\n背が痛い（せがいたい）: đau lưng\n頭が痛い（あたまがいたい）: đau đầu → nghĩa bóng: đau đầu vì vấn đề\n骨が痛い（ほねがいたい）: không dùng tự nhiên\nDịch: Không tìm được người thay nên rất đau đầu.", count: 0 },
                     { gramType: "quiz", q: "新しく来た課長、かなり（___________）らしいよ。", ans: "頭が切れる", w1: "足が切れる", w2: "足が上げる", w3: "頭が上げる", explain: "足が切れる（あしがきれる）: không dùng\n頭が切れる（あたまがきれる）: đầu óc nhanh nhạy, thông minh\n足が上げる（あしがあげる）: sai cấu trúc\n頭が上げる（あたまがあげる）: sai cách dùng\nDịch: Trưởng phòng mới rất giỏi.", count: 0 },
@@ -430,7 +440,9 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 3 (51-75)", list: [
+                name: "Bài 3 (51-75)",
+                free: true,
+                list: [
                     { gramType: "quiz", q: "商品名について、いくつか（___________）を出してみてください。", ans: "案", w1: "件", w2: "状", w3: "章", explain: "件（けん）: vụ việc\n状（じょう）: trạng thái\n章（しょう）: chương\n案（あん）: phương án, ý tưởng\nDịch: Về tên sản phẩm, hãy đưa ra một vài phương án.", count: 0 },
                     { gramType: "quiz", q: "オンライン（___________）は、回答の集計を自動で行えるため、データ収集や分析が容易だ。", ans: "アンケート", w1: "アンダーライン", w2: "アレンジ", w3: "アドバイス", explain: "アンケート: khảo sát\nアンダーライン: gạch chân\nアレンジ: điều chỉnh\nアドバイス: lời khuyên\nDịch: Khảo sát online giúp tổng hợp dữ liệu dễ dàng.", count: 0 },
                     { gramType: "quiz", q: "この問題は、明日の会議の最重要（___________）として扱われる。", ans: "案件", w1: "案内", w2: "安全", w3: "安健", explain: "案内（あんない）: hướng dẫn\n安全（あんぜん）: an toàn\n案件（あんけん）: vấn đề, hạng mục\nDịch: Đây là nội dung quan trọng nhất của cuộc họp.", count: 0 },
@@ -459,7 +471,9 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 4 (76-100)", list: [
+                name: "Bài 4 (76-100)",
+                free: true,
+                list: [
 
                     { gramType: "quiz", q: "新製品AP600は、間もなく全国（___________）発売になります。", ans: "一斉", w1: "一層", w2: "一切", w3: "一項", explain: "一層（いっそう）: hơn nữa\n一切（いっさい）: hoàn toàn\n一斉（いっせい）: đồng loạt\n一項（いっこう）: một mục\nDịch: Sản phẩm mới AP600 sắp được bán đồng loạt trên toàn quốc.", count: 0 },
                     { gramType: "quiz", q: "より良いサービスをめざして、（___________）の努力をしてまいります。", ans: "一層", w1: "一再", w2: "一茶", w3: "一階", explain: "一層（いっそう）: hơn nữa\nDịch: Chúng tôi sẽ nỗ lực hơn nữa để cải thiện dịch vụ.", count: 0 },
