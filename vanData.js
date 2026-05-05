@@ -321,6 +321,53 @@ const vanData = {
                     { c1: "受け取りました", c2: "うけとりました", c3: "đã nhận", c4: "", c5: "", c6: "", count: 0 },
                     { c1: "受け渡し", c2: "うけわたし", c3: "bàn giao", c4: "", c5: "", c6: "", count: 0 }
                 ]
+            },
+            {
+                name: "Bài 6",
+                list: [
+                    { c1: "受け渡す", c2: "うけわたす", c3: "giao nhận", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "打ち合わせる", c2: "うちあわせる", c3: "trao đổi trước, bàn bạc", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "引き上げる", c2: "ひきあげる", c3: "rút lên, thu hồi", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "拾い上げる", c2: "ひろいあげる", c3: "nhặt lên, chọn ra", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "打ち切り", c2: "うちきり", c3: "ngừng, hủy bỏ", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "取り上げる", c2: "とりあげる", c3: "đưa tin, đề cập", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "持ち上げる", c2: "もちあげる", c3: "nâng lên, ca ngợi", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "引き出し", c2: "ひきだし", c3: "ngăn kéo", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "引き出す", c2: "ひきだす", c3: "rút ra", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "受け取る", c2: "うけとる", c3: "nhận", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "前金", c2: "まえきん", c3: "tiền trả trước", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "全金", c2: "ぜんきん", c3: "toàn bộ tiền", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "内金", c2: "うちきん", c3: "tiền trả trước một phần", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "同金", c2: "どうきん", c3: "số tiền đó", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "有無", c2: "うむ", c3: "có hay không", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "埋め合わせ", c2: "うめあわせ", c3: "bù đắp", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "打ち合わせ", c2: "うちあわせ", c3: "cuộc họp, trao đổi", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "引き合わせる", c2: "ひきあわせる", c3: "giới thiệu cho gặp", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "裏紙", c2: "うらがみ", c3: "giấy nháp (mặt sau)", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "内紙", c2: "ないし", c3: "giấy bên trong", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "外紙", c2: "がいし", c3: "giấy bên ngoài", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "上紙", c2: "うわがみ", c3: "giấy phía trên", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "裏付け", c2: "うらづけ", c3: "bằng chứng, cơ sở", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "表付き", c2: "ひょうつき", c3: "có bề mặt/nhãn bên ngoài", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "売り上げ", c2: "うりあげ", c3: "doanh thu", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "売り切れ", c2: "うりきれ", c3: "hết hàng", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "売り込み", c2: "うりこみ", c3: "chào hàng", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "売り出す", c2: "うりだす", c3: "bắt đầu bán", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "売り筋", c2: "うりすじ", c3: "mặt hàng bán chạy", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "売り行き", c2: "うりゆき", c3: "tình hình tiêu thụ", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "売り手", c2: "うりて", c3: "người bán", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "売場", c2: "うりば", c3: "khu bán hàng", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "売主", c2: "うりぬし", c3: "bên bán", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "販売", c2: "はんばい", c3: "việc bán hàng", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "反抗", c2: "はんこう", c3: "phản kháng", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "貿易", c2: "ぼうえき", c3: "thương mại", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "状況", c2: "じょうきょう", c3: "tình hình", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "購入", c2: "こうにゅう", c3: "mua hàng", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "上書き", c2: "うわがき", c3: "ghi đè", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "上回る", c2: "うわまわる", c3: "vượt qua", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "下書き", c2: "したがき", c3: "bản nháp", c4: "", c5: "", c6: "", count: 0 },
+                    { c1: "下回る", c2: "したまわる", c3: "thấp hơn", c4: "", c5: "", c6: "", count: 0 }
+                ]
             }
         ],
         quiz: [
@@ -439,6 +486,36 @@ const vanData = {
                     { gramType: "quiz", q: "本日、見本を（___________）。", ans: "受け取りました", w1: "受け渡しました", w2: "受け負りました", w3: "受け回りました", explain: "受け取る: nhận\n受け渡す: giao nhận\nDịch: Hôm nay tôi đã nhận mẫu.", count: 0 },
                     { gramType: "quiz", q: "明日用意できますが、（___________）はどうしますか。", ans: "受け渡し", w1: "打ち上げ", w2: "取り込み", w3: "打ち切り", explain: "受け渡し（うけわたし）: bàn giao\nDịch: Có thể chuẩn bị ngày mai, việc bàn giao thì sao?", count: 0 },
                     { gramType: "quiz", q: "その件は急ぎなので（___________）をしましょう。", ans: "打ち合わせ", w1: "打ち込み", w2: "打ち切り", w3: "打ち出り", explain: "打ち合わせ（うちあわせ）: họp bàn\nDịch: Vì việc gấp nên hãy họp bàn ngay.", count: 0 }
+                ]
+            },
+            {
+                name: "Bài 5 (100-125)",
+                list: [
+                    { gramType: "quiz", q: "B社に行く前に、細かい点を（___________）おく必要があると思います。", ans: "打ち合わせて", w1: "受け渡して", w2: "引き上げて", w3: "拾い上げて", explain: "受け渡して（うけわたして）: giao nhận\n打ち合わせて（うちあわせて）: trao đổi trước, bàn bạc trước\n引き上げて（ひきあげて）: rút lên, thu hồi\n拾い上げて（ひろいあげて）: nhặt lên, chọn ra\nDịch: Trước khi đến công ty B, tôi nghĩ cần trao đổi trước các chi tiết nhỏ.", count: 0 },
+                    { gramType: "quiz", q: "視聴率の低迷が続いたBテレビのクイズ番組は、3ヵ月で（___________）になった。", ans: "打ち切り", w1: "取り上げ", w2: "持ち上げ", w3: "引き出し", explain: "打ち切り（うちきり）: bị dừng, bị hủy\n取り上げ（とりあげ）: đưa tin, đề cập\n持ち上げ（もちあげ）: nâng lên, ca ngợi\n引き出し（ひきだし）: ngăn kéo\nDịch: Chương trình quiz của đài B bị ngừng sau 3 tháng.", count: 0 },
+                    { gramType: "quiz", q: "B社の製品に重大な欠陥が見つかったので、A社はB社の受注契約を（___________）。", ans: "打ち切った", w1: "引き出した", w2: "打ち合わせた", w3: "受け取った", explain: "引き出した（ひきだした）: rút ra\n打ち切った（うちきった）: hủy bỏ\n打ち合わせた（うちあわせた）: bàn bạc\n受け取った（うけとった）: nhận\nDịch: Do phát hiện lỗi nghiêm trọng, công ty A đã hủy hợp đồng với công ty B.", count: 0 },
+                    { gramType: "quiz", q: "代金23万円に対して、（___________）として5万円を払った。", ans: "前金", w1: "全金", w2: "内金", w3: "同金", explain: "全金（ぜんきん）: toàn bộ tiền\n前金（まえきん）: tiền trả trước\n内金（うちきん）: tiền trả trước một phần\n同金（どうきん）: số tiền đó\nDịch: Trong tổng 230,000 yên, đã trả trước 50,000 yên.", count: 0 },
+                    { gramType: "quiz", q: "経験の（___________）よりも、やる気を重視しています。", ans: "有無", w1: "有美", w2: "良無", w3: "良美", explain: "有無（うむ）: có hay không\nDịch: Chúng tôi coi trọng động lực hơn là có hay không có kinh nghiệm.", count: 0 },
+                    { gramType: "quiz", q: "昨日は急にキャンセルしてごめん。この（___________）は必ずするから。", ans: "埋め合わせ", w1: "打ち合わせ", w2: "受け合わせ", w3: "引き合わせ", explain: "埋め合わせ（うめあわせ）: bù đắp\n打ち合わせ（うちあわせ）: cuộc họp, trao đổi\n引き合わせ（ひきあわせ）: sự giới thiệu gặp\nDịch: Hôm qua xin lỗi vì hủy đột ngột, tôi sẽ bù lại.", count: 0 },
+                    { gramType: "quiz", q: "値下げに伴う減収は、販売量の拡大で（___________）形となった。", ans: "埋め合わせる", w1: "受け合わせる", w2: "引き合わせる", w3: "打ち合わせる", explain: "埋め合わせる: bù đắp\n引き合わせる: cho gặp, đối chiếu\n打ち合わせる: trao đổi\nDịch: Sự giảm doanh thu do giảm giá đã được bù lại bằng việc tăng số lượng bán.", count: 0 },
+                    { gramType: "quiz", q: "ホッチキスの付いた紙を（___________）にしないでください。", ans: "裏紙", w1: "内紙", w2: "外紙", w3: "上紙", explain: "裏紙（うらがみ）: giấy nháp (dùng mặt sau)\nDịch: Đừng dùng giấy có ghim làm giấy nháp.", count: 0 },
+                    { gramType: "quiz", q: "プレゼンは、データの（___________）がないと説得力がない。", ans: "裏付け", w1: "裏付き", w2: "表付け", w3: "表付き", explain: "裏付け（うらづけ）: bằng chứng, cơ sở\nDịch: Nếu không có dữ liệu chứng minh thì bài thuyết trình không thuyết phục.", count: 0 },
+                    { gramType: "quiz", q: "当社は、豊富な金融知識に（___________）、きめ細かいサービスを提供しております。", ans: "裏付けられた", w1: "裏付げられた", w2: "裏受けられた", w3: "裏受げられた", explain: "裏付けられた: được chứng minh, đảm bảo bởi\nDịch: Công ty chúng tôi cung cấp dịch vụ dựa trên nền tảng kiến thức tài chính vững chắc.", count: 0 },
+                    { gramType: "quiz", q: "新商品発売により、今年度の（___________）は20％アップとなる見通しだ。", ans: "売り上げ", w1: "売り切れ", w2: "売り込み", w3: "売り下げ", explain: "売り上げ（うりあげ）: doanh thu\n売り切れ（うりきれ）: hết hàng\n売り込み（うりこみ）: chào hàng\n売り下げ（うりさげ）: giảm giá\nDịch: Doanh thu năm nay dự kiến tăng 20%.", count: 0 },
+                    { gramType: "quiz", q: "話題のDVD【日本の山】は、100万枚を（___________）大ヒットとなった。", ans: "売り上げる", w1: "売り下げる", w2: "売り込む", w3: "売り出す", explain: "売り上げる: bán được\n売り下げる: giảm giá\n売り込む: quảng bá\n売り出す: bắt đầu bán\nDịch: DVD đã bán hơn 1 triệu bản và trở thành hit lớn.", count: 0 },
+                    { gramType: "quiz", q: "ゲームソフトAは、各店で発売と同時に（___________）になった。", ans: "売り切れ", w1: "売り込み", w2: "売り入れ", w3: "売り出し", explain: "売り切れ: cháy hàng\n売り込み: chào hàng\n売り出し: mở bán\nDịch: Vừa phát hành đã bán hết.", count: 0 },
+                    { gramType: "quiz", q: "11時に買いに行ったが、チケットは早くも（___________）いた。", ans: "売り切れて", w1: "売り込んで", w2: "売り曲げて", w3: "売り出して", explain: "売り切れて: đã bán hết\n売り込んで: đang chào hàng\n売り出して: bắt đầu bán\nDịch: Vé đã bán hết từ sớm.", count: 0 },
+                    { gramType: "quiz", q: "A社は（___________）が激しくて、営業担当が毎日のように訪ねて来る。", ans: "売り込み", w1: "売り上げ", w2: "売り曲げ", w3: "売り入れ", explain: "売り込み: chào hàng\n売り上げ: doanh thu\nDịch: Việc chào hàng cạnh tranh khốc liệt nên nhân viên sale đến mỗi ngày.", count: 0 },
+                    { gramType: "quiz", q: "新製品を（___________）には、他社製品との違いを強調することが必要だ。", ans: "売り込む", w1: "売り出す", w2: "売り掛ける", w3: "売り入る", explain: "売り込む: quảng bá để bán\n売り出す: bắt đầu bán\nDịch: Để bán được sản phẩm mới, cần nhấn mạnh sự khác biệt.", count: 0 },
+                    { gramType: "quiz", q: "このマンションは、（___________）後1週間で完売したそうだ。", ans: "売り出し", w1: "売り切れ", w2: "売り込み", w3: "売り曲げ", explain: "売り出し: mở bán\n売り切れ: hết hàng\n売り込み: chào hàng\nDịch: Sau khi mở bán 1 tuần thì đã bán hết.", count: 0 },
+                    { gramType: "quiz", q: "11月になると、各デパートでは正月用品を（___________）。", ans: "売り出す", w1: "引き出す", w2: "欠き込む", w3: "差し入る", explain: "売り出す: bắt đầu bán\n引き出す: rút ra\nDịch: Đến tháng 11, các trung tâm bắt đầu bán đồ Tết.", count: 0 },
+                    { gramType: "quiz", q: "Aビルの構造上の欠陥については、当然、（___________）側の責任も問われる。", ans: "売主", w1: "販売", w2: "反抗", w3: "貿易", explain: "売主（うりぬし）: bên bán\n販売（はんばい）: việc bán hàng\n反抗（はんこう）: phản kháng\n貿易（ぼうえき）: thương mại\nDịch: Bên bán cũng bị truy cứu trách nhiệm.", count: 0 },
+                    { gramType: "quiz", q: "ABCデパートの食品（___________）は、いつも大勢の人でにぎわっている。", ans: "売場", w1: "状況", w2: "建工", w3: "購入", explain: "売場（うりば）: khu bán hàng\n状況（じょうきょう）: tình hình\n購入（こうにゅう）: mua hàng\nDịch: Khu thực phẩm luôn đông khách.", count: 0 },
+                    { gramType: "quiz", q: "ネットで調べれば、最近何が（___________）かわかるよ。", ans: "売り筋", w1: "売り箱", w2: "売り背", w3: "売り手", explain: "売り筋（うりすじ）: mặt hàng bán chạy\n売り手（うりて）: người bán\nDịch: Tra mạng sẽ biết cái gì đang bán chạy.", count: 0 },
+                    { gramType: "quiz", q: "先月出た新商品の（___________）は、どうですか。", ans: "売り行き", w1: "売り消し", w2: "売り引き", w3: "売り入れ", explain: "売り行き（うりゆき）: tình hình tiêu thụ\nDịch: Tình hình bán sản phẩm mới thế nào?", count: 0 },
+                    { gramType: "quiz", q: "最近、低カロリーのビールがよく（___________）います。", ans: "売れて", w1: "掛けて", w2: "囲んで", w3: "切れて", explain: "売れて: bán chạy\nDịch: Gần đây bia ít calo bán rất chạy.", count: 0 },
+                    { gramType: "quiz", q: "私はそれを同じ場所に（___________）保存しました。", ans: "上書き", w1: "上回る", w2: "下書き", w3: "下回る", explain: "上書き（うわがき）: ghi đè\n上回る（うわまわる）: vượt qua\n下書き（したがき）: bản nháp\n下回る（したまわる）: thấp hơn\nDịch: Tôi đã ghi đè và lưu vào cùng chỗ đó.", count: 0 },
+                    { gramType: "quiz", q: "連休中の海外旅行者数は、去年を（___________）見込みです。", ans: "上回る", w1: "上書き", w2: "下書き", w3: "下回る", explain: "上回る（うわまわる）: vượt qua\n上書き（うわがき）: ghi đè\n下書き（したがき）: bản nháp\n下回る（したまわる）: thấp hơn\nDịch: Dự kiến số người đi du lịch nước ngoài sẽ vượt năm ngoái.", count: 0 }
                 ]
             }
         ]
