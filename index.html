@@ -1849,15 +1849,26 @@
             <button id="sidebar-toggle-btn" onclick="toggleMenu()" title="Ẩn/Hiện menu">☰</button>
             <div id="header-user-name" style="font-weight: 800; color: var(--warning);">Cố lên! 🌸</div>
             <div id="header-timer" style="font-weight: 800; color: var(--warning); font-size: 22px;">00:00</div>
-            <div style="display:flex; align-items:center; gap: 8px;">
-                <select id="lang-switcher" onchange="switchLanguage(this.value)" style="padding: 4px; border-radius: 6px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.2); font-weight: bold; cursor: pointer; outline: none; font-size: 13px;">
-                    <option value="jp" style="color: black;">🇯🇵 Nhật</option>
-                    <option value="en" style="color: black;">🇺🇸 TOEIC</option>
-                    <option value="cn" style="color: black;">🇨🇳 HSK</option>
+            <div style="display:flex; align-items:center; gap: 5px; flex-shrink:0;">
+                <!-- Bộ chọn ngôn ngữ: 3 nút cờ nhỏ -->
+                <div style="display:flex; gap:3px; background:rgba(0,0,0,0.3); border-radius:8px; padding:3px; border:1px solid rgba(255,255,255,0.15);">
+                    <button id="lang-btn-jp" onclick="switchLanguage('jp')" title="Tiếng Nhật"
+                        style="background:rgba(255,255,255,0.15); border:none; border-radius:6px; width:28px; height:28px; font-size:16px; cursor:pointer; transition:0.2s; line-height:1;">🇯🇵</button>
+                    <button id="lang-btn-en" onclick="switchLanguage('en')" title="TOEIC"
+                        style="background:transparent; border:none; border-radius:6px; width:28px; height:28px; font-size:16px; cursor:pointer; transition:0.2s; line-height:1;">🇺🇸</button>
+                    <button id="lang-btn-cn" onclick="switchLanguage('cn')" title="HSK"
+                        style="background:transparent; border:none; border-radius:6px; width:28px; height:28px; font-size:16px; cursor:pointer; transition:0.2s; line-height:1;">🇨🇳</button>
+                </div>
+                <!-- Ẩn select gốc nhưng giữ để JS tương thích -->
+                <select id="lang-switcher" onchange="switchLanguage(this.value)" style="display:none;">
+                    <option value="jp">jp</option>
+                    <option value="en">en</option>
+                    <option value="cn">cn</option>
                 </select>
                 <button onclick="toggleStatsScreen()" id="stats-toggle-btn" title="Thống kê học tập"
-                    style="background:linear-gradient(135deg,#8b5cf6,#ec4899);border:none;color:white;font-size:18px;width:38px;height:38px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(139,92,246,0.5);transition:0.2s;flex-shrink:0;"
-                    onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">📊</button>
+                    style="background:linear-gradient(135deg,#8b5cf6,#ec4899);border:none;color:white;font-size:18px;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(139,92,246,0.5);transition:0.2s;flex-shrink:0;"
+                    onmouseover="this.style.transform='scale(1.1)'"
+                    onmouseout="this.style.transform='scale(1)'">📊</button>
             </div>
         </div>
 
@@ -1900,49 +1911,50 @@
 
             <!-- ===== GÓC CỦA VÂN ===== -->
             <div id="van-section-wrapper">
-            <div class="section-header-van" onclick="toggleSub('van-section')"
-                style="padding: 0; border-bottom: none; display: block; position: relative; overflow: hidden; background: none;">
-                <img src="goccuavan_new.png" alt="Góc của Vân"
-                    style="width:100%; height:110px; object-fit:cover; object-position:center 50%; display:block;"
-                    onerror="this.src='goccuavan.jfif'; this.style.objectFit='cover';">
-                <span id="van-section-arrow"
-                    style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size:16px; color: white; text-shadow: 0 0 5px rgba(0,0,0,0.8);">▼</span>
-            </div>
-
-            <div id="van-section">
-
-                <!-- ▸ NHÓM JLPT -->
-                <div class="sidebar-group-header jlpt">🎌 JLPT</div>
-
-                <!-- N1 Từ Vựng -->
-                <div class="van-menu-lvl1" onclick="toggleSub('van-n1voca-sub')">&#x1F4DA; N1 Từ Vựng ▼</div>
-                <div id="van-n1voca-sub" class="sub-menu">
-                    <div class="menu-lvl2" onclick="toggleSub('van-n1voca-struct')">📚 Từ đơn</div>
-                    <div id="van-n1voca-struct" class="sub-menu"></div>
-                    <div class="menu-lvl2" onclick="toggleSub('van-n1voca-quiz')">📝 Trắc nghiệm</div>
-                    <div id="van-n1voca-quiz" class="sub-menu"></div>
-                </div>
-                <!-- N2 Ngữ Pháp -->
-                <div class="van-menu-lvl1" onclick="toggleSub('van-n2gram-sub')">&#x270D;&#xFE0F; N2 Ngữ Pháp ▼</div>
-                <div id="van-n2gram-sub" class="sub-menu">
-                    <div class="menu-lvl2" onclick="toggleSub('van-n2gram-struct')">✍️ Từ đơn</div>
-                    <div id="van-n2gram-struct" class="sub-menu"></div>
-                    <div class="menu-lvl2" onclick="toggleSub('van-n2gram-quiz')">🎯 Trắc nghiệm</div>
-                    <div id="van-n2gram-quiz" class="sub-menu"></div>
+                <div class="section-header-van" onclick="toggleSub('van-section')"
+                    style="padding: 0; border-bottom: none; display: block; position: relative; overflow: hidden; background: none;">
+                    <img src="goccuavan_new.png" alt="Góc của Vân"
+                        style="width:100%; height:110px; object-fit:cover; object-position:center 50%; display:block;"
+                        onerror="this.src='goccuavan.jfif'; this.style.objectFit='cover';">
+                    <span id="van-section-arrow"
+                        style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size:16px; color: white; text-shadow: 0 0 5px rgba(0,0,0,0.8);">▼</span>
                 </div>
 
-                <!-- ▸ NHÓM BJT -->
-                <div class="sidebar-group-header bjt">💼 BJT</div>
+                <div id="van-section">
 
-                <!-- BJT Từ Vựng -->
-                <div class="van-menu-lvl1" onclick="toggleSub('van-bjtvoca-sub')">&#x1F4BC; BJT Từ Vựng ▼</div>
-                <div id="van-bjtvoca-sub" class="sub-menu">
-                    <div class="menu-lvl2" onclick="toggleSub('van-bjtvoca-struct')">📚 Từ đơn</div>
-                    <div id="van-bjtvoca-struct" class="sub-menu"></div>
-                    <div class="menu-lvl2" onclick="toggleSub('van-bjtvoca-quiz')">📝 Trắc nghiệm</div>
-                    <div id="van-bjtvoca-quiz" class="sub-menu"></div>
+                    <!-- ▸ NHÓM JLPT -->
+                    <div class="sidebar-group-header jlpt">🎌 JLPT</div>
+
+                    <!-- N1 Từ Vựng -->
+                    <div class="van-menu-lvl1" onclick="toggleSub('van-n1voca-sub')">&#x1F4DA; N1 Từ Vựng ▼</div>
+                    <div id="van-n1voca-sub" class="sub-menu">
+                        <div class="menu-lvl2" onclick="toggleSub('van-n1voca-struct')">📚 Từ đơn</div>
+                        <div id="van-n1voca-struct" class="sub-menu"></div>
+                        <div class="menu-lvl2" onclick="toggleSub('van-n1voca-quiz')">📝 Trắc nghiệm</div>
+                        <div id="van-n1voca-quiz" class="sub-menu"></div>
+                    </div>
+                    <!-- N2 Ngữ Pháp -->
+                    <div class="van-menu-lvl1" onclick="toggleSub('van-n2gram-sub')">&#x270D;&#xFE0F; N2 Ngữ Pháp ▼
+                    </div>
+                    <div id="van-n2gram-sub" class="sub-menu">
+                        <div class="menu-lvl2" onclick="toggleSub('van-n2gram-struct')">✍️ Từ đơn</div>
+                        <div id="van-n2gram-struct" class="sub-menu"></div>
+                        <div class="menu-lvl2" onclick="toggleSub('van-n2gram-quiz')">🎯 Trắc nghiệm</div>
+                        <div id="van-n2gram-quiz" class="sub-menu"></div>
+                    </div>
+
+                    <!-- ▸ NHÓM BJT -->
+                    <div class="sidebar-group-header bjt">💼 BJT</div>
+
+                    <!-- BJT Từ Vựng -->
+                    <div class="van-menu-lvl1" onclick="toggleSub('van-bjtvoca-sub')">&#x1F4BC; BJT Từ Vựng ▼</div>
+                    <div id="van-bjtvoca-sub" class="sub-menu">
+                        <div class="menu-lvl2" onclick="toggleSub('van-bjtvoca-struct')">📚 Từ đơn</div>
+                        <div id="van-bjtvoca-struct" class="sub-menu"></div>
+                        <div class="menu-lvl2" onclick="toggleSub('van-bjtvoca-quiz')">📝 Trắc nghiệm</div>
+                        <div id="van-bjtvoca-quiz" class="sub-menu"></div>
+                    </div>
                 </div>
-            </div>
             </div> <!-- end van-section-wrapper JP -->
 
             <!-- ===== GÓC TOEIC (chỉ hiện khi lang=en) ===== -->
@@ -1951,11 +1963,13 @@
                     <img src="goc_toeic.png"
                         style="width:100%; height:110px; object-fit:cover; object-position:center 50%; display:block; border-radius:0;"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="display:none; padding:14px 20px; align-items:center; gap:10px; background:linear-gradient(135deg,#1d4ed8,#ef4444);">
+                    <div
+                        style="display:none; padding:14px 20px; align-items:center; gap:10px; background:linear-gradient(135deg,#1d4ed8,#ef4444);">
                         <span style="font-size:22px;">🇺🇸</span>
                         <span style="font-size:16px; font-weight:900; color:#fff;">GÓC TOEIC</span>
                     </div>
-                    <span style="position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:13px; color:#fff; text-shadow:0 1px 4px #000;">▼</span>
+                    <span
+                        style="position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:13px; color:#fff; text-shadow:0 1px 4px #000;">▼</span>
                 </div>
                 <div id="van-en-section">
                     <div class="van-menu-lvl1" onclick="toggleSub('van-toeicvoca-sub')">📖 Từ vựng TOEIC ▼</div>
@@ -1981,11 +1995,13 @@
                     <img src="goc_hsk.png"
                         style="width:100%; height:110px; object-fit:cover; object-position:center 50%; display:block; border-radius:0;"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="display:none; padding:14px 20px; align-items:center; gap:10px; background:linear-gradient(135deg,#dc2626,#b91c1c);">
+                    <div
+                        style="display:none; padding:14px 20px; align-items:center; gap:10px; background:linear-gradient(135deg,#dc2626,#b91c1c);">
                         <span style="font-size:22px;">🇨🇳</span>
                         <span style="font-size:16px; font-weight:900; color:#fff;">GÓC HSK</span>
                     </div>
-                    <span style="position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:13px; color:#fff; text-shadow:0 1px 4px #000;">▼</span>
+                    <span
+                        style="position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:13px; color:#fff; text-shadow:0 1px 4px #000;">▼</span>
                 </div>
                 <div id="van-cn-section">
                     <!-- HSK 1 -->
@@ -2104,7 +2120,8 @@
 
                 <!-- Nhóm TOEIC -->
                 <div id="en-group" style="display: none;">
-                    <div class="sidebar-group-header bjt-user" style="background: linear-gradient(90deg, #1d4ed8, #ef4444);">🇺🇸 TOEIC</div>
+                    <div class="sidebar-group-header bjt-user"
+                        style="background: linear-gradient(90deg, #1d4ed8, #ef4444);">🇺🇸 TOEIC</div>
                     <div class="menu-lvl1" onclick="toggleSub('toeic-sub')">NĂNG LỰC TOEIC ▼</div>
                     <div id="toeic-sub" class="sub-menu">
                         <div class="menu-lvl2" onclick="toggleSub('toeic-voca')">📚 Luyện tập từ vựng</div>
@@ -2120,7 +2137,8 @@
 
                 <!-- Nhóm HSK -->
                 <div id="cn-group" style="display: none;">
-                    <div class="sidebar-group-header bjt-user" style="background: linear-gradient(90deg, #dc2626, #b91c1c);">🇨🇳 HSK</div>
+                    <div class="sidebar-group-header bjt-user"
+                        style="background: linear-gradient(90deg, #dc2626, #b91c1c);">🇨🇳 HSK</div>
                     <div class="menu-lvl1" onclick="toggleSub('hsk-sub')">NĂNG LỰC HSK ▼</div>
                     <div id="hsk-sub" class="sub-menu">
                         <div class="menu-lvl2" onclick="toggleSub('hsk-voca')">📚 Luyện tập từ vựng</div>
@@ -2735,7 +2753,8 @@
                                     style="display: none; background: rgba(251,191,36,0.1); color: #fde68a; font-size: 15px; padding: 14px; border-radius: 12px; border: 1px dashed rgba(251,191,36,0.4); width: 100%; font-weight: 800; cursor: pointer;"
                                     onclick="retryStarredOnly()"
                                     onmouseover="this.style.background='rgba(251,191,36,0.2)'"
-                                    onmouseout="this.style.background='rgba(251,191,36,0.1)'">⭐ LÀM LẠI CÂU ĐÁNH SAO</button>
+                                    onmouseout="this.style.background='rgba(251,191,36,0.1)'">⭐ LÀM LẠI CÂU ĐÁNH
+                                    SAO</button>
                                 <button class="btn"
                                     style="background: rgba(255,255,255,0.05); color: #94a3b8; font-size: 14px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); width: 100%; font-weight: 700; cursor: pointer;"
                                     onclick="closeModal('congrats-modal'); window.scrollTo({top: 0, behavior: 'smooth'});"
@@ -2787,12 +2806,15 @@
                     </div>
                     <div style="display:flex; gap:10px; flex-wrap:wrap;">
                         <button id="btn-export-pdf" class="btn" onclick="exportListToPdf()"
-                            style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; border: none; flex: 1; min-width:140px; font-weight: bold; border-radius: 8px;">📕 XUẤT PDF</button>
+                            style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; border: none; flex: 1; min-width:140px; font-weight: bold; border-radius: 8px;">📕
+                            XUẤT PDF</button>
                         <button id="btn-export-txt" class="btn" onclick="exportListToTxt()"
-                            style="background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; flex: 1; min-width:140px; font-weight: bold; border-radius: 8px;">💾 XUẤT TXT</button>
+                            style="background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; flex: 1; min-width:140px; font-weight: bold; border-radius: 8px;">💾
+                            XUẤT TXT</button>
                         <button id="btn-filter-dups" class="btn btn-purple" onclick="removeDuplicates()"
                             style="flex:1; min-width:140px;">🧹 LỌC TỪ TRÙNG LẶP</button>
-                        <button class="btn btn-gray" onclick="closeModal('list-modal')" style="flex:1; min-width:140px;">ĐÓNG</button>
+                        <button class="btn btn-gray" onclick="closeModal('list-modal')"
+                            style="flex:1; min-width:140px;">ĐÓNG</button>
                     </div>
                 </div>
             </div>
@@ -3273,7 +3295,7 @@
 
             <!-- Load vanData theo ngôn ngữ hiện tại -->
             <script>
-                (function() {
+                (function () {
                     var _lp = new URLSearchParams(window.location.search).get('lang') || 'jp';
                     var _fileMap = { jp: 'vanData.js', en: 'vanData_en.js', cn: 'vanData_cn.js' };
                     var _src = _fileMap[_lp] || 'vanData.js';
@@ -3285,12 +3307,12 @@
                 // ➜ Để thêm section mới: thêm 1 dòng với key = key trong vanData_xx.js
                 var VAN_CONTAINERS_MAP = {
                     jp: {
-                        'n1voca':  { struct: 'van-n1voca-struct',  quiz: 'van-n1voca-quiz',  type_struct: 'voca', type_quiz: 'voca_quiz' },
-                        'n2gram':  { struct: 'van-n2gram-struct',  quiz: 'van-n2gram-quiz',  type_struct: 'gram', type_quiz: 'gram_quiz' },
+                        'n1voca': { struct: 'van-n1voca-struct', quiz: 'van-n1voca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
+                        'n2gram': { struct: 'van-n2gram-struct', quiz: 'van-n2gram-quiz', type_struct: 'gram', type_quiz: 'gram_quiz' },
                         'bjtvoca': { struct: 'van-bjtvoca-struct', quiz: 'van-bjtvoca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' }
                     },
                     en: {
-                        'toeicvoca':  { struct: 'van-toeicvoca-struct',  quiz: 'van-toeicvoca-quiz',  type_struct: 'voca', type_quiz: 'voca_quiz' },
+                        'toeicvoca': { struct: 'van-toeicvoca-struct', quiz: 'van-toeicvoca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
                         'toeicpart5': { struct: 'van-toeicpart5-struct', quiz: 'van-toeicpart5-quiz', type_struct: 'gram', type_quiz: 'gram_quiz' }
                     },
                     cn: {
@@ -3299,7 +3321,7 @@
                         'hsk3voca': { struct: 'van-hsk3voca-struct', quiz: 'van-hsk3voca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
                         'hsk4voca': { struct: 'van-hsk4voca-struct', quiz: 'van-hsk4voca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
                         'hsk5voca': { struct: 'van-hsk5voca-struct', quiz: 'van-hsk5voca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
-                        'hskgram':  { struct: 'van-hskgram-struct',  quiz: 'van-hskgram-quiz',  type_struct: 'gram', type_quiz: 'gram_quiz' }
+                        'hskgram': { struct: 'van-hskgram-struct', quiz: 'van-hskgram-quiz', type_struct: 'gram', type_quiz: 'gram_quiz' }
                     }
                 };
                 var _currentLangParam = new URLSearchParams(window.location.search).get('lang') || 'jp';
@@ -3531,6 +3553,15 @@
                     langLabel = '🇨🇳 HSK';
                 }
 
+                function _updateLangButtons(lang) {
+                    ['jp', 'en', 'cn'].forEach(l => {
+                        const btn = document.getElementById('lang-btn-' + l);
+                        if (btn) btn.style.background = (l === lang) ? 'rgba(255,255,255,0.25)' : 'transparent';
+                    });
+                    const sel = document.getElementById('lang-switcher');
+                    if (sel) sel.value = lang;
+                }
+
                 function switchLanguage(lang) {
                     const url = new URL(window.location);
                     url.searchParams.set('lang', lang);
@@ -3538,31 +3569,33 @@
                 }
 
                 function applyLanguageLayout() {
+                    // Cập nhật nút cờ ngôn ngữ
+                    _updateLangButtons(currentLang);
                     // Bước 1: Ẩn tất cả các nhóm sidebar trước
                     const jpGroup = document.getElementById('jp-group');
                     const enGroup = document.getElementById('en-group');
                     const cnGroup = document.getElementById('cn-group');
-                    const vanWrapper    = document.getElementById('van-section-wrapper'); // Góc của Vân (JP)
-                    const vanEnWrapper  = document.getElementById('van-en-wrapper');       // Góc TOEIC
-                    const vanCnWrapper  = document.getElementById('van-cn-wrapper');       // Góc HSK
+                    const vanWrapper = document.getElementById('van-section-wrapper'); // Góc của Vân (JP)
+                    const vanEnWrapper = document.getElementById('van-en-wrapper');       // Góc TOEIC
+                    const vanCnWrapper = document.getElementById('van-cn-wrapper');       // Góc HSK
 
                     if (jpGroup) jpGroup.style.display = 'none';
                     if (enGroup) enGroup.style.display = 'none';
                     if (cnGroup) cnGroup.style.display = 'none';
-                    if (vanWrapper)   vanWrapper.style.display   = 'none';
+                    if (vanWrapper) vanWrapper.style.display = 'none';
                     if (vanEnWrapper) vanEnWrapper.style.display = 'none';
                     if (vanCnWrapper) vanCnWrapper.style.display = 'none';
 
                     // Bước 2: Hiện đúng nhóm theo ngôn ngữ
                     if (currentLang === 'jp') {
-                        if (jpGroup)    jpGroup.style.display    = 'block';
+                        if (jpGroup) jpGroup.style.display = 'block';
                         if (vanWrapper) vanWrapper.style.display = 'block';
                     } else if (currentLang === 'en') {
-                        if (enGroup)       enGroup.style.display       = 'block';
-                        if (vanEnWrapper)  vanEnWrapper.style.display  = 'block';
+                        if (enGroup) enGroup.style.display = 'block';
+                        if (vanEnWrapper) vanEnWrapper.style.display = 'block';
                     } else if (currentLang === 'cn') {
-                        if (cnGroup)       cnGroup.style.display       = 'block';
-                        if (vanCnWrapper)  vanCnWrapper.style.display  = 'block';
+                        if (cnGroup) cnGroup.style.display = 'block';
+                        if (vanCnWrapper) vanCnWrapper.style.display = 'block';
                     }
                 }
 
@@ -3575,7 +3608,7 @@
                         Object.keys(db[lv].gram_quiz).forEach(day => totalGramQuiz += db[lv].gram_quiz[day].list.length);
                     });
                     const e1 = document.getElementById('stat-voca-total'), e2 = document.getElementById('stat-voca-quiz-total'), e3 = document.getElementById('stat-gram-total'), e4 = document.getElementById('stat-gram-quiz-total');
-                    if(e1) e1.innerText = totalVoca; if(e2) e2.innerText = totalVocaQuiz; if(e3) e3.innerText = totalGram; if(e4) e4.innerText = totalGramQuiz;
+                    if (e1) e1.innerText = totalVoca; if (e2) e2.innerText = totalVocaQuiz; if (e3) e3.innerText = totalGram; if (e4) e4.innerText = totalGramQuiz;
                 }
 
                 let db = JSON.parse(localStorage.getItem(currentDbKey));
@@ -3878,23 +3911,23 @@
                     document.getElementById('flashcard-progress').innerText = `${currentFlashcardIndex + 1} / ${fcList.length}`;
                 }
                 function toggleListStar(index, btnId, e) {
-                    if(e) e.stopPropagation();
+                    if (e) e.stopPropagation();
                     const item = currentList[index];
                     if (!item) return;
                     const key = _itemKey(item);
-                    
+
                     let isStarred = fcStarredKeys.has(key);
                     if (isStarred) {
                         fcStarredKeys.delete(key);
                         let toRemove = null;
-                        fcStarred.forEach(it => { if(_itemKey(it) === key) toRemove = it; });
-                        if(toRemove) fcStarred.delete(toRemove);
+                        fcStarred.forEach(it => { if (_itemKey(it) === key) toRemove = it; });
+                        if (toRemove) fcStarred.delete(toRemove);
                     } else {
                         fcStarredKeys.add(key);
                         fcStarred.add(item);
                     }
                     saveFcStarred();
-                    
+
                     const btn = document.getElementById(btnId);
                     if (btn) {
                         const nowStarred = fcStarredKeys.has(key);
@@ -5349,7 +5382,7 @@
                     document.getElementById('res-ng').innerText = failed;
                     document.getElementById('res-time').innerText = document.getElementById('timer-display').textContent;
                     document.getElementById('btn-retry-failed').style.display = failed > 0 ? 'block' : 'none';
-                    
+
                     const starredCount = currentList.filter(item => fcStarredKeys.has(_itemKey(item))).length;
                     const btnRetryStarred = document.getElementById('btn-retry-starred');
                     if (btnRetryStarred) btnRetryStarred.style.display = starredCount > 0 ? 'block' : 'none';
@@ -5980,9 +6013,9 @@
                         alert("Danh sách trống!");
                         return;
                     }
-                    
+
                     const titleText = document.getElementById('view-title') ? document.getElementById('view-title').textContent.trim() : 'Danh Sách Học Tập';
-                    
+
                     let html = `
                     <html>
                     <head>
@@ -6011,14 +6044,14 @@
                         <table>
                             <thead>
                     `;
-                    
+
                     const hasC1 = currentList.some(it => it.c1 !== undefined);
                     if (hasC1) {
                         html += `<tr><th style="width:40px; text-align:center;">STT</th><th>Từ vựng / Cấu trúc</th><th>Cách đọc</th><th>Ý nghĩa</th></tr></thead><tbody>`;
                     } else {
                         html += `<tr><th style="width:40px; text-align:center;">STT</th><th>Câu hỏi</th><th>Đáp án</th></tr></thead><tbody>`;
                     }
-                    
+
                     currentList.forEach((item, index) => {
                         html += `<tr><td style="text-align:center; font-weight:bold;">${index + 1}</td>`;
                         if (item.c1 !== undefined) {
@@ -6030,17 +6063,17 @@
                         }
                         html += `</tr>`;
                     });
-                    
+
                     html += `</tbody></table></body></html>`;
-                    
+
                     const iframe = document.createElement('iframe');
                     iframe.style.display = 'none';
                     document.body.appendChild(iframe);
-                    
+
                     iframe.contentWindow.document.open();
                     iframe.contentWindow.document.write(html);
                     iframe.contentWindow.document.close();
-                    
+
                     setTimeout(() => {
                         iframe.contentWindow.focus();
                         iframe.contentWindow.print();
@@ -6053,13 +6086,13 @@
                         alert("Danh sách trống!");
                         return;
                     }
-                    
+
                     let content = `DANH SÁCH HỌC TẬP\n`;
                     const titleText = document.getElementById('view-title') ? document.getElementById('view-title').textContent : 'Danh Sach';
                     content += `Bài: ${titleText.trim()}\n`;
                     content += `Tổng số: ${currentList.length} câu\n`;
                     content += `-------------------------\n\n`;
-                    
+
                     currentList.forEach((item, index) => {
                         let line = `${index + 1}. `;
                         if (item.c1 !== undefined) {
@@ -6072,7 +6105,7 @@
                         line = line.replace(/<[^>]*>?/gm, ''); // Remove HTML tags
                         content += line + "\n";
                     });
-                    
+
                     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
@@ -6349,7 +6382,7 @@
                             }
                         }
                     });
-                    
+
                     // Hide Van source if not JP
                     const vanSrcChip = document.getElementById('cq-src-van');
                     if (vanSrcChip) vanSrcChip.style.display = currentLang === 'jp' ? 'inline-flex' : 'none';
@@ -6464,12 +6497,12 @@
                         alert("Khoảng không hợp lệ! Vui lòng nhập số hợp lệ.");
                         return;
                     }
-                    
+
                     const items = document.querySelectorAll('.cq-lesson-item');
                     items.forEach(el => {
                         const input = el.querySelector('input');
                         const label = el.querySelector('span').innerText;
-                        
+
                         const matches = label.match(/\d+/g);
                         if (matches && matches.length > 0) {
                             const lastNum = parseInt(matches[matches.length - 1]);
@@ -6718,25 +6751,38 @@
                     <span>📅 Chọn bài học</span>
                     <div style="display:flex; gap:6px;">
                         <button onclick="cqSelectAllLessons(true)"
-                            style="background:rgba(59,130,246,0.15); border:1px solid #3b82f6; color:#60a5fa; border-radius:8px; padding:2px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Tất cả</button>
+                            style="background:rgba(59,130,246,0.15); border:1px solid #3b82f6; color:#60a5fa; border-radius:8px; padding:2px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Tất
+                            cả</button>
                         <button onclick="cqSelectAllLessons(false)"
-                            style="background:rgba(100,116,139,0.15); border:1px solid #475569; color:#94a3b8; border-radius:8px; padding:2px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Bỏ chọn</button>
+                            style="background:rgba(100,116,139,0.15); border:1px solid #475569; color:#94a3b8; border-radius:8px; padding:2px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Bỏ
+                            chọn</button>
                     </div>
                 </div>
-                
+
                 <!-- Thanh công cụ lọc & chọn khoảng -->
-                <div style="background:rgba(0,0,0,0.15); border:1px solid rgba(255,255,255,0.05); border-radius:8px; padding:10px; margin-bottom:10px; display:flex; flex-direction:column; gap:8px;">
+                <div
+                    style="background:rgba(0,0,0,0.15); border:1px solid rgba(255,255,255,0.05); border-radius:8px; padding:10px; margin-bottom:10px; display:flex; flex-direction:column; gap:8px;">
                     <!-- Lọc tên -->
                     <div style="display:flex; align-items:center;">
-                        <input type="text" id="cq-search-lesson" placeholder="🔍 Gõ số bài hoặc ngày (vd: 5)..." style="flex:1; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:6px; padding:6px 10px; font-size:13px; outline:none;" oninput="cqFilterLessonUI()">
+                        <input type="text" id="cq-search-lesson" placeholder="🔍 Gõ số bài hoặc ngày (vd: 5)..."
+                            style="flex:1; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:6px; padding:6px 10px; font-size:13px; outline:none;"
+                            oninput="cqFilterLessonUI()">
                     </div>
                     <!-- Chọn khoảng bài -->
                     <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-size:12px; color:#94a3b8; font-weight:600;">Chọn nhanh khoảng (Ngày/Bài):</span>
-                        <input type="number" id="cq-range-start" placeholder="1" style="width:50px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px; padding:4px 6px; font-size:13px; outline:none;" min="1">
+                        <span style="font-size:12px; color:#94a3b8; font-weight:600;">Chọn nhanh khoảng
+                            (Ngày/Bài):</span>
+                        <input type="number" id="cq-range-start" placeholder="1"
+                            style="width:50px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px; padding:4px 6px; font-size:13px; outline:none;"
+                            min="1">
                         <span style="font-size:12px; color:#64748b;">đến</span>
-                        <input type="number" id="cq-range-end" placeholder="10" style="width:50px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px; padding:4px 6px; font-size:13px; outline:none;" min="1">
-                        <button onclick="cqApplyRange()" style="background:#8b5cf6; color:#fff; border:none; border-radius:4px; padding:5px 12px; font-size:12px; font-weight:bold; cursor:pointer; margin-left:auto; transition:0.2s;" onmouseover="this.style.background='#a78bfa'" onmouseout="this.style.background='#8b5cf6'">Áp dụng</button>
+                        <input type="number" id="cq-range-end" placeholder="10"
+                            style="width:50px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px; padding:4px 6px; font-size:13px; outline:none;"
+                            min="1">
+                        <button onclick="cqApplyRange()"
+                            style="background:#8b5cf6; color:#fff; border:none; border-radius:4px; padding:5px 12px; font-size:12px; font-weight:bold; cursor:pointer; margin-left:auto; transition:0.2s;"
+                            onmouseover="this.style.background='#a78bfa'"
+                            onmouseout="this.style.background='#8b5cf6'">Áp dụng</button>
                     </div>
                 </div>
 
