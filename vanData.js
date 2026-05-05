@@ -323,7 +323,7 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 6",
+                name: "Bài 5",
                 list: [
                     { c1: "受け渡す", c2: "うけわたす", c3: "giao nhận", c4: "", c5: "", c6: "", count: 0 },
                     { c1: "打ち合わせる", c2: "うちあわせる", c3: "trao đổi trước, bàn bạc", c4: "", c5: "", c6: "", count: 0 },
