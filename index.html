@@ -2575,6 +2575,11 @@
                                     onmouseover="this.style.background='rgba(255,255,255,0.1)'"
                                     onmouseout="this.style.background='rgba(255,255,255,0.05)'">♻️ LÀM LẠI CÂU QUÊN VÀ
                                     SAI</button>
+                                <button id="btn-retry-starred" class="btn"
+                                    style="display: none; background: rgba(251,191,36,0.1); color: #fde68a; font-size: 15px; padding: 14px; border-radius: 12px; border: 1px dashed rgba(251,191,36,0.4); width: 100%; font-weight: 800; cursor: pointer;"
+                                    onclick="retryStarredOnly()"
+                                    onmouseover="this.style.background='rgba(251,191,36,0.2)'"
+                                    onmouseout="this.style.background='rgba(251,191,36,0.1)'">⭐ LÀM LẠI CÂU ĐÁNH SAO</button>
                                 <button class="btn"
                                     style="background: rgba(255,255,255,0.05); color: #94a3b8; font-size: 14px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); width: 100%; font-weight: 700; cursor: pointer;"
                                     onclick="closeModal('congrats-modal'); window.scrollTo({top: 0, behavior: 'smooth'});"
@@ -5062,6 +5067,10 @@
                     document.getElementById('res-ng').innerText = failed;
                     document.getElementById('res-time').innerText = document.getElementById('timer-display').textContent;
                     document.getElementById('btn-retry-failed').style.display = failed > 0 ? 'block' : 'none';
+                    
+                    const starredCount = currentList.filter(item => fcStarredKeys.has(_itemKey(item))).length;
+                    const btnRetryStarred = document.getElementById('btn-retry-starred');
+                    if (btnRetryStarred) btnRetryStarred.style.display = starredCount > 0 ? 'block' : 'none';
 
                     let title = "CỐ GẮNG THÊM 💪";
                     let subtitle = "Bạn đã rất cố gắng nhưng hãy làm thêm lần nữa nhé.";
@@ -5310,6 +5319,18 @@
                         selectVanDay(curVanSection, curVanSub, curVanIdx, wrongs, oldMode);
                     } else {
                         selectDay(curLevel, curType, curDay, wrongs, oldMode);
+                    }
+                }
+
+                function retryStarredOnly() {
+                    const starredItems = currentList.filter(item => fcStarredKeys.has(_itemKey(item)));
+                    if (starredItems.length === 0) return;
+                    const oldMode = currentMode;
+                    closeModal('congrats-modal');
+                    if (curVanMode) {
+                        selectVanDay(curVanSection, curVanSub, curVanIdx, starredItems, oldMode);
+                    } else {
+                        selectDay(curLevel, curType, curDay, starredItems, oldMode);
                     }
                 }
 
