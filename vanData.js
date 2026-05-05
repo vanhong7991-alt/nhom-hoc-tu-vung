@@ -176,7 +176,9 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 2", list: [
+                name: "Bài 2",
+                free: true,
+                list: [
                     { c1: "頭打ち", c2: "あたまうち", c3: "chững lại, đạt giới hạn", c4: "", c5: "", c6: "", count: 0 },
                     { c1: "耳打ち", c2: "みみうち", c3: "thì thầm", c4: "", c5: "", c6: "", count: 0 },
                     { c1: "頭が痛い", c2: "あたまがいたい", c3: "đau đầu (nghĩa đen & bóng)", c4: "", c5: "", c6: "", count: 0 },
@@ -212,7 +214,9 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 3", list: [
+                name: "Bài 3",
+                free: true,
+                list: [
                     { c1: "件", c2: "けん", c3: "vụ việc, trường hợp", c4: "", c5: "", c6: "", count: 0 },
                     { c1: "状", c2: "じょう", c3: "tình trạng", c4: "", c5: "", c6: "", count: 0 },
                     { c1: "章", c2: "しょう", c3: "chương (sách)", c4: "", c5: "", c6: "", count: 0 },
