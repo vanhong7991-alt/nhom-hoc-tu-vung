@@ -1731,6 +1731,23 @@
             text-align: center;
             position: relative;
         ">
+            <!-- Nút X đóng -->
+            <button onclick="_closeLockScreen()" title="Đóng" style="
+                position: absolute; top: 14px; right: 14px;
+                width: 32px; height: 32px;
+                background: rgba(255,255,255,0.08);
+                border: 1px solid rgba(255,255,255,0.15);
+                border-radius: 50%;
+                color: #94a3b8;
+                font-size: 16px;
+                line-height: 1;
+                cursor: pointer;
+                display: flex; align-items: center; justify-content: center;
+                transition: background 0.2s, color 0.2s;
+            "
+            onmouseover="this.style.background='rgba(239,68,68,0.25)';this.style.color='#f87171';"
+            onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='#94a3b8';"
+            >×</button>
             <!-- Lock icon -->
             <div style="
                 width: 70px; height: 70px;
@@ -3093,12 +3110,17 @@
                                 const rIcon = icons[idx % icons.length];
                                 const div = document.createElement('div');
                                 div.className = 'menu-lvl3';
+                                const lockBadge = (!lesson.free && REQUIRE_LOCK.goc_cua_van)
+                                    ? '<span title="Bài học có khoá" style="font-size:12px;background:rgba(239,68,68,0.2);color:#fca5a5;padding:2px 6px;border-radius:10px;border:1px solid rgba(239,68,68,0.3);">🔒</span>'
+                                    : '<span title="Mở tự do" style="font-size:12px;background:rgba(52,211,153,0.2);color:#6ee7b7;padding:2px 6px;border-radius:10px;border:1px solid rgba(52,211,153,0.3);">🔓</span>';
+
                                 div.innerHTML = `
                         <span onclick="selectVanDay('${sectionKey}','${sub}',${idx})" style="flex:1;display:flex;align-items:center;gap:8px;">
                             ${rIcon} <span class="lesson-name-text">${lesson.name}</span>
                         </span>
                         <span style="display:flex;align-items:center;gap:8px;margin-right:12px;">
                             ${isAllDone ? '<b class="done-check" style="font-size:18px;">✅</b>' : ''}
+                            ${lockBadge}
                             <span style="font-size:13px;font-weight:800;color:#c4b5fd;border:1px solid #a855f7;padding:2px 8px;border-radius:12px;box-shadow:0 0 8px rgba(168,85,247,0.5);">${wordCount} ${unitText}</span>
                         </span>`;
                                 containerEl.appendChild(div);
@@ -4282,6 +4304,20 @@
                     }
                 }
 
+                function _closeLockScreen() {
+                    const overlay = document.getElementById('lockscreen-overlay');
+                    if (overlay) {
+                        overlay.style.transition = 'opacity 0.3s';
+                        overlay.style.opacity = '0';
+                        setTimeout(function () { overlay.style.display = 'none'; overlay.style.opacity = ''; }, 320);
+                    }
+                    // Hủy callback đang chờ (không thực thi bài)
+                    window._lockPendingFn = null;
+                    // Reset input
+                    var inp = document.getElementById('lockscreen-input');
+                    if (inp) { inp.value = ''; _lockUpdateDots(''); }
+                }
+
                 function _submitLockCode() {
                     const inp = document.getElementById('lockscreen-input');
                     const err = document.getElementById('lock-error-msg');
@@ -4332,6 +4368,12 @@
                 // ─── End lock screen helpers ───
 
                 function selectDay(lv, ty, day, listOverride = null, targetMode = null) {
+                    // Kiểm tra khoá cho bài học tiêu chuẩn
+                    const lockKey = lv + '_' + ty;
+                    if (REQUIRE_LOCK[lockKey] && !_appUnlocked && !listOverride) {
+                        _requireAccess(() => selectDay(lv, ty, day, listOverride, targetMode));
+                        return;
+                    }
                     var _ss = document.getElementById('stats-screen'); if (_ss) _ss.style.display = 'none';
                     var _qc = document.getElementById('quiz-container'); if (_qc) _qc.style.display = ''; var _sc2 = document.getElementById('submit-container'); if (_sc2 && _sc2.style.display === 'none') _sc2.style.display = ''; var _rt2 = document.getElementById('rt-wrapper'); if (_rt2 && _rt2.style.display === 'none') _rt2.style.display = '';
                     curVanMode = false;
