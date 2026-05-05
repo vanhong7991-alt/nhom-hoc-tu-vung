@@ -3114,11 +3114,12 @@
                 }
 
                 function selectVanDay(sectionKey, sub, lessonIdx, listOverride = null, targetMode = null) {
-                    if (REQUIRE_LOCK.goc_cua_van && !_appUnlocked && !listOverride) {
+                    const lesson = vanData[sectionKey]?.[sub]?.[lessonIdx];
+                    const isFreeLesson = lesson && lesson.free === true;
+                    if (REQUIRE_LOCK.goc_cua_van && !_appUnlocked && !listOverride && !isFreeLesson) {
                         _requireAccess(() => selectVanDay(sectionKey, sub, lessonIdx, listOverride, targetMode));
                         return;
                     }
-                    const lesson = vanData[sectionKey][sub][lessonIdx];
                     if (!lesson) return;
                     curVanSection = sectionKey; curVanSub = sub; curVanIdx = lessonIdx;
                     var _ss = document.getElementById('stats-screen'); if (_ss) _ss.style.display = 'none';
