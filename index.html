@@ -1972,19 +1972,12 @@
                         style="position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:13px; color:#fff; text-shadow:0 1px 4px #000;">▼</span>
                 </div>
                 <div id="van-en-section">
-                    <div class="van-menu-lvl1" onclick="toggleSub('van-toeicvoca-sub')">📖 Từ vựng TOEIC ▼</div>
-                    <div id="van-toeicvoca-sub" class="sub-menu">
-                        <div class="menu-lvl2" onclick="toggleSub('van-toeicvoca-struct')">📚 Học từ vựng</div>
-                        <div id="van-toeicvoca-struct" class="sub-menu"></div>
-                        <div class="menu-lvl2" onclick="toggleSub('van-toeicvoca-quiz')">📝 Trắc nghiệm</div>
-                        <div id="van-toeicvoca-quiz" class="sub-menu"></div>
-                    </div>
-                    <div class="van-menu-lvl1" onclick="toggleSub('van-toeicpart5-sub')">✍️ Ngữ pháp Part 5 ▼</div>
-                    <div id="van-toeicpart5-sub" class="sub-menu">
-                        <div class="menu-lvl2" onclick="toggleSub('van-toeicpart5-struct')">📖 Lý thuyết</div>
-                        <div id="van-toeicpart5-struct" class="sub-menu"></div>
-                        <div class="menu-lvl2" onclick="toggleSub('van-toeicpart5-quiz')">🎯 Trắc nghiệm</div>
-                        <div id="van-toeicpart5-quiz" class="sub-menu"></div>
+                    <div class="van-menu-lvl1" onclick="toggleSub('van-toeic600-sub')">🏆 600 Từ vựng TOEIC ▼</div>
+                    <div id="van-toeic600-sub" class="sub-menu">
+                        <div class="menu-lvl2" onclick="toggleSub('van-toeic600-struct')">📚 Học từ vựng</div>
+                        <div id="van-toeic600-struct" class="sub-menu"></div>
+                        <div class="menu-lvl2" onclick="toggleSub('van-toeic600-quiz')">📝 Trắc nghiệm</div>
+                        <div id="van-toeic600-quiz" class="sub-menu"></div>
                     </div>
                 </div>
             </div>
@@ -3312,8 +3305,7 @@
                         'bjtvoca': { struct: 'van-bjtvoca-struct', quiz: 'van-bjtvoca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' }
                     },
                     en: {
-                        'toeicvoca': { struct: 'van-toeicvoca-struct', quiz: 'van-toeicvoca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
-                        'toeicpart5': { struct: 'van-toeicpart5-struct', quiz: 'van-toeicpart5-quiz', type_struct: 'gram', type_quiz: 'gram_quiz' }
+                        'toeic600': { struct: 'van-toeic600-struct', quiz: 'van-toeic600-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' }
                     },
                     cn: {
                         'hsk1voca': { struct: 'van-hsk1voca-struct', quiz: 'van-hsk1voca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
@@ -3331,7 +3323,7 @@
                 let curVanSection = null, curVanSub = null, curVanIdx = null;
 
                 function renderVanSidebar() {
-                    if (currentLang !== 'jp') return; // Chỉ hiển thị Góc Của Vân khi ở chế độ Tiếng Nhật
+                    if (currentLang !== 'jp' && currentLang !== 'en' && currentLang !== 'cn') return; // Chỉ render khi lang=jp, en hoặc cn
                     const icons = ['🌸', '🍀', '🌻', '🌺', '🌿', '🍄', '🎀', '🧸', '🌷', '🍁', '🌱', '🌼'];
                     for (const [sectionKey, containers] of Object.entries(VAN_CONTAINERS)) {
                         for (const sub of ['struct', 'quiz']) {
@@ -3346,6 +3338,7 @@
                                 let maxMode = 3;
                                 if (vanType === 'gram') maxMode = 2;
                                 else if (vanType === 'voca_quiz' || vanType === 'gram_quiz') maxMode = 1;
+                                else if (currentLang === 'en' && vanType === 'voca') maxMode = 2;
                                 const isAllDone = progress.done.slice(0, maxMode).every(v => v === true);
                                 const wordCount = lesson.list.length;
                                 const unitText = (vanType === 'voca_quiz' || vanType === 'gram_quiz') ? 'câu' : (vanType === 'gram' ? 'mẫu' : 'từ');
@@ -3436,8 +3429,11 @@
                     updateVanFab();
 
                     // Breadcrumb & back button
-                    const secLabel = { 'n1voca': 'N1 Từ Vựng', 'n2gram': 'N2 Ngữ Pháp', 'bjtvoca': 'BJT Từ Vựng' }[sectionKey] || sectionKey;
-                    const subLabel = sub === 'struct' ? 'Từ đơn' : 'Trắc nghiệm';
+                    const secLabel = {
+                        'n1voca': 'N1 Từ Vựng', 'n2gram': 'N2 Ngữ Pháp', 'bjtvoca': 'BJT Từ Vựng',
+                        'toeicvoca': 'Từ vựng TOEIC', 'toeic600': '600 Từ vựng TOEIC', 'toeicpart5': 'Ngữ pháp Part 5'
+                    }[sectionKey] || sectionKey;
+                    const subLabel = sub === 'struct' ? 'Học từ vựng' : 'Trắc nghiệm';
                     setBreadcrumb(`${secLabel} / ${subLabel} / ${lesson.name}`, true);
                     setActiveMenuItem(lesson.name);
                 }
@@ -4823,15 +4819,18 @@
                     // Guard: curLevel='custom' — don’t read db[custom]
                     const isCustom = (curLevel === 'custom');
 
+                    const isEnglishMode = (currentLang === 'en' && curType === 'voca');
+                    const isTwoModes = (curType === 'gram' || isEnglishMode || (currentLang === 'en' && isCustom));
+
                     if (curType === 'voca_quiz' || curType === 'gram_quiz') {
                         if (modeBox) modeBox.style.display = 'none';
                         if (vocaQuizOpts) vocaQuizOpts.style.display = 'flex';
                     } else {
                         if (modeBox) {
                             modeBox.style.display = 'grid';
-                            modeBox.style.gridTemplateColumns = curType === 'gram' ? "1fr 1fr" : "1fr 1fr 1fr";
+                            modeBox.style.gridTemplateColumns = isTwoModes ? "1fr 1fr" : "1fr 1fr 1fr";
                             const mode2 = document.getElementById('mode-2');
-                            if (curType === 'gram') mode2.style.display = 'none';
+                            if (isTwoModes) mode2.style.display = 'none';
                             else mode2.style.display = 'flex';
                         }
                         if (vocaQuizOpts) vocaQuizOpts.style.display = 'none';
@@ -4840,12 +4839,12 @@
                     for (let i = 0; i < 3; i++) {
                         const btn = document.getElementById(`mode-${i}`);
                         const isDone = curVanMode
-                            ? (window._vanProgress && window._vanProgress.done[i])
-                            : (!isCustom && db[curLevel] && db[curLevel][curType] && db[curLevel][curType][curDay] && db[curLevel][curType][curDay].done[i]);
+                            ? (window._vanProgress && window._vanProgress.done && window._vanProgress.done[i])
+                            : (!isCustom && db[curLevel] && db[curLevel][curType] && db[curLevel][curType][curDay] && db[curLevel][curType][curDay].done && db[curLevel][curType][curDay].done[i]);
 
                         let disabled = false;
                         if (currentList.length === 0) disabled = true;
-                        if (curType === 'gram' && i === 2) disabled = true;
+                        if (isTwoModes && i === 2) disabled = true;
 
                         if (disabled) {
                             btn.className = 'btn btn-gray';
@@ -4859,61 +4858,13 @@
 
                         let txt = "";
                         if (curType === 'voca' || isCustom) {
-                            txt = (i == 0 ? "CÁCH ĐỌC" : i == 1 ? "NGHĨA" : "TIẾNG NHẬT");
-                        } else if (curType === 'voca_quiz' || curType === 'gram_quiz') {
-                            txt = "TRẮc NGHIỆM";
-                        } else if (curType === 'gram') {
-                            txt = (i == 0 ? "TÌM NGHĨA" : i == 1 ? "TÌM CẤU TRÚC" : "");
-                        }
-                        if (txt) {
-                            btn.innerHTML = `<span style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">ĐỀ ${i + 1}</span><span>${txt}${isDone ? ' ✅' : ''}</span>`;
-                        }
-                    };
-                }
-
-                function changeMode(m) {
-                    currentMode = m;
-
-                    const modeBox = document.getElementById('mode-box');
-                    const vocaQuizOpts = document.getElementById('voca-quiz-options');
-
-                    if (curType === 'voca_quiz' || curType === 'gram_quiz') {
-                        if (modeBox) modeBox.style.display = 'none';
-                        if (vocaQuizOpts) vocaQuizOpts.style.display = 'flex';
-                    } else {
-                        if (modeBox) {
-                            modeBox.style.display = 'grid';
-                            modeBox.style.gridTemplateColumns = curType === 'gram' ? "1fr 1fr" : "1fr 1fr 1fr";
-                            const mode2 = document.getElementById('mode-2');
-                            if (curType === 'gram') mode2.style.display = 'none';
-                            else mode2.style.display = 'flex';
-                        }
-                        if (vocaQuizOpts) vocaQuizOpts.style.display = 'none';
-                    }
-
-                    for (let i = 0; i < 3; i++) {
-                        const btn = document.getElementById(`mode-${i}`);
-                        const isDone = curVanMode
-                            ? (window._vanProgress && window._vanProgress.done[i])
-                            : (db[curLevel] && db[curLevel][curType] && db[curLevel][curType][curDay] && db[curLevel][curType][curDay].done[i]);
-
-                        let disabled = false;
-                        if (currentList.length === 0) disabled = true;
-                        if (curType === 'gram' && i === 2) disabled = true;
-
-                        if (disabled) {
-                            btn.className = 'btn btn-gray';
-                            btn.style.opacity = '0.3';
-                            btn.style.pointerEvents = 'none';
-                        } else {
-                            btn.className = (i === m) ? 'btn btn-blue' : 'btn btn-gray';
-                            btn.style.opacity = '1';
-                            btn.style.pointerEvents = 'auto';
-                        }
-
-                        let txt = "";
-                        if (curType === 'voca') {
-                            txt = (i == 0 ? "CÁCH ĐỌC" : i == 1 ? "NGHĨA" : "TIẾNG NHẬT");
+                            if (currentLang === 'en') {
+                                txt = (i == 0 ? "ĐIỀN NGHĨA VIỆT" : i == 1 ? "ĐIỀN TỪ TIẾNG ANH" : "");
+                            } else if (currentLang === 'cn') {
+                                txt = (i == 0 ? "CÁCH ĐỌC" : i == 1 ? "NGHĨA" : "TIẾNG TRUNG");
+                            } else {
+                                txt = (i == 0 ? "CÁCH ĐỌC" : i == 1 ? "NGHĨA" : "TIẾNG NHẬT");
+                            }
                         } else if (curType === 'voca_quiz' || curType === 'gram_quiz') {
                             txt = "TRẮC NGHIỆM";
                         } else if (curType === 'gram') {
@@ -4923,6 +4874,7 @@
                             btn.innerHTML = `<span style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">ĐỀ ${i + 1}</span><span>${txt}${isDone ? ' ✅' : ''}</span>`;
                         }
                     }
+
                     // Always clear quiz container first to prevent stale content from previous selection
                     document.getElementById('quiz-container').innerHTML = '';
                     if (currentList.length > 0) renderQuiz();
@@ -4977,15 +4929,23 @@
                                 if (currentMode === 0) { ques = item.c1 || ''; ans = item.c3 || ''; }
                                 else if (currentMode === 1) { ques = item.c3 || ''; ans = item.c1 || ''; }
                             } else {
-                                if (currentMode === 0) { ques = item.c1 || ''; ans = item.c2 || ''; }
-                                else if (currentMode === 1) { ques = item.c1 || ''; ans = item.c3 || ''; }
-                                else { ques = item.c3 || ''; ans = item.c1 || ''; }
+                                if (currentLang === 'en') {
+                                    if (currentMode === 0) { ques = item.c1 || ''; ans = item.c3 || ''; }
+                                    else if (currentMode === 1) { ques = item.c3 || ''; ans = item.c1 || ''; }
+                                } else {
+                                    if (currentMode === 0) { ques = item.c1 || ''; ans = item.c2 || ''; }
+                                    else if (currentMode === 1) { ques = item.c1 || ''; ans = item.c3 || ''; }
+                                    else { ques = item.c3 || ''; ans = item.c1 || ''; }
+                                }
                             }
                             return `<div class="card" id="q-${i}" data-idx="${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s; position:relative; padding-right:50px;">
                     <button id="star-btn-${i}" onclick="toggleListStar(${i}, 'star-btn-${i}', event)" style="position:absolute; top:20px; right:20px; background:transparent; border:none; font-size:28px; cursor:pointer; color:${fcStarredKeys.has(_itemKey(item)) ? '#fbbf24' : '#64748b'}; text-shadow:${fcStarredKeys.has(_itemKey(item)) ? '0 0 10px rgba(251,191,36,0.5)' : 'none'}; padding:0;" title="Đánh dấu sao (Lưu ý)">${fcStarredKeys.has(_itemKey(item)) ? '⭐' : '☆'}</button>
-                    <div style="font-size:26px; font-weight:800; margin-bottom:10px; display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
-                        <span>${fT(ques)} ${item.count >= 5 ? '⭐' : ''} <a href="https://www.google.com/search?q=${encodeURIComponent('Giải thích nghĩa của ' + (item.c1 || '') + ' và cách sử dụng trong tiếng nhật')}" target="_blank" style="text-decoration:none; margin-left:8px; display:inline-flex; align-items:center; transition:0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Tra cứu trên Google"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></span>
-                        <span id="msg-${i}" class="fb-msg"></span>
+                    <div style="display:flex; flex-direction:column; margin-bottom:10px;">
+                        ${(ques === item.c1 && item.c2) ? `<span style="font-size:16px; color:#e879f9; font-weight:700; margin-bottom:-2px; text-shadow: 0 0 5px rgba(232,121,249,0.3); font-family: 'Baloo 2', sans-serif;">${item.c2}</span>` : ''}
+                        <div style="font-size:26px; font-weight:800; display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
+                            <span>${fT(ques)} ${item.count >= 5 ? '⭐' : ''} <a href="https://www.google.com/search?q=${encodeURIComponent('Giải thích nghĩa của ' + (item.c1 || '') + (currentLang === 'en' ? ' trong tiếng anh' : ' và cách sử dụng trong tiếng nhật'))}" target="_blank" style="text-decoration:none; margin-left:8px; display:inline-flex; align-items:center; transition:0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Tra cứu trên Google"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></span>
+                            <span id="msg-${i}" class="fb-msg"></span>
+                        </div>
                     </div>
                     ${item.c4 ? `<div style="font-size:16px; color:#cbd5e1; margin-bottom:15px; background:rgba(0,0,0,0.2); padding:10px 15px; border-radius:10px; border-left:4px solid var(--warning);">💡 ${fT(item.c4)}</div>` : ''}
                     <div style="display:flex; gap:12px;">
