@@ -118,99 +118,7 @@ const vanData = {
                     { c1: "ストレッチ", c2: "すとれっち", c3: "động tác giãn cơ", c4: "", c5: "", c6: "", count: 0 }
                 ]
             },
-        ],
-        quiz: [
-            {
-                name: "Bài 1 (Câu 1-25)",
-                free: true, list: [
-                    { gramType: "quiz", q: "コツコツという足音が廊下に( ________)。", ans: "ひびいた", w1: "ないた", w2: "わいた", w3: "なびいた", explain: "「響く（ひびく）」＝ âm thanh vang, dội lại → Dịch: Tiếng bước chân “cộc cộc” vang lên trong hành lang", count: 0 },
-                    { gramType: "quiz", q: "過ぎ去ったことを( ________)仕方がない。前を向いて生きていこう。", ans: "くやんで", w1: "なやんで", w2: "うらやんで", w3: "はやんで", explain: "「悔やむ（くやむ）」＝ hối hận, tiếc nuối → Dịch: Dù có hối hận về chuyện đã qua cũng vô ích. Hãy hướng về phía trước mà sống", count: 0 },
-                    { gramType: "quiz", q: "ここは12階で周りのビルより高いので、視界を( ________)ものは何もない。", ans: "さえぎる", w1: "かすめる", w2: "とどめる", w3: "つきる", explain: "「遮る（さえぎる）」＝ che chắn, cản trở → Dịch: Vì ở tầng 12 và cao hơn các tòa nhà xung quanh nên không có gì che khuất tầm nhìn", count: 0 },
-                    { gramType: "quiz", q: "国民は国会での首相の発言に( ________)反応し、各地で批判が起こった。", ans: "びんかん", w1: "みんかん", w2: "みんがん", w3: "びんがん", explain: "「敏感（びんかん）」＝ nhạy cảm → Dịch: Người dân phản ứng nhạy cảm với phát biểu của thủ tướng tại quốc hội, và các chỉ trích đã xảy ra ở nhiều nơi", count: 0 },
-                    { gramType: "quiz", q: "世界的に男性より女性のほうが平均( ________)が長い傾向がある。", ans: "じゅみょう", w1: "じゅめい", w2: "じゅうめい", w3: "じゅうみょう", explain: "「寿命（じゅみょう）」＝ tuổi thọ → Dịch: Trên thế giới, phụ nữ có xu hướng sống thọ hơn nam giới", count: 0 },
-                    { gramType: "quiz", q: "山田選手は3本のヒットでチームの勝利に( ________)。", ans: "貢献した", w1: "かいけん", w2: "かいなん", w3: "こうなん", explain: "「貢献（こうけん）」＝ đóng góp → Dịch: Cầu thủ Yamada đã góp phần vào chiến thắng của đội với 3 cú đánh trúng", count: 0 },
-                    { gramType: "quiz", q: "クラスメートの森田さんとデートしているところを友達に見られて( ________)。", ans: "ひやかされた", w1: "しいられた", w2: "もてなされた", w3: "ひきいられた", explain: "「ひやかす」＝ trêu chọc → Dịch: Bị bạn bè trêu chọc khi bị nhìn thấy đang hẹn hò với bạn Morita", count: 0 },
-                    { gramType: "quiz", q: "( ________)の社長が、この会社を大きく発展させたらしい。", ans: "先代", w1: "古代", w2: "近郊", w3: "近世", explain: "「先代（せんだい）」＝ đời trước → Dịch: Có vẻ như vị giám đốc đời trước đã phát triển công ty này lớn mạnh", count: 0 },
-                    { gramType: "quiz", q: "あの俳優は前から人気はあったが、例のドラマで去年一気に( ________)した。", ans: "ブレイク", w1: "スルー", w2: "ボイコット", w3: "ブーム", explain: "「ブレイクする」＝ nổi tiếng bùng nổ → Dịch: Nam diễn viên đó vốn đã nổi tiếng, nhưng nhờ bộ phim đó mà năm ngoái đã bùng nổ tên tuổi", count: 0 },
-                    { gramType: "quiz", q: "いつも仕事をしない彼があの大変な仕事をやらせてくれだなんて、何か( ________)があるに違いない。", ans: "下心", w1: "内心", w2: "気心", w3: "裏心", explain: "「下心（したごころ）」＝ động cơ thầm kín → Dịch: Người vốn không làm việc như anh ta mà lại xin làm việc khó đó, chắc chắn có động cơ gì đó", count: 0 },
-                    { gramType: "quiz", q: "そのチームは、力強いプレーで敵を( ________)。", ans: "圧倒した", w1: "完敗した", w2: "健闘した", w3: "突撃した", explain: "「圧倒する」＝ áp đảo → Dịch: Đội đó đã áp đảo đối thủ bằng lối chơi mạnh mẽ", count: 0 },
-                    { gramType: "quiz", q: "風邪をひいて頭が痛いが、さっき薬を飲んだので、( ________)よくなるだろう。", ans: "じきに", w1: "じかに", w2: "いかに", w3: "いきに", explain: "「じきに」＝ sớm thôi → Dịch: Bị cảm nên đau đầu nhưng vừa uống thuốc xong nên chắc sẽ sớm khỏi", count: 0 },
-                    { gramType: "quiz", q: "今回の台風は、列島各地に大きな被害を( ________)。", ans: "もたらした", w1: "引きずった", w2: "おさめた", w3: "そこなった", explain: "「もたらす」＝ mang lại (kết quả) → Dịch: Cơn bão lần này đã gây ra thiệt hại lớn trên khắp các vùng", count: 0 },
-                    { gramType: "quiz", q: "うちの会社とA社は同業ではあるが、( ________)が全然違う。", ans: "規模", w1: "目的", w2: "立地", w3: "方針", explain: "「スケール」＝ quy mô → Dịch: Công ty chúng tôi và công ty A cùng ngành nhưng quy mô hoàn toàn khác", count: 0 },
-                    { gramType: "quiz", q: "学生ならほかに( ________)すべきことがあるんじゃない?。", ans: "集中", w1: "挑戦", w2: "研究", w3: "習得", explain: "「専念する」＝ chuyên tâm → Dịch: Nếu là sinh viên thì chẳng phải còn việc khác nên tập trung hơn sao", count: 0 },
-                    { gramType: "quiz", q: "土地の( ________)に慣れるのには時間がかかるものだ。", ans: "慣習", w1: "味付", w2: "天候", w3: "言葉", explain: "「しきたり」＝ tập quán → Dịch: Làm quen với tập quán địa phương thì cần thời gian", count: 0 },
-                    { gramType: "quiz", q: "会議の進行を( ________)ください。", ans: "邪魔しない", w1: "周知しない", w2: "停止しない", w3: "中断しない", explain: "「妨げる」＝ cản trở → Dịch: Xin đừng làm gián đoạn tiến trình cuộc họp", count: 0 },
-                    { gramType: "quiz", q: "この記事は、( ________)のこれまでの発言をまとめたものだ。", ans: "都道府県の長", w1: "村の長", w2: "市の長", w3: "国の長", explain: "「知事」＝ tỉnh trưởng → Dịch: Bài báo này tổng hợp các phát biểu trước đây của thống đốc tỉnh", count: 0 },
-                    { gramType: "quiz", q: "( ________)方法でダイエットをするのは体によくない。", ans: "偏った", w1: "間違った", w2: "簡単な", w3: "単純な", explain: "「極端」＝ cực đoan → Dịch: Giảm cân bằng phương pháp cực đoan không tốt cho cơ thể", count: 0 },
-                    { gramType: "quiz", q: "【路線】使い方が最も適切なものを選択せよ。", ans: "市民たちは政策路線の変更を求めてデモを起こした", w1: "この路線に住んでいる住民はお金持ちが多い", w2: "彼は他人の言うことは気にしない路線で、自分のやり方を貫くタイプだ", w3: "踏切のない所で路線を横切ると危ない", explain: "「路線」＝ đường lối/chính sách → Dịch: Người dân đã biểu tình yêu cầu thay đổi đường lối chính sách", count: 0 },
-                    { gramType: "quiz", q: "【いかにも】使い方が最も適切なものを選択せよ。", ans: "大学生に人気の店だけあって、店内の小物に至るまでいかにも若者が好みそうな雰囲気だ", w1: "近場でこんなにすばらしい景色が見られるなんて、いかにも夢のようだ", w2: "給料が魅力でこの会社に入ったが、残業続きで休日出勤も多いから、いかにも休みたい", w3: "高いところは苦手だから、私がいかにも登りたくないところは東京タワーだ", explain: "「いかにも」＝ đúng là, rõ ràng là → Dịch: Đúng là cửa hàng được sinh viên ưa thích nên từ đồ trang trí đến không khí đều rất hợp gu giới trẻ", count: 0 },
-                    { gramType: "quiz", q: "【一息】使い方が最も適切なものを選択せよ。", ans: "作品の完成までもう一息だから、あきらめずに頑張ろうじゃないか", w1: "新聞の号外が配られ始めると、大勢の人々が一息に集まってきた", w2: "この作戦が成功すれば、犯人グループが一息に検挙できるだろう", w3: "彼女の一息は、今アメリカで経済の勉強をしている", explain: "「一息」＝ còn một chút nữa → Dịch: Chỉ còn một chút nữa là hoàn thành tác phẩm nên hãy cố gắng đừng bỏ cuộc", count: 0 },
-                    { gramType: "quiz", q: "【割く】使い方が最も適切なものを選択せよ。", ans: "忙しい社長が僕のためにわざわざ時間を割いて話を聞いてくれた", w1: "手がすべって、父が大切にしていたお皿を割いてしまった", w2: "10年間友達の縁を割いていたが、再会したのをきっかけに仲直りした", w3: "この作業は一人では大変だから、グループで仕事を割いてすることにしましょう", explain: "「割く」＝ dành ra (thời gian, công sức) → Dịch: Vị giám đốc bận rộn đã dành thời gian nghe tôi nói", count: 0 },
-                    { gramType: "quiz", q: "【シェア】使い方が最も適切なものを選択せよ。", ans: "円滑な業務遂行のために、知り得た情報はチーム全員でシェアすべきだ", w1: "このピザは8枚にシェアして食べることにしましょう", w2: "高齢化が進んだこの町では、シェアの60%は老人が占めている", w3: "ここでは毎年7月になるとアニメが好きな若者を中心に大規模なシェアが行われている", explain: "「シェア」＝ chia sẻ thông tin → Dịch: Để công việc diễn ra suôn sẻ, thông tin cần được chia sẻ với toàn bộ nhóm", count: 0 },
-                    { gramType: "quiz", q: "【あやふや】使い方が最も適切なものを選択せよ。", ans: "好きでもないのにデートをするというようなあやふやな態度はとるべきじゃないよ", w1: "昨日の晩は満月だったのに、雲が多くて月があやふやにしか見えなかった", w2: "調査によると、若者の三人に一人が将来に対するあやふやな不安を抱えているという", w3: "遅刻ばかりしている彼が、上司や同僚にあやふやな人だと思われているのも当然だ", explain: "「あやふや」＝ mơ hồ, không rõ ràng → Dịch: Không nên có thái độ mập mờ như đi hẹn hò với người mình không thích", count: 0 }
-                ]
-            },
-            {
-                name: "Bài 2 (Câu 26-50)",
-                free: true, list: [
-                    { gramType: "quiz", q: "日本語を自由に[[操る]]彼女が羨ましい。", ans: "あやつる", w1: "あやまる", w2: "そなわる", w3: "つとめる", explain: "「操る（あやつる）」＝ điều khiển, sử dụng thành thạo → Dịch: Tôi ngưỡng mộ cô ấy vì có thể sử dụng tiếng Nhật một cách tự do", count: 0 },
-                    { gramType: "quiz", q: "退院後も心臓[[発作]]が起きる恐れがある。", ans: "ほっさ", w1: "はつさく", w2: "はっさ", w3: "はっさく", explain: "「発作（ほっさ）」＝ cơn phát tác → Dịch: Sau khi xuất viện vẫn có nguy cơ xảy ra cơn đau tim", count: 0 },
-                    { gramType: "quiz", q: "猫の[[額]]のような狭い土地だ。", ans: "ひたい", w1: "あご", w2: "まゆげ", w3: "かしゅ", explain: "「額（ひたい）」＝ trán → 「猫の額」＝ mảnh đất nhỏ hẹp → Dịch: Đó là mảnh đất nhỏ như trán mèo", count: 0 },
-                    { gramType: "quiz", q: "夜更かしは体に[[障る]]。", ans: "さわる", w1: "さぐる", w2: "くばる", w3: "やぶる", explain: "「障る（さわる）」＝ ảnh hưởng xấu → Dịch: Thức khuya có hại cho cơ thể", count: 0 },
-                    { gramType: "quiz", q: "挫折だらけの人生を[[歩んで]]きた。", ans: "あゆんで", w1: "ゆるんで", w2: "のぞんで", w3: "はずんで", explain: "「歩む（あゆむ）」＝ bước đi, trải qua → Dịch: Tôi đã sống một cuộc đời đầy thất bại", count: 0 },
-                    { gramType: "quiz", q: "会社創立50周年にあたり、記念の[[催し]]を行う。", ans: "もよおし", w1: "きざし", w2: "くちばし", w3: "あかし", explain: "「催し（もよおし）」＝ sự kiện, hoạt động → Dịch: Nhân dịp kỷ niệm 50 năm thành lập công ty sẽ tổ chức sự kiện kỷ niệm", count: 0 },
-                    { gramType: "quiz", q: "定期的に機械設備の( ________)を行う。", ans: "点検", w1: "捜査", w2: "検診", w3: "診断", explain: "「点検（てんけん）」＝ kiểm tra thiết bị → Dịch: Định kỳ kiểm tra thiết bị máy móc", count: 0 },
-                    { gramType: "quiz", q: "彼は仕事のストレスで、アルコール( ________)症になってしまった。", ans: "依存", w1: "感染", w2: "中毒", w3: "混同", explain: "「依存症（いぞんしょう）」＝ chứng lệ thuộc → Dịch: Vì áp lực công việc mà anh ấy bị nghiện rượu", count: 0 },
-                    { gramType: "quiz", q: "面接のときは控えめ且つ清潔な装いを( ________)ことが大事だ。", ans: "こころがける", w1: "うけたまわる", w2: "いつくしむ", w3: "さかのぼる", explain: "「心がける（こころがける）」＝ chú ý, cố gắng thực hiện → Dịch: Khi phỏng vấn, điều quan trọng là chú ý ăn mặc giản dị và sạch sẽ", count: 0 },
-                    { gramType: "quiz", q: "木曜の部内会議は全員参加が( ________)。", ans: "のぞましい", w1: "たのもしい", w2: "たくましい", w3: "むなしい", explain: "「望ましい（のぞましい）」＝ đáng mong đợi → Dịch: Cuộc họp nội bộ thứ Năm nên có sự tham gia của toàn bộ thành viên", count: 0 },
-                    { gramType: "quiz", q: "そんな( ________)に合わない説明では理解できるわけがない。", ans: "理屈", w1: "理性", w2: "普通", w3: "納得", explain: "「理屈（りくつ）」＝ lý lẽ → Dịch: Với cách giải thích vô lý như vậy thì không thể hiểu được", count: 0 },
-                    { gramType: "quiz", q: "( ________)休みの申請をしたほうが周囲に迷惑がかからない。", ans: "まえもって", w1: "かつて", w2: "あえて", w3: "しいて", explain: "「前もって（まえもって）」＝ trước → Dịch: Nên xin nghỉ trước để không làm phiền người xung quanh", count: 0 },
-                    { gramType: "quiz", q: "この手紙を最後に、紀子からの連絡は完全に( ________)絶えた。", ans: "途", w1: "通", w2: "音", w3: "源", explain: "「途絶える（とだえる）」＝ bị gián đoạn hoàn toàn → Dịch: Sau lá thư này thì liên lạc từ Noriko hoàn toàn bị cắt đứt", count: 0 },
-                    { gramType: "quiz", q: "職務を[[おこたる]]不適切な行為は一切禁じられる。", ans: "疎かにする", w1: "異にする", w2: "苦にする", w3: "無にする", explain: "「怠る（おこたる）」＝ lơ là, sao nhãng → Dịch: Mọi hành vi không phù hợp do lơ là nhiệm vụ đều bị cấm", count: 0 },
-                    { gramType: "quiz", q: "この動物は近づくと[[すばしこく]]逃げるので、撮影が難しい。", ans: "敏捷に", w1: "頻繁に", w2: "得意に", w3: "強引に", explain: "「すばしこい」＝ nhanh nhẹn → Dịch: Loài động vật này nhanh nhẹn bỏ chạy khi đến gần nên rất khó chụp hình", count: 0 },
-                    { gramType: "quiz", q: "落ち着こうとすればするほど、不安が[[つのる]]。", ans: "つよくなる", w1: "小さくなる", w2: "なくなる", w3: "出なくなる", explain: "「募る（つのる）」＝ tăng lên → Dịch: Càng cố bình tĩnh thì sự bất an càng tăng", count: 0 },
-                    { gramType: "quiz", q: "彼の想像力はきわめて[[ひんじゃく]]だった。", ans: "乏しかった", w1: "豊富だった", w2: "おもしろかった", w3: "かしこかった", explain: "「貧弱（ひんじゃく）」＝ nghèo nàn, yếu kém → Dịch: Trí tưởng tượng của anh ấy cực kỳ nghèo nàn", count: 0 },
-                    { gramType: "quiz", q: "初対面から[[なれなれしい]]態度の人は好きになれない。", ans: "親しすぎる", w1: "厳しすぎる", w2: "不潔な", w3: "甘すぎる", explain: "「なれなれしい」＝ quá suồng sã → Dịch: Tôi không thích những người quá thân mật ngay từ lần đầu gặp", count: 0 },
-                    { gramType: "quiz", q: "言葉の遊びで[[しなやかな]]発想を育てる。", ans: "柔らかい", w1: "豊かな", w2: "自由", w3: "新奇", explain: "「しなやか」＝ mềm dẻo, linh hoạt → Dịch: Nuôi dưỡng cách suy nghĩ linh hoạt thông qua trò chơi ngôn ngữ", count: 0 },
-                    { gramType: "quiz", q: "【横断】使い方が最も適切なものを選択せよ。", ans: "赤信号を無視して道路を横断する。", w1: "玉ねぎを横断するときは涙が出る。", w2: "行きたくないなら横断してもいいよ。", w3: "店員の横断な態度に腹が立った。", explain: "「横断（おうだん）」＝ băng qua → Dịch: Băng qua đường mà phớt lờ đèn đỏ", count: 0 },
-                    { gramType: "quiz", q: "【盛り上げる】使い方が最も適切なものを選択せよ。", ans: "彼の活躍は大会を大いに盛り上げた。", w1: "企画書を完璧に盛り上げて部長に提出した。", w2: "資金不足で、プロジェクトは盛り上げ状態になった。", w3: "田村君は皆に盛り上げられて喜んでいる。", explain: "「盛り上げる（もりあげる）」＝ làm sôi động → Dịch: Sự thể hiện của anh ấy đã làm cho đại hội trở nên rất sôi động", count: 0 },
-                    { gramType: "quiz", q: "【手順】使い方が最も適切なものを選択せよ。", ans: "インストールの説明に従って、次の手順に進んでください。", w1: "お手順をおかけしますが、もう一度メールをいただけませんか。", w2: "母は冷蔵庫の余りもので手順よく夕飯を作った。", w3: "銀行口座を解約する手順は簡単になった。", explain: "「手順（てじゅん）」＝ trình tự thao tác → Dịch: Hãy làm theo hướng dẫn cài đặt và chuyển sang bước tiếp theo", count: 0 },
-                    { gramType: "quiz", q: "【適宜】使い方が最も適切なものを選択せよ。", ans: "暑いので適宜休みをとりながら農作業をやっている。", w1: "彼女は優しいので、看護婦の仕事に適宜だ。", w2: "こういう土壌はお米の栽培に適宜している。", w3: "この適宜した上着は姉からのプレゼントだ。", explain: "「適宜（てきぎ）」＝ thích hợp tùy tình huống → Dịch: Vì trời nóng nên vừa nghỉ ngơi thích hợp vừa làm việc đồng áng", count: 0 },
-                    { gramType: "quiz", q: "【ちやほや】使い方が最も適切なものを選択せよ。", ans: "周りにちやほやされてわがままになっている。", w1: "旅館のベランダからちやほやと遠くの山を眺める。", w2: "毎日ちやほや働いても、給料はちっとも上がらない。", w3: "毎月光熱費だけでもちやほやお金がかかる。", explain: "「ちやほや」＝ nuông chiều, tâng bốc → Dịch: Vì được mọi người xung quanh chiều chuộng nên trở nên ích kỷ", count: 0 },
-                    { gramType: "quiz", q: "【ジャンル】使い方が最も適切なものを選択せよ。", ans: "本棚の書籍はジャンル別に分けられてある。", w1: "偽物か本物かのジャンルがつきにくい。", w2: "大学のジャンルを選ぶことはとても重要だ。", w3: "病院で胸部のジャンル写真をとった。", explain: "「ジャンル」＝ thể loại → Dịch: Sách trên kệ được phân loại theo từng thể loại", count: 0 }
-                ]
-            },
-            {
-                name: "Bài 3 (Câu 51-75)",
-                free: true, list: [
-                    { gramType: "quiz", q: "日本語を自由に[[操る]]彼女が羨ましい。", ans: "あやつる", w1: "あやまる", w2: "そなわる", w3: "つとめる", explain: "「操る（あやつる）」＝ điều khiển, sử dụng thành thạo → Dịch: Tôi ngưỡng mộ cô ấy vì có thể sử dụng tiếng Nhật một cách tự do", count: 0 },
-                    { gramType: "quiz", q: "退院後も心臓[[発作]]が起きる恐れがある。", ans: "ほっさ", w1: "はつさく", w2: "はっさ", w3: "はっさく", explain: "「発作（ほっさ）」＝ cơn phát tác → Dịch: Sau khi xuất viện vẫn có nguy cơ xảy ra cơn đau tim", count: 0 },
-                    { gramType: "quiz", q: "猫の[[額]]のような狭い土地だ。", ans: "ひたい", w1: "あご", w2: "まゆげ", w3: "かしゅ", explain: "「額（ひたい）」＝ trán → 「猫の額」＝ mảnh đất nhỏ hẹp → Dịch: Đó là mảnh đất nhỏ như trán mèo", count: 0 },
-                    { gramType: "quiz", q: "夜更かしは体に[[障る]]。", ans: "さわる", w1: "さぐる", w2: "くばる", w3: "やぶる", explain: "「障る（さわる）」＝ ảnh hưởng xấu → Dịch: Thức khuya có hại cho cơ thể", count: 0 },
-                    { gramType: "quiz", q: "挫折だらけの人生を[[歩んで]]きた。", ans: "あゆんで", w1: "ゆるんで", w2: "のぞんで", w3: "はずんで", explain: "「歩む（あゆむ）」＝ bước đi, trải qua → Dịch: Tôi đã sống một cuộc đời đầy thất bại", count: 0 },
-                    { gramType: "quiz", q: "会社創立50周年にあたり、記念の[[催し]]を行う。", ans: "もよおし", w1: "きざし", w2: "くちばし", w3: "あかし", explain: "「催し（もよおし）」＝ sự kiện, hoạt động → Dịch: Nhân dịp kỷ niệm 50 năm thành lập công ty sẽ tổ chức sự kiện kỷ niệm", count: 0 },
-                    { gramType: "quiz", q: "定期的に機械設備の( ________)を行う。", ans: "点検", w1: "捜査", w2: "検診", w3: "診断", explain: "「点検（てんけん）」＝ kiểm tra thiết bị → Dịch: Định kỳ kiểm tra thiết bị máy móc", count: 0 },
-                    { gramType: "quiz", q: "彼は仕事のストレスで、アルコール( ________)症になってしまった。", ans: "依存", w1: "感染", w2: "中毒", w3: "混同", explain: "「依存症（いぞんしょう）」＝ chứng lệ thuộc → Dịch: Vì áp lực công việc mà anh ấy bị nghiện rượu", count: 0 },
-                    { gramType: "quiz", q: "面接のときは控えめ且つ清潔な装いを( ________)ことが大事だ。", ans: "こころがける", w1: "うけたまわる", w2: "いつくしむ", w3: "さかのぼる", explain: "「心がける（こころがける）」＝ chú ý, cố gắng thực hiện → Dịch: Khi phỏng vấn, điều quan trọng là chú ý ăn mặc giản dị và sạch sẽ", count: 0 },
-                    { gramType: "quiz", q: "木曜の部内会議は全員参加が( ________)。", ans: "のぞましい", w1: "たのもしい", w2: "たくましい", w3: "むなしい", explain: "「望ましい（のぞましい）」＝ đáng mong đợi → Dịch: Cuộc họp nội bộ thứ Năm nên có sự tham gia của toàn bộ thành viên", count: 0 },
-                    { gramType: "quiz", q: "そんな( ________)に合わない説明では理解できるわけがない。", ans: "理屈", w1: "理性", w2: "普通", w3: "納得", explain: "「理屈（りくつ）」＝ lý lẽ → Dịch: Với cách giải thích vô lý như vậy thì không thể hiểu được", count: 0 },
-                    { gramType: "quiz", q: "( ________)休みの申請をしたほうが周囲に迷惑がかからない。", ans: "まえもって", w1: "かつて", w2: "あえて", w3: "しいて", explain: "「前もって（まえもって）」＝ trước → Dịch: Nên xin nghỉ trước để không làm phiền người xung quanh", count: 0 },
-                    { gramType: "quiz", q: "この手紙を最後に、紀子からの連絡は完全に( ________)絶えた。", ans: "途", w1: "通", w2: "音", w3: "源", explain: "「途絶える（とだえる）」＝ bị gián đoạn hoàn toàn → Dịch: Sau lá thư này thì liên lạc từ Noriko hoàn toàn bị cắt đứt", count: 0 },
-                    { gramType: "quiz", q: "職務を[[おこたる]]不適切な行為は一切禁じられる。", ans: "疎かにする", w1: "異にする", w2: "苦にする", w3: "無にする", explain: "「怠る（おこたる）」＝ lơ là, sao nhãng → Dịch: Mọi hành vi không phù hợp do lơ là nhiệm vụ đều bị cấm", count: 0 },
-                    { gramType: "quiz", q: "この動物は近づくと[[すばしこく]]逃げるので、撮影が難しい。", ans: "敏捷に", w1: "頻繁に", w2: "得意に", w3: "強引に", explain: "「すばしこい」＝ nhanh nhẹn → Dịch: Loài động vật này nhanh nhẹn bỏ chạy khi đến gần nên rất khó chụp hình", count: 0 },
-                    { gramType: "quiz", q: "落ち着こうとすればするほど、不安が[[つのる]]。", ans: "つよくなる", w1: "小さくなる", w2: "なくなる", w3: "出なくなる", explain: "「募る（つのる）」＝ tăng lên → Dịch: Càng cố bình tĩnh thì sự bất an càng tăng", count: 0 },
-                    { gramType: "quiz", q: "彼の想像力はきわめて[[ひんじゃく]]だった。", ans: "乏しかった", w1: "豊富だった", w2: "おもしろかった", w3: "かしこかった", explain: "「貧弱（ひんじゃく）」＝ nghèo nàn, yếu kém → Dịch: Trí tưởng tượng của anh ấy cực kỳ nghèo nàn", count: 0 },
-                    { gramType: "quiz", q: "初対面から[[なれなれしい]]態度の人は好きになれない。", ans: "親しすぎる", w1: "厳しすぎる", w2: "不潔な", w3: "甘すぎる", explain: "「なれなれしい」＝ quá suồng sã → Dịch: Tôi không thích những người quá thân mật ngay từ lần đầu gặp", count: 0 },
-                    { gramType: "quiz", q: "言葉の遊びで[[しなやかな]]発想を育てる。", ans: "柔らかい", w1: "豊かな", w2: "自由", w3: "新奇", explain: "「しなやか」＝ mềm dẻo, linh hoạt → Dịch: Nuôi dưỡng cách suy nghĩ linh hoạt thông qua trò chơi ngôn ngữ", count: 0 },
-                    { gramType: "quiz", q: "【横断】使い方が最も適切なものを選択せよ。", ans: "赤信号を無視して道路を横断する。", w1: "玉ねぎを横断するときは涙が出る。", w2: "行きたくないなら横断してもいいよ。", w3: "店員の横断な態度に腹が立った。", explain: "「横断（おうだん）」＝ băng qua → Dịch: Băng qua đường mà phớt lờ đèn đỏ", count: 0 },
-                    { gramType: "quiz", q: "【盛り上げる】使い方が最も適切なものを選択せよ。", ans: "彼の活躍は大会を大いに盛り上げた。", w1: "企画書を完璧に盛り上げて部長に提出した。", w2: "資金不足で、プロジェクトは盛り上げ状態になった。", w3: "田村君は皆に盛り上げられて喜んでいる。", explain: "「盛り上げる（もりあげる）」＝ làm sôi động → Dịch: Sự thể hiện của anh ấy đã làm cho đại hội trở nên rất sôi động", count: 0 },
-                    { gramType: "quiz", q: "【手順】使い方が最も適切なものを選択せよ。", ans: "インストールの説明に従って、次の手順に進んでください。", w1: "お手順をおかけしますが、もう一度メールをいただけませんか。", w2: "母は冷蔵庫の余りもので手順よく夕飯を作った。", w3: "銀行口座を解約する手順は簡単になった。", explain: "「手順（てじゅん）」＝ trình tự thao tác → Dịch: Hãy làm theo hướng dẫn cài đặt và chuyển sang bước tiếp theo", count: 0 },
-                    { gramType: "quiz", q: "【適宜】使い方が最も適切なものを選択せよ。", ans: "暑いので適宜休みをとりながら農作業をやっている。", w1: "彼女は優しいので、看護婦の仕事に適宜だ。", w2: "こういう土壌はお米の栽培に適宜している。", w3: "この適宜した上着は姉からのプレゼントだ。", explain: "「適宜（てきぎ）」＝ thích hợp tùy tình huống → Dịch: Vì trời nóng nên vừa nghỉ ngơi thích hợp vừa làm việc đồng áng", count: 0 },
-                    { gramType: "quiz", q: "【ちやほや】使い方が最も適切なものを選択せよ。", ans: "周りにちやほやされてわがままになっている。", w1: "旅館のベランダからちやほやと遠くの山を眺める。", w2: "毎日ちやほや働いても、給料はちっとも上がらない。", w3: "毎月光熱費だけでもちやほやお金がかかる。", explain: "「ちやほや」＝ nuông chiều, tâng bốc → Dịch: Vì được mọi người xung quanh chiều chuộng nên trở nên ích kỷ", count: 0 },
-                    { gramType: "quiz", q: "【ジャンル】使い方が最も適切なものを選択せよ。", ans: "本棚の書籍はジャンル別に分けられてある。", w1: "偽物か本物かのジャンルがつきにくい。", w2: "大学のジャンルを選ぶことはとても重要だ。", w3: "病院で胸部のジャンル写真をとった。", explain: "「ジャンル」＝ thể loại → Dịch: Sách trên kệ được phân loại theo từng thể loại", count: 0 }
-                ]
-            },
-            {
+                        {
                 name: "Bài 3 (Câu 101-150)",
                 free: true,
                 list: [
@@ -266,7 +174,7 @@ const vanData = {
                     { c1: "口が肥える", c2: "くちがこえる", c3: "sành ăn", c4: "", c5: "", c6: "", count: 0 }
                 ]
             },
-            {
+                       {
                 name: "Bài 4 (Câu 151-200)",
                 free: true,
                 list: [
@@ -378,7 +286,99 @@ const vanData = {
                     { c1: "すんなり", c2: "すんなり", c3: "suôn sẻ", c4: "", c5: "", c6: "", count: 0 }
                 ]
             },
+        ],
+        quiz: [
             {
+                name: "Bài 1 (Câu 1-25)",
+                free: true, list: [
+                    { gramType: "quiz", q: "コツコツという足音が廊下に( ________)。", ans: "ひびいた", w1: "ないた", w2: "わいた", w3: "なびいた", explain: "「響く（ひびく）」＝ âm thanh vang, dội lại → Dịch: Tiếng bước chân “cộc cộc” vang lên trong hành lang", count: 0 },
+                    { gramType: "quiz", q: "過ぎ去ったことを( ________)仕方がない。前を向いて生きていこう。", ans: "くやんで", w1: "なやんで", w2: "うらやんで", w3: "はやんで", explain: "「悔やむ（くやむ）」＝ hối hận, tiếc nuối → Dịch: Dù có hối hận về chuyện đã qua cũng vô ích. Hãy hướng về phía trước mà sống", count: 0 },
+                    { gramType: "quiz", q: "ここは12階で周りのビルより高いので、視界を( ________)ものは何もない。", ans: "さえぎる", w1: "かすめる", w2: "とどめる", w3: "つきる", explain: "「遮る（さえぎる）」＝ che chắn, cản trở → Dịch: Vì ở tầng 12 và cao hơn các tòa nhà xung quanh nên không có gì che khuất tầm nhìn", count: 0 },
+                    { gramType: "quiz", q: "国民は国会での首相の発言に( ________)反応し、各地で批判が起こった。", ans: "びんかん", w1: "みんかん", w2: "みんがん", w3: "びんがん", explain: "「敏感（びんかん）」＝ nhạy cảm → Dịch: Người dân phản ứng nhạy cảm với phát biểu của thủ tướng tại quốc hội, và các chỉ trích đã xảy ra ở nhiều nơi", count: 0 },
+                    { gramType: "quiz", q: "世界的に男性より女性のほうが平均( ________)が長い傾向がある。", ans: "じゅみょう", w1: "じゅめい", w2: "じゅうめい", w3: "じゅうみょう", explain: "「寿命（じゅみょう）」＝ tuổi thọ → Dịch: Trên thế giới, phụ nữ có xu hướng sống thọ hơn nam giới", count: 0 },
+                    { gramType: "quiz", q: "山田選手は3本のヒットでチームの勝利に( ________)。", ans: "貢献した", w1: "かいけん", w2: "かいなん", w3: "こうなん", explain: "「貢献（こうけん）」＝ đóng góp → Dịch: Cầu thủ Yamada đã góp phần vào chiến thắng của đội với 3 cú đánh trúng", count: 0 },
+                    { gramType: "quiz", q: "クラスメートの森田さんとデートしているところを友達に見られて( ________)。", ans: "ひやかされた", w1: "しいられた", w2: "もてなされた", w3: "ひきいられた", explain: "「ひやかす」＝ trêu chọc → Dịch: Bị bạn bè trêu chọc khi bị nhìn thấy đang hẹn hò với bạn Morita", count: 0 },
+                    { gramType: "quiz", q: "( ________)の社長が、この会社を大きく発展させたらしい。", ans: "先代", w1: "古代", w2: "近郊", w3: "近世", explain: "「先代（せんだい）」＝ đời trước → Dịch: Có vẻ như vị giám đốc đời trước đã phát triển công ty này lớn mạnh", count: 0 },
+                    { gramType: "quiz", q: "あの俳優は前から人気はあったが、例のドラマで去年一気に( ________)した。", ans: "ブレイク", w1: "スルー", w2: "ボイコット", w3: "ブーム", explain: "「ブレイクする」＝ nổi tiếng bùng nổ → Dịch: Nam diễn viên đó vốn đã nổi tiếng, nhưng nhờ bộ phim đó mà năm ngoái đã bùng nổ tên tuổi", count: 0 },
+                    { gramType: "quiz", q: "いつも仕事をしない彼があの大変な仕事をやらせてくれだなんて、何か( ________)があるに違いない。", ans: "下心", w1: "内心", w2: "気心", w3: "裏心", explain: "「下心（したごころ）」＝ động cơ thầm kín → Dịch: Người vốn không làm việc như anh ta mà lại xin làm việc khó đó, chắc chắn có động cơ gì đó", count: 0 },
+                    { gramType: "quiz", q: "そのチームは、力強いプレーで敵を( ________)。", ans: "圧倒した", w1: "完敗した", w2: "健闘した", w3: "突撃した", explain: "「圧倒する」＝ áp đảo → Dịch: Đội đó đã áp đảo đối thủ bằng lối chơi mạnh mẽ", count: 0 },
+                    { gramType: "quiz", q: "風邪をひいて頭が痛いが、さっき薬を飲んだので、( ________)よくなるだろう。", ans: "じきに", w1: "じかに", w2: "いかに", w3: "いきに", explain: "「じきに」＝ sớm thôi → Dịch: Bị cảm nên đau đầu nhưng vừa uống thuốc xong nên chắc sẽ sớm khỏi", count: 0 },
+                    { gramType: "quiz", q: "今回の台風は、列島各地に大きな被害を( ________)。", ans: "もたらした", w1: "引きずった", w2: "おさめた", w3: "そこなった", explain: "「もたらす」＝ mang lại (kết quả) → Dịch: Cơn bão lần này đã gây ra thiệt hại lớn trên khắp các vùng", count: 0 },
+                    { gramType: "quiz", q: "うちの会社とA社は同業ではあるが、( ________)が全然違う。", ans: "規模", w1: "目的", w2: "立地", w3: "方針", explain: "「スケール」＝ quy mô → Dịch: Công ty chúng tôi và công ty A cùng ngành nhưng quy mô hoàn toàn khác", count: 0 },
+                    { gramType: "quiz", q: "学生ならほかに( ________)すべきことがあるんじゃない?。", ans: "集中", w1: "挑戦", w2: "研究", w3: "習得", explain: "「専念する」＝ chuyên tâm → Dịch: Nếu là sinh viên thì chẳng phải còn việc khác nên tập trung hơn sao", count: 0 },
+                    { gramType: "quiz", q: "土地の( ________)に慣れるのには時間がかかるものだ。", ans: "慣習", w1: "味付", w2: "天候", w3: "言葉", explain: "「しきたり」＝ tập quán → Dịch: Làm quen với tập quán địa phương thì cần thời gian", count: 0 },
+                    { gramType: "quiz", q: "会議の進行を( ________)ください。", ans: "邪魔しない", w1: "周知しない", w2: "停止しない", w3: "中断しない", explain: "「妨げる」＝ cản trở → Dịch: Xin đừng làm gián đoạn tiến trình cuộc họp", count: 0 },
+                    { gramType: "quiz", q: "この記事は、( ________)のこれまでの発言をまとめたものだ。", ans: "都道府県の長", w1: "村の長", w2: "市の長", w3: "国の長", explain: "「知事」＝ tỉnh trưởng → Dịch: Bài báo này tổng hợp các phát biểu trước đây của thống đốc tỉnh", count: 0 },
+                    { gramType: "quiz", q: "( ________)方法でダイエットをするのは体によくない。", ans: "偏った", w1: "間違った", w2: "簡単な", w3: "単純な", explain: "「極端」＝ cực đoan → Dịch: Giảm cân bằng phương pháp cực đoan không tốt cho cơ thể", count: 0 },
+                    { gramType: "quiz", q: "【路線】使い方が最も適切なものを選択せよ。", ans: "市民たちは政策路線の変更を求めてデモを起こした", w1: "この路線に住んでいる住民はお金持ちが多い", w2: "彼は他人の言うことは気にしない路線で、自分のやり方を貫くタイプだ", w3: "踏切のない所で路線を横切ると危ない", explain: "「路線」＝ đường lối/chính sách → Dịch: Người dân đã biểu tình yêu cầu thay đổi đường lối chính sách", count: 0 },
+                    { gramType: "quiz", q: "【いかにも】使い方が最も適切なものを選択せよ。", ans: "大学生に人気の店だけあって、店内の小物に至るまでいかにも若者が好みそうな雰囲気だ", w1: "近場でこんなにすばらしい景色が見られるなんて、いかにも夢のようだ", w2: "給料が魅力でこの会社に入ったが、残業続きで休日出勤も多いから、いかにも休みたい", w3: "高いところは苦手だから、私がいかにも登りたくないところは東京タワーだ", explain: "「いかにも」＝ đúng là, rõ ràng là → Dịch: Đúng là cửa hàng được sinh viên ưa thích nên từ đồ trang trí đến không khí đều rất hợp gu giới trẻ", count: 0 },
+                    { gramType: "quiz", q: "【一息】使い方が最も適切なものを選択せよ。", ans: "作品の完成までもう一息だから、あきらめずに頑張ろうじゃないか", w1: "新聞の号外が配られ始めると、大勢の人々が一息に集まってきた", w2: "この作戦が成功すれば、犯人グループが一息に検挙できるだろう", w3: "彼女の一息は、今アメリカで経済の勉強をしている", explain: "「一息」＝ còn một chút nữa → Dịch: Chỉ còn một chút nữa là hoàn thành tác phẩm nên hãy cố gắng đừng bỏ cuộc", count: 0 },
+                    { gramType: "quiz", q: "【割く】使い方が最も適切なものを選択せよ。", ans: "忙しい社長が僕のためにわざわざ時間を割いて話を聞いてくれた", w1: "手がすべって、父が大切にしていたお皿を割いてしまった", w2: "10年間友達の縁を割いていたが、再会したのをきっかけに仲直りした", w3: "この作業は一人では大変だから、グループで仕事を割いてすることにしましょう", explain: "「割く」＝ dành ra (thời gian, công sức) → Dịch: Vị giám đốc bận rộn đã dành thời gian nghe tôi nói", count: 0 },
+                    { gramType: "quiz", q: "【シェア】使い方が最も適切なものを選択せよ。", ans: "円滑な業務遂行のために、知り得た情報はチーム全員でシェアすべきだ", w1: "このピザは8枚にシェアして食べることにしましょう", w2: "高齢化が進んだこの町では、シェアの60%は老人が占めている", w3: "ここでは毎年7月になるとアニメが好きな若者を中心に大規模なシェアが行われている", explain: "「シェア」＝ chia sẻ thông tin → Dịch: Để công việc diễn ra suôn sẻ, thông tin cần được chia sẻ với toàn bộ nhóm", count: 0 },
+                    { gramType: "quiz", q: "【あやふや】使い方が最も適切なものを選択せよ。", ans: "好きでもないのにデートをするというようなあやふやな態度はとるべきじゃないよ", w1: "昨日の晩は満月だったのに、雲が多くて月があやふやにしか見えなかった", w2: "調査によると、若者の三人に一人が将来に対するあやふやな不安を抱えているという", w3: "遅刻ばかりしている彼が、上司や同僚にあやふやな人だと思われているのも当然だ", explain: "「あやふや」＝ mơ hồ, không rõ ràng → Dịch: Không nên có thái độ mập mờ như đi hẹn hò với người mình không thích", count: 0 }
+                ]
+            },
+            {
+                name: "Bài 2 (Câu 26-50)",
+                free: true, list: [
+                    { gramType: "quiz", q: "日本語を自由に[[操る]]彼女が羨ましい。", ans: "あやつる", w1: "あやまる", w2: "そなわる", w3: "つとめる", explain: "「操る（あやつる）」＝ điều khiển, sử dụng thành thạo → Dịch: Tôi ngưỡng mộ cô ấy vì có thể sử dụng tiếng Nhật một cách tự do", count: 0 },
+                    { gramType: "quiz", q: "退院後も心臓[[発作]]が起きる恐れがある。", ans: "ほっさ", w1: "はつさく", w2: "はっさ", w3: "はっさく", explain: "「発作（ほっさ）」＝ cơn phát tác → Dịch: Sau khi xuất viện vẫn có nguy cơ xảy ra cơn đau tim", count: 0 },
+                    { gramType: "quiz", q: "猫の[[額]]のような狭い土地だ。", ans: "ひたい", w1: "あご", w2: "まゆげ", w3: "かしゅ", explain: "「額（ひたい）」＝ trán → 「猫の額」＝ mảnh đất nhỏ hẹp → Dịch: Đó là mảnh đất nhỏ như trán mèo", count: 0 },
+                    { gramType: "quiz", q: "夜更かしは体に[[障る]]。", ans: "さわる", w1: "さぐる", w2: "くばる", w3: "やぶる", explain: "「障る（さわる）」＝ ảnh hưởng xấu → Dịch: Thức khuya có hại cho cơ thể", count: 0 },
+                    { gramType: "quiz", q: "挫折だらけの人生を[[歩んで]]きた。", ans: "あゆんで", w1: "ゆるんで", w2: "のぞんで", w3: "はずんで", explain: "「歩む（あゆむ）」＝ bước đi, trải qua → Dịch: Tôi đã sống một cuộc đời đầy thất bại", count: 0 },
+                    { gramType: "quiz", q: "会社創立50周年にあたり、記念の[[催し]]を行う。", ans: "もよおし", w1: "きざし", w2: "くちばし", w3: "あかし", explain: "「催し（もよおし）」＝ sự kiện, hoạt động → Dịch: Nhân dịp kỷ niệm 50 năm thành lập công ty sẽ tổ chức sự kiện kỷ niệm", count: 0 },
+                    { gramType: "quiz", q: "定期的に機械設備の( ________)を行う。", ans: "点検", w1: "捜査", w2: "検診", w3: "診断", explain: "「点検（てんけん）」＝ kiểm tra thiết bị → Dịch: Định kỳ kiểm tra thiết bị máy móc", count: 0 },
+                    { gramType: "quiz", q: "彼は仕事のストレスで、アルコール( ________)症になってしまった。", ans: "依存", w1: "感染", w2: "中毒", w3: "混同", explain: "「依存症（いぞんしょう）」＝ chứng lệ thuộc → Dịch: Vì áp lực công việc mà anh ấy bị nghiện rượu", count: 0 },
+                    { gramType: "quiz", q: "面接のときは控えめ且つ清潔な装いを( ________)ことが大事だ。", ans: "こころがける", w1: "うけたまわる", w2: "いつくしむ", w3: "さかのぼる", explain: "「心がける（こころがける）」＝ chú ý, cố gắng thực hiện → Dịch: Khi phỏng vấn, điều quan trọng là chú ý ăn mặc giản dị và sạch sẽ", count: 0 },
+                    { gramType: "quiz", q: "木曜の部内会議は全員参加が( ________)。", ans: "のぞましい", w1: "たのもしい", w2: "たくましい", w3: "むなしい", explain: "「望ましい（のぞましい）」＝ đáng mong đợi → Dịch: Cuộc họp nội bộ thứ Năm nên có sự tham gia của toàn bộ thành viên", count: 0 },
+                    { gramType: "quiz", q: "そんな( ________)に合わない説明では理解できるわけがない。", ans: "理屈", w1: "理性", w2: "普通", w3: "納得", explain: "「理屈（りくつ）」＝ lý lẽ → Dịch: Với cách giải thích vô lý như vậy thì không thể hiểu được", count: 0 },
+                    { gramType: "quiz", q: "( ________)休みの申請をしたほうが周囲に迷惑がかからない。", ans: "まえもって", w1: "かつて", w2: "あえて", w3: "しいて", explain: "「前もって（まえもって）」＝ trước → Dịch: Nên xin nghỉ trước để không làm phiền người xung quanh", count: 0 },
+                    { gramType: "quiz", q: "この手紙を最後に、紀子からの連絡は完全に( ________)絶えた。", ans: "途", w1: "通", w2: "音", w3: "源", explain: "「途絶える（とだえる）」＝ bị gián đoạn hoàn toàn → Dịch: Sau lá thư này thì liên lạc từ Noriko hoàn toàn bị cắt đứt", count: 0 },
+                    { gramType: "quiz", q: "職務を[[おこたる]]不適切な行為は一切禁じられる。", ans: "疎かにする", w1: "異にする", w2: "苦にする", w3: "無にする", explain: "「怠る（おこたる）」＝ lơ là, sao nhãng → Dịch: Mọi hành vi không phù hợp do lơ là nhiệm vụ đều bị cấm", count: 0 },
+                    { gramType: "quiz", q: "この動物は近づくと[[すばしこく]]逃げるので、撮影が難しい。", ans: "敏捷に", w1: "頻繁に", w2: "得意に", w3: "強引に", explain: "「すばしこい」＝ nhanh nhẹn → Dịch: Loài động vật này nhanh nhẹn bỏ chạy khi đến gần nên rất khó chụp hình", count: 0 },
+                    { gramType: "quiz", q: "落ち着こうとすればするほど、不安が[[つのる]]。", ans: "つよくなる", w1: "小さくなる", w2: "なくなる", w3: "出なくなる", explain: "「募る（つのる）」＝ tăng lên → Dịch: Càng cố bình tĩnh thì sự bất an càng tăng", count: 0 },
+                    { gramType: "quiz", q: "彼の想像力はきわめて[[ひんじゃく]]だった。", ans: "乏しかった", w1: "豊富だった", w2: "おもしろかった", w3: "かしこかった", explain: "「貧弱（ひんじゃく）」＝ nghèo nàn, yếu kém → Dịch: Trí tưởng tượng của anh ấy cực kỳ nghèo nàn", count: 0 },
+                    { gramType: "quiz", q: "初対面から[[なれなれしい]]態度の人は好きになれない。", ans: "親しすぎる", w1: "厳しすぎる", w2: "不潔な", w3: "甘すぎる", explain: "「なれなれしい」＝ quá suồng sã → Dịch: Tôi không thích những người quá thân mật ngay từ lần đầu gặp", count: 0 },
+                    { gramType: "quiz", q: "言葉の遊びで[[しなやかな]]発想を育てる。", ans: "柔らかい", w1: "豊かな", w2: "自由", w3: "新奇", explain: "「しなやか」＝ mềm dẻo, linh hoạt → Dịch: Nuôi dưỡng cách suy nghĩ linh hoạt thông qua trò chơi ngôn ngữ", count: 0 },
+                    { gramType: "quiz", q: "【横断】使い方が最も適切なものを選択せよ。", ans: "赤信号を無視して道路を横断する。", w1: "玉ねぎを横断するときは涙が出る。", w2: "行きたくないなら横断してもいいよ。", w3: "店員の横断な態度に腹が立った。", explain: "「横断（おうだん）」＝ băng qua → Dịch: Băng qua đường mà phớt lờ đèn đỏ", count: 0 },
+                    { gramType: "quiz", q: "【盛り上げる】使い方が最も適切なものを選択せよ。", ans: "彼の活躍は大会を大いに盛り上げた。", w1: "企画書を完璧に盛り上げて部長に提出した。", w2: "資金不足で、プロジェクトは盛り上げ状態になった。", w3: "田村君は皆に盛り上げられて喜んでいる。", explain: "「盛り上げる（もりあげる）」＝ làm sôi động → Dịch: Sự thể hiện của anh ấy đã làm cho đại hội trở nên rất sôi động", count: 0 },
+                    { gramType: "quiz", q: "【手順】使い方が最も適切なものを選択せよ。", ans: "インストールの説明に従って、次の手順に進んでください。", w1: "お手順をおかけしますが、もう一度メールをいただけませんか。", w2: "母は冷蔵庫の余りもので手順よく夕飯を作った。", w3: "銀行口座を解約する手順は簡単になった。", explain: "「手順（てじゅん）」＝ trình tự thao tác → Dịch: Hãy làm theo hướng dẫn cài đặt và chuyển sang bước tiếp theo", count: 0 },
+                    { gramType: "quiz", q: "【適宜】使い方が最も適切なものを選択せよ。", ans: "暑いので適宜休みをとりながら農作業をやっている。", w1: "彼女は優しいので、看護婦の仕事に適宜だ。", w2: "こういう土壌はお米の栽培に適宜している。", w3: "この適宜した上着は姉からのプレゼントだ。", explain: "「適宜（てきぎ）」＝ thích hợp tùy tình huống → Dịch: Vì trời nóng nên vừa nghỉ ngơi thích hợp vừa làm việc đồng áng", count: 0 },
+                    { gramType: "quiz", q: "【ちやほや】使い方が最も適切なものを選択せよ。", ans: "周りにちやほやされてわがままになっている。", w1: "旅館のベランダからちやほやと遠くの山を眺める。", w2: "毎日ちやほや働いても、給料はちっとも上がらない。", w3: "毎月光熱費だけでもちやほやお金がかかる。", explain: "「ちやほや」＝ nuông chiều, tâng bốc → Dịch: Vì được mọi người xung quanh chiều chuộng nên trở nên ích kỷ", count: 0 },
+                    { gramType: "quiz", q: "【ジャンル】使い方が最も適切なものを選択せよ。", ans: "本棚の書籍はジャンル別に分けられてある。", w1: "偽物か本物かのジャンルがつきにくい。", w2: "大学のジャンルを選ぶことはとても重要だ。", w3: "病院で胸部のジャンル写真をとった。", explain: "「ジャンル」＝ thể loại → Dịch: Sách trên kệ được phân loại theo từng thể loại", count: 0 }
+                ]
+            },
+            {
+                name: "Bài 3 (Câu 51-75)",
+                free: true, list: [
+                    { gramType: "quiz", q: "日本語を自由に[[操る]]彼女が羨ましい。", ans: "あやつる", w1: "あやまる", w2: "そなわる", w3: "つとめる", explain: "「操る（あやつる）」＝ điều khiển, sử dụng thành thạo → Dịch: Tôi ngưỡng mộ cô ấy vì có thể sử dụng tiếng Nhật một cách tự do", count: 0 },
+                    { gramType: "quiz", q: "退院後も心臓[[発作]]が起きる恐れがある。", ans: "ほっさ", w1: "はつさく", w2: "はっさ", w3: "はっさく", explain: "「発作（ほっさ）」＝ cơn phát tác → Dịch: Sau khi xuất viện vẫn có nguy cơ xảy ra cơn đau tim", count: 0 },
+                    { gramType: "quiz", q: "猫の[[額]]のような狭い土地だ。", ans: "ひたい", w1: "あご", w2: "まゆげ", w3: "かしゅ", explain: "「額（ひたい）」＝ trán → 「猫の額」＝ mảnh đất nhỏ hẹp → Dịch: Đó là mảnh đất nhỏ như trán mèo", count: 0 },
+                    { gramType: "quiz", q: "夜更かしは体に[[障る]]。", ans: "さわる", w1: "さぐる", w2: "くばる", w3: "やぶる", explain: "「障る（さわる）」＝ ảnh hưởng xấu → Dịch: Thức khuya có hại cho cơ thể", count: 0 },
+                    { gramType: "quiz", q: "挫折だらけの人生を[[歩んで]]きた。", ans: "あゆんで", w1: "ゆるんで", w2: "のぞんで", w3: "はずんで", explain: "「歩む（あゆむ）」＝ bước đi, trải qua → Dịch: Tôi đã sống một cuộc đời đầy thất bại", count: 0 },
+                    { gramType: "quiz", q: "会社創立50周年にあたり、記念の[[催し]]を行う。", ans: "もよおし", w1: "きざし", w2: "くちばし", w3: "あかし", explain: "「催し（もよおし）」＝ sự kiện, hoạt động → Dịch: Nhân dịp kỷ niệm 50 năm thành lập công ty sẽ tổ chức sự kiện kỷ niệm", count: 0 },
+                    { gramType: "quiz", q: "定期的に機械設備の( ________)を行う。", ans: "点検", w1: "捜査", w2: "検診", w3: "診断", explain: "「点検（てんけん）」＝ kiểm tra thiết bị → Dịch: Định kỳ kiểm tra thiết bị máy móc", count: 0 },
+                    { gramType: "quiz", q: "彼は仕事のストレスで、アルコール( ________)症になってしまった。", ans: "依存", w1: "感染", w2: "中毒", w3: "混同", explain: "「依存症（いぞんしょう）」＝ chứng lệ thuộc → Dịch: Vì áp lực công việc mà anh ấy bị nghiện rượu", count: 0 },
+                    { gramType: "quiz", q: "面接のときは控えめ且つ清潔な装いを( ________)ことが大事だ。", ans: "こころがける", w1: "うけたまわる", w2: "いつくしむ", w3: "さかのぼる", explain: "「心がける（こころがける）」＝ chú ý, cố gắng thực hiện → Dịch: Khi phỏng vấn, điều quan trọng là chú ý ăn mặc giản dị và sạch sẽ", count: 0 },
+                    { gramType: "quiz", q: "木曜の部内会議は全員参加が( ________)。", ans: "のぞましい", w1: "たのもしい", w2: "たくましい", w3: "むなしい", explain: "「望ましい（のぞましい）」＝ đáng mong đợi → Dịch: Cuộc họp nội bộ thứ Năm nên có sự tham gia của toàn bộ thành viên", count: 0 },
+                    { gramType: "quiz", q: "そんな( ________)に合わない説明では理解できるわけがない。", ans: "理屈", w1: "理性", w2: "普通", w3: "納得", explain: "「理屈（りくつ）」＝ lý lẽ → Dịch: Với cách giải thích vô lý như vậy thì không thể hiểu được", count: 0 },
+                    { gramType: "quiz", q: "( ________)休みの申請をしたほうが周囲に迷惑がかからない。", ans: "まえもって", w1: "かつて", w2: "あえて", w3: "しいて", explain: "「前もって（まえもって）」＝ trước → Dịch: Nên xin nghỉ trước để không làm phiền người xung quanh", count: 0 },
+                    { gramType: "quiz", q: "この手紙を最後に、紀子からの連絡は完全に( ________)絶えた。", ans: "途", w1: "通", w2: "音", w3: "源", explain: "「途絶える（とだえる）」＝ bị gián đoạn hoàn toàn → Dịch: Sau lá thư này thì liên lạc từ Noriko hoàn toàn bị cắt đứt", count: 0 },
+                    { gramType: "quiz", q: "職務を[[おこたる]]不適切な行為は一切禁じられる。", ans: "疎かにする", w1: "異にする", w2: "苦にする", w3: "無にする", explain: "「怠る（おこたる）」＝ lơ là, sao nhãng → Dịch: Mọi hành vi không phù hợp do lơ là nhiệm vụ đều bị cấm", count: 0 },
+                    { gramType: "quiz", q: "この動物は近づくと[[すばしこく]]逃げるので、撮影が難しい。", ans: "敏捷に", w1: "頻繁に", w2: "得意に", w3: "強引に", explain: "「すばしこい」＝ nhanh nhẹn → Dịch: Loài động vật này nhanh nhẹn bỏ chạy khi đến gần nên rất khó chụp hình", count: 0 },
+                    { gramType: "quiz", q: "落ち着こうとすればするほど、不安が[[つのる]]。", ans: "つよくなる", w1: "小さくなる", w2: "なくなる", w3: "出なくなる", explain: "「募る（つのる）」＝ tăng lên → Dịch: Càng cố bình tĩnh thì sự bất an càng tăng", count: 0 },
+                    { gramType: "quiz", q: "彼の想像力はきわめて[[ひんじゃく]]だった。", ans: "乏しかった", w1: "豊富だった", w2: "おもしろかった", w3: "かしこかった", explain: "「貧弱（ひんじゃく）」＝ nghèo nàn, yếu kém → Dịch: Trí tưởng tượng của anh ấy cực kỳ nghèo nàn", count: 0 },
+                    { gramType: "quiz", q: "初対面から[[なれなれしい]]態度の人は好きになれない。", ans: "親しすぎる", w1: "厳しすぎる", w2: "不潔な", w3: "甘すぎる", explain: "「なれなれしい」＝ quá suồng sã → Dịch: Tôi không thích những người quá thân mật ngay từ lần đầu gặp", count: 0 },
+                    { gramType: "quiz", q: "言葉の遊びで[[しなやかな]]発想を育てる。", ans: "柔らかい", w1: "豊かな", w2: "自由", w3: "新奇", explain: "「しなやか」＝ mềm dẻo, linh hoạt → Dịch: Nuôi dưỡng cách suy nghĩ linh hoạt thông qua trò chơi ngôn ngữ", count: 0 },
+                    { gramType: "quiz", q: "【横断】使い方が最も適切なものを選択せよ。", ans: "赤信号を無視して道路を横断する。", w1: "玉ねぎを横断するときは涙が出る。", w2: "行きたくないなら横断してもいいよ。", w3: "店員の横断な態度に腹が立った。", explain: "「横断（おうだん）」＝ băng qua → Dịch: Băng qua đường mà phớt lờ đèn đỏ", count: 0 },
+                    { gramType: "quiz", q: "【盛り上げる】使い方が最も適切なものを選択せよ。", ans: "彼の活躍は大会を大いに盛り上げた。", w1: "企画書を完璧に盛り上げて部長に提出した。", w2: "資金不足で、プロジェクトは盛り上げ状態になった。", w3: "田村君は皆に盛り上げられて喜んでいる。", explain: "「盛り上げる（もりあげる）」＝ làm sôi động → Dịch: Sự thể hiện của anh ấy đã làm cho đại hội trở nên rất sôi động", count: 0 },
+                    { gramType: "quiz", q: "【手順】使い方が最も適切なものを選択せよ。", ans: "インストールの説明に従って、次の手順に進んでください。", w1: "お手順をおかけしますが、もう一度メールをいただけませんか。", w2: "母は冷蔵庫の余りもので手順よく夕飯を作った。", w3: "銀行口座を解約する手順は簡単になった。", explain: "「手順（てじゅん）」＝ trình tự thao tác → Dịch: Hãy làm theo hướng dẫn cài đặt và chuyển sang bước tiếp theo", count: 0 },
+                    { gramType: "quiz", q: "【適宜】使い方が最も適切なものを選択せよ。", ans: "暑いので適宜休みをとりながら農作業をやっている。", w1: "彼女は優しいので、看護婦の仕事に適宜だ。", w2: "こういう土壌はお米の栽培に適宜している。", w3: "この適宜した上着は姉からのプレゼントだ。", explain: "「適宜（てきぎ）」＝ thích hợp tùy tình huống → Dịch: Vì trời nóng nên vừa nghỉ ngơi thích hợp vừa làm việc đồng áng", count: 0 },
+                    { gramType: "quiz", q: "【ちやほや】使い方が最も適切なものを選択せよ。", ans: "周りにちやほやされてわがままになっている。", w1: "旅館のベランダからちやほやと遠くの山を眺める。", w2: "毎日ちやほや働いても、給料はちっとも上がらない。", w3: "毎月光熱費だけでもちやほやお金がかかる。", explain: "「ちやほや」＝ nuông chiều, tâng bốc → Dịch: Vì được mọi người xung quanh chiều chuộng nên trở nên ích kỷ", count: 0 },
+                    { gramType: "quiz", q: "【ジャンル】使い方が最も適切なものを選択せよ。", ans: "本棚の書籍はジャンル別に分けられてある。", w1: "偽物か本物かのジャンルがつきにくい。", w2: "大学のジャンルを選ぶことはとても重要だ。", w3: "病院で胸部のジャンル写真をとった。", explain: "「ジャンル」＝ thể loại → Dịch: Sách trên kệ được phân loại theo từng thể loại", count: 0 }
+                ]
+            },
+             {
                 name: "Bài 4 (Câu 76-100)",
                 free: true, list: [
                     { gramType: "quiz", q: "議長は、参加者に発言を[[促した]]。", ans: "うながした", w1: "そくした", w2: "つぶした", w3: "おかした", explain: "「促す（うながす）」＝ thúc giục → Dịch: Chủ tịch đã thúc giục người tham gia phát biểu", count: 0 },
