@@ -1848,10 +1848,7 @@
         <div class="mobile-header">
             <button id="sidebar-toggle-btn" onclick="toggleMenu()" title="Ẩn/Hiện menu">☰</button>
             <div id="header-user-name" style="font-weight: 800; color: var(--warning);">Cố lên! 🌸</div>
-            <div id="header-timer" style="display:flex; align-items:center; gap:6px; font-weight:800; color:var(--warning); font-size:18px; background:rgba(0,0,0,0.3); padding:4px 10px; border-radius:10px; border:1px solid rgba(251,191,36,0.3);">
-                <span style="font-size:13px; opacity:0.7;">📖</span>
-                <span id="header-timer-display">00:00</span>
-            </div>
+            <div id="header-timer" style="font-weight: 800; color: var(--warning); font-size: 22px;">00:00</div>
             <div style="display:flex; align-items:center; gap: 5px; flex-shrink:0;">
                 <!-- Ẩn select gốc nhưng giữ để JS tương thích -->
                 <select id="lang-switcher" onchange="switchLanguage(this.value)" style="display:none;">
@@ -2190,9 +2187,26 @@
 
         <div class="main-wrapper">
             <div class="main">
-                <div id="main-timer-box" style="display: none;">
-                    <div id="timer-display" style="display:none;">00:00</div>
-                    <div id="total-timer-display" style="display:none;">00:00</div>
+                <div id="main-timer-box" class="card" style="text-align: center; display: none;">
+                    <div style="display:flex; align-items:center; justify-content:center; gap:24px; flex-wrap:wrap;">
+                        <div style="text-align:center;">
+                            <div
+                                style="font-size:11px; font-weight:800; color:#64748b; letter-spacing:1px; text-transform:uppercase; margin-bottom:2px;">
+                                ⏱ BÀI NÀY</div>
+                            <div id="timer-display" style="font-size:inherit;">00:00</div>
+                        </div>
+                        <div style="width:1px; height:40px; background:rgba(255,255,255,0.1);"></div>
+                        <div style="text-align:center;">
+                            <div
+                                style="font-size:11px; font-weight:800; color:#64748b; letter-spacing:1px; text-transform:uppercase; margin-bottom:2px;">
+                                🕐 TỔNG</div>
+                            <div id="total-timer-display" style="font-size:inherit; color:var(--warning);">00:00</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                        <button class="btn btn-green" id="timer-btn" onclick="toggleTimer()">▶ BẮT ĐẦU</button>
+                        <button class="btn btn-gray" onclick="resetLessonTimer()">🔄 RESET BÀI</button>
+                    </div>
                 </div>
 
                 <div class="card" id="top-control-card" style="position: relative;">
@@ -2331,38 +2345,39 @@
                                 </div>
 
                                 <!-- Tùy chọn hiển thị đáp án -->
-                                <div style="display: flex; gap: 10px; justify-content: center; align-items: center; font-size: 13px; color: #cbd5e1; flex-wrap: wrap; background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 10px; margin-top:10px;">
+                                <div
+                                    style="display: flex; gap: 10px; justify-content: center; align-items: center; font-size: 13px; color: #cbd5e1; flex-wrap: wrap; background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 10px; margin-top:10px;">
                                     <span style="font-weight:800; color: #fbbf24;">Hiển thị đáp án:</span>
-                                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none;">
-                                        <input type="radio" name="checkMode" value="immediate" onchange="showAnswerImmediately = true;" style="accent-color: var(--success); width:16px; height:16px; cursor:pointer;">
+                                    <label
+                                        style="display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none;">
+                                        <input type="radio" name="checkMode" value="immediate"
+                                            onchange="showAnswerImmediately = true;"
+                                            style="accent-color: var(--success); width:16px; height:16px; cursor:pointer;">
                                         Hiện ngay
                                     </label>
-                                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none;">
-                                        <input type="radio" name="checkMode" value="after" onchange="showAnswerImmediately = false;" checked style="accent-color: var(--success); width:16px; height:16px; cursor:pointer;">
+                                    <label
+                                        style="display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none;">
+                                        <input type="radio" name="checkMode" value="after"
+                                            onchange="showAnswerImmediately = false;" checked
+                                            style="accent-color: var(--success); width:16px; height:16px; cursor:pointer;">
                                         Hiện sau khi nộp
                                     </label>
                                 </div>
 
                                 <!-- Trộn từ + Hoàn thành -->
                                 <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
-                                    <button id="btn-shuffle" class="btn btn-purple" style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:10px 12px;" onclick="shuffleQuiz()">🔀 TRỘN TỪ</button>
-                                    <button id="btn-mark-done" class="btn btn-green" style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:10px 12px;" onclick="markAllDone()">✅ ĐÃ HOÀN THÀNH</button>
-                                    <button id="btn-unmark-done" class="btn btn-green" style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:10px 12px;" onclick="unmarkAllDone()">❎ HUỶ HOÀN THÀNH</button>
-                                </div>
-                            </div> <!-- Ends mode-box-container -->
-
-                            <!-- Nút Bắt Đầu và Reset -->
-                            <div style="margin-top:10px; margin-bottom:20px;">
-                                <!-- Test timer display (chỉ hiện sau khi bấm Bắt Đầu) -->
-                                <div id="test-timer-display-wrap" style="display:none; text-align:center; margin-bottom:12px;">
-                                    <div style="font-size:11px; font-weight:800; color:#64748b; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:4px;">⏱ THỜi GIAN LÀM BÀI</div>
-                                    <div id="test-timer-display" style="font-size:44px; font-weight:900; color:var(--warning); text-shadow:0 2px 10px rgba(251,191,36,0.5); font-variant-numeric:tabular-nums; letter-spacing:2px;">00:00</div>
-                                </div>
-                                <div style="display:flex; gap:10px; justify-content:center;">
-                                    <button class="btn btn-green" id="timer-btn" onclick="toggleTestTimer()" style="width:180px; font-size:16px; padding:13px; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);">▶ BẮT ĐẦU</button>
-                                    <button class="btn btn-gray" onclick="resetTestTimer()" style="width:120px; font-size:14px; padding:13px;">🔄 RESET</button>
+                                    <button id="btn-shuffle" class="btn btn-purple"
+                                        style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:10px 12px;"
+                                        onclick="shuffleQuiz()">🔀 TRỘN TỪ</button>
+                                    <button id="btn-mark-done" class="btn btn-green"
+                                        style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:10px 12px;"
+                                        onclick="markAllDone()">✅ ĐÃ HOÀN THÀNH</button>
+                                    <button id="btn-unmark-done" class="btn btn-green"
+                                        style="display:none; flex:1; min-width:120px; justify-content:center; font-size:13px; padding:10px 12px;"
+                                        onclick="unmarkAllDone()">❎ HUỶ HOÀN THÀNH</button>
                                 </div>
                             </div>
+
                         </div>
 
                         <!-- Wrapper ẩn (tương thích ngược, dùng để show/hide action buttons) -->
@@ -4903,8 +4918,9 @@
                     document.getElementById('quiz-container').innerHTML = '';
                     if (currentList.length > 0) renderQuiz();
 
-                    // Auto-start header timer for new lesson access
-                    startLessonAccessTimer();
+                    // Auto-start timer for new lesson
+                    if (!timerInterval && currentList.length > 0) toggleTimer();
+                    if (!totalTimerInterval && currentList.length > 0) startTotalTimer();
                 }
 
                 function shuffleArray(array) {
@@ -5558,31 +5574,35 @@
                                     b.classList.add('correct'); b.style.opacity = '1';
                                 } else { b.style.opacity = '0.5'; }
                             });
-                            const msgEl = document.getElementById('msg-' + idx);
-                            if (msgEl && !msgEl.classList.contains('show')) {
-                                msgEl.className = 'fb-msg show ng'; msgEl.innerText = 'Sai rồi tiếc quá 😢';
+                            // Show msg if not yet shown
+                            const msg = document.getElementById('msg-' + idx);
+                            if (msg && !msg.classList.contains('show')) {
+                                msg.className = 'fb-msg show ng'; msg.innerText = 'SAI RỒI! ❌';
                             }
                             // Show answer-reveal
                             const _correctBtn = wrap.querySelector('.quiz-opt[data-correct="true"]');
                             const _correctText = _correctBtn ? _correctBtn.textContent.trim() : item.ans;
-                            let solEl = card.querySelector('.answer-reveal');
-                            if (!solEl && _correctText) {
-                                solEl = document.createElement('div');
-                                solEl.className = 'answer-reveal';
-                                card.appendChild(solEl);
+                            let _solEl = card.querySelector('.answer-reveal');
+                            if (!_solEl && _correctText) {
+                                _solEl = document.createElement('div');
+                                _solEl.className = 'answer-reveal';
+                                card.appendChild(_solEl);
                             }
-                            if (solEl && _correctText) solEl.innerHTML = '✅ Đáp án đúng: <b>' + _correctText + '</b>';
+                            if (_solEl && _correctText) _solEl.innerHTML = '✅ Đáp án đúng: <b>' + _correctText + '</b>';
                             // Show explain
                             const exp = document.getElementById('explain-' + idx);
                             if (exp) exp.style.display = 'block';
 
                         } else {
+                            // Từ đơn / Struct: hiện answer-reveal cho câu sai / chưa điền
                             if (res === 'ok') return;
                             const input = document.getElementById('input-' + idx);
                             if (!input) return;
                             const origAns = input.getAttribute('data-ans').trim();
+                            // Lock input
                             input.style.pointerEvents = 'none';
                             card.style.borderLeftColor = 'var(--danger)';
+                            // Show msg
                             const msgEl = document.getElementById('msg-' + idx);
                             if (msgEl && !msgEl.classList.contains('show')) {
                                 msgEl.className = 'fb-msg show ng'; msgEl.innerText = 'Sai rồi tiếc quá 😢';
@@ -5601,77 +5621,6 @@
                         }
                     });
                 }
-
-                // ===== TIMER SYSTEM (2 luồng độc lập) =====
-                // 1. Lesson access timer (tự chạy khi chọn bài, hiển thị ở header)
-                let lessonSeconds = 0;
-                let lessonTimerInterval = null;
-                function startLessonAccessTimer() {
-                    if (lessonTimerInterval) { clearInterval(lessonTimerInterval); lessonTimerInterval = null; }
-                    lessonSeconds = 0;
-                    updateLessonAccessTime();
-                    lessonTimerInterval = setInterval(() => { lessonSeconds++; updateLessonAccessTime(); }, 1000);
-                }
-                function updateLessonAccessTime() {
-                    const m = Math.floor(lessonSeconds / 60).toString().padStart(2, '0');
-                    const s = (lessonSeconds % 60).toString().padStart(2, '0');
-                    const el = document.getElementById('header-timer-display');
-                    if (el) el.textContent = `${m}:${s}`;
-                }
-
-                // 2. Test timer (chạy sau khi bấm Bắt Đầu, hiển thị trong card)
-                function toggleTestTimer() {
-                    const btn = document.getElementById('timer-btn');
-                    const wrap = document.getElementById('test-timer-display-wrap');
-                    const iframe = document.getElementById('bgm-iframe');
-                    if (timerInterval) {
-                        clearInterval(timerInterval); timerInterval = null;
-                        if (btn) { btn.innerHTML = '▶ TIẾP TỤC'; btn.className = 'btn btn-green'; }
-                        if (iframe && iframe.contentWindow) iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-                    } else {
-                        if (wrap) wrap.style.display = 'block';
-                        timerInterval = setInterval(() => { seconds++; updateTestTime(); }, 1000);
-                        if (btn) { btn.innerHTML = '⏸ TẠM DỪNG'; btn.className = 'btn btn-danger'; }
-                        if (iframe && iframe.contentWindow) iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-                    }
-                }
-                function resetTestTimer() {
-                    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-                    seconds = 0;
-                    updateTestTime();
-                    const btn = document.getElementById('timer-btn');
-                    if (btn) { btn.innerHTML = '▶ BẮT ĐẦU'; btn.className = 'btn btn-green'; }
-                    const wrap = document.getElementById('test-timer-display-wrap');
-                    if (wrap) wrap.style.display = 'none';
-                    const iframe = document.getElementById('bgm-iframe');
-                    if (iframe && iframe.contentWindow) {
-                        iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-                        iframe.contentWindow.postMessage('{"event":"command","func":"seekTo","args":[0, true]}', '*');
-                    }
-                }
-                function updateTestTime() {
-                    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-                    const s2 = (seconds % 60).toString().padStart(2, '0');
-                    const el = document.getElementById('test-timer-display');
-                    if (el) el.textContent = `${m}:${s2}`;
-                    const d = document.getElementById('timer-display'); if (d) d.textContent = `${m}:${s2}`;
-                }
-
-                // Legacy wrappers (backward compat)
-                function toggleTimer() { toggleTestTimer(); }
-                function startTotalTimer() {
-                    if (totalTimerInterval) return;
-                    totalTimerInterval = setInterval(() => { totalSeconds++; updateTotalTime(); }, 1000);
-                }
-                function resetLessonTimer() { resetTestTimer(); }
-                function resetTotalTimer() { if (totalTimerInterval) { clearInterval(totalTimerInterval); totalTimerInterval = null; } totalSeconds = 0; updateTotalTime(); }
-                function resetTimer() { resetTestTimer(); }
-                function updateLessonTime() { updateTestTime(); }
-                function updateTotalTime() {
-                    const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0'), s = (totalSeconds % 60).toString().padStart(2, '0');
-                    const d = document.getElementById('total-timer-display'); if (d) d.textContent = `${m}:${s}`;
-                }
-                function updateTime() { updateTestTime(); } // backward compat alias
 
                 function retryFailedOnly() {
                     const wrongs = [];
@@ -5700,6 +5649,35 @@
                     }
                 }
 
+                function toggleTimer() {
+                    const btn = document.getElementById('timer-btn');
+                    if (timerInterval) {
+                        clearInterval(timerInterval); timerInterval = null;
+                        btn.innerText = "▶ TIẾP TỤC"; btn.className = "btn btn-green";
+                    } else {
+                        timerInterval = setInterval(() => { seconds++; updateLessonTime(); }, 1000);
+                        btn.innerText = "⏸ TẠM DỪNG"; btn.className = "btn btn-danger";
+                    }
+                }
+                function startTotalTimer() {
+                    if (totalTimerInterval) return;
+                    totalTimerInterval = setInterval(() => { totalSeconds++; updateTotalTime(); }, 1000);
+                }
+                function resetLessonTimer() { seconds = 0; updateLessonTime(); }
+                function resetTotalTimer() { if (totalTimerInterval) { clearInterval(totalTimerInterval); totalTimerInterval = null; } totalSeconds = 0; updateTotalTime(); }
+                // Keep resetTimer as alias for backward compat
+                function resetTimer() { resetLessonTimer(); }
+                function updateLessonTime() {
+                    const m = Math.floor(seconds / 60).toString().padStart(2, '0'), s = (seconds % 60).toString().padStart(2, '0');
+                    const t = `${m}:${s}`;
+                    const d = document.getElementById('timer-display'); if (d) d.textContent = t;
+                    const h = document.getElementById('header-timer'); if (h) h.textContent = t;
+                }
+                function updateTotalTime() {
+                    const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0'), s = (totalSeconds % 60).toString().padStart(2, '0');
+                    const d = document.getElementById('total-timer-display'); if (d) d.textContent = `${m}:${s}`;
+                }
+                function updateTime() { updateLessonTime(); } // backward compat alias
 
                 function getMaxModeForType() {
                     if (curType === 'voca_quiz' || curType === 'gram_quiz') return 1;
@@ -5729,8 +5707,6 @@
 
                 function showCompletionScreen() {
                     if (totalTimerInterval) { clearInterval(totalTimerInterval); totalTimerInterval = null; }
-                    const iframe = document.getElementById('bgm-iframe');
-                    if (iframe && iframe.contentWindow) iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
                     const totalOk = sessionScores.reduce((a, s) => a + s.ok, 0);
                     const totalQ = sessionScores.reduce((a, s) => a + s.total, 0);
                     const pct = totalQ > 0 ? Math.round((totalOk / totalQ) * 100) : 0;
@@ -7597,7 +7573,6 @@
             }).join('');
         }
     </script>
-    <iframe id="bgm-iframe" src="https://www.youtube.com/embed/ihZYtrWTbkY?enablejsapi=1&autoplay=0&loop=1&playlist=ihZYtrWTbkY" style="display:none;" allow="autoplay"></iframe>
 </body>
 
 </html>
