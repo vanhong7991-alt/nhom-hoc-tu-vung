@@ -3371,6 +3371,12 @@
                 }
 
                 function selectVanDay(sectionKey, sub, lessonIdx, listOverride = null, targetMode = null) {
+                    if (window.innerWidth <= 768) {
+                        document.body.classList.add('sidebar-hidden');
+                        localStorage.setItem('sidebar_hidden', '1');
+                        const fab = document.getElementById('mobile-menu-fab');
+                        if (fab) fab.style.display = 'flex';
+                    }
                     const lesson = vanData[sectionKey]?.[sub]?.[lessonIdx];
                     const isFreeLesson = lesson && lesson.free === true;
                     if (REQUIRE_LOCK.goc_cua_van && !_appUnlocked && !listOverride && !isFreeLesson) {
@@ -4735,6 +4741,12 @@
                 // ─── End lock screen helpers ───
 
                 function selectDay(lv, ty, day, listOverride = null, targetMode = null) {
+                    if (window.innerWidth <= 768) {
+                        document.body.classList.add('sidebar-hidden');
+                        localStorage.setItem('sidebar_hidden', '1');
+                        const fab = document.getElementById('mobile-menu-fab');
+                        if (fab) fab.style.display = 'flex';
+                    }
                     // Kiểm tra khoá cho bài học tiêu chuẩn
                     const lockKey = lv + '_' + ty;
                     if (REQUIRE_LOCK[lockKey] && !_appUnlocked && !listOverride) {
