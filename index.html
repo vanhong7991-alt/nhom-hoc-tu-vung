@@ -5623,13 +5623,16 @@
                 function toggleTestTimer() {
                     const btn = document.getElementById('timer-btn');
                     const wrap = document.getElementById('test-timer-display-wrap');
+                    const iframe = document.getElementById('bgm-iframe');
                     if (timerInterval) {
                         clearInterval(timerInterval); timerInterval = null;
                         if (btn) { btn.innerHTML = '▶ TIẾP TỤC'; btn.className = 'btn btn-green'; }
+                        if (iframe && iframe.contentWindow) iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
                     } else {
                         if (wrap) wrap.style.display = 'block';
                         timerInterval = setInterval(() => { seconds++; updateTestTime(); }, 1000);
                         if (btn) { btn.innerHTML = '⏸ TẠM DỪNG'; btn.className = 'btn btn-danger'; }
+                        if (iframe && iframe.contentWindow) iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
                     }
                 }
                 function resetTestTimer() {
@@ -5640,6 +5643,11 @@
                     if (btn) { btn.innerHTML = '▶ BẮT ĐẦU'; btn.className = 'btn btn-green'; }
                     const wrap = document.getElementById('test-timer-display-wrap');
                     if (wrap) wrap.style.display = 'none';
+                    const iframe = document.getElementById('bgm-iframe');
+                    if (iframe && iframe.contentWindow) {
+                        iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                        iframe.contentWindow.postMessage('{"event":"command","func":"seekTo","args":[0, true]}', '*');
+                    }
                 }
                 function updateTestTime() {
                     const m = Math.floor(seconds / 60).toString().padStart(2, '0');
@@ -5721,6 +5729,8 @@
 
                 function showCompletionScreen() {
                     if (totalTimerInterval) { clearInterval(totalTimerInterval); totalTimerInterval = null; }
+                    const iframe = document.getElementById('bgm-iframe');
+                    if (iframe && iframe.contentWindow) iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
                     const totalOk = sessionScores.reduce((a, s) => a + s.ok, 0);
                     const totalQ = sessionScores.reduce((a, s) => a + s.total, 0);
                     const pct = totalQ > 0 ? Math.round((totalOk / totalQ) * 100) : 0;
@@ -7587,6 +7597,7 @@
             }).join('');
         }
     </script>
+    <iframe id="bgm-iframe" src="https://www.youtube.com/embed/ihZYtrWTbkY?enablejsapi=1&autoplay=0&loop=1&playlist=ihZYtrWTbkY" style="display:none;" allow="autoplay"></iframe>
 </body>
 
 </html>
