@@ -119,7 +119,7 @@ const vanData = {
                 ]
             },
                         {
-                name: "Bài 3 (Câu 101-150)",
+                name: "Bài 3 (101-150)",
                 free: true,
                 list: [
                     { c1: "剥ぐ・剝ぐ", c2: "はぐ・はぐ", c3: "lột, bóc", c4: "", c5: "", c6: "", count: 0 },
@@ -175,7 +175,7 @@ const vanData = {
                 ]
             },
                        {
-                name: "Bài 4 (Câu 151-200)",
+                name: "Bài 4 (151-200)",
                 free: true,
                 list: [
                     { c1: "盛り付ける", c2: "もりつける", c3: "bày biện thức ăn", c4: "", c5: "", c6: "", count: 0 },
@@ -231,7 +231,7 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 5 (Câu 201-250)",
+                name: "Bài 5 (201-250)",
                 free: true,
                 list: [
                     { c1: "俄然", c2: "がぜん", c3: "đột nhiên, bất ngờ", c4: "", c5: "", c6: "", count: 0 },
