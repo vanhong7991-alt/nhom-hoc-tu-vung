@@ -1850,15 +1850,6 @@
             <div id="header-user-name" style="font-weight: 800; color: var(--warning);">Cố lên! 🌸</div>
             <div id="header-timer" style="font-weight: 800; color: var(--warning); font-size: 22px;">00:00</div>
             <div style="display:flex; align-items:center; gap: 5px; flex-shrink:0;">
-                <!-- Bộ chọn ngôn ngữ: 3 nút cờ nhỏ -->
-                <div style="display:flex; gap:3px; background:rgba(0,0,0,0.3); border-radius:8px; padding:3px; border:1px solid rgba(255,255,255,0.15);">
-                    <button id="lang-btn-jp" onclick="switchLanguage('jp')" title="Tiếng Nhật"
-                        style="background:rgba(255,255,255,0.15); border:none; border-radius:6px; width:28px; height:28px; font-size:16px; cursor:pointer; transition:0.2s; line-height:1;">🇯🇵</button>
-                    <button id="lang-btn-en" onclick="switchLanguage('en')" title="TOEIC"
-                        style="background:transparent; border:none; border-radius:6px; width:28px; height:28px; font-size:16px; cursor:pointer; transition:0.2s; line-height:1;">🇺🇸</button>
-                    <button id="lang-btn-cn" onclick="switchLanguage('cn')" title="HSK"
-                        style="background:transparent; border:none; border-radius:6px; width:28px; height:28px; font-size:16px; cursor:pointer; transition:0.2s; line-height:1;">🇨🇳</button>
-                </div>
                 <!-- Ẩn select gốc nhưng giữ để JS tương thích -->
                 <select id="lang-switcher" onchange="switchLanguage(this.value)" style="display:none;">
                     <option value="jp">jp</option>
@@ -1908,6 +1899,42 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ===== LANGUAGE SELECTOR ===== -->
+            <style>
+                .lang-btn-cute {
+                    flex: 1; text-align: center; padding: 10px 4px; border-radius: 18px; font-weight: 800; text-decoration: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(30,41,59,0.8); color: #94a3b8; border: 2px solid rgba(255,255,255,0.05); box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; position: relative; overflow: hidden;
+                }
+                .lang-btn-cute::before {
+                    content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%); opacity: 0; transition: 0.3s;
+                }
+                .lang-btn-cute:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+                }
+                .lang-btn-cute:hover::before { opacity: 1; }
+                .lang-btn-cute span.emoji { font-size: 24px; line-height: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+                .lang-btn-cute span.text { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; z-index: 1; }
+                
+                .lang-btn-cute.active-jp { background: linear-gradient(135deg, #f43f5e, #fb7185); color: #fff; border-color: #fda4af; box-shadow: 0 6px 15px rgba(244, 63, 94, 0.4); transform: scale(1.05); }
+                .lang-btn-cute.active-en { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: #fff; border-color: #93c5fd; box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4); transform: scale(1.05); }
+                .lang-btn-cute.active-cn { background: linear-gradient(135deg, #eab308, #facc15); color: #fff; border-color: #fef08a; box-shadow: 0 6px 15px rgba(234, 179, 8, 0.4); transform: scale(1.05); }
+            </style>
+            <div style="padding: 12px 15px; display: flex; gap: 12px; justify-content: center; margin-bottom: 5px; border-bottom: 2px dashed rgba(255, 255, 255, 0.1);">
+                <a href="?lang=jp" id="lang-btn-jp" class="lang-btn-cute"><span class="emoji">🇯🇵</span><span class="text">Tiếng Nhật</span></a>
+                <a href="?lang=en" id="lang-btn-en" class="lang-btn-cute"><span class="emoji">🇺🇸</span><span class="text">Tiếng Anh</span></a>
+                <a href="?lang=cn" id="lang-btn-cn" class="lang-btn-cute"><span class="emoji">🇨🇳</span><span class="text">Tiếng Trung</span></a>
+            </div>
+            <script>
+                (function(){
+                    const params = new URLSearchParams(window.location.search);
+                    const lang = params.get('lang') || 'jp';
+                    const activeBtn = document.getElementById('lang-btn-' + lang);
+                    if(activeBtn) {
+                        activeBtn.classList.add('active-' + lang);
+                    }
+                })();
+            </script>
 
             <!-- ===== GÓC CỦA VÂN ===== -->
             <div id="van-section-wrapper">
