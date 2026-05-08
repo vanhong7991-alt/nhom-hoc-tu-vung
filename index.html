@@ -3666,15 +3666,19 @@
                 }
 
                 function setActiveMenuItem(dayName) {
-                    // Remove all previous highlights
+                    // ── Bước 1: Xoá highlight cũ ──
                     document.querySelectorAll('.menu-lvl3.active-lesson').forEach(el => el.classList.remove('active-lesson'));
-                    // Strict equality match only (prevent "Ngày 1" matching "Ngày 10")
+
+                    // ── Bước 2: Đóng tất cả sub-menu đang mở ──
+                    document.querySelectorAll('.sub-menu').forEach(s => s.style.display = 'none');
+
+                    // ── Bước 3: Tìm item đúng, highlight và mở ĐÚNG parent chain ──
                     document.querySelectorAll('.menu-lvl3').forEach(el => {
                         const nameEl = el.querySelector('.lesson-name-text');
                         const label = nameEl ? nameEl.textContent.trim() : el.textContent.trim();
                         if (label === dayName) {
                             el.classList.add('active-lesson');
-                            // Auto-expand all parent sub-menus
+                            // Chỉ mở parent chain của item này thôi
                             let parent = el.parentElement;
                             while (parent && parent.id !== 'sidebar') {
                                 if (parent.classList.contains('sub-menu')) {
@@ -4374,7 +4378,27 @@
                         if (dx < 0 && !isSidebarHidden) { toggleMenu(); return; }
                     }, { passive: true });
                 })();
-                function toggleSub(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+                function toggleSub(id) {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    const isOpen = (el.style.display === 'block');
+
+                    // ── Accordion: đóng tất cả sub-menu anh em cùng cấp ──
+                    if (el.parentElement) {
+                        // Tìm tất cả sub-menu cùng cha (anh em)
+                        const siblings = el.parentElement.querySelectorAll(':scope > .sub-menu');
+                        siblings.forEach(s => {
+                            if (s !== el) {
+                                s.style.display = 'none';
+                                // Đóng luôn các sub-menu con bên trong
+                                s.querySelectorAll('.sub-menu').forEach(c => c.style.display = 'none');
+                            }
+                        });
+                    }
+
+                    // Toggle menu được chọn
+                    el.style.display = isOpen ? 'none' : 'block';
+                }
                 let curSep = 'auto';
                 function updateImportUI() {
                     const isGram = (curType === 'gram');
