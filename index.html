@@ -71,6 +71,26 @@
             padding-bottom: 50px;
             flex-shrink: 0;
         }
+        
+        .resizer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 6px;
+            height: 100%;
+            cursor: col-resize;
+            z-index: 2001;
+            transition: background 0.2s;
+        }
+        .resizer:hover, .resizer.resizing {
+            background: rgba(59, 130, 246, 0.5);
+            width: 10px;
+        }
+
+        body.is-resizing .sidebar, 
+        body.is-resizing .main-wrapper {
+            transition: none !important;
+        }
 
         /* Sidebar hidden state */
         body.sidebar-hidden .sidebar {
@@ -2785,8 +2805,12 @@
                         
                         <button class="btn btn-gray" style="flex: 1; font-size: 16px; padding: 16px; font-weight: 800;"
                             onclick="resetQuiz()">🔄 LÀM LẠI</button>
+                        <button class="btn btn-warning" id="bottom-pause-btn" style="flex: 1.2; font-size: 16px; padding: 16px; font-weight: 800; display: none;"
+                            onclick="toggleTestTimer()">⏸️ Tạm dừng</button>
                         <button class="btn btn-blue" style="flex: 2; font-size: 18px; padding: 16px; font-weight: 800;"
                             onclick="submitQuiz()">✅ NỘP BÀI</button>
+                        <button class="btn btn-indigo" id="bottom-mute-btn" style="flex: 1.2; font-size: 16px; padding: 16px; font-weight: 800;"
+                            onclick="toggleMute()">🔊 Âm thanh</button>
                     </div>
 
                     <!-- Nút Mở Rộng -->
@@ -5206,6 +5230,31 @@
                 document.addEventListener('touchstart', unlockAudio);
                 document.addEventListener('click', unlockAudio);
 
+                window.isBgmMuted = localStorage.getItem('mgao_bgm_muted') === 'true';
+                window.toggleMute = function() {
+                    window.isBgmMuted = !window.isBgmMuted;
+                    localStorage.setItem('mgao_bgm_muted', window.isBgmMuted);
+                    
+                    const iframe = document.getElementById('bgm-iframe');
+                    if (window.isBgmMuted) {
+                        if (typeof ytBgmPlayer !== 'undefined' && ytBgmPlayer.mute) ytBgmPlayer.mute();
+                        else if (iframe && iframe.contentWindow) iframe.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+                    } else {
+                        if (typeof ytBgmPlayer !== 'undefined' && ytBgmPlayer.unMute) ytBgmPlayer.unMute();
+                        else if (iframe && iframe.contentWindow) iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+                    }
+                    updateMuteButtons();
+                }
+                function updateMuteButtons() {
+                    const btn = document.getElementById('bottom-mute-btn');
+                    if (btn) {
+                        btn.innerHTML = window.isBgmMuted ? '🔇 Tắt nhạc' : '🔊 Nhạc nền';
+                        btn.style.background = window.isBgmMuted ? '#475569' : ''; 
+                    }
+                }
+                // Initial update
+                setTimeout(updateMuteButtons, 500);
+
                 function playSound(type) {
                     try {
                         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -5807,6 +5856,8 @@
                     if (timerInterval) {
                         clearInterval(timerInterval); timerInterval = null;
                         if (btn) { btn.innerHTML = '▶ TIẾP TỤC'; btn.className = 'btn btn-green'; }
+                        const bPause = document.getElementById('bottom-pause-btn');
+                        if (bPause) { bPause.innerHTML = '▶ TIẾP TỤC'; bPause.className = 'btn btn-green'; }
                         if (typeof ytBgmPlayer !== 'undefined' && ytBgmPlayer.pauseVideo) ytBgmPlayer.pauseVideo();
                         else if (iframe && iframe.contentWindow) iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
                         if (!fromSubmit) {
@@ -5817,8 +5868,17 @@
                         if (wrap) wrap.style.display = 'block';
                         timerInterval = setInterval(() => { seconds++; updateTestTime(); }, 1000);
                         if (btn) { btn.innerHTML = '⏸ TẠM DỪNG'; btn.className = 'btn btn-danger'; }
-                        if (typeof ytBgmPlayer !== 'undefined' && ytBgmPlayer.playVideo) ytBgmPlayer.playVideo();
-                        else if (iframe && iframe.contentWindow) iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                        const bPause = document.getElementById('bottom-pause-btn');
+                        if (bPause) { bPause.innerHTML = '⏸ TẠM DỪNG'; bPause.className = 'btn btn-danger'; bPause.style.display = 'inline-flex'; }
+                        if (typeof ytBgmPlayer !== 'undefined' && ytBgmPlayer.playVideo) {
+                            ytBgmPlayer.playVideo();
+                            if (window.isBgmMuted) ytBgmPlayer.mute(); else ytBgmPlayer.unMute();
+                        }
+                        else if (iframe && iframe.contentWindow) {
+                            iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                            if (window.isBgmMuted) iframe.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+                            else iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+                        }
                         const qc = document.getElementById('quiz-container'); if (qc) qc.style.display = '';
                         const sc = document.getElementById('submit-container'); if (sc && currentList.length > 0) sc.style.display = 'flex';
                     }
@@ -5831,6 +5891,8 @@
                     if (btn) { btn.innerHTML = '▶ BẮT ĐẦU'; btn.className = 'btn btn-green'; }
                     const wrap = document.getElementById('test-timer-display-wrap');
                     if (wrap) wrap.style.display = 'none';
+                    const bPause = document.getElementById('bottom-pause-btn');
+                    if (bPause) bPause.style.display = 'none';
                     const iframe = document.getElementById('bgm-iframe');
                     if (typeof ytBgmPlayer !== 'undefined' && ytBgmPlayer.pauseVideo) {
                         ytBgmPlayer.pauseVideo();
@@ -7223,6 +7285,50 @@
         });
 
         // ══════════════════════════════════════════════════════════
+        // SIDEBAR RESIZER
+        // ══════════════════════════════════════════════════════════
+        (function() {
+            const sidebar = document.querySelector('.sidebar');
+            if (!sidebar) return;
+            const resizer = document.createElement('div');
+            resizer.className = 'resizer';
+            sidebar.appendChild(resizer);
+
+            let isResizing = false;
+
+            resizer.addEventListener('mousedown', (e) => {
+                if (window.innerWidth <= 480) return; // Disable on mobile
+                isResizing = true;
+                document.body.classList.add('is-resizing');
+                resizer.classList.add('resizing');
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isResizing) return;
+                let newWidth = e.clientX;
+                if (newWidth < 250) newWidth = 250;
+                if (newWidth > window.innerWidth * 0.8) newWidth = window.innerWidth * 0.8;
+                document.documentElement.style.setProperty('--sidebar-width', newWidth + 'px');
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isResizing) {
+                    isResizing = false;
+                    document.body.classList.remove('is-resizing');
+                    resizer.classList.remove('resizing');
+                    localStorage.setItem('mgao_sidebar_width', document.documentElement.style.getPropertyValue('--sidebar-width'));
+                }
+            });
+
+            // Load saved width
+            const savedWidth = localStorage.getItem('mgao_sidebar_width');
+            if (savedWidth && window.innerWidth > 480) {
+                document.documentElement.style.setProperty('--sidebar-width', savedWidth);
+            }
+        })();
+
+        // ══════════════════════════════════════════════════════════
         // STATS SCREEN LOGIC
         // ══════════════════════════════════════════════════════════
         function _getAllItems() {
@@ -7824,7 +7930,13 @@
     <script>
         var ytBgmPlayer;
         function onYouTubeIframeAPIReady() {
-            ytBgmPlayer = new YT.Player('bgm-iframe');
+            ytBgmPlayer = new YT.Player('bgm-iframe', {
+                events: {
+                    'onReady': function(e) {
+                        if (window.isBgmMuted) e.target.mute();
+                    }
+                }
+            });
         }
     </script>
     <iframe id="bgm-iframe"
