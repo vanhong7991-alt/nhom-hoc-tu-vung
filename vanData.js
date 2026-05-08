@@ -776,7 +776,7 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 2 (Câu 21-50))",
+                name: "Bài 2 (Câu 21-50)",
                 free: true,
                 list: [
                     { gramType: "quiz", q: "会議では自分の( ________)を明確に伝える必要がある。", ans: "意見", w1: "感情", w2: "態度", w3: "表情", explain: "「意見（いけん）」＝ ý kiến → Dịch: Trong cuộc họp cần truyền đạt rõ ý kiến của mình", count: 0 },
@@ -792,6 +792,16 @@ const vanData = {
                     { gramType: "quiz", q: "彼は自分の( ________)を信じて挑戦した。", ans: "実力", w1: "弱点", w2: "限界", w3: "欠点", explain: "「実力（じつりょく）」＝ thực lực → Dịch: Anh ấy tin vào thực lực của mình và thử thách", count: 0 },
                     { gramType: "quiz", q: "会議の( ________)を全員にメールで送った。", ans: "内容", w1: "外見", w2: "印象", w3: "結果", explain: "「内容（ないよう）」＝ nội dung → Dịch: Đã gửi nội dung cuộc họp cho mọi người qua email", count: 0 },
                     { gramType: "quiz", q: "このデータは正確な( ________)に基づいている。", ans: "事実", w1: "予想", w2: "希望", w3: "感情", explain: "「事実（じじつ）」＝ sự thật → Dịch: Dữ liệu này dựa trên sự thật chính xác", count: 0 },
+                    { gramType: "quiz", q: "上司からの( ________)にすぐ対応しなければならない。", ans: "指示", w1: "感想", w2: "印象", w3: "事情", explain: "「指示（しじ）」＝ chỉ thị → Dịch: Phải nhanh chóng 대응 với chỉ thị từ cấp trên", count: 0 },
+                    { gramType: "quiz", q: "この書類には社長の( ________)が必要です。", ans: "承認", w1: "発言", w2: "相談", w3: "確認", explain: "「承認（しょうにん）」＝ phê duyệt → Dịch: Tài liệu này cần sự phê duyệt của giám đốc", count: 0 },
+                    { gramType: "quiz", q: "社員同士の( ________)を深めるために交流会が開かれた。", ans: "理解", w1: "競争", w2: "失敗", w3: "誤解", explain: "「理解（りかい）」＝ sự thấu hiểu → Dịch: Đã tổ chức buổi giao lưu để tăng sự thấu hiểu giữa các nhân viên", count: 0 },
+                    { gramType: "quiz", q: "お客様への( ________)を第一に考えている。", ans: "対応", w1: "反対", w2: "行動", w3: "関係", explain: "「対応（たいおう）」＝ ứng đối → Dịch: Luôn đặt việc 대응 với khách hàng lên hàng đầu", count: 0 },
+                    { gramType: "quiz", q: "会議の日程を( ________)する必要があります。", ans: "調整", w1: "完成", w2: "削除", w3: "中断", explain: "「調整（ちょうせい）」＝ điều chỉnh → Dịch: Cần điều chỉnh lịch họp", count: 0 },
+                    { gramType: "quiz", q: "会社の将来について真剣に( ________)している。", ans: "検討", w1: "運転", w2: "失敗", w3: "休憩", explain: "「検討（けんとう）」＝ xem xét → Dịch: Đang nghiêm túc xem xét về tương lai công ty", count: 0 },
+                    { gramType: "quiz", q: "この商品は多くの人から高く( ________)されている。", ans: "評価", w1: "利用", w2: "反対", w3: "批判", explain: "「評価（ひょうか）」＝ đánh giá → Dịch: Sản phẩm này được nhiều người đánh giá cao", count: 0 },
+                    { gramType: "quiz", q: "安全のために設備を( ________)することになった。", ans: "改善", w1: "停止", w2: "削除", w3: "減少", explain: "「改善（かいぜん）」＝ cải thiện → Dịch: Đã quyết định cải thiện thiết bị để đảm bảo an toàn", count: 0 },
+                    { gramType: "quiz", q: "仕事を効率よく進めるには( ________)が重要だ。", ans: "協力", w1: "競争", w2: "失敗", w3: "混乱", explain: "「協力（きょうりょく）」＝ hợp tác → Dịch: Để tiến hành công việc hiệu quả thì sự hợp tác là quan trọng", count: 0 },
+                    { gramType: "quiz", q: "新入社員に会社のルールを( ________)した。", ans: "説明", w1: "中止", w2: "放棄", w3: "省略", explain: "「説明（せつめい）」＝ giải thích → Dịch: Đã giải thích nội quy công ty cho nhân viên mới", count: 0 },
                     { gramType: "quiz", q: "チーム全体の( ________)を高める必要がある。", ans: "能力", w1: "不足", w2: "不満", w3: "限界", explain: "「能力（のうりょく）」＝ năng lực → Dịch: Cần nâng cao năng lực của toàn đội", count: 0 },
                     { gramType: "quiz", q: "社会の( ________)に合わせて制度を見直した。", ans: "変化", w1: "停止", w2: "固定", w3: "終了", explain: "「変化（へんか）」＝ thay đổi → Dịch: Đã xem xét lại chế độ phù hợp với sự thay đổi của xã hội", count: 0 },
                     { gramType: "quiz", q: "彼の( ________)は非常に的確だった。", ans: "判断", w1: "感情", w2: "希望", w3: "記憶", explain: "「判断（はんだん）」＝ phán đoán → Dịch: Sự phán đoán của anh ấy rất chính xác", count: 0 },
