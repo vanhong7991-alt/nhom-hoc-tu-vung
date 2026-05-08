@@ -2651,10 +2651,10 @@
                                 <div class="kpi-val" id="kpi-sessions-val" style="color:#e9d5ff;">0</div>
                                 <div class="kpi-label" style="color:#7e22ce;">Lần làm bài</div>
                             </div>
-                            <div class="stats-kpi-card kpi-gold" id="kpi-pass90">
-                                <div class="kpi-icon">🌟</div>
-                                <div class="kpi-val" id="kpi-pass90-val" style="color:#fde68a;">0</div>
-                                <div class="kpi-label" style="color:#b45309;">Đạt &gt;90% điểm</div>
+                            <div class="stats-kpi-card kpi-gold" id="kpi-admin-words">
+                                <div class="kpi-icon">🌸</div>
+                                <div class="kpi-val" id="kpi-admin-words-val" style="color:#fde68a;">0</div>
+                                <div class="kpi-label" style="color:#b45309;">Tổng từ Góc của Vân</div>
                             </div>
                             <div class="stats-kpi-card kpi-cyan" id="kpi-mastered">
                                 <div class="kpi-icon">🎓</div>
@@ -2677,23 +2677,7 @@
                         margin-bottom: 20px;
                         box-shadow: 0 0 0 1px rgba(99,102,241,0.15), inset 0 0 20px rgba(99,102,241,0.05);
                     ">
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
-                            <div class="stats-card">
-                                <div class="stats-card-title">🗓️ Lịch học 4 tuần gần nhất</div>
-                                <div id="stats-heatmap" style="margin-top:10px;"></div>
-                                <div
-                                    style="display:flex;gap:6px;align-items:center;margin-top:10px;font-size:11px;color:#64748b;">
-                                    <span>Ít</span>
-                                    <div style="display:flex;gap:3px;">
-                                        <div style="width:12px;height:12px;border-radius:3px;background:#1e293b;"></div>
-                                        <div style="width:12px;height:12px;border-radius:3px;background:#14532d;"></div>
-                                        <div style="width:12px;height:12px;border-radius:3px;background:#166534;"></div>
-                                        <div style="width:12px;height:12px;border-radius:3px;background:#22c55e;"></div>
-                                        <div style="width:12px;height:12px;border-radius:3px;background:#4ade80;"></div>
-                                    </div>
-                                    <span>Nhiều</span>
-                                </div>
-                            </div>
+                        <div style="margin-bottom:14px;">
                             <div class="stats-card">
                                 <div class="stats-card-title">⏱️ Thời gian học theo ngày (phút)</div>
                                 <div id="stats-time-chart"
@@ -3624,7 +3608,9 @@
                     }[sectionKey] || sectionKey;
                     const subLabel = sub === 'struct' ? 'Học từ vựng' : 'Trắc nghiệm';
                     setBreadcrumb(`${secLabel} / ${subLabel} / ${lesson.name}`, true);
-                    setActiveMenuItem(lesson.name);
+                    // Truyền containerId để chỉ highlight đúng nhánh, tránh match tên ngày trùng ở nhánh khác
+                    const activeContainerId = VAN_CONTAINERS[sectionKey]?.[sub === 'struct' ? 'struct' : 'quiz'] ?? null;
+                    setActiveMenuItem(lesson.name, activeContainerId);
                 }
 
                 function fT(text) {
@@ -3665,7 +3651,7 @@
                     if (defBtn) defBtn.style.display = 'none';
                 }
 
-                function setActiveMenuItem(dayName) {
+                function setActiveMenuItem(dayName, containerId) {
                     // ── Bước 1: Xoá highlight cũ ──
                     document.querySelectorAll('.menu-lvl3.active-lesson').forEach(el => el.classList.remove('active-lesson'));
 
@@ -3673,7 +3659,10 @@
                     document.querySelectorAll('.sub-menu').forEach(s => s.style.display = 'none');
 
                     // ── Bước 3: Tìm item đúng, highlight và mở ĐÚNG parent chain ──
-                    document.querySelectorAll('.menu-lvl3').forEach(el => {
+                    // Nếu có containerId → chỉ tìm trong container đó (tránh match tên ngày trùng ở nhánh khác)
+                    const scope = containerId ? document.getElementById(containerId) : document;
+                    if (!scope) return;
+                    scope.querySelectorAll('.menu-lvl3').forEach(el => {
                         const nameEl = el.querySelector('.lesson-name-text');
                         const label = nameEl ? nameEl.textContent.trim() : el.textContent.trim();
                         if (label === dayName) {
@@ -3791,10 +3780,10 @@
                 function updateGlobalStats() {
                     let totalVoca = 0, totalVocaQuiz = 0, totalGram = 0, totalGramQuiz = 0;
                     activeLevels.forEach(lv => {
-                        Object.keys(db[lv].voca).forEach(day => totalVoca += db[lv].voca[day].list.length);
-                        Object.keys(db[lv].voca_quiz).forEach(day => totalVocaQuiz += db[lv].voca_quiz[day].list.length);
-                        Object.keys(db[lv].gram).forEach(day => totalGram += db[lv].gram[day].list.length);
-                        Object.keys(db[lv].gram_quiz).forEach(day => totalGramQuiz += db[lv].gram_quiz[day].list.length);
+                        Object.keys(db[lv].voca).forEach(day => totalVoca += db[lv].voca[day].list.filter(it => (it.count || 0) >= 1).length);
+                        Object.keys(db[lv].voca_quiz).forEach(day => totalVocaQuiz += db[lv].voca_quiz[day].list.filter(it => (it.count || 0) >= 1).length);
+                        Object.keys(db[lv].gram).forEach(day => totalGram += db[lv].gram[day].list.filter(it => (it.count || 0) >= 1).length);
+                        Object.keys(db[lv].gram_quiz).forEach(day => totalGramQuiz += db[lv].gram_quiz[day].list.filter(it => (it.count || 0) >= 1).length);
                     });
                     const e1 = document.getElementById('stat-voca-total'), e2 = document.getElementById('stat-voca-quiz-total'), e3 = document.getElementById('stat-gram-total'), e4 = document.getElementById('stat-gram-quiz-total');
                     if (e1) e1.innerText = totalVoca; if (e2) e2.innerText = totalVocaQuiz; if (e3) e3.innerText = totalGram; if (e4) e4.innerText = totalGramQuiz;
@@ -4804,12 +4793,14 @@
                             const container = document.getElementById(`${lv}-${ty}`);
                             if (!container) return;
                             container.innerHTML = "";
+                            let catTotal = 0;
                             Object.keys(db[lv][ty]).forEach((dayKey, idx) => {
                                 let maxMode = 3;
                                 if (ty === 'gram') maxMode = 2;
                                 else if (ty === 'voca_quiz' || ty === 'gram_quiz') maxMode = 1;
                                 const isAllDone = db[lv][ty][dayKey].done.slice(0, maxMode).every(v => v === true);
                                 const wordCount = db[lv][ty][dayKey].list.length;
+                                catTotal += wordCount;
                                 const unitText = (ty === 'voca_quiz' || ty === 'gram_quiz') ? "câu" : (ty === 'gram' ? "mẫu" : "từ");
                                 const div = document.createElement("div"); div.className = "menu-lvl3";
                                 const rIcon = icons[idx % icons.length];
@@ -4827,6 +4818,18 @@
                     </span>`;
                                 container.appendChild(div);
                             });
+                            const prev = container.previousElementSibling;
+                            if (prev && prev.classList.contains('menu-lvl2')) {
+                                const oldBadge = prev.querySelector('.cat-badge');
+                                if (oldBadge) oldBadge.remove();
+                                if (catTotal > 0) {
+                                    const badge = document.createElement('span');
+                                    badge.className = 'cat-badge';
+                                    badge.style.cssText = 'position:absolute; right:15px; top:50%; transform:translateY(-50%); font-size:12px; font-weight:800; background:rgba(15,23,42,0.8); color:var(--warning); padding:2px 8px; border-radius:12px; border:1px solid var(--warning);';
+                                    badge.innerText = catTotal;
+                                    prev.appendChild(badge);
+                                }
+                            }
                             const addBtn = document.createElement("button"); addBtn.className = "btn btn-gray"; addBtn.style = "width:100%; border-radius:0; font-size:12px;"; addBtn.innerText = "+ THÊM BÀI HỌC"; addBtn.onclick = () => addDay(lv, ty); container.appendChild(addBtn);
                         });
                     });
@@ -5026,7 +5029,7 @@
                     const lvLabel = { 'n1': 'Năng lực N1', 'n2': 'Năng lực N2', 'n3': 'Trình độ N3', 'bjt': 'BJT' }[lv] || lv;
                     const tyLabel = { 'voca': 'Từ vựng', 'gram': 'Ngữ pháp', 'voca_quiz': 'Từ vựng (TN)', 'gram_quiz': 'Ngữ pháp (TN)' }[ty] || ty;
                     setBreadcrumb(`${lvLabel} / ${tyLabel} / ${day}`, false);
-                    setActiveMenuItem(day);
+                    setActiveMenuItem(day, `${lv}-${ty}`);
                 }
 
                 function changeMode(m) {
@@ -5242,7 +5245,7 @@
                         const msg = document.getElementById(`msg-${i}`);
 
                         if (isCorrect) {
-                            currentList[i].count = (currentList[i].count || 0) + 1;
+                            trackCorrect(currentList[i]);
                             card.setAttribute('data-res', 'ok');
                             card.style.borderLeftColor = 'var(--success)';
                             if (msg) { msg.className = 'fb-msg show ok'; msg.innerText = 'CHÍNH XÁC! 🎉'; }
@@ -5428,7 +5431,7 @@
 
                             if (isCorrect) {
                                 ok++;
-                                currentList[idx].count = (currentList[idx].count || 0) + 1;
+                                trackCorrect(currentList[idx]);
                                 card.setAttribute('data-res', 'ok');
                                 card.style.borderLeftColor = 'var(--success)';
                                 const btn = document.getElementById(`opt-${idx}-${selectedIdx}`);
@@ -5471,7 +5474,7 @@
                             // Câu đúng: data-res đã là 'ok' (đã gõ đúng trước đó)
                             if (card.getAttribute('data-res') === 'ok') {
                                 ok++;
-                                currentList[idx].count = (currentList[idx].count || 0) + 1;
+                                trackCorrect(currentList[idx]);
                                 if (input) input.classList.add('correct');
                                 card.style.borderLeftColor = 'var(--success)';
                                 // Hiện badge xanh 'Tuyệt vời'
@@ -5489,7 +5492,7 @@
                             // Câu không có đáp án định nghĩa và chưa điền → bỏ qua (tính đúng)
                             else if (ans === '' && val === '') {
                                 ok++;
-                                currentList[idx].count = (currentList[idx].count || 0) + 1;
+                                trackCorrect(currentList[idx]);
                                 card.setAttribute('data-res', 'ok');
                                 if (input) input.classList.add('correct');
                                 card.style.borderLeftColor = 'var(--success)';
@@ -6543,6 +6546,11 @@
                 // ══════════════════════════════════════════
                 // WRONG / FORGOT COUNT TRACKING (per-item, saved in db or vanData localStorage)
                 // ══════════════════════════════════════════
+                function trackCorrect(item) {
+                    item.count = (item.count || 0) + 1;
+                    if (!curVanMode) saveToLocal();
+                    else saveVanItemExtra(item);
+                }
                 function trackWrong(item) {
                     item.wrongCount = (item.wrongCount || 0) + 1;
                     if (!curVanMode) saveToLocal();
@@ -6554,14 +6562,22 @@
                     else saveVanItemExtra(item);
                 }
                 function saveVanItemExtra(item) {
-                    // For vanData items: persist wrongCount/forgotCount by c1/q key
+                    // For vanData items: persist count/wrongCount/forgotCount by c1/q key
                     const key = 'vanextra_' + _itemKey(item);
-                    localStorage.setItem(key, JSON.stringify({ wrongCount: item.wrongCount || 0, forgotCount: item.forgotCount || 0 }));
+                    localStorage.setItem(key, JSON.stringify({ 
+                        count: item.count || 0,
+                        wrongCount: item.wrongCount || 0, 
+                        forgotCount: item.forgotCount || 0 
+                    }));
                 }
                 function loadVanItemExtra(item) {
                     const key = 'vanextra_' + _itemKey(item);
                     const saved = JSON.parse(localStorage.getItem(key) || 'null');
-                    if (saved) { item.wrongCount = saved.wrongCount || 0; item.forgotCount = saved.forgotCount || 0; }
+                    if (saved) { 
+                        item.count = saved.count || 0;
+                        item.wrongCount = saved.wrongCount || 0; 
+                        item.forgotCount = saved.forgotCount || 0; 
+                    }
                 }
 
                 // ══════════════════════════════════════════
@@ -7211,14 +7227,18 @@
         // ══════════════════════════════════════════════════════════
         function _getAllItems() {
             var items = [];
-            if (!db) return items;
+            var userTotal = 0;
+            if (!db) return { items: items, userTotal: userTotal };
             // Dùng activeLevels để chỉ lấy đúng dữ liệu theo ngôn ngữ hiện tại
             (typeof activeLevels !== 'undefined' ? activeLevels : ['n1', 'n2', 'n3', 'bjt']).forEach(function (lv) {
                 if (!db[lv]) return;
                 ['voca', 'gram', 'voca_quiz', 'gram_quiz'].forEach(function (ty) {
                     if (!db[lv][ty]) return;
                     Object.values(db[lv][ty]).forEach(function (day) {
-                        if (day && day.list) day.list.forEach(function (item) { items.push(item); });
+                        if (day && day.list) day.list.forEach(function (item) { 
+                            items.push(item); 
+                            userTotal++; 
+                        });
                     });
                 });
             });
@@ -7232,19 +7252,25 @@
                             if (lesson.list) lesson.list.forEach(function (item) {
                                 var key = 'vanextra_' + (item.q || item.c1 || '').trim();
                                 var extra = JSON.parse(localStorage.getItem(key) || 'null');
-                                if (extra) { item.wrongCount = extra.wrongCount || 0; item.forgotCount = extra.forgotCount || 0; }
+                                if (extra) { 
+                                    item.count = extra.count || 0;
+                                    item.wrongCount = extra.wrongCount || 0; 
+                                    item.forgotCount = extra.forgotCount || 0; 
+                                }
+                                item.isVan = true;
                                 items.push(item);
                             });
                         });
                     });
                 });
             }
-            return items;
+            return { items: items, userTotal: userTotal };
         }
 
         function _computeStats() {
-            var items = _getAllItems();
-            var total = items.length;
+            var data = _getAllItems();
+            var items = data.items;
+            var total = data.userTotal;
             var learned = items.filter(function (it) { return (it.count || 0) >= 1; }).length;
             var perfect = items.filter(function (it) { return (it.count || 0) >= 1 && (it.wrongCount || 0) === 0; }).length;
             var wrongMany = items.filter(function (it) { return (it.wrongCount || 0) > 3; }).length;
@@ -7255,6 +7281,7 @@
             var log = JSON.parse(localStorage.getItem(logKey) || '[]');
             var sessions_total = log.length;
             var pass90 = log.filter(function (e) { return e.total > 0 && (e.ok / e.total) >= 0.9; }).length;
+            var vanLearned = items.filter(it => it.isVan && (it.count || 0) >= 1).length;
 
             // Wrong items > 2
             var wrongItems = items.filter(function (it) { return (it.wrongCount || 0) > 2; })
@@ -7266,7 +7293,7 @@
                 .sort(function (a, b) { return (b.forgotCount || 0) - (a.forgotCount || 0); })
                 .slice(0, 15);
 
-            return { total, learned, perfect, wrongMany, mastered, forgotMany, sessions_total, pass90, log, wrongItems, forgotItems };
+            return { total, learned, perfect, wrongMany, mastered, forgotMany, sessions_total, pass90, log, wrongItems, forgotItems, vanLearned };
         }
 
 
@@ -7365,9 +7392,9 @@
             document.getElementById('kpi-mastered-val').textContent = stats.mastered.toLocaleString();
             document.getElementById('kpi-forgot-many-val').textContent = stats.forgotMany.toLocaleString();
             document.getElementById('kpi-sessions-val').textContent = stats.sessions_total.toLocaleString();
-            document.getElementById('kpi-pass90-val').textContent = stats.pass90.toLocaleString();
+            document.getElementById('kpi-admin-words-val').textContent = stats.vanLearned.toLocaleString();
 
-            _renderHeatmap(stats.log);
+            // _renderHeatmap(stats.log);
             _renderTimeChart(stats.log);
             _renderSessionChart();
             _renderHistoryTable(stats.log);
