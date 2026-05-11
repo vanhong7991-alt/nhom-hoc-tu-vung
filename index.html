@@ -71,7 +71,7 @@
             padding-bottom: 50px;
             flex-shrink: 0;
         }
-        
+
         .resizer {
             position: absolute;
             top: 0;
@@ -82,12 +82,14 @@
             z-index: 2001;
             transition: background 0.2s;
         }
-        .resizer:hover, .resizer.resizing {
+
+        .resizer:hover,
+        .resizer.resizing {
             background: rgba(59, 130, 246, 0.5);
             width: 10px;
         }
 
-        body.is-resizing .sidebar, 
+        body.is-resizing .sidebar,
         body.is-resizing .main-wrapper {
             transition: none !important;
         }
@@ -1023,42 +1025,46 @@
         /* ── NHÁNH MÀU SẮC RIÊNG ── */
         /* N1 Từ Vựng - Đỏ crimson */
         .lvl1-n1voca {
-            background: linear-gradient(90deg, rgba(239,68,68,0.18) 0%, rgba(239,68,68,0.04) 100%);
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.18) 0%, rgba(239, 68, 68, 0.04) 100%);
             color: #fca5a5;
             border-left-color: #ef4444;
         }
+
         .lvl1-n1voca:hover {
-            background: linear-gradient(90deg, rgba(239,68,68,0.32) 0%, rgba(239,68,68,0.10) 100%);
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.32) 0%, rgba(239, 68, 68, 0.10) 100%);
         }
 
         /* N2 Từ Vựng - Vàng amber */
         .lvl1-n2voca {
-            background: linear-gradient(90deg, rgba(245,158,11,0.18) 0%, rgba(245,158,11,0.04) 100%);
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.18) 0%, rgba(245, 158, 11, 0.04) 100%);
             color: #fcd34d;
             border-left-color: #f59e0b;
         }
+
         .lvl1-n2voca:hover {
-            background: linear-gradient(90deg, rgba(245,158,11,0.32) 0%, rgba(245,158,11,0.10) 100%);
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.32) 0%, rgba(245, 158, 11, 0.10) 100%);
         }
 
         /* N2 Ngữ Pháp - Xanh cyan */
         .lvl1-n2gram {
-            background: linear-gradient(90deg, rgba(6,182,212,0.18) 0%, rgba(6,182,212,0.04) 100%);
+            background: linear-gradient(90deg, rgba(6, 182, 212, 0.18) 0%, rgba(6, 182, 212, 0.04) 100%);
             color: #67e8f9;
             border-left-color: #06b6d4;
         }
+
         .lvl1-n2gram:hover {
-            background: linear-gradient(90deg, rgba(6,182,212,0.32) 0%, rgba(6,182,212,0.10) 100%);
+            background: linear-gradient(90deg, rgba(6, 182, 212, 0.32) 0%, rgba(6, 182, 212, 0.10) 100%);
         }
 
         /* BJT Từ Vựng - Xanh lá emerald */
         .lvl1-bjtvoca {
-            background: linear-gradient(90deg, rgba(16,185,129,0.18) 0%, rgba(16,185,129,0.04) 100%);
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.04) 100%);
             color: #6ee7b7;
             border-left-color: #10b981;
         }
+
         .lvl1-bjtvoca:hover {
-            background: linear-gradient(90deg, rgba(16,185,129,0.32) 0%, rgba(16,185,129,0.10) 100%);
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.32) 0%, rgba(16, 185, 129, 0.10) 100%);
         }
 
         /* ── GROUP HEADERS (JLPT / BJT) ── */
@@ -1069,16 +1075,18 @@
             letter-spacing: 2.5px;
             text-transform: uppercase;
             color: #94a3b8;
-            border-top: 1px solid rgba(255,255,255,0.06);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
             margin-top: 2px;
         }
+
         .sidebar-group-header.jlpt {
-            background: linear-gradient(90deg, rgba(244,63,94,0.14) 0%, transparent 70%);
+            background: linear-gradient(90deg, rgba(244, 63, 94, 0.14) 0%, transparent 70%);
             color: #fda4af;
             border-left: 4px solid #f43f5e;
         }
+
         .sidebar-group-header.bjt {
-            background: linear-gradient(90deg, rgba(234,179,8,0.14) 0%, transparent 70%);
+            background: linear-gradient(90deg, rgba(234, 179, 8, 0.14) 0%, transparent 70%);
             color: #fde68a;
             border-left: 4px solid #eab308;
         }
@@ -2133,7 +2141,8 @@
                     <div class="sidebar-group-header bjt">💼 BJT</div>
 
                     <!-- BJT Từ Vựng -->
-                    <div class="van-menu-lvl1 lvl1-bjtvoca" onclick="toggleSub('van-bjtvoca-sub')">💼 BJT Từ Vựng ▼</div>
+                    <div class="van-menu-lvl1 lvl1-bjtvoca" onclick="toggleSub('van-bjtvoca-sub')">💼 BJT Từ Vựng ▼
+                    </div>
                     <div id="van-bjtvoca-sub" class="sub-menu">
                         <div class="menu-lvl2" onclick="toggleSub('van-bjtvoca-struct')">📚 Từ đơn</div>
                         <div id="van-bjtvoca-struct" class="sub-menu"></div>
@@ -2796,27 +2805,32 @@
                 <div id="quiz-container"></div>
                 <div id="submit-container"
                     style="display: none; flex-direction: column; align-items: center; justify-content: center; position: sticky; bottom: 20px; z-index: 1000; width: 100%; pointer-events: none;">
-                    
+
                     <div id="submit-bar-content"
                         style="pointer-events: auto; display: flex; gap: 12px; background: rgba(30, 41, 59, 0.95); padding: 15px; border-radius: 20px; box-shadow: 0 -10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); width: 100%; box-sizing: border-box; position: relative;">
                         <!-- Nút Thu Gọn -->
-                        <button onclick="document.getElementById('submit-bar-content').style.display='none'; document.getElementById('submit-expand-btn').style.display='flex';"
-                            style="position: absolute; top: -15px; right: 20px; background: #1e293b; border: 1px solid #475569; color: #cbd5e1; padding: 5px 14px; border-radius: 14px; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10;">▼ Thu gọn</button>
-                        
+                        <button
+                            onclick="document.getElementById('submit-bar-content').style.display='none'; document.getElementById('submit-expand-btn').style.display='flex';"
+                            style="position: absolute; top: -15px; right: 20px; background: #1e293b; border: 1px solid #475569; color: #cbd5e1; padding: 5px 14px; border-radius: 14px; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10;">▼
+                            Thu gọn</button>
+
                         <button class="btn btn-gray" style="flex: 1; font-size: 16px; padding: 16px; font-weight: 800;"
                             onclick="resetQuiz()">🔄 LÀM LẠI</button>
-                        <button class="btn btn-warning" id="bottom-pause-btn" style="flex: 1.2; font-size: 16px; padding: 16px; font-weight: 800; display: none;"
+                        <button class="btn btn-warning" id="bottom-pause-btn"
+                            style="flex: 1.2; font-size: 16px; padding: 16px; font-weight: 800; display: none;"
                             onclick="toggleTestTimer()">⏸️ Tạm dừng</button>
                         <button class="btn btn-blue" style="flex: 2; font-size: 18px; padding: 16px; font-weight: 800;"
                             onclick="submitQuiz()">✅ NỘP BÀI</button>
-                        <button class="btn btn-indigo" id="bottom-mute-btn" style="flex: 1.2; font-size: 16px; padding: 16px; font-weight: 800;"
+                        <button class="btn btn-indigo" id="bottom-mute-btn"
+                            style="flex: 1.2; font-size: 16px; padding: 16px; font-weight: 800;"
                             onclick="toggleMute()">🔊 Âm thanh</button>
                     </div>
 
                     <!-- Nút Mở Rộng -->
                     <button id="submit-expand-btn"
                         onclick="document.getElementById('submit-bar-content').style.display='flex'; this.style.display='none';"
-                        style="pointer-events: auto; display: none; width: auto; padding: 12px 24px; border-radius: 30px; background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(59,130,246,0.5); color: #60a5fa; font-size: 14px; font-weight: 800; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer; align-items: center; gap: 8px; backdrop-filter: blur(10px);">▲ MỞ THANH NỘP BÀI</button>
+                        style="pointer-events: auto; display: none; width: auto; padding: 12px 24px; border-radius: 30px; background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(59,130,246,0.5); color: #60a5fa; font-size: 14px; font-weight: 800; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer; align-items: center; gap: 8px; backdrop-filter: blur(10px);">▲
+                        MỞ THANH NỘP BÀI</button>
                 </div>
             </div>
 
@@ -4580,7 +4594,7 @@
                             }
 
                             let explain = parts[6] || '';
-                            const entry = { gramType: 'quiz', q, ans, w1, w2, w3, count: 0, explain };
+                            const entry = { gramType: 'quiz', q, ans, w1, w2, w3, count: 0, explain, createdAt: Date.now() };
                             return { entry, valid, parts };
                         });
                     }
@@ -4593,7 +4607,7 @@
                     return lines.map(line => {
                         const parts = sep === 'spaces' ? line.trim().split(/\s{2,}/).map(p => p.trim()).filter(Boolean) : line.split(sep).map(p => p.trim());
                         const valid = parts.length >= 2;
-                        const entry = { count: 0 };
+                        const entry = { count: 0, createdAt: Date.now() };
                         if (isGram) {
                             entry['c1'] = parts[0] || '';
                             entry['c3'] = parts[1] || '';
@@ -5231,10 +5245,10 @@
                 document.addEventListener('click', unlockAudio);
 
                 window.isBgmMuted = localStorage.getItem('mgao_bgm_muted') === 'true';
-                window.toggleMute = function() {
+                window.toggleMute = function () {
                     window.isBgmMuted = !window.isBgmMuted;
                     localStorage.setItem('mgao_bgm_muted', window.isBgmMuted);
-                    
+
                     const iframe = document.getElementById('bgm-iframe');
                     if (window.isBgmMuted) {
                         if (typeof ytBgmPlayer !== 'undefined' && ytBgmPlayer.mute) ytBgmPlayer.mute();
@@ -5249,7 +5263,7 @@
                     const btn = document.getElementById('bottom-mute-btn');
                     if (btn) {
                         btn.innerHTML = window.isBgmMuted ? '🔇 Tắt nhạc' : '🔊 Nhạc nền';
-                        btn.style.background = window.isBgmMuted ? '#475569' : ''; 
+                        btn.style.background = window.isBgmMuted ? '#475569' : '';
                     }
                 }
                 // Initial update
@@ -6126,7 +6140,7 @@
                         const w3 = document.getElementById('add-w3').value.trim();
                         const explain = document.getElementById('add-q-explain').value.trim();
                         if (!q || !ans) { alert("Nhập ít nhất câu hỏi và đáp án đúng!"); return; }
-                        db[curLevel][curType][curDay].list.push({ gramType: 'quiz', q, ans, w1, w2, w3, count: 0, explain });
+                        db[curLevel][curType][curDay].list.push({ gramType: 'quiz', q, ans, w1, w2, w3, count: 0, explain, createdAt: Date.now() });
                         document.getElementById('add-q').value = '';
                         document.getElementById('add-ans').value = '';
                         document.getElementById('add-w1').value = '';
@@ -6146,7 +6160,7 @@
                         const exists = db[curLevel][curType][curDay].list.some(w => (w.c1 || '').trim().toLowerCase() === c1.toLowerCase());
                         if (exists && !confirm(`⚠️ "${c1}" đã tồn tại trong bài này! Bạn vẫn muốn thêm?`)) return;
 
-                        const entry = { count: 0, c1: c1, c2: c2, c3: c3 || c2, c4: c4, c5: c5, c6: c6 };
+                        const entry = { count: 0, c1: c1, c2: c2, c3: c3 || c2, c4: c4, c5: c5, c6: c6, createdAt: Date.now() };
                         if (gramType === 'struct') entry.gramType = 'struct';
                         db[curLevel][curType][curDay].list.push(entry);
                         document.getElementById('add-c1').value = '';
@@ -6626,19 +6640,19 @@
                 function saveVanItemExtra(item) {
                     // For vanData items: persist count/wrongCount/forgotCount by c1/q key
                     const key = 'vanextra_' + _itemKey(item);
-                    localStorage.setItem(key, JSON.stringify({ 
+                    localStorage.setItem(key, JSON.stringify({
                         count: item.count || 0,
-                        wrongCount: item.wrongCount || 0, 
-                        forgotCount: item.forgotCount || 0 
+                        wrongCount: item.wrongCount || 0,
+                        forgotCount: item.forgotCount || 0
                     }));
                 }
                 function loadVanItemExtra(item) {
                     const key = 'vanextra_' + _itemKey(item);
                     const saved = JSON.parse(localStorage.getItem(key) || 'null');
-                    if (saved) { 
+                    if (saved) {
                         item.count = saved.count || 0;
-                        item.wrongCount = saved.wrongCount || 0; 
-                        item.forgotCount = saved.forgotCount || 0; 
+                        item.wrongCount = saved.wrongCount || 0;
+                        item.forgotCount = saved.forgotCount || 0;
                     }
                 }
 
@@ -6821,13 +6835,15 @@
                     const filterWrong = cqIsActive('cq-f-wrong');
                     const filterForgot = cqIsActive('cq-f-forgot');
                     const filterStar = cqIsActive('cq-f-star');
+                    const timeFilterEl = document.getElementById('cq-time-filter');
+                    const timeFilterDays = timeFilterEl ? parseInt(timeFilterEl.value) : 0;
                     const isStruct = cqIsActive('cq-mode-struct');
                     const isQuiz = cqIsActive('cq-mode-quiz');
 
                     let total = 0;
                     lessons.filter(l => selected.has(l.id)).forEach(l => {
-                        const itemsS = applySpecialFilters(l.structItems || [], filterWrong, filterForgot, filterStar);
-                        const itemsQ = applySpecialFilters(l.quizItems || [], filterWrong, filterForgot, filterStar);
+                        const itemsS = applySpecialFilters(l.structItems || [], filterWrong, filterForgot, filterStar, timeFilterDays, l.src);
+                        const itemsQ = applySpecialFilters(l.quizItems || [], filterWrong, filterForgot, filterStar, timeFilterDays, l.src);
                         if (isStruct) total += itemsS.length;
                         else if (isQuiz) total += itemsQ.length;
                         else total += itemsS.length + itemsQ.length;
@@ -6839,13 +6855,24 @@
                         total > 0 ? `Từ ${sel} bài được chọn` : 'Không có câu/từ phù hợp';
                 }
 
-                function applySpecialFilters(items, filterWrong, filterForgot, filterStar) {
-                    if (!filterWrong && !filterForgot && !filterStar) return items;
+                function applySpecialFilters(items, filterWrong, filterForgot, filterStar, timeFilterDays, src) {
+                    if (!filterWrong && !filterForgot && !filterStar && !timeFilterDays) return items;
+                    const now = Date.now();
                     return items.filter(item => {
-                        if (filterWrong && (item.wrongCount || 0) > 2) return true;
-                        if (filterForgot && (item.forgotCount || 0) > 2) return true;
-                        if (filterStar && fcStarredKeys.has(_itemKey(item))) return true;
-                        return false;
+                        if (timeFilterDays > 0 && src === 'user') {
+                            if (!item.createdAt) return false;
+                            const diffDays = (now - item.createdAt) / (1000 * 60 * 60 * 24);
+                            if (diffDays > timeFilterDays) return false;
+                        }
+
+                        if (filterWrong || filterForgot || filterStar) {
+                            let matchSpecial = false;
+                            if (filterWrong && (item.wrongCount || 0) > 2) matchSpecial = true;
+                            if (filterForgot && (item.forgotCount || 0) > 2) matchSpecial = true;
+                            if (filterStar && fcStarredKeys.has(_itemKey(item))) matchSpecial = true;
+                            if (!matchSpecial) return false;
+                        }
+                        return true;
                     });
                 }
 
@@ -6855,6 +6882,8 @@
                     const filterWrong = cqIsActive('cq-f-wrong');
                     const filterForgot = cqIsActive('cq-f-forgot');
                     const filterStar = cqIsActive('cq-f-star');
+                    const timeFilterEl = document.getElementById('cq-time-filter');
+                    const timeFilterDays = timeFilterEl ? parseInt(timeFilterEl.value) : 0;
 
                     const wantStruct = forceMode === 'struct';
                     const wantQuiz = forceMode === 'quiz';
@@ -6862,9 +6891,9 @@
                     let finalList = [];
                     lessons.filter(l => selected.has(l.id)).forEach(l => {
                         if (wantStruct) {
-                            finalList.push(...applySpecialFilters(l.structItems || [], filterWrong, filterForgot, filterStar));
+                            finalList.push(...applySpecialFilters(l.structItems || [], filterWrong, filterForgot, filterStar, timeFilterDays, l.src));
                         } else if (wantQuiz) {
-                            finalList.push(...applySpecialFilters(l.quizItems || [], filterWrong, filterForgot, filterStar));
+                            finalList.push(...applySpecialFilters(l.quizItems || [], filterWrong, filterForgot, filterStar, timeFilterDays, l.src));
                         }
                     });
 
@@ -7039,6 +7068,23 @@
                         onclick="cqToggleChip(this,'cq-f','active-orange'); cqRefresh()">😅 Hay quên (&gt;2 lần)</div>
                     <div class="cq-chip" id="cq-f-star"
                         onclick="cqToggleChip(this,'cq-f','active-orange'); cqRefresh()">⭐ Đánh dấu sao</div>
+                </div>
+            </div>
+
+            <!-- BỘ LỌC THỜI GIAN -->
+            <div class="cq-section">
+                <div class="cq-section-label">⏳ Lọc theo thời gian tạo <span style="color:#64748b; font-size:10px;">(Góc của Bạn)</span></div>
+                <div style="margin-top:6px;">
+                    <select id="cq-time-filter" onchange="cqRefresh()" style="background:rgba(0,0,0,0.3); color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:8px 12px; font-size:14px; width:100%; outline:none; font-family:'Baloo 2'; cursor:pointer;">
+                        <option value="0">Tất cả thời gian</option>
+                        <option value="7">7 ngày gần nhất</option>
+                        <option value="14">14 ngày gần nhất</option>
+                        <option value="30">1 tháng gần nhất</option>
+                        <option value="60">2 tháng gần nhất</option>
+                        <option value="90">3 tháng gần nhất</option>
+                        <option value="180">6 tháng gần nhất</option>
+                        <option value="365">12 tháng gần nhất</option>
+                    </select>
                 </div>
             </div>
 
@@ -7287,7 +7333,7 @@
         // ══════════════════════════════════════════════════════════
         // SIDEBAR RESIZER
         // ══════════════════════════════════════════════════════════
-        (function() {
+        (function () {
             const sidebar = document.querySelector('.sidebar');
             if (!sidebar) return;
             const resizer = document.createElement('div');
@@ -7341,9 +7387,9 @@
                 ['voca', 'gram', 'voca_quiz', 'gram_quiz'].forEach(function (ty) {
                     if (!db[lv][ty]) return;
                     Object.values(db[lv][ty]).forEach(function (day) {
-                        if (day && day.list) day.list.forEach(function (item) { 
-                            items.push(item); 
-                            userTotal++; 
+                        if (day && day.list) day.list.forEach(function (item) {
+                            items.push(item);
+                            userTotal++;
                         });
                     });
                 });
@@ -7358,10 +7404,10 @@
                             if (lesson.list) lesson.list.forEach(function (item) {
                                 var key = 'vanextra_' + (item.q || item.c1 || '').trim();
                                 var extra = JSON.parse(localStorage.getItem(key) || 'null');
-                                if (extra) { 
+                                if (extra) {
                                     item.count = extra.count || 0;
-                                    item.wrongCount = extra.wrongCount || 0; 
-                                    item.forgotCount = extra.forgotCount || 0; 
+                                    item.wrongCount = extra.wrongCount || 0;
+                                    item.forgotCount = extra.forgotCount || 0;
                                 }
                                 item.isVan = true;
                                 items.push(item);
@@ -7932,7 +7978,7 @@
         function onYouTubeIframeAPIReady() {
             ytBgmPlayer = new YT.Player('bgm-iframe', {
                 events: {
-                    'onReady': function(e) {
+                    'onReady': function (e) {
                         if (window.isBgmMuted) e.target.mute();
                     }
                 }
@@ -7941,7 +7987,8 @@
     </script>
     <iframe id="bgm-iframe"
         src="https://www.youtube.com/embed/ihZYtrWTbkY?enablejsapi=1&autoplay=0&loop=1&playlist=ihZYtrWTbkY"
-        style="position:absolute; width:1px; height:1px; left:-9999px; opacity:0; pointer-events:none;" allow="autoplay"></iframe>
+        style="position:absolute; width:1px; height:1px; left:-9999px; opacity:0; pointer-events:none;"
+        allow="autoplay"></iframe>
 </body>
 
 </html>
