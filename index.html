@@ -6055,6 +6055,17 @@
                         }
                         const qc = document.getElementById('quiz-container'); if (qc) qc.style.display = '';
                         const sc = document.getElementById('submit-container'); if (sc && currentList.length > 0) sc.style.display = 'flex';
+                        // Cuộn để câu đầu tiên lên đầu màn hình
+                        setTimeout(function() {
+                            var firstQ = document.querySelector('#quiz-container .q-block, #quiz-container .quiz-item, #quiz-container > *:first-child');
+                            if (firstQ) {
+                                var top = firstQ.getBoundingClientRect().top + window.scrollY - 80;
+                                window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+                            } else if (qc) {
+                                var top2 = qc.getBoundingClientRect().top + window.scrollY - 80;
+                                window.scrollTo({ top: Math.max(0, top2), behavior: 'smooth' });
+                            }
+                        }, 80);
                     }
                 }
                 function resetTestTimer() {
@@ -7300,16 +7311,34 @@
                     </div>
                     <!-- Lọc thời gian -->
                     <div style="display:flex; flex-direction:column; gap:6px;">
-                        <span style="font-size:11px; color:#94a3b8; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">⏳ Thời gian tạo bài</span>
+                        <span
+                            style="font-size:11px; color:#94a3b8; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">⏳
+                            Thời gian tạo bài</span>
                         <div id="cq-time-chips" style="display:flex; flex-wrap:wrap; gap:6px;">
-                            <button class="cq-time-chip active" data-days="0" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(165,180,252,0.5); background:rgba(99,102,241,0.3); color:#a5b4fc; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">✨ Tất cả</button>
-                            <button class="cq-time-chip" data-days="7" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">7 ngày</button>
-                            <button class="cq-time-chip" data-days="14" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">14 ngày</button>
-                            <button class="cq-time-chip" data-days="30" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">1 tháng</button>
-                            <button class="cq-time-chip" data-days="60" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">2 tháng</button>
-                            <button class="cq-time-chip" data-days="90" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">3 tháng</button>
-                            <button class="cq-time-chip" data-days="180" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">6 tháng</button>
-                            <button class="cq-time-chip" data-days="365" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">12 tháng</button>
+                            <button class="cq-time-chip active" data-days="0" onclick="cqSelectTimeChip(this)"
+                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(165,180,252,0.5); background:rgba(99,102,241,0.3); color:#a5b4fc; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">✨
+                                Tất cả</button>
+                            <button class="cq-time-chip" data-days="7" onclick="cqSelectTimeChip(this)"
+                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">7
+                                ngày</button>
+                            <button class="cq-time-chip" data-days="14" onclick="cqSelectTimeChip(this)"
+                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">14
+                                ngày</button>
+                            <button class="cq-time-chip" data-days="30" onclick="cqSelectTimeChip(this)"
+                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">1
+                                tháng</button>
+                            <button class="cq-time-chip" data-days="60" onclick="cqSelectTimeChip(this)"
+                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">2
+                                tháng</button>
+                            <button class="cq-time-chip" data-days="90" onclick="cqSelectTimeChip(this)"
+                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">3
+                                tháng</button>
+                            <button class="cq-time-chip" data-days="180" onclick="cqSelectTimeChip(this)"
+                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">6
+                                tháng</button>
+                            <button class="cq-time-chip" data-days="365" onclick="cqSelectTimeChip(this)"
+                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">12
+                                tháng</button>
                         </div>
                     </div>
                 </div>
@@ -8262,39 +8291,56 @@
                 </div>
             </div>
             <div style="padding:14px 24px 0;">
-                <div style="background:linear-gradient(135deg,#fff8f0,#fef3c7); border:1.5px solid #fcd34d; border-radius:16px; padding:16px 18px; font-family:'Baloo 2',sans-serif;">
-                    <div style="font-size:13px; font-weight:900; color:#92400e; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
-                        📖 Hệ thống học theo <span style="background:#f97316; color:#fff; border-radius:6px; padding:1px 8px; font-size:12px;">Ebbinghaus</span> hoạt động thế nào?
+                <div
+                    style="background:linear-gradient(135deg,#fff8f0,#fef3c7); border:1.5px solid #fcd34d; border-radius:16px; padding:16px 18px; font-family:'Baloo 2',sans-serif;">
+                    <div
+                        style="font-size:13px; font-weight:900; color:#92400e; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+                        📖 Hệ thống học theo <span
+                            style="background:#f97316; color:#fff; border-radius:6px; padding:1px 8px; font-size:12px;">Ebbinghaus</span>
+                        hoạt động thế nào?
                     </div>
                     <!-- Từ sắp quên -->
-                    <div style="background:#fff; border-radius:10px; padding:10px 12px; margin-bottom:8px; border-left:4px solid #ef4444; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
-                        <div style="font-size:12px; font-weight:900; color:#ef4444; margin-bottom:3px;">🔴 Từ sắp quên — Ôn NGAY kẻo mất!</div>
+                    <div
+                        style="background:#fff; border-radius:10px; padding:10px 12px; margin-bottom:8px; border-left:4px solid #ef4444; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+                        <div style="font-size:12px; font-weight:900; color:#ef4444; margin-bottom:3px;">🔴 Từ sắp quên —
+                            Ôn NGAY kẻo mất!</div>
                         <div style="font-size:11.5px; color:#57534e; line-height:1.65;">
-                            Mỗi từ có một <b style="color:#dc2626;">điểm nhớ</b> tính theo công thức: <i>Nhớ = e<sup>−t/S</sup> × 100</i><br>
-                            Khi điểm nhớ xuống dưới <b style="color:#dc2626;">50%</b> hoặc đã quá ngày ôn lịch → từ rơi vào đây 🚨<br>
-                            <span style="color:#78716c; font-size:11px;">👉 t = số ngày từ lần ôn cuối &nbsp;|&nbsp; S = độ bền ghi nhớ</span>
+                            Mỗi từ có một <b style="color:#dc2626;">điểm nhớ</b> tính theo công thức: <i>Nhớ =
+                                e<sup>−t/S</sup> × 100</i><br>
+                            Khi điểm nhớ xuống dưới <b style="color:#dc2626;">50%</b> hoặc đã quá ngày ôn lịch → từ rơi
+                            vào đây 🚨<br>
+                            <span style="color:#78716c; font-size:11px;">👉 t = số ngày từ lần ôn cuối &nbsp;|&nbsp; S =
+                                độ bền ghi nhớ</span>
                         </div>
                     </div>
                     <!-- Từ hay sai -->
-                    <div style="background:#fff; border-radius:10px; padding:10px 12px; margin-bottom:8px; border-left:4px solid #f97316; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
-                        <div style="font-size:12px; font-weight:900; color:#ea580c; margin-bottom:3px;">🟠 Từ hay sai — Điểm yếu cần chinh phục!</div>
+                    <div
+                        style="background:#fff; border-radius:10px; padding:10px 12px; margin-bottom:8px; border-left:4px solid #f97316; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+                        <div style="font-size:12px; font-weight:900; color:#ea580c; margin-bottom:3px;">🟠 Từ hay sai —
+                            Điểm yếu cần chinh phục!</div>
                         <div style="font-size:11.5px; color:#57534e; line-height:1.65;">
                             Những từ bạn đã trả lời <b style="color:#ea580c;">sai ≥ 2 lần</b> được gom vào đây.<br>
                             Hệ thống giảm khoảng ôn lại về <b>1 ngày</b> để nhắc liên tục cho đến khi bạn nhớ chắc.
                         </div>
                     </div>
                     <!-- Chưa từng ôn -->
-                    <div style="background:#fff; border-radius:10px; padding:10px 12px; margin-bottom:8px; border-left:4px solid #8b5cf6; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
-                        <div style="font-size:12px; font-weight:900; color:#7c3aed; margin-bottom:3px;">🟣 Chưa từng ôn — Từ bạn đã nhập nhưng chưa luyện</div>
+                    <div
+                        style="background:#fff; border-radius:10px; padding:10px 12px; margin-bottom:8px; border-left:4px solid #8b5cf6; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+                        <div style="font-size:12px; font-weight:900; color:#7c3aed; margin-bottom:3px;">🟣 Chưa từng ôn
+                            — Từ bạn đã nhập nhưng chưa luyện</div>
                         <div style="font-size:11.5px; color:#57534e; line-height:1.65;">
                             Từ bạn tự nhập vào <b style="color:#7c3aed;">Góc của Bạn</b> nhưng chưa làm bài bao giờ.<br>
                             Ôn lần đầu giúp "kích hoạt" từ vào bộ nhớ — lịch ôn tự tính từ đây!
                         </div>
                     </div>
                     <!-- Tip -->
-                    <div style="background:linear-gradient(90deg,#ecfdf5,#d1fae5); border-radius:10px; padding:9px 12px; border-left:4px solid #10b981; display:flex; align-items:center; gap:8px;">
+                    <div
+                        style="background:linear-gradient(90deg,#ecfdf5,#d1fae5); border-radius:10px; padding:9px 12px; border-left:4px solid #10b981; display:flex; align-items:center; gap:8px;">
                         <span style="font-size:18px;">✅</span>
-                        <div style="font-size:11.5px; color:#065f46; font-weight:700; line-height:1.5;">Ôn <i>đúng lúc</i> → khoảng nhắc lại <b>tăng gấp đôi</b> mỗi lần.<br><span style="font-weight:500; color:#047857;">Ôn sớm quá cũng vô ích — hãy để não "sắp quên" rồi mới ôn!</span></div>
+                        <div style="font-size:11.5px; color:#065f46; font-weight:700; line-height:1.5;">Ôn <i>đúng
+                                lúc</i> → khoảng nhắc lại <b>tăng gấp đôi</b> mỗi lần.<br><span
+                                style="font-weight:500; color:#047857;">Ôn sớm quá cũng vô ích — hãy để não "sắp quên"
+                                rồi mới ôn!</span></div>
                     </div>
                 </div>
             </div>
@@ -8319,7 +8365,7 @@
             function memScore(s) { if (!s.lastAt) return 0; var t = (Date.now() - s.lastAt) / 86400000, S = Math.max(0.5, s.interval || 1); return Math.round(Math.exp(-t / S) * 100); }
             function updateState(s, result) { var now = Date.now(); if (!s.firstAt) s.firstAt = now; s.lastAt = now; s.reviews = (s.reviews || 0) + 1; var ef = s.ef || 2.5, inv = s.interval || 1; if (result === 'wrong') { inv = 1; ef = Math.max(1.3, ef - 0.3); } else if (result === 'hard') { inv = Math.max(1, Math.round(inv * 1.2)); ef = Math.max(1.3, ef - 0.15); } else { if (s.reviews <= 1) inv = 1; else if (s.reviews === 2) inv = 3; else inv = Math.round(inv * ef); ef = Math.min(3.0, ef + 0.05); } s.ef = ef; s.interval = inv; s.nextAt = now + inv * 86400000; s.mem = memScore(s); return s; }
             window.srsTracker = { record: function (item, result) { var id = itemId(item); if (!id) return; var d = getSrsDb(), s = d[id] || { id: id, word: (item.c1 || item.q || '').trim(), meaning: (item.c3 || item.ans || '').trim(), wrongCount: 0 }; d[id] = updateState(s, result); if (result === 'wrong') d[id].wrongCount = (d[id].wrongCount || 0) + 1; d[id].isStarred = item.count > 0; saveSrsDb(d); } };
-            window.collectAllItemsForSR = function () { var all = []; try { if (typeof db !== 'undefined' && typeof activeLevels !== 'undefined') { activeLevels.forEach(function (lv) { ['voca','gram','voca_quiz','gram_quiz'].forEach(function (ty) { var b = (db[lv] || {})[ty]; if (!b) return; Object.values(b).forEach(function (day) { (day.list || []).forEach(function (it) { it._src = 'user'; all.push(it); }); }); }); }); } } catch (e) { } try { if (typeof vanData !== 'undefined' && typeof VAN_CONTAINERS_MAP !== 'undefined') { var map = VAN_CONTAINERS_MAP[currentLang] || {}; Object.keys(map).forEach(function (sec) { var sd = vanData[sec]; if (!sd) return; [].concat(sd.struct || []).forEach(function (lesson) { (lesson.list || []).forEach(function (it) { if (typeof loadVanItemExtra === 'function') loadVanItemExtra(it); it._src = 'van'; all.push(it); }); }); }); } } catch (e) { } return all; };
+            window.collectAllItemsForSR = function () { var all = []; try { if (typeof db !== 'undefined' && typeof activeLevels !== 'undefined') { activeLevels.forEach(function (lv) { ['voca', 'gram', 'voca_quiz', 'gram_quiz'].forEach(function (ty) { var b = (db[lv] || {})[ty]; if (!b) return; Object.values(b).forEach(function (day) { (day.list || []).forEach(function (it) { it._src = 'user'; all.push(it); }); }); }); }); } } catch (e) { } try { if (typeof vanData !== 'undefined' && typeof VAN_CONTAINERS_MAP !== 'undefined') { var map = VAN_CONTAINERS_MAP[currentLang] || {}; Object.keys(map).forEach(function (sec) { var sd = vanData[sec]; if (!sd) return;[].concat(sd.struct || []).forEach(function (lesson) { (lesson.list || []).forEach(function (it) { if (typeof loadVanItemExtra === 'function') loadVanItemExtra(it); it._src = 'van'; all.push(it); }); }); }); } } catch (e) { } return all; };
             window.computeSrStats = function (items) { var srsDb = getSrsDb(), fcStars = new Set(JSON.parse(localStorage.getItem('fc_starred_keys') || '[]')), now = Date.now(), tagged = { due: [], wrong: [], new: [], star: [], all: [] }; items.forEach(function (item) { var id = itemId(item); if (!id) return; var s = srsDb[id], key = (item.q || item.c1 || '').trim(), isStar = fcStars.has(key); if (!s || !s.lastAt) { if (item._src === 'user') tagged.new.push(item); } else { var mem = memScore(s); if ((s.nextAt && s.nextAt <= now) || mem < 50) tagged.due.push(item); if ((s.wrongCount || 0) >= 2) tagged.wrong.push(item); } if (isStar) tagged.star.push(item); tagged.all.push(item); }); return { due: tagged.due.length, wrong: tagged.wrong.length, 'new': tagged.new.length, star: tagged.star.length, tagged: tagged }; };
             window.openSmartReviewModal = function () { var modal = document.getElementById('smart-review-modal'); if (!modal) return; modal.style.display = 'block'; document.getElementById('sr-selected-category').value = 'all'; document.querySelectorAll('.sr-stat-card').forEach(function (c) { c.style.outline = 'none'; c.classList.remove('active'); }); var defaultCard = document.getElementById('sr-card-all'); if (defaultCard) { defaultCard.style.outline = '2.5px solid #f97316'; defaultCard.classList.add('active'); } setTimeout(function () { var items = window.collectAllItemsForSR(), stats = window.computeSrStats(items); window._srStats = stats; document.getElementById('sr-count-due').textContent = stats.due + ' từ'; document.getElementById('sr-count-wrong').textContent = stats.wrong + ' từ'; document.getElementById('sr-count-new').textContent = stats['new'] + ' từ'; document.getElementById('sr-count-star').textContent = stats.star + ' từ'; var badge = document.getElementById('sr-due-badge'); if (badge) { var t = stats.due + stats.wrong; if (t > 0) { badge.style.display = 'block'; badge.textContent = t; } else badge.style.display = 'none'; } }, 80); };
             window.closeSmartReviewModal = function () { document.getElementById('smart-review-modal').style.display = 'none'; };
@@ -8396,6 +8442,11 @@
                         if (g2a) g2a.style.display = 'block';
                         var fb = document.getElementById('btn-flashcard');
                         if (fb) fb.style.display = 'inline-flex';
+                        // Tự động bắt đầu đồng hồ ngay khi vào Ôn tập thông minh
+                        if (typeof resetTestTimer === 'function') resetTestTimer();
+                        setTimeout(function() {
+                            if (typeof toggleTestTimer === 'function') toggleTestTimer();
+                        }, 100);
                     }, 150);
                 } else { alert('Lỗi khởi động quiz.'); }
             };
@@ -8438,44 +8489,54 @@
         onmouseout="this.style.transform='scale(1)';this.style.background='rgba(15,23,42,0.75)'">🖼️</button>
 
     <!-- ===== MODAL CHỌN ẢNH NỀN ===== -->
-    <div id="bg-picker-modal" style="display:none; position:fixed; inset:0; z-index:9100; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); align-items:center; justify-content:center;">
-        <div style="background:linear-gradient(145deg,#1e1b4b,#0f172a); border:1.5px solid rgba(165,180,252,0.2); border-radius:20px; padding:24px; width:min(420px,92vw); font-family:'Baloo 2',sans-serif; box-shadow:0 25px 60px rgba(0,0,0,0.6);">
+    <div id="bg-picker-modal"
+        style="display:none; position:fixed; inset:0; z-index:9100; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); align-items:center; justify-content:center;">
+        <div
+            style="background:linear-gradient(145deg,#1e1b4b,#0f172a); border:1.5px solid rgba(165,180,252,0.2); border-radius:20px; padding:24px; width:min(420px,92vw); font-family:'Baloo 2',sans-serif; box-shadow:0 25px 60px rgba(0,0,0,0.6);">
             <!-- Header -->
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
                 <div style="font-size:16px; font-weight:900; color:#e2e8f0;">🖼️ Đổi ảnh nền</div>
-                <button onclick="closeBgPicker()" style="background:rgba(255,255,255,0.08); border:none; color:#94a3b8; font-size:18px; cursor:pointer; border-radius:8px; width:32px; height:32px; display:flex; align-items:center; justify-content:center;">✕</button>
+                <button onclick="closeBgPicker()"
+                    style="background:rgba(255,255,255,0.08); border:none; color:#94a3b8; font-size:18px; cursor:pointer; border-radius:8px; width:32px; height:32px; display:flex; align-items:center; justify-content:center;">✕</button>
             </div>
 
             <!-- Ảnh hệ thống -->
-            <div style="font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">🎨 Ảnh hệ thống</div>
+            <div
+                style="font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">
+                🎨 Ảnh hệ thống</div>
             <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px;">
                 <!-- Default (no image) -->
                 <div onclick="applyBg('default')" class="bg-thumb"
                     style="aspect-ratio:16/9; border-radius:10px; cursor:pointer; border:2px solid rgba(255,255,255,0.1); background:linear-gradient(135deg,#1e1b4b,#0f172a); display:flex; align-items:center; justify-content:center; font-size:22px; transition:all 0.2s; position:relative; overflow:hidden;"
                     title="Mặc định (không ảnh)">
                     🌌
-                    <div style="position:absolute; bottom:4px; font-size:10px; color:#94a3b8; font-weight:700;">Mặc định</div>
-                </div>
-                <!-- anhnen.png -->
-                <div onclick="applyBg('anhnen.png')" class="bg-thumb"
-                    style="aspect-ratio:16/9; border-radius:10px; cursor:pointer; border:2px solid rgba(255,255,255,0.1); background:url('anhnen.png') center/cover; transition:all 0.2s; position:relative; overflow:hidden;"
-                    title="Ảnh nền 1">
-                    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:flex-end; padding:4px; border-radius:8px;">
-                        <span style="font-size:10px; color:#fff; font-weight:700;">Ảnh 1</span>
+                    <div style="position:absolute; bottom:4px; font-size:10px; color:#94a3b8; font-weight:700;">Mặc định
                     </div>
                 </div>
                 <!-- anhnen1.png -->
                 <div onclick="applyBg('anhnen1.png')" class="bg-thumb"
                     style="aspect-ratio:16/9; border-radius:10px; cursor:pointer; border:2px solid rgba(255,255,255,0.1); background:url('anhnen1.png') center/cover; transition:all 0.2s; position:relative; overflow:hidden;"
+                    title="Ảnh nền 1">
+                    <div
+                        style="position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:flex-end; padding:4px; border-radius:8px;">
+                        <span style="font-size:10px; color:#fff; font-weight:700;">Ảnh 1</span>
+                    </div>
+                </div>
+                <!-- anhnen2.png -->
+                <div onclick="applyBg('anhnen2.png')" class="bg-thumb"
+                    style="aspect-ratio:16/9; border-radius:10px; cursor:pointer; border:2px solid rgba(255,255,255,0.1); background:url('anhnen2.png') center/cover; transition:all 0.2s; position:relative; overflow:hidden;"
                     title="Ảnh nền 2">
-                    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:flex-end; padding:4px; border-radius:8px;">
+                    <div
+                        style="position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:flex-end; padding:4px; border-radius:8px;">
                         <span style="font-size:10px; color:#fff; font-weight:700;">Ảnh 2</span>
                     </div>
                 </div>
             </div>
 
             <!-- Upload ảnh -->
-            <div style="font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">📤 Tải ảnh của bạn</div>
+            <div
+                style="font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">
+                📤 Tải ảnh của bạn</div>
             <label for="bg-upload-input"
                 style="display:flex; align-items:center; gap:10px; padding:12px 16px; background:rgba(99,102,241,0.1); border:1.5px dashed rgba(99,102,241,0.4); border-radius:12px; cursor:pointer; color:#a5b4fc; font-size:13px; font-weight:700; transition:all 0.2s;"
                 onmouseover="this.style.background='rgba(99,102,241,0.2)'"
@@ -8483,94 +8544,99 @@
                 <span style="font-size:24px;">📁</span>
                 <div>
                     <div>Chọn ảnh từ máy tính</div>
-                    <div style="font-size:11px; color:#64748b; font-weight:500;">JPG, PNG, WebP — khuyến nghị 1920×1080</div>
+                    <div style="font-size:11px; color:#64748b; font-weight:500;">JPG, PNG, WebP — khuyến nghị 1920×1080
+                    </div>
                 </div>
             </label>
-            <input type="file" id="bg-upload-input" accept="image/*" style="display:none;" onchange="handleBgUpload(this)">
+            <input type="file" id="bg-upload-input" accept="image/*" style="display:none;"
+                onchange="handleBgUpload(this)">
 
             <!-- Preview ảnh đang dùng -->
-            <div id="bg-current-info" style="margin-top:14px; padding:10px 14px; background:rgba(255,255,255,0.04); border-radius:10px; font-size:12px; color:#64748b; display:flex; align-items:center; gap:8px;">
+            <div id="bg-current-info"
+                style="margin-top:14px; padding:10px 14px; background:rgba(255,255,255,0.04); border-radius:10px; font-size:12px; color:#64748b; display:flex; align-items:center; gap:8px;">
                 <span>🖼️</span><span id="bg-current-label">Đang dùng: Mặc định</span>
-                <button onclick="applyBg('default')" style="margin-left:auto; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; border-radius:6px; padding:3px 10px; font-size:11px; cursor:pointer; font-family:'Baloo 2';">✕ Xóa ảnh</button>
+                <button onclick="applyBg('default')"
+                    style="margin-left:auto; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; border-radius:6px; padding:3px 10px; font-size:11px; cursor:pointer; font-family:'Baloo 2';">✕
+                    Xóa ảnh</button>
             </div>
         </div>
     </div>
 
     <script>
-    (function() {
-        var BG_KEY = 'app_bg_setting';
+        (function () {
+            var BG_KEY = 'app_bg_setting';
 
-        function applyBg(value) {
-            window._currentBg = value;
-            if (value === 'default') {
-                document.body.style.backgroundImage = "url('anhnen.png')";
-                localStorage.setItem(BG_KEY, 'anhnen.png');
-                updateBgLabel('Mặc định (anhnen.png)');
-            } else if (value.startsWith('data:')) {
-                // base64 từ upload
-                document.body.style.backgroundImage = "url('" + value + "')";
-                document.body.style.backgroundSize = 'cover';
-                document.body.style.backgroundPosition = 'center';
-                document.body.style.backgroundAttachment = 'fixed';
-                try { localStorage.setItem(BG_KEY, value); } catch(e) { alert('Ảnh quá lớn để lưu, sẽ không giữ sau khi tải lại.'); }
-                updateBgLabel('Ảnh tùy chỉnh của bạn');
-            } else {
-                document.body.style.backgroundImage = "url('" + value + "')";
-                document.body.style.backgroundSize = 'cover';
-                document.body.style.backgroundPosition = 'center';
-                document.body.style.backgroundAttachment = 'fixed';
-                localStorage.setItem(BG_KEY, value);
-                var label = {
-                    'anhnen.png': 'Ảnh 1 (anhnen.png)',
-                    'anhnen1.png': 'Ảnh 2 (anhnen1.png)'
-                }[value] || value;
-                updateBgLabel(label);
+            function applyBg(value) {
+                window._currentBg = value;
+                if (value === 'default') {
+                    document.body.style.backgroundImage = "url('anhnen.png')";
+                    localStorage.setItem(BG_KEY, 'anhnen.png');
+                    updateBgLabel('Mặc định (anhnen.png)');
+                } else if (value.startsWith('data:')) {
+                    // base64 từ upload
+                    document.body.style.backgroundImage = "url('" + value + "')";
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                    document.body.style.backgroundAttachment = 'fixed';
+                    try { localStorage.setItem(BG_KEY, value); } catch (e) { alert('Ảnh quá lớn để lưu, sẽ không giữ sau khi tải lại.'); }
+                    updateBgLabel('Ảnh tùy chỉnh của bạn');
+                } else {
+                    document.body.style.backgroundImage = "url('" + value + "')";
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                    document.body.style.backgroundAttachment = 'fixed';
+                    localStorage.setItem(BG_KEY, value);
+                    var label = {
+                        'anhnen1.png': 'Ảnh 1 (anhnen1.png)',
+                        'anhnen2.png': 'Ảnh 2 (anhnen2.png)'
+                    }[value] || value;
+                    updateBgLabel(label);
+                }
+                // highlight selected thumb
+                document.querySelectorAll('.bg-thumb').forEach(function (el) {
+                    el.style.borderColor = 'rgba(255,255,255,0.1)';
+                    el.style.boxShadow = 'none';
+                });
             }
-            // highlight selected thumb
-            document.querySelectorAll('.bg-thumb').forEach(function(el) {
-                el.style.borderColor = 'rgba(255,255,255,0.1)';
-                el.style.boxShadow = 'none';
+            window.applyBg = applyBg;
+
+            function updateBgLabel(label) {
+                var el = document.getElementById('bg-current-label');
+                if (el) el.textContent = 'Đang dùng: ' + label;
+            }
+
+            function handleBgUpload(input) {
+                var file = input.files[0];
+                if (!file) return;
+                var reader = new FileReader();
+                reader.onload = function (e) { applyBg(e.target.result); };
+                reader.readAsDataURL(file);
+            }
+            window.handleBgUpload = handleBgUpload;
+
+            function openBgPicker() {
+                var m = document.getElementById('bg-picker-modal');
+                if (m) { m.style.display = 'flex'; }
+            }
+            window.openBgPicker = openBgPicker;
+
+            function closeBgPicker() {
+                var m = document.getElementById('bg-picker-modal');
+                if (m) m.style.display = 'none';
+            }
+            window.closeBgPicker = closeBgPicker;
+
+            // Click backdrop to close
+            document.getElementById('bg-picker-modal').addEventListener('click', function (e) {
+                if (e.target === this) closeBgPicker();
             });
-        }
-        window.applyBg = applyBg;
 
-        function updateBgLabel(label) {
-            var el = document.getElementById('bg-current-label');
-            if (el) el.textContent = 'Đang dùng: ' + label;
-        }
-
-        function handleBgUpload(input) {
-            var file = input.files[0];
-            if (!file) return;
-            var reader = new FileReader();
-            reader.onload = function(e) { applyBg(e.target.result); };
-            reader.readAsDataURL(file);
-        }
-        window.handleBgUpload = handleBgUpload;
-
-        function openBgPicker() {
-            var m = document.getElementById('bg-picker-modal');
-            if (m) { m.style.display = 'flex'; }
-        }
-        window.openBgPicker = openBgPicker;
-
-        function closeBgPicker() {
-            var m = document.getElementById('bg-picker-modal');
-            if (m) m.style.display = 'none';
-        }
-        window.closeBgPicker = closeBgPicker;
-
-        // Click backdrop to close
-        document.getElementById('bg-picker-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeBgPicker();
-        });
-
-        // Restore saved bg on load
-        var saved = localStorage.getItem(BG_KEY);
-        if (saved) {
-            applyBg(saved);
-        }
-    })();
+            // Restore saved bg on load
+            var saved = localStorage.getItem(BG_KEY);
+            if (saved) {
+                applyBg(saved);
+            }
+        })();
     </script>
 
 </body>
