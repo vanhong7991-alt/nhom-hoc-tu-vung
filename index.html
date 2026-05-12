@@ -2673,6 +2673,10 @@
                             <input type="date" id="journey-end" onchange="updateJourney()"
                                 style="background: rgba(255,255,255,0.1); border: 2px solid #a855f7; color: #fbbf24; outline: none; font-family: 'Baloo 2'; cursor: pointer; padding: 6px 12px; border-radius: 10px; font-weight: bold; font-size: 14px; transition: 0.3s;">
                         </div>
+                        <button onclick="saveJourneyExplicit(this)"
+                            style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 10px 12px; border-radius: 10px; font-weight: 800; font-family: 'Baloo 2'; cursor: pointer; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4); transition: 0.2s; font-size: 14px; margin-top: 5px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            💾 LƯU LẠI
+                        </button>
                     </div>
                 </div>
 
@@ -4399,6 +4403,19 @@
                     if (savedEnd) document.getElementById('journey-end').value = savedEnd;
                     updateJourney();
                 };
+
+                function saveJourneyExplicit(btn) {
+                    updateJourney();
+                    const oldHtml = btn.innerHTML;
+                    btn.innerHTML = '✅ ĐÃ LƯU KẾT QUẢ';
+                    btn.style.background = 'linear-gradient(135deg, #3b82f6, #2563eb)';
+                    btn.style.boxShadow = '0 4px 10px rgba(59, 130, 246, 0.4)';
+                    setTimeout(() => {
+                        btn.innerHTML = oldHtml;
+                        btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                        btn.style.boxShadow = '0 4px 10px rgba(16, 185, 129, 0.4)';
+                    }, 1500);
+                }
 
                 function updateJourney() {
                     const startInput = document.getElementById('journey-start');
