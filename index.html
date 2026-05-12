@@ -6972,29 +6972,52 @@
                     });
                 }
 
-                function cqApplyRange() {
-                    const startVal = parseInt(document.getElementById('cq-range-start').value);
-                    const endVal = parseInt(document.getElementById('cq-range-end').value);
-                    if (isNaN(startVal) || isNaN(endVal) || startVal > endVal) {
-                        alert("Khoảng không hợp lệ! Vui lòng nhập số hợp lệ.");
-                        return;
-                    }
+                function cqSelectTimeChip(el) {
+                    document.querySelectorAll('.cq-time-chip').forEach(btn => {
+                        btn.style.background = 'transparent';
+                        btn.style.color = '#94a3b8';
+                        btn.style.borderColor = 'rgba(255,255,255,0.1)';
+                        btn.classList.remove('active');
+                    });
+                    el.style.background = 'rgba(99,102,241,0.3)';
+                    el.style.color = '#a5b4fc';
+                    el.style.borderColor = 'rgba(165,180,252,0.5)';
+                    el.classList.add('active');
+                    cqApplyTimeFilter();
+                }
 
-                    const items = document.querySelectorAll('.cq-lesson-item');
-                    items.forEach(el => {
+                function cqApplyTimeFilter() {
+                    const activeChip = document.querySelector('.cq-time-chip.active');
+                    const days = activeChip ? parseInt(activeChip.dataset.days || '0') : 0;
+                    const lessons = window._cqLessons || [];
+                    document.querySelectorAll('.cq-lesson-item').forEach(el => {
+                        el.style.display = ''; // luôn hiện tất cả
                         const input = el.querySelector('input');
-                        const label = el.querySelector('span').innerText;
-
-                        const matches = label.match(/\d+/g);
-                        if (matches && matches.length > 0) {
-                            const lastNum = parseInt(matches[matches.length - 1]);
-                            if (lastNum >= startVal && lastNum <= endVal) {
-                                input.checked = true;
-                            } else {
-                                input.checked = false;
-                            }
+                        if (!input) return;
+                        if (!days) { input.checked = true; return; } // Tất cả thời gian → tick hết
+                        const lessonId = input.value;
+                        const lesson = lessons.find(l => l.id === lessonId);
+                        if (!lesson) { input.checked = false; return; }
+                        const now = Date.now();
+                        const cutoff = now - days * 86400000;
+                        // Kiểm tra ngày trong label (dd/mm/yyyy)
+                        const labelSpan = el.querySelector('span');
+                        const label = labelSpan ? labelSpan.innerText : '';
+                        const dateMatch = label.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+                        let lessonDate = null;
+                        if (dateMatch) {
+                            lessonDate = new Date(parseInt(dateMatch[3]), parseInt(dateMatch[2]) - 1, parseInt(dateMatch[1])).getTime();
+                        }
+                        // Kiểm tra createdAt của items
+                        const allItems = [...(lesson.structItems || []), ...(lesson.quizItems || [])];
+                        const hasCreatedAt = allItems.some(it => it.createdAt);
+                        const hasRecentItem = allItems.some(it => it.createdAt && it.createdAt >= cutoff);
+                        // Nếu không có thông tin ngày nào → giữ tick (không loại bài không biết tuổi)
+                        // Chỉ bỏ tick nếu CÓ thông tin ngày tạo nhưng NGOÀI khoảng thời gian
+                        if (!lessonDate && !hasCreatedAt) {
+                            input.checked = true; // không có ngày → không lọc → giữ
                         } else {
-                            input.checked = false;
+                            input.checked = (lessonDate && lessonDate >= cutoff) || hasRecentItem;
                         }
                     });
                     cqUpdateCount();
@@ -7006,24 +7029,31 @@
                     const filterWrong = cqIsActive('cq-f-wrong');
                     const filterForgot = cqIsActive('cq-f-forgot');
                     const filterStar = cqIsActive('cq-f-star');
-                    const timeFilterEl = document.getElementById('cq-time-filter');
-                    const timeFilterDays = timeFilterEl ? parseInt(timeFilterEl.value) : 0;
+                    const timeFilterDays = 0;
                     const isStruct = cqIsActive('cq-mode-struct');
                     const isQuiz = cqIsActive('cq-mode-quiz');
 
-                    let total = 0;
+                    let totalS = 0, totalQ = 0;
                     lessons.filter(l => selected.has(l.id)).forEach(l => {
                         const itemsS = applySpecialFilters(l.structItems || [], filterWrong, filterForgot, filterStar, timeFilterDays, l.src);
+                        // Trắc nghiệm chỉ lấy quizItems thật (gramType=quiz)
                         const itemsQ = applySpecialFilters(l.quizItems || [], filterWrong, filterForgot, filterStar, timeFilterDays, l.src);
-                        if (isStruct) total += itemsS.length;
-                        else if (isQuiz) total += itemsQ.length;
-                        else total += itemsS.length + itemsQ.length;
+                        if (isStruct) totalS += itemsS.length;
+                        if (isQuiz) totalQ += itemsQ.length;
                     });
 
-                    document.getElementById('cq-count').textContent = total;
+                    const total = (isStruct ? totalS : 0) + (isQuiz && !(isStruct) ? totalQ : 0) || (isStruct && isQuiz ? totalS + totalQ : isStruct ? totalS : totalQ);
+                    const displayTotal = (isStruct ? totalS : 0) + (isQuiz ? totalQ : 0);
+                    document.getElementById('cq-count').textContent = displayTotal;
                     const sel = lessons.filter(l => selected.has(l.id)).length;
                     document.getElementById('cq-detail').textContent =
-                        total > 0 ? `Từ ${sel} bài được chọn` : 'Không có câu/từ phù hợp';
+                        displayTotal > 0 ? `Từ ${sel} bài được chọn` : 'Không có câu/từ phù hợp';
+
+                    // Ẩn/hiện nút theo mode
+                    const btnStruct = document.getElementById('cq-btn-struct');
+                    const btnQuiz = document.getElementById('cq-btn-quiz');
+                    if (btnStruct) btnStruct.style.display = isStruct ? '' : 'none';
+                    if (btnQuiz) btnQuiz.style.display = isQuiz ? '' : 'none';
                 }
 
                 function applySpecialFilters(items, filterWrong, filterForgot, filterStar, timeFilterDays, src) {
@@ -7053,8 +7083,7 @@
                     const filterWrong = cqIsActive('cq-f-wrong');
                     const filterForgot = cqIsActive('cq-f-forgot');
                     const filterStar = cqIsActive('cq-f-star');
-                    const timeFilterEl = document.getElementById('cq-time-filter');
-                    const timeFilterDays = timeFilterEl ? parseInt(timeFilterEl.value) : 0;
+                    const timeFilterDays = 0;
 
                     const wantStruct = forceMode === 'struct';
                     const wantQuiz = forceMode === 'quiz';
@@ -7064,11 +7093,8 @@
                         if (wantStruct) {
                             finalList.push(...applySpecialFilters(l.structItems || [], filterWrong, filterForgot, filterStar, timeFilterDays, l.src));
                         } else if (wantQuiz) {
-                            // Ưu tiên quizItems (gramType=quiz); nếu không có thì dùng structItems
-                            const qItems = applySpecialFilters(l.quizItems || [], filterWrong, filterForgot, filterStar, timeFilterDays, l.src);
-                            const sItems = applySpecialFilters(l.structItems || [], filterWrong, filterForgot, filterStar, timeFilterDays, l.src);
-                            if (qItems.length > 0) finalList.push(...qItems);
-                            else finalList.push(...sItems);
+                            // Trắc nghiệm chỉ lấy quizItems thật (gramType=quiz), không fallback
+                            finalList.push(...applySpecialFilters(l.quizItems || [], filterWrong, filterForgot, filterStar, timeFilterDays, l.src));
                         }
                     });
 
@@ -7228,9 +7254,9 @@
                         đề nếu cần)</span></div>
                 <div class="cq-chips">
                     <div class="cq-chip active" id="cq-mode-struct"
-                        onclick="cqSingleSelect(this,'cq-mode','active'); cqRefresh()">📝 Từ đơn (tự luận)</div>
-                    <div class="cq-chip" id="cq-mode-quiz"
-                        onclick="cqSingleSelect(this,'cq-mode','active'); cqRefresh()">🔘 Trắc nghiệm</div>
+                        onclick="cqToggleChip(this,'cq-mode','active'); cqRefresh()">📝 Từ đơn (tự luận)</div>
+                    <div class="cq-chip active" id="cq-mode-quiz"
+                        onclick="cqToggleChip(this,'cq-mode','active'); cqRefresh()">🔘 Trắc nghiệm</div>
                 </div>
             </div>
 
@@ -7248,25 +7274,6 @@
                 </div>
             </div>
 
-            <!-- BỘ LỌC THỜI GIAN -->
-            <div class="cq-section">
-                <div class="cq-section-label">⏳ Lọc theo thời gian tạo <span
-                        style="color:#fbbf24; font-size:10px; font-weight:900; background:rgba(251,191,36,0.15); padding:2px 6px; border-radius:4px; border:1px dashed #fbbf24; margin-left:6px;">(ÁP
-                        DỤNG CẢ 2 GÓC)</span></div>
-                <div style="margin-top:6px;">
-                    <select id="cq-time-filter" onchange="cqRefresh()"
-                        style="background:rgba(0,0,0,0.3); color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:8px 12px; font-size:14px; width:100%; outline:none; font-family:'Baloo 2'; cursor:pointer;">
-                        <option value="0">Tất cả thời gian</option>
-                        <option value="7">7 ngày gần nhất</option>
-                        <option value="14">14 ngày gần nhất</option>
-                        <option value="30">1 tháng gần nhất</option>
-                        <option value="60">2 tháng gần nhất</option>
-                        <option value="90">3 tháng gần nhất</option>
-                        <option value="180">6 tháng gần nhất</option>
-                        <option value="365">12 tháng gần nhất</option>
-                    </select>
-                </div>
-            </div>
 
             <!-- CHỌN BÀI -->
             <div class="cq-section">
@@ -7291,21 +7298,19 @@
                             style="flex:1; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:6px; padding:6px 10px; font-size:13px; outline:none;"
                             oninput="cqFilterLessonUI()">
                     </div>
-                    <!-- Chọn khoảng bài -->
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-size:12px; color:#94a3b8; font-weight:600;">Chọn nhanh khoảng
-                            (Ngày/Bài):</span>
-                        <input type="number" id="cq-range-start" placeholder="1"
-                            style="width:50px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px; padding:4px 6px; font-size:13px; outline:none;"
-                            min="1">
-                        <span style="font-size:12px; color:#64748b;">đến</span>
-                        <input type="number" id="cq-range-end" placeholder="10"
-                            style="width:50px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px; padding:4px 6px; font-size:13px; outline:none;"
-                            min="1">
-                        <button onclick="cqApplyRange()"
-                            style="background:#8b5cf6; color:#fff; border:none; border-radius:4px; padding:5px 12px; font-size:12px; font-weight:bold; cursor:pointer; margin-left:auto; transition:0.2s;"
-                            onmouseover="this.style.background='#a78bfa'"
-                            onmouseout="this.style.background='#8b5cf6'">Áp dụng</button>
+                    <!-- Lọc thời gian -->
+                    <div style="display:flex; flex-direction:column; gap:6px;">
+                        <span style="font-size:11px; color:#94a3b8; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">⏳ Thời gian tạo bài</span>
+                        <div id="cq-time-chips" style="display:flex; flex-wrap:wrap; gap:6px;">
+                            <button class="cq-time-chip active" data-days="0" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(165,180,252,0.5); background:rgba(99,102,241,0.3); color:#a5b4fc; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">✨ Tất cả</button>
+                            <button class="cq-time-chip" data-days="7" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">7 ngày</button>
+                            <button class="cq-time-chip" data-days="14" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">14 ngày</button>
+                            <button class="cq-time-chip" data-days="30" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">1 tháng</button>
+                            <button class="cq-time-chip" data-days="60" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">2 tháng</button>
+                            <button class="cq-time-chip" data-days="90" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">3 tháng</button>
+                            <button class="cq-time-chip" data-days="180" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">6 tháng</button>
+                            <button class="cq-time-chip" data-days="365" onclick="cqSelectTimeChip(this)" style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">12 tháng</button>
+                        </div>
                     </div>
                 </div>
 
@@ -7322,9 +7327,9 @@
                     <div class="cq-preview-detail" id="cq-detail">Chưa có dữ liệu phù hợp</div>
                 </div>
                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                    <button class="btn btn-purple" style="padding:10px 18px; font-size:14px;"
+                    <button id="cq-btn-struct" class="btn btn-purple" style="padding:10px 18px; font-size:14px;"
                         onclick="openCustomQuiz('struct')">📝 Làm từ đơn</button>
-                    <button class="btn btn-blue" style="padding:10px 18px; font-size:14px;"
+                    <button id="cq-btn-quiz" class="btn btn-blue" style="padding:10px 18px; font-size:14px;"
                         onclick="openCustomQuiz('quiz')">🔘 Làm trắc nghiệm</button>
                 </div>
             </div>
@@ -8256,16 +8261,44 @@
                     <span>5</span><span>25</span><span>50</span>
                 </div>
             </div>
-            <div style="padding:16px 24px 0;">
-                <div
-                    style="background:rgba(15,23,42,0.6);border:1px solid rgba(249,115,22,0.15);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;">
-                    <div style="font-size:28px;">📉</div>
-                    <div style="font-size:12px;color:#94a3b8;line-height:1.6;"><b
-                            style="color:#f97316;display:block;margin-bottom:2px;">Lý thuyết Ebbinghaus</b>Bộ nhớ giảm
-                        theo hàm mũ <i>R = e<sup>-t/S</sup></i>. Ôn đúng lúc giúp khoảng nhắc lại <b
-                            style="color:#86efac;">tăng gấp đôi</b> mỗi lần.</div>
+            <div style="padding:14px 24px 0;">
+                <div style="background:linear-gradient(135deg,#fff8f0,#fef3c7); border:1.5px solid #fcd34d; border-radius:16px; padding:16px 18px; font-family:'Baloo 2',sans-serif;">
+                    <div style="font-size:13px; font-weight:900; color:#92400e; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+                        📖 Hệ thống học theo <span style="background:#f97316; color:#fff; border-radius:6px; padding:1px 8px; font-size:12px;">Ebbinghaus</span> hoạt động thế nào?
+                    </div>
+                    <!-- Từ sắp quên -->
+                    <div style="background:#fff; border-radius:10px; padding:10px 12px; margin-bottom:8px; border-left:4px solid #ef4444; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+                        <div style="font-size:12px; font-weight:900; color:#ef4444; margin-bottom:3px;">🔴 Từ sắp quên — Ôn NGAY kẻo mất!</div>
+                        <div style="font-size:11.5px; color:#57534e; line-height:1.65;">
+                            Mỗi từ có một <b style="color:#dc2626;">điểm nhớ</b> tính theo công thức: <i>Nhớ = e<sup>−t/S</sup> × 100</i><br>
+                            Khi điểm nhớ xuống dưới <b style="color:#dc2626;">50%</b> hoặc đã quá ngày ôn lịch → từ rơi vào đây 🚨<br>
+                            <span style="color:#78716c; font-size:11px;">👉 t = số ngày từ lần ôn cuối &nbsp;|&nbsp; S = độ bền ghi nhớ</span>
+                        </div>
+                    </div>
+                    <!-- Từ hay sai -->
+                    <div style="background:#fff; border-radius:10px; padding:10px 12px; margin-bottom:8px; border-left:4px solid #f97316; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+                        <div style="font-size:12px; font-weight:900; color:#ea580c; margin-bottom:3px;">🟠 Từ hay sai — Điểm yếu cần chinh phục!</div>
+                        <div style="font-size:11.5px; color:#57534e; line-height:1.65;">
+                            Những từ bạn đã trả lời <b style="color:#ea580c;">sai ≥ 2 lần</b> được gom vào đây.<br>
+                            Hệ thống giảm khoảng ôn lại về <b>1 ngày</b> để nhắc liên tục cho đến khi bạn nhớ chắc.
+                        </div>
+                    </div>
+                    <!-- Chưa từng ôn -->
+                    <div style="background:#fff; border-radius:10px; padding:10px 12px; margin-bottom:8px; border-left:4px solid #8b5cf6; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+                        <div style="font-size:12px; font-weight:900; color:#7c3aed; margin-bottom:3px;">🟣 Chưa từng ôn — Từ bạn đã nhập nhưng chưa luyện</div>
+                        <div style="font-size:11.5px; color:#57534e; line-height:1.65;">
+                            Từ bạn tự nhập vào <b style="color:#7c3aed;">Góc của Bạn</b> nhưng chưa làm bài bao giờ.<br>
+                            Ôn lần đầu giúp "kích hoạt" từ vào bộ nhớ — lịch ôn tự tính từ đây!
+                        </div>
+                    </div>
+                    <!-- Tip -->
+                    <div style="background:linear-gradient(90deg,#ecfdf5,#d1fae5); border-radius:10px; padding:9px 12px; border-left:4px solid #10b981; display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:18px;">✅</span>
+                        <div style="font-size:11.5px; color:#065f46; font-weight:700; line-height:1.5;">Ôn <i>đúng lúc</i> → khoảng nhắc lại <b>tăng gấp đôi</b> mỗi lần.<br><span style="font-weight:500; color:#047857;">Ôn sớm quá cũng vô ích — hãy để não "sắp quên" rồi mới ôn!</span></div>
+                    </div>
                 </div>
             </div>
+
             <div style="padding:20px 24px 24px;display:grid;gap:10px;">
                 <button onclick="startSmartReviewNow()"
                     style="background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;border:none;padding:16px;border-radius:14px;font-size:16px;font-weight:900;cursor:pointer;font-family:'Baloo 2',sans-serif;box-shadow:0 8px 25px rgba(249,115,22,0.5);letter-spacing:0.5px;transition:transform 0.15s;"
@@ -8286,8 +8319,8 @@
             function memScore(s) { if (!s.lastAt) return 0; var t = (Date.now() - s.lastAt) / 86400000, S = Math.max(0.5, s.interval || 1); return Math.round(Math.exp(-t / S) * 100); }
             function updateState(s, result) { var now = Date.now(); if (!s.firstAt) s.firstAt = now; s.lastAt = now; s.reviews = (s.reviews || 0) + 1; var ef = s.ef || 2.5, inv = s.interval || 1; if (result === 'wrong') { inv = 1; ef = Math.max(1.3, ef - 0.3); } else if (result === 'hard') { inv = Math.max(1, Math.round(inv * 1.2)); ef = Math.max(1.3, ef - 0.15); } else { if (s.reviews <= 1) inv = 1; else if (s.reviews === 2) inv = 3; else inv = Math.round(inv * ef); ef = Math.min(3.0, ef + 0.05); } s.ef = ef; s.interval = inv; s.nextAt = now + inv * 86400000; s.mem = memScore(s); return s; }
             window.srsTracker = { record: function (item, result) { var id = itemId(item); if (!id) return; var d = getSrsDb(), s = d[id] || { id: id, word: (item.c1 || item.q || '').trim(), meaning: (item.c3 || item.ans || '').trim(), wrongCount: 0 }; d[id] = updateState(s, result); if (result === 'wrong') d[id].wrongCount = (d[id].wrongCount || 0) + 1; d[id].isStarred = item.count > 0; saveSrsDb(d); } };
-            window.collectAllItemsForSR = function () { var all = []; try { if (typeof db !== 'undefined' && typeof activeLevels !== 'undefined') { activeLevels.forEach(function (lv) { ['voca'].forEach(function (ty) { var b = (db[lv] || {})[ty]; if (!b) return; Object.values(b).forEach(function (day) { (day.list || []).forEach(function (it) { all.push(it); }); }); }); }); } } catch (e) { } try { if (typeof vanData !== 'undefined' && typeof VAN_CONTAINERS_MAP !== 'undefined') { var map = VAN_CONTAINERS_MAP[currentLang] || {}; Object.keys(map).forEach(function (sec) { var sd = vanData[sec]; if (!sd) return;[].concat(sd.struct || []).forEach(function (lesson) { (lesson.list || []).forEach(function (it) { if (typeof loadVanItemExtra === 'function') loadVanItemExtra(it); all.push(it); }); }); }); } } catch (e) { } return all; };
-            window.computeSrStats = function (items) { var srsDb = getSrsDb(), fcStars = new Set(JSON.parse(localStorage.getItem('fc_starred_keys') || '[]')), now = Date.now(), tagged = { due: [], wrong: [], new: [], star: [], all: [] }; items.forEach(function (item) { var id = itemId(item); if (!id) return; var s = srsDb[id], key = (item.q || item.c1 || '').trim(), isStar = fcStars.has(key) || item.count > 0; if (!s || !s.lastAt) { tagged.new.push(item); } else { var mem = memScore(s); if ((s.nextAt && s.nextAt <= now) || mem < 50) tagged.due.push(item); if ((s.wrongCount || 0) >= 2) tagged.wrong.push(item); } if (isStar) tagged.star.push(item); tagged.all.push(item); }); return { due: tagged.due.length, wrong: tagged.wrong.length, 'new': tagged.new.length, star: tagged.star.length, tagged: tagged }; };
+            window.collectAllItemsForSR = function () { var all = []; try { if (typeof db !== 'undefined' && typeof activeLevels !== 'undefined') { activeLevels.forEach(function (lv) { ['voca','gram','voca_quiz','gram_quiz'].forEach(function (ty) { var b = (db[lv] || {})[ty]; if (!b) return; Object.values(b).forEach(function (day) { (day.list || []).forEach(function (it) { it._src = 'user'; all.push(it); }); }); }); }); } } catch (e) { } try { if (typeof vanData !== 'undefined' && typeof VAN_CONTAINERS_MAP !== 'undefined') { var map = VAN_CONTAINERS_MAP[currentLang] || {}; Object.keys(map).forEach(function (sec) { var sd = vanData[sec]; if (!sd) return; [].concat(sd.struct || []).forEach(function (lesson) { (lesson.list || []).forEach(function (it) { if (typeof loadVanItemExtra === 'function') loadVanItemExtra(it); it._src = 'van'; all.push(it); }); }); }); } } catch (e) { } return all; };
+            window.computeSrStats = function (items) { var srsDb = getSrsDb(), fcStars = new Set(JSON.parse(localStorage.getItem('fc_starred_keys') || '[]')), now = Date.now(), tagged = { due: [], wrong: [], new: [], star: [], all: [] }; items.forEach(function (item) { var id = itemId(item); if (!id) return; var s = srsDb[id], key = (item.q || item.c1 || '').trim(), isStar = fcStars.has(key); if (!s || !s.lastAt) { if (item._src === 'user') tagged.new.push(item); } else { var mem = memScore(s); if ((s.nextAt && s.nextAt <= now) || mem < 50) tagged.due.push(item); if ((s.wrongCount || 0) >= 2) tagged.wrong.push(item); } if (isStar) tagged.star.push(item); tagged.all.push(item); }); return { due: tagged.due.length, wrong: tagged.wrong.length, 'new': tagged.new.length, star: tagged.star.length, tagged: tagged }; };
             window.openSmartReviewModal = function () { var modal = document.getElementById('smart-review-modal'); if (!modal) return; modal.style.display = 'block'; document.getElementById('sr-selected-category').value = 'all'; document.querySelectorAll('.sr-stat-card').forEach(function (c) { c.style.outline = 'none'; c.classList.remove('active'); }); var defaultCard = document.getElementById('sr-card-all'); if (defaultCard) { defaultCard.style.outline = '2.5px solid #f97316'; defaultCard.classList.add('active'); } setTimeout(function () { var items = window.collectAllItemsForSR(), stats = window.computeSrStats(items); window._srStats = stats; document.getElementById('sr-count-due').textContent = stats.due + ' từ'; document.getElementById('sr-count-wrong').textContent = stats.wrong + ' từ'; document.getElementById('sr-count-new').textContent = stats['new'] + ' từ'; document.getElementById('sr-count-star').textContent = stats.star + ' từ'; var badge = document.getElementById('sr-due-badge'); if (badge) { var t = stats.due + stats.wrong; if (t > 0) { badge.style.display = 'block'; badge.textContent = t; } else badge.style.display = 'none'; } }, 80); };
             window.closeSmartReviewModal = function () { document.getElementById('smart-review-modal').style.display = 'none'; };
             window._inSmartReviewMode = false;
