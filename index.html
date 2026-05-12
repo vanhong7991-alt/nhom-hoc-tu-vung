@@ -1266,7 +1266,8 @@
             color: #fb923c;
         }
 
-        .sidebar-group-header.free-user, .sidebar-group-header.free-learn {
+        .sidebar-group-header.free-user,
+        .sidebar-group-header.free-learn {
             color: #ec4899;
         }
 
@@ -1956,11 +1957,11 @@
         <div class="mobile-header">
             <button id="sidebar-toggle-btn" onclick="toggleMenu()" title="Ẩn/Hiện menu">☰</button>
             <div id="header-user-name" style="font-weight: 800; color: var(--warning);">Cố lên! 🌸</div>
-            
+
             <button onclick="goHome()" id="header-home-btn"
                 style="margin-left:auto; margin-right: 10px; background: rgba(16,185,129,0.15); border: 1px solid rgba(34,197,94,0.4); color:#bbf7d0; font-size:13px; cursor:pointer; padding:4px 10px; border-radius:8px; font-weight:800; display:flex; align-items:center; gap:4px; font-family:'Baloo 2'; transition:0.2s; box-shadow: 0 2px 8px rgba(34,197,94,0.2);"
                 onmouseover="this.style.background='rgba(34,197,94,0.25)'"
-                onmouseout="this.style.background='rgba(16,185,129,0.15)'" title="Về trang chủ">🏠</button>
+                onmouseout="this.style.background='rgba(16,185,129,0.15)'" title="Về trang chủ">🏠 Trang chủ</button>
 
             <div id="header-test-timer-display"
                 style="display:flex; align-items:center; gap:6px; font-weight:900; color:#fbbf24; font-size:18px; background:rgba(0,0,0,0.5); padding:4px 12px; border-radius:10px; border:2px solid #fbbf24; font-variant-numeric:tabular-nums; letter-spacing:1px; box-shadow:0 0 10px rgba(251,191,36,0.3); margin-right:10px;">
@@ -2269,7 +2270,8 @@
             <!-- ===== GÓC HỌC TỰ DO (ADMIN) ===== -->
             <div id="van-free-wrapper">
                 <div class="sidebar-group-header free-learn">🎯 HỌC TỰ DO</div>
-                <div class="van-menu-lvl1 lvl1-freevoca" onclick="toggleSub('van-freevoca-sub')">🎯 Học tự do Từ Vựng ▼</div>
+                <div class="van-menu-lvl1 lvl1-freevoca" onclick="toggleSub('van-freevoca-sub')">🎯 Học tự do Từ Vựng ▼
+                </div>
                 <div id="van-freevoca-sub" class="sub-menu">
                     <div class="menu-lvl2" onclick="toggleSub('van-freevoca-struct')">📚 Từ đơn</div>
                     <div id="van-freevoca-struct" class="sub-menu"></div>
@@ -2400,7 +2402,8 @@
                 <button class="btn" id="btn-smart-review" onclick="openSmartReviewModal()"
                     style="background: linear-gradient(135deg, #f97316, #ef4444); font-size: 14px; justify-content: center; box-shadow: 0 4px 20px rgba(249,115,22,0.6); position:relative; overflow:hidden; animation: srPulse 2.5s ease-in-out infinite;">
                     🧠 ÔN TẬP THÔNG MINH
-                    <span id="sr-due-badge" style="display:none; position:absolute; top:4px; right:6px; background:#fff; color:#ef4444; font-size:10px; font-weight:900; padding:1px 6px; border-radius:10px;"></span>
+                    <span id="sr-due-badge"
+                        style="display:none; position:absolute; top:4px; right:6px; background:#fff; color:#ef4444; font-size:10px; font-weight:900; padding:1px 6px; border-radius:10px;"></span>
                 </button>
                 <button class="btn" id="btn-custom-quiz"
                     style="background: linear-gradient(135deg, #7c3aed, #ec4899); font-size: 14px; justify-content: center; box-shadow: 0 4px 15px rgba(124,58,237,0.5);"
@@ -2440,7 +2443,8 @@
                     </div>
 
                     <!-- Default toggle button (shown when breadcrumb-bar is hidden) -->
-                    <div style="position:absolute; top: 15px; right: 15px; display:flex; align-items:center; gap:10px; z-index:10;">
+                    <div
+                        style="position:absolute; top: 15px; right: 15px; display:flex; align-items:center; gap:10px; z-index:10;">
                         <button onclick="toggleTopCard()" id="top-card-toggle-btn-default"
                             style="background: rgba(255,255,255,0.1); border: none; color: white; font-size: 16px; cursor: pointer; padding: 5px 12px; border-radius: 12px; font-weight: bold; transition: 0.2s;"
                             title="Thu gọn/Mở rộng">− Thu gọn</button>
@@ -2676,36 +2680,58 @@
                     </div>
                 </div>
 
-                
+
                 <!-- ===== 🧠 ÔN TẬP THÔNG MINH BANNER ===== -->
                 <div id="smart-review-banner"
                     style="position:relative; margin-bottom:20px; border-radius:20px; overflow:hidden; cursor:pointer; box-shadow:0 10px 30px rgba(249,115,22,0.35); border:1px solid rgba(249,115,22,0.25);"
                     onclick="openSmartReviewModal()">
-                    <div style="background:linear-gradient(135deg,#0f172a 0%,#1c1038 40%,#1a0c08 100%); padding:22px 24px; display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
-                        <div style="position:absolute;top:-40px;right:60px;width:180px;height:180px;background:radial-gradient(circle,rgba(249,115,22,0.18),transparent 70%);border-radius:50%;pointer-events:none;"></div>
-                        <div style="position:absolute;bottom:-30px;right:-20px;width:130px;height:130px;background:radial-gradient(circle,rgba(239,68,68,0.15),transparent 70%);border-radius:50%;pointer-events:none;"></div>
+                    <div
+                        style="background:linear-gradient(135deg,#0f172a 0%,#1c1038 40%,#1a0c08 100%); padding:22px 24px; display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
+                        <div
+                            style="position:absolute;top:-40px;right:60px;width:180px;height:180px;background:radial-gradient(circle,rgba(249,115,22,0.18),transparent 70%);border-radius:50%;pointer-events:none;">
+                        </div>
+                        <div
+                            style="position:absolute;bottom:-30px;right:-20px;width:130px;height:130px;background:radial-gradient(circle,rgba(239,68,68,0.15),transparent 70%);border-radius:50%;pointer-events:none;">
+                        </div>
                         <div style="position:relative; width:64px; height:64px; flex-shrink:0;">
-                            <div style="width:64px;height:64px;background:linear-gradient(135deg,#f97316,#ef4444);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 8px 20px rgba(249,115,22,0.5);">🧠</div>
-                            <div id="sr-banner-badge" style="display:none;position:absolute;top:-6px;right:-6px;background:#ef4444;color:#fff;font-size:10px;font-weight:900;min-width:20px;height:20px;border-radius:10px;align-items:center;justify-content:center;padding:0 4px;border:2px solid #0f172a;"></div>
+                            <div
+                                style="width:64px;height:64px;background:linear-gradient(135deg,#f97316,#ef4444);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 8px 20px rgba(249,115,22,0.5);">
+                                🧠</div>
+                            <div id="sr-banner-badge"
+                                style="display:none;position:absolute;top:-6px;right:-6px;background:#ef4444;color:#fff;font-size:10px;font-weight:900;min-width:20px;height:20px;border-radius:10px;align-items:center;justify-content:center;padding:0 4px;border:2px solid #0f172a;">
+                            </div>
                         </div>
                         <div style="flex:1;min-width:180px;">
                             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-                                <span style="font-size:16px;font-weight:900;color:#fff;letter-spacing:0.5px;">ÔN TẬP THÔNG MINH</span>
-                                <span style="background:rgba(249,115,22,0.25);color:#fb923c;font-size:10px;font-weight:900;padding:2px 8px;border-radius:6px;border:1px solid rgba(249,115,22,0.4);">AI</span>
+                                <span style="font-size:16px;font-weight:900;color:#fff;letter-spacing:0.5px;">ÔN TẬP
+                                    THÔNG MINH</span>
+                                <span
+                                    style="background:rgba(249,115,22,0.25);color:#fb923c;font-size:10px;font-weight:900;padding:2px 8px;border-radius:6px;border:1px solid rgba(249,115,22,0.4);">AI</span>
                             </div>
-                            <div id="sr-banner-msg" style="font-size:13px;color:#94a3b8;line-height:1.5;margin-bottom:10px;font-style:italic;"></div>
+                            <div id="sr-banner-msg"
+                                style="font-size:13px;color:#94a3b8;line-height:1.5;margin-bottom:10px;font-style:italic;">
+                            </div>
                             <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                                <span id="sr-banner-due" style="display:none;background:rgba(239,68,68,0.15);color:#fca5a5;font-size:11px;font-weight:800;padding:3px 10px;border-radius:8px;border:1px solid rgba(239,68,68,0.3);">🔴 <span id="sr-banner-due-n">0</span> sắp quên</span>
-                                <span id="sr-banner-wrong" style="display:none;background:rgba(251,146,60,0.15);color:#fdba74;font-size:11px;font-weight:800;padding:3px 10px;border-radius:8px;border:1px solid rgba(251,146,60,0.3);">🟠 <span id="sr-banner-wrong-n">0</span> hay sai</span>
-                                <span id="sr-banner-new" style="display:none;background:rgba(99,102,241,0.15);color:#a5b4fc;font-size:11px;font-weight:800;padding:3px 10px;border-radius:8px;border:1px solid rgba(99,102,241,0.3);">🟣 <span id="sr-banner-new-n">0</span> chưa ôn</span>
+                                <span id="sr-banner-due"
+                                    style="display:none;background:rgba(239,68,68,0.15);color:#fca5a5;font-size:11px;font-weight:800;padding:3px 10px;border-radius:8px;border:1px solid rgba(239,68,68,0.3);">🔴
+                                    <span id="sr-banner-due-n">0</span> sắp quên</span>
+                                <span id="sr-banner-wrong"
+                                    style="display:none;background:rgba(251,146,60,0.15);color:#fdba74;font-size:11px;font-weight:800;padding:3px 10px;border-radius:8px;border:1px solid rgba(251,146,60,0.3);">🟠
+                                    <span id="sr-banner-wrong-n">0</span> hay sai</span>
+                                <span id="sr-banner-new"
+                                    style="display:none;background:rgba(99,102,241,0.15);color:#a5b4fc;font-size:11px;font-weight:800;padding:3px 10px;border-radius:8px;border:1px solid rgba(99,102,241,0.3);">🟣
+                                    <span id="sr-banner-new-n">0</span> chưa ôn</span>
                             </div>
                         </div>
                         <div style="flex-shrink:0;">
-                            <div style="background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;font-size:14px;font-weight:900;padding:12px 20px;border-radius:14px;text-align:center;box-shadow:0 6px 18px rgba(249,115,22,0.5);white-space:nowrap;font-family:'Baloo 2',sans-serif;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">📖 TẠO ĐỀ ÔN<br><span style="font-size:11px;opacity:0.85;font-weight:700;">NGAY BÂY GIỜ</span></div>
+                            <div style="background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;font-size:14px;font-weight:900;padding:12px 20px;border-radius:14px;text-align:center;box-shadow:0 6px 18px rgba(249,115,22,0.5);white-space:nowrap;font-family:'Baloo 2',sans-serif;"
+                                onmouseover="this.style.transform='scale(1.05)'"
+                                onmouseout="this.style.transform='scale(1)'">📖 TẠO ĐỀ ÔN<br><span
+                                    style="font-size:11px;opacity:0.85;font-weight:700;">NGAY BÂY GIỜ</span></div>
                         </div>
                     </div>
                 </div>
-<!-- ===== STATS SCREEN ===== -->
+                <!-- ===== STATS SCREEN ===== -->
                 <div id="stats-screen" style="display:none;">
                     <div
                         style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
@@ -5165,7 +5191,7 @@
                     if (journeyCard) journeyCard.style.display = 'none';
                     var srb = document.getElementById('smart-review-banner');
                     if (srb) srb.style.display = 'none';
-const mainTimerBox = document.getElementById('main-timer-box');
+                    const mainTimerBox = document.getElementById('main-timer-box');
                     if (mainTimerBox) mainTimerBox.style.display = 'block';
 
                     const btnMark = document.getElementById('btn-mark-done');
@@ -5296,14 +5322,11 @@ const mainTimerBox = document.getElementById('main-timer-box');
                     <button class="quiz-opt" id="opt-${i}-${idx}" data-correct="${o.v === 1}" onclick="checkQuiz(${i}, ${idx}, ${o.v === 1})">${fT(o.t)}</button>
                 `).join('');
 
-                            return `<div class="card" id="q-${i}" data-idx="${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s; padding: 25px; border-radius: 16px; background: linear-gradient(145deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9)); box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
-                    <div style="position:relative; font-size:20px; font-weight:800; margin-bottom:25px; color:#0f172a; background:#f8fafc; padding:20px 50px 20px 25px; border-radius:12px; text-align:left; line-height:1.6; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 6px solid #3b82f6;">
-                        <button id="star-btn-${i}" onclick="toggleListStar(${i}, 'star-btn-${i}', event)" style="position:absolute; top:15px; right:15px; background:transparent; border:none; font-size:24px; cursor:pointer; color:${fcStarredKeys.has(_itemKey(item)) ? '#fbbf24' : '#94a3b8'}; text-shadow:${fcStarredKeys.has(_itemKey(item)) ? '0 0 10px rgba(251,191,36,0.5)' : 'none'}; padding:0;" title="Đánh dấu sao (Lưu ý)">${fcStarredKeys.has(_itemKey(item)) ? '⭐' : '☆'}</button>
+                            return `<div class="card" id="q-${i}" data-idx="${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s; padding: 25px; border-radius: 16px; background: linear-gradient(145deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9)); box-shadow: 0 8px 32px rgba(0,0,0,0.3); position:relative;">
+                    <button id="star-btn-${i}" onclick="toggleListStar(${i}, 'star-btn-${i}', event)" style="position:absolute; top:10px; right:10px; background:transparent; border:none; font-size:24px; cursor:pointer; color:${fcStarredKeys.has(_itemKey(item)) ? '#fbbf24' : '#94a3b8'}; text-shadow:${fcStarredKeys.has(_itemKey(item)) ? '0 0 10px rgba(251,191,36,0.5)' : 'none'}; padding:0; z-index:1;" title="Đánh dấu sao (Lưu ý)">${fcStarredKeys.has(_itemKey(item)) ? '⭐' : '☆'}</button>
+                    <div style="position:relative; font-size:20px; font-weight:800; margin-bottom:25px; color:#0f172a; background:#f8fafc; padding:20px 25px; border-radius:12px; text-align:left; line-height:1.6; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 6px solid #3b82f6;">
                         <div style="position:absolute; top:-15px; left:-15px; background:var(--accent); color:white; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:bold; box-shadow:0 4px 10px rgba(59,130,246,0.5); border:3px solid #f8fafc;">${i + 1}</div>
-                        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                            <div style="width:100%;">${fT(item.q)}</div>
-                            <span style="background:rgba(59,130,246,0.12); color:#2563eb; font-size:12px; font-weight:800; padding:6px 10px; border-radius:999px; white-space:nowrap;">${item.type === 'reading' ? 'Cách đọc' : 'Nghĩa'}</span>
-                        </div>
+                        <div>${fT(item.q)}</div>
                     </div>
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;" id="opts-wrap-${i}">
                         ${optHtml}
@@ -6197,8 +6220,8 @@ const mainTimerBox = document.getElementById('main-timer-box');
                     </div>
 
                     ${curLevel === 'custom'
-                        ? `<div style="display:flex;flex-direction:column;gap:10px;"><button onclick="showAllAnswers(); document.getElementById('completion-overlay').remove();" style="padding:16px;border-radius:14px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:white;font-size:17px;font-weight:900;border:none;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 20px rgba(59,130,246,0.4);">&#128203; XEM &#272;&#193;P &#193;N</button><button onclick="document.getElementById('completion-overlay').remove();" style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);color:#94a3b8;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.08);cursor:pointer;">&#x2715; &#272;&#243;ng</button></div>`
-                        : `<div style="display:flex;flex-direction:column;gap:10px;"><button onclick="markDayComplete(); document.getElementById('completion-overlay').remove(); confetti({particleCount:250,spread:80});" style="padding:16px;border-radius:14px;background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:17px;font-weight:900;border:none;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 20px rgba(16,185,129,0.4);">&#9989; HO&#192;N TH&#192;NH NG&#192;Y H&#7885;C!</button><button onclick="document.getElementById('completion-overlay').remove(); selectDay(curLevel, curType, curDay);" style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);color:#94a3b8;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.08);cursor:pointer;">&#128260; L&#224;m l&#7841;i t&#7915; &#273;&#7847;u</button></div>`}
+                            ? `<div style="display:flex;flex-direction:column;gap:10px;"><button onclick="showAllAnswers(); document.getElementById('completion-overlay').remove();" style="padding:16px;border-radius:14px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:white;font-size:17px;font-weight:900;border:none;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 20px rgba(59,130,246,0.4);">&#128203; XEM &#272;&#193;P &#193;N</button><button onclick="document.getElementById('completion-overlay').remove();" style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);color:#94a3b8;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.08);cursor:pointer;">&#x2715; &#272;&#243;ng</button></div>`
+                            : `<div style="display:flex;flex-direction:column;gap:10px;"><button onclick="markDayComplete(); document.getElementById('completion-overlay').remove(); confetti({particleCount:250,spread:80});" style="padding:16px;border-radius:14px;background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:17px;font-weight:900;border:none;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 20px rgba(16,185,129,0.4);">&#9989; HO&#192;N TH&#192;NH NG&#192;Y H&#7885;C!</button><button onclick="document.getElementById('completion-overlay').remove(); selectDay(curLevel, curType, curDay);" style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);color:#94a3b8;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.08);cursor:pointer;">&#128260; L&#224;m l&#7841;i t&#7915; &#273;&#7847;u</button></div>`}
 
                 </div>`;
                     document.body.appendChild(overlay);
@@ -7223,9 +7246,12 @@ const mainTimerBox = document.getElementById('main-timer-box');
 
             <!-- BỘ LỌC THỜI GIAN -->
             <div class="cq-section">
-                <div class="cq-section-label">⏳ Lọc theo thời gian tạo <span style="color:#fbbf24; font-size:10px; font-weight:900; background:rgba(251,191,36,0.15); padding:2px 6px; border-radius:4px; border:1px dashed #fbbf24; margin-left:6px;">(ÁP DỤNG CẢ 2 GÓC)</span></div>
+                <div class="cq-section-label">⏳ Lọc theo thời gian tạo <span
+                        style="color:#fbbf24; font-size:10px; font-weight:900; background:rgba(251,191,36,0.15); padding:2px 6px; border-radius:4px; border:1px dashed #fbbf24; margin-left:6px;">(ÁP
+                        DỤNG CẢ 2 GÓC)</span></div>
                 <div style="margin-top:6px;">
-                    <select id="cq-time-filter" onchange="cqRefresh()" style="background:rgba(0,0,0,0.3); color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:8px 12px; font-size:14px; width:100%; outline:none; font-family:'Baloo 2'; cursor:pointer;">
+                    <select id="cq-time-filter" onchange="cqRefresh()"
+                        style="background:rgba(0,0,0,0.3); color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:8px 12px; font-size:14px; width:100%; outline:none; font-family:'Baloo 2'; cursor:pointer;">
                         <option value="0">Tất cả thời gian</option>
                         <option value="7">7 ngày gần nhất</option>
                         <option value="14">14 ngày gần nhất</option>
@@ -8144,195 +8170,254 @@ const mainTimerBox = document.getElementById('main-timer-box');
         style="position:absolute; width:1px; height:1px; left:-9999px; opacity:0; pointer-events:none;"
         allow="autoplay"></iframe>
 
-<!-- =====================================================================
+    <!-- =====================================================================
      🧠 ÔN TẬP THÔNG MINH — Smart Review SRS Engine
      ===================================================================== -->
 
-<!-- Modal HTML -->
-<div id="smart-review-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(2,8,23,0.85); backdrop-filter:blur(8px); overflow-y:auto; padding:20px;">
-  <div style="max-width:560px; margin:30px auto; background:linear-gradient(145deg,#0f172a,#1e293b); border-radius:24px; border:1px solid rgba(249,115,22,0.3); box-shadow:0 25px 60px rgba(0,0,0,0.6); overflow:hidden; font-family:'Baloo 2',sans-serif;">
-    <div style="background:linear-gradient(135deg,#f97316,#ef4444,#dc2626); padding:28px 28px 20px; position:relative; overflow:hidden;">
-      <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:rgba(255,255,255,0.05);border-radius:50%;"></div>
-      <div style="position:relative;">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
-          <div style="width:52px;height:52px;background:rgba(255,255,255,0.15);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;">🧠</div>
-          <div>
-            <div style="font-size:20px;font-weight:900;color:#fff;letter-spacing:1px;">ÔN TẬP THÔNG MINH</div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:2px;">Đường cong lãng quên • Spaced Repetition</div>
-          </div>
+    <!-- Modal HTML -->
+    <div id="smart-review-modal"
+        style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(2,8,23,0.85); backdrop-filter:blur(8px); overflow-y:auto; padding:20px;">
+        <div
+            style="max-width:560px; margin:30px auto; background:linear-gradient(145deg,#0f172a,#1e293b); border-radius:24px; border:1px solid rgba(249,115,22,0.3); box-shadow:0 25px 60px rgba(0,0,0,0.6); overflow:hidden; font-family:'Baloo 2',sans-serif;">
+            <div
+                style="background:linear-gradient(135deg,#f97316,#ef4444,#dc2626); padding:28px 28px 20px; position:relative; overflow:hidden;">
+                <div
+                    style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:rgba(255,255,255,0.05);border-radius:50%;">
+                </div>
+                <div style="position:relative;">
+                    <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+                        <div
+                            style="width:52px;height:52px;background:rgba(255,255,255,0.15);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;">
+                            🧠</div>
+                        <div>
+                            <div style="font-size:20px;font-weight:900;color:#fff;letter-spacing:1px;">ÔN TẬP THÔNG MINH
+                            </div>
+                            <div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:2px;">Đường cong lãng quên
+                                • Spaced Repetition</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:20px;font-size:12px;color:rgba(255,255,255,0.85);">
+                        <span>⏱ Đúng thời điểm</span><span>🎯 Tập trung yếu điểm</span><span>📈 Hiệu quả vượt
+                            trội</span>
+                    </div>
+                </div>
+            </div>
+            <div style="padding:20px 24px 0;">
+                <div
+                    style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">
+                    ĐỀ XUẤT HÔM NAY — click để chọn loại</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div class="sr-stat-card" id="sr-card-due"
+                        style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:14px;padding:14px 16px;cursor:pointer;"
+                        onclick="srSelectCategory('due')">
+                        <div style="font-size:20px;margin-bottom:4px;">🔴</div>
+                        <div style="font-size:22px;font-weight:900;color:#fca5a5;" id="sr-count-due">—</div>
+                        <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Từ sắp quên</div>
+                    </div>
+                    <div class="sr-stat-card" id="sr-card-wrong"
+                        style="background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.3);border-radius:14px;padding:14px 16px;cursor:pointer;"
+                        onclick="srSelectCategory('wrong')">
+                        <div style="font-size:20px;margin-bottom:4px;">🟠</div>
+                        <div style="font-size:22px;font-weight:900;color:#fdba74;" id="sr-count-wrong">—</div>
+                        <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Từ hay sai</div>
+                    </div>
+                    <div class="sr-stat-card" id="sr-card-new"
+                        style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);border-radius:14px;padding:14px 16px;cursor:pointer;"
+                        onclick="srSelectCategory('new')">
+                        <div style="font-size:20px;margin-bottom:4px;">🟣</div>
+                        <div style="font-size:22px;font-weight:900;color:#a5b4fc;" id="sr-count-new">—</div>
+                        <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Chưa từng ôn</div>
+                    </div>
+                    <div class="sr-stat-card" id="sr-card-star"
+                        style="background:rgba(250,204,21,0.1);border:1px solid rgba(250,204,21,0.3);border-radius:14px;padding:14px 16px;cursor:pointer;"
+                        onclick="srSelectCategory('star')">
+                        <div style="font-size:20px;margin-bottom:4px;">⭐</div>
+                        <div style="font-size:22px;font-weight:900;color:#fde047;" id="sr-count-star">—</div>
+                        <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Từ đánh dấu sao</div>
+                    </div>
+                </div>
+                <input type="hidden" id="sr-selected-category" value="all">
+                <div style="margin-top:10px;font-size:11px;color:#475569;text-align:center;">Không chọn = lấy tổng hợp
+                    theo điểm ưu tiên</div>
+            </div>
+            <div style="padding:18px 24px 0;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <span style="font-size:13px;color:#94a3b8;font-weight:700;">📝 Số câu ôn tập</span>
+                    <span id="sr-count-label" style="font-size:18px;font-weight:900;color:#f97316;">20 câu</span>
+                </div>
+                <input type="range" id="sr-limit-slider" min="5" max="50" step="5" value="20"
+                    oninput="document.getElementById('sr-count-label').textContent=this.value+' câu'"
+                    style="width:100%;accent-color:#f97316;cursor:pointer;height:6px;">
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-top:4px;">
+                    <span>5</span><span>25</span><span>50</span>
+                </div>
+            </div>
+            <div style="padding:16px 24px 0;">
+                <div
+                    style="background:rgba(15,23,42,0.6);border:1px solid rgba(249,115,22,0.15);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;">
+                    <div style="font-size:28px;">📉</div>
+                    <div style="font-size:12px;color:#94a3b8;line-height:1.6;"><b
+                            style="color:#f97316;display:block;margin-bottom:2px;">Lý thuyết Ebbinghaus</b>Bộ nhớ giảm
+                        theo hàm mũ <i>R = e<sup>-t/S</sup></i>. Ôn đúng lúc giúp khoảng nhắc lại <b
+                            style="color:#86efac;">tăng gấp đôi</b> mỗi lần.</div>
+                </div>
+            </div>
+            <div style="padding:20px 24px 24px;display:grid;gap:10px;">
+                <button onclick="startSmartReviewNow()"
+                    style="background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;border:none;padding:16px;border-radius:14px;font-size:16px;font-weight:900;cursor:pointer;font-family:'Baloo 2',sans-serif;box-shadow:0 8px 25px rgba(249,115,22,0.5);letter-spacing:0.5px;transition:transform 0.15s;"
+                    onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">🚀 TẠO
+                    ĐỀ ÔN NGAY</button>
+                <button onclick="closeSmartReviewModal()"
+                    style="background:rgba(255,255,255,0.06);color:#94a3b8;border:1px solid rgba(255,255,255,0.1);padding:12px;border-radius:14px;font-size:14px;cursor:pointer;font-family:'Baloo 2',sans-serif;">Đóng</button>
+            </div>
         </div>
-        <div style="display:flex;gap:20px;font-size:12px;color:rgba(255,255,255,0.85);">
-          <span>⏱ Đúng thời điểm</span><span>🎯 Tập trung yếu điểm</span><span>📈 Hiệu quả vượt trội</span>
-        </div>
-      </div>
     </div>
-    <div style="padding:20px 24px 0;">
-      <div style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">ĐỀ XUẤT HÔM NAY — click để chọn loại</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <div class="sr-stat-card" id="sr-card-due" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:14px;padding:14px 16px;cursor:pointer;" onclick="srSelectCategory('due')">
-          <div style="font-size:20px;margin-bottom:4px;">🔴</div>
-          <div style="font-size:22px;font-weight:900;color:#fca5a5;" id="sr-count-due">—</div>
-          <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Từ sắp quên</div>
-        </div>
-        <div class="sr-stat-card" id="sr-card-wrong" style="background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.3);border-radius:14px;padding:14px 16px;cursor:pointer;" onclick="srSelectCategory('wrong')">
-          <div style="font-size:20px;margin-bottom:4px;">🟠</div>
-          <div style="font-size:22px;font-weight:900;color:#fdba74;" id="sr-count-wrong">—</div>
-          <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Từ hay sai</div>
-        </div>
-        <div class="sr-stat-card" id="sr-card-new" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);border-radius:14px;padding:14px 16px;cursor:pointer;" onclick="srSelectCategory('new')">
-          <div style="font-size:20px;margin-bottom:4px;">🟣</div>
-          <div style="font-size:22px;font-weight:900;color:#a5b4fc;" id="sr-count-new">—</div>
-          <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Chưa từng ôn</div>
-        </div>
-        <div class="sr-stat-card" id="sr-card-star" style="background:rgba(250,204,21,0.1);border:1px solid rgba(250,204,21,0.3);border-radius:14px;padding:14px 16px;cursor:pointer;" onclick="srSelectCategory('star')">
-          <div style="font-size:20px;margin-bottom:4px;">⭐</div>
-          <div style="font-size:22px;font-weight:900;color:#fde047;" id="sr-count-star">—</div>
-          <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Từ đánh dấu sao</div>
-        </div>
-      </div>
-      <input type="hidden" id="sr-selected-category" value="all">
-      <div style="margin-top:10px;font-size:11px;color:#475569;text-align:center;">Không chọn = lấy tổng hợp theo điểm ưu tiên</div>
-    </div>
-    <div style="padding:18px 24px 0;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <span style="font-size:13px;color:#94a3b8;font-weight:700;">📝 Số câu ôn tập</span>
-        <span id="sr-count-label" style="font-size:18px;font-weight:900;color:#f97316;">20 câu</span>
-      </div>
-      <input type="range" id="sr-limit-slider" min="5" max="50" step="5" value="20" oninput="document.getElementById('sr-count-label').textContent=this.value+' câu'" style="width:100%;accent-color:#f97316;cursor:pointer;height:6px;">
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-top:4px;"><span>5</span><span>25</span><span>50</span></div>
-    </div>
-    <div style="padding:16px 24px 0;">
-      <div style="background:rgba(15,23,42,0.6);border:1px solid rgba(249,115,22,0.15);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;">
-        <div style="font-size:28px;">📉</div>
-        <div style="font-size:12px;color:#94a3b8;line-height:1.6;"><b style="color:#f97316;display:block;margin-bottom:2px;">Lý thuyết Ebbinghaus</b>Bộ nhớ giảm theo hàm mũ <i>R = e<sup>-t/S</sup></i>. Ôn đúng lúc giúp khoảng nhắc lại <b style="color:#86efac;">tăng gấp đôi</b> mỗi lần.</div>
-      </div>
-    </div>
-    <div style="padding:20px 24px 24px;display:grid;gap:10px;">
-      <button onclick="startSmartReviewNow()" style="background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;border:none;padding:16px;border-radius:14px;font-size:16px;font-weight:900;cursor:pointer;font-family:'Baloo 2',sans-serif;box-shadow:0 8px 25px rgba(249,115,22,0.5);letter-spacing:0.5px;transition:transform 0.15s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">🚀 TẠO ĐỀ ÔN NGAY</button>
-      <button onclick="closeSmartReviewModal()" style="background:rgba(255,255,255,0.06);color:#94a3b8;border:1px solid rgba(255,255,255,0.1);padding:12px;border-radius:14px;font-size:14px;cursor:pointer;font-family:'Baloo 2',sans-serif;">Đóng</button>
-    </div>
-  </div>
-</div>
 
-<script>
-(function(){
-var SRS_KEY='van_srs_v1';
-function getSrsDb(){try{return JSON.parse(localStorage.getItem(SRS_KEY))||{};}catch{return {};}}
-function saveSrsDb(d){try{localStorage.setItem(SRS_KEY,JSON.stringify(d));}catch{}}
-function itemId(item){var k=(item.q||item.c1||'').trim();return k?'srs_'+k.substring(0,80):null;}
-function memScore(s){if(!s.lastAt)return 0;var t=(Date.now()-s.lastAt)/86400000,S=Math.max(0.5,s.interval||1);return Math.round(Math.exp(-t/S)*100);}
-function updateState(s,result){var now=Date.now();if(!s.firstAt)s.firstAt=now;s.lastAt=now;s.reviews=(s.reviews||0)+1;var ef=s.ef||2.5,inv=s.interval||1;if(result==='wrong'){inv=1;ef=Math.max(1.3,ef-0.3);}else if(result==='hard'){inv=Math.max(1,Math.round(inv*1.2));ef=Math.max(1.3,ef-0.15);}else{if(s.reviews<=1)inv=1;else if(s.reviews===2)inv=3;else inv=Math.round(inv*ef);ef=Math.min(3.0,ef+0.05);}s.ef=ef;s.interval=inv;s.nextAt=now+inv*86400000;s.mem=memScore(s);return s;}
-window.srsTracker={record:function(item,result){var id=itemId(item);if(!id)return;var d=getSrsDb(),s=d[id]||{id:id,word:(item.c1||item.q||'').trim(),meaning:(item.c3||item.ans||'').trim(),wrongCount:0};d[id]=updateState(s,result);if(result==='wrong')d[id].wrongCount=(d[id].wrongCount||0)+1;d[id].isStarred=item.count>0;saveSrsDb(d);}};
-window.collectAllItemsForSR=function(){var all=[];try{if(typeof db!=='undefined'&&typeof activeLevels!=='undefined'){activeLevels.forEach(function(lv){['voca'].forEach(function(ty){var b=(db[lv]||{})[ty];if(!b)return;Object.values(b).forEach(function(day){(day.list||[]).forEach(function(it){all.push(it);});});});});}}catch(e){}try{if(typeof vanData!=='undefined'&&typeof VAN_CONTAINERS_MAP!=='undefined'){var map=VAN_CONTAINERS_MAP[currentLang]||{};Object.keys(map).forEach(function(sec){var sd=vanData[sec];if(!sd)return;[].concat(sd.struct||[]).forEach(function(lesson){(lesson.list||[]).forEach(function(it){if(typeof loadVanItemExtra==='function')loadVanItemExtra(it);all.push(it);});});});}}catch(e){}return all;};
-window.computeSrStats=function(items){var srsDb=getSrsDb(),fcStars=new Set(JSON.parse(localStorage.getItem('fc_starred_keys')||'[]')),now=Date.now(),tagged={due:[],wrong:[],new:[],star:[],all:[]};items.forEach(function(item){var id=itemId(item);if(!id)return;var s=srsDb[id],key=(item.q||item.c1||'').trim(),isStar=fcStars.has(key)||item.count>0;if(!s||!s.lastAt){tagged.new.push(item);}else{var mem=memScore(s);if((s.nextAt&&s.nextAt<=now)||mem<50)tagged.due.push(item);if((s.wrongCount||0)>=2)tagged.wrong.push(item);}if(isStar)tagged.star.push(item);tagged.all.push(item);});return{due:tagged.due.length,wrong:tagged.wrong.length,'new':tagged.new.length,star:tagged.star.length,tagged:tagged};};
-window.openSmartReviewModal=function(){var modal=document.getElementById('smart-review-modal');if(!modal)return;modal.style.display='block';document.getElementById('sr-selected-category').value='all';document.querySelectorAll('.sr-stat-card').forEach(function(c){c.style.outline='none';c.classList.remove('active');});var defaultCard=document.getElementById('sr-card-all');if(defaultCard){defaultCard.style.outline='2.5px solid #f97316';defaultCard.classList.add('active');}setTimeout(function(){var items=window.collectAllItemsForSR(),stats=window.computeSrStats(items);window._srStats=stats;document.getElementById('sr-count-due').textContent=stats.due+' từ';document.getElementById('sr-count-wrong').textContent=stats.wrong+' từ';document.getElementById('sr-count-new').textContent=stats['new']+' từ';document.getElementById('sr-count-star').textContent=stats.star+' từ';var badge=document.getElementById('sr-due-badge');if(badge){var t=stats.due+stats.wrong;if(t>0){badge.style.display='block';badge.textContent=t;}else badge.style.display='none';}},80);};
-window.closeSmartReviewModal=function(){document.getElementById('smart-review-modal').style.display='none';};
-window._inSmartReviewMode=false;
-window.srSelectCategory=function(cat){document.getElementById('sr-selected-category').value=cat;document.querySelectorAll('.sr-stat-card').forEach(function(c){c.style.outline='none';c.classList.remove('active');});var card=document.getElementById('sr-card-'+cat);if(card){card.style.outline='2.5px solid #f97316';card.classList.add('active');}};
-function buildReviewList(items,limit){
-var srsDb=getSrsDb(),fcStars=new Set(JSON.parse(localStorage.getItem('fc_starred_keys')||'[]')),now=Date.now();
-var scored=items.map(function(item){
-var id=itemId(item),s=id?(srsDb[id]||null):null,mem=s?memScore(s):0,overdue=s&&s.nextAt?Math.max(0,(now-s.nextAt)/86400000):0,wc=(item.wrongCount||0)+(s?(s.wrongCount||0):0),fc=item.forgotCount||0,isStar=fcStars.has((item.q||item.c1||'').trim())||item.count>0,never=!s||!s.lastAt,p=0;
-if(never)p+=30;if(overdue>0)p+=Math.min(overdue*5,40);p+=Math.max(0,50-mem);p+=wc*12;p+=fc*8;if(isStar)p+=10;
-return{item:item,p:p};});
-scored.sort(function(a,b){return b.p-a.p;});
-return scored.slice(0,limit).map(function(x){return x.item;});}
+    <script>
+        (function () {
+            var SRS_KEY = 'van_srs_v1';
+            function getSrsDb() { try { return JSON.parse(localStorage.getItem(SRS_KEY)) || {}; } catch { return {}; } }
+            function saveSrsDb(d) { try { localStorage.setItem(SRS_KEY, JSON.stringify(d)); } catch { } }
+            function itemId(item) { var k = (item.q || item.c1 || '').trim(); return k ? 'srs_' + k.substring(0, 80) : null; }
+            function memScore(s) { if (!s.lastAt) return 0; var t = (Date.now() - s.lastAt) / 86400000, S = Math.max(0.5, s.interval || 1); return Math.round(Math.exp(-t / S) * 100); }
+            function updateState(s, result) { var now = Date.now(); if (!s.firstAt) s.firstAt = now; s.lastAt = now; s.reviews = (s.reviews || 0) + 1; var ef = s.ef || 2.5, inv = s.interval || 1; if (result === 'wrong') { inv = 1; ef = Math.max(1.3, ef - 0.3); } else if (result === 'hard') { inv = Math.max(1, Math.round(inv * 1.2)); ef = Math.max(1.3, ef - 0.15); } else { if (s.reviews <= 1) inv = 1; else if (s.reviews === 2) inv = 3; else inv = Math.round(inv * ef); ef = Math.min(3.0, ef + 0.05); } s.ef = ef; s.interval = inv; s.nextAt = now + inv * 86400000; s.mem = memScore(s); return s; }
+            window.srsTracker = { record: function (item, result) { var id = itemId(item); if (!id) return; var d = getSrsDb(), s = d[id] || { id: id, word: (item.c1 || item.q || '').trim(), meaning: (item.c3 || item.ans || '').trim(), wrongCount: 0 }; d[id] = updateState(s, result); if (result === 'wrong') d[id].wrongCount = (d[id].wrongCount || 0) + 1; d[id].isStarred = item.count > 0; saveSrsDb(d); } };
+            window.collectAllItemsForSR = function () { var all = []; try { if (typeof db !== 'undefined' && typeof activeLevels !== 'undefined') { activeLevels.forEach(function (lv) { ['voca'].forEach(function (ty) { var b = (db[lv] || {})[ty]; if (!b) return; Object.values(b).forEach(function (day) { (day.list || []).forEach(function (it) { all.push(it); }); }); }); }); } } catch (e) { } try { if (typeof vanData !== 'undefined' && typeof VAN_CONTAINERS_MAP !== 'undefined') { var map = VAN_CONTAINERS_MAP[currentLang] || {}; Object.keys(map).forEach(function (sec) { var sd = vanData[sec]; if (!sd) return;[].concat(sd.struct || []).forEach(function (lesson) { (lesson.list || []).forEach(function (it) { if (typeof loadVanItemExtra === 'function') loadVanItemExtra(it); all.push(it); }); }); }); } } catch (e) { } return all; };
+            window.computeSrStats = function (items) { var srsDb = getSrsDb(), fcStars = new Set(JSON.parse(localStorage.getItem('fc_starred_keys') || '[]')), now = Date.now(), tagged = { due: [], wrong: [], new: [], star: [], all: [] }; items.forEach(function (item) { var id = itemId(item); if (!id) return; var s = srsDb[id], key = (item.q || item.c1 || '').trim(), isStar = fcStars.has(key) || item.count > 0; if (!s || !s.lastAt) { tagged.new.push(item); } else { var mem = memScore(s); if ((s.nextAt && s.nextAt <= now) || mem < 50) tagged.due.push(item); if ((s.wrongCount || 0) >= 2) tagged.wrong.push(item); } if (isStar) tagged.star.push(item); tagged.all.push(item); }); return { due: tagged.due.length, wrong: tagged.wrong.length, 'new': tagged.new.length, star: tagged.star.length, tagged: tagged }; };
+            window.openSmartReviewModal = function () { var modal = document.getElementById('smart-review-modal'); if (!modal) return; modal.style.display = 'block'; document.getElementById('sr-selected-category').value = 'all'; document.querySelectorAll('.sr-stat-card').forEach(function (c) { c.style.outline = 'none'; c.classList.remove('active'); }); var defaultCard = document.getElementById('sr-card-all'); if (defaultCard) { defaultCard.style.outline = '2.5px solid #f97316'; defaultCard.classList.add('active'); } setTimeout(function () { var items = window.collectAllItemsForSR(), stats = window.computeSrStats(items); window._srStats = stats; document.getElementById('sr-count-due').textContent = stats.due + ' từ'; document.getElementById('sr-count-wrong').textContent = stats.wrong + ' từ'; document.getElementById('sr-count-new').textContent = stats['new'] + ' từ'; document.getElementById('sr-count-star').textContent = stats.star + ' từ'; var badge = document.getElementById('sr-due-badge'); if (badge) { var t = stats.due + stats.wrong; if (t > 0) { badge.style.display = 'block'; badge.textContent = t; } else badge.style.display = 'none'; } }, 80); };
+            window.closeSmartReviewModal = function () { document.getElementById('smart-review-modal').style.display = 'none'; };
+            window._inSmartReviewMode = false;
+            window.srSelectCategory = function (cat) { document.getElementById('sr-selected-category').value = cat; document.querySelectorAll('.sr-stat-card').forEach(function (c) { c.style.outline = 'none'; c.classList.remove('active'); }); var card = document.getElementById('sr-card-' + cat); if (card) { card.style.outline = '2.5px solid #f97316'; card.classList.add('active'); } };
+            function buildReviewList(items, limit) {
+                var srsDb = getSrsDb(), fcStars = new Set(JSON.parse(localStorage.getItem('fc_starred_keys') || '[]')), now = Date.now();
+                var scored = items.map(function (item) {
+                    var id = itemId(item), s = id ? (srsDb[id] || null) : null, mem = s ? memScore(s) : 0, overdue = s && s.nextAt ? Math.max(0, (now - s.nextAt) / 86400000) : 0, wc = (item.wrongCount || 0) + (s ? (s.wrongCount || 0) : 0), fc = item.forgotCount || 0, isStar = fcStars.has((item.q || item.c1 || '').trim()) || item.count > 0, never = !s || !s.lastAt, p = 0;
+                    if (never) p += 30; if (overdue > 0) p += Math.min(overdue * 5, 40); p += Math.max(0, 50 - mem); p += wc * 12; p += fc * 8; if (isStar) p += 10;
+                    return { item: item, p: p };
+                });
+                scored.sort(function (a, b) { return b.p - a.p; });
+                return scored.slice(0, limit).map(function (x) { return x.item; });
+            }
 
-function toQuizItems(reviewItems,allItems){
-var meaningPool=[];
-var kanaPool=[];
-allItems.forEach(function(it){
-var m=(it.c3||it.ans||'').trim();
-if(m&&meaningPool.indexOf(m)===-1)meaningPool.push(m);
-var k=(it.c2||'').trim();
-if(k&&kanaPool.indexOf(k)===-1)kanaPool.push(k);
-});
-return reviewItems.filter(function(item){
-var m=(item.c3||item.ans||'').trim();
-return m&&m.length>0;
-}).map(function(item){
-if(item.gramType==='quiz'&&item.w1)return item;
-var meaning=(item.c3||item.ans||'').trim(),word=(item.c1||item.q||'').trim(),kana=(item.c2||'').trim();
-if(!meaning||!word)return null;
-var askReading = kana && kana!==word && Math.random() < 0.5;
-var q, ans, wrongs;
-if(askReading) {
-q = meaning;
-ans = kana;
-wrongs = kanaPool.filter(function(k){return k!==ans;}).sort(function(){return 0.5-Math.random();}).slice(0,3);
-if(wrongs.length < 3) {
-wrongs = meaningPool.filter(function(m){return m!==meaning;}).sort(function(){return 0.5-Math.random();}).slice(0,3);
-}
-if(wrongs.length < 3) while(wrongs.length < 3) wrongs.push('Tùy chọn '+(wrongs.length+1));
-} else {
-q = word;
-ans = meaning;
-wrongs = meaningPool.filter(function(m){return m!==ans;}).sort(function(){return 0.5-Math.random();}).slice(0,3);
-if(wrongs.length < 3) {
-wrongs = kanaPool.filter(function(k){return k!==kana;}).sort(function(){return 0.5-Math.random();}).slice(0,3);
-}
-if(wrongs.length < 3) while(wrongs.length < 3) wrongs.push('Tùy chọn '+(wrongs.length+1));
-}
-var explain = askReading ? ('Cách đọc: '+kana) : (kana ? 'Cách đọc: '+kana : (item.explain||item.c6||''));
-return{gramType:'quiz',type:askReading ? 'reading' : 'meaning',q:q,ans:ans,w1:wrongs[0]||'',w2:wrongs[1]||'',w3:wrongs[2]||'',explain:explain,c1:word,c2:kana,c3:meaning,count:item.count||0};
-}).filter(function(x){return x!==null;});}
-window.startSmartReviewNow=function(){
-var limit=parseInt(document.getElementById('sr-limit-slider').value)||20,cat=document.getElementById('sr-selected-category').value||'all',stats=window._srStats,allItems=window.collectAllItemsForSR(),srcItems=allItems;
-var categoryName={'due':'Từ sắp quên','wrong':'Từ hay sai','new':'Chưa ôn','star':'Đánh dấu sao','all':'Tổng hợp'}[cat]||'Tổng hợp';
-if(stats&&cat!=='all'&&stats.tagged[cat]&&stats.tagged[cat].length>0)srcItems=stats.tagged[cat];
-if(srcItems.length===0){alert('Chưa có dữ liệu! Hãy học thêm một vài bài trước nhé 🌟');return;}
-var picked=buildReviewList(srcItems,limit),quizList=toQuizItems(picked,allItems);
-if(quizList.length===0){alert('Không đủ từ để tạo đề.');return;}
-closeSmartReviewModal();
-window._inSmartReviewMode=true;
-if(typeof selectDay==='function'){
-selectDay('custom','voca_quiz','🧠 Ôn tập thông minh',quizList,0);
-setTimeout(function(){
-var h=document.getElementById('header-title'),v=document.getElementById('view-title');
-if(h)h.innerText='🧠 Ôn tập thông minh';
-if(v)v.textContent='🧠 Ôn tập thông minh';
-var quote=document.getElementById('motivational-quote');
-if(quote)quote.innerHTML='<div style="font-size:13px;line-height:1.7;color:#cbd5e1;background:rgba(249,115,22,0.08);padding:14px;border-radius:12px;border:1px dashed rgba(249,115,22,0.3);margin-top:10px;text-align:left;"><b style="color:#f97316;font-size:14px;display:block;margin-bottom:4px;">🧠 Ôn theo đường cong lãng quên</b>• <b>Loại đề:</b> '+categoryName+'<br>• <b>Sắp quên</b>: memory score &lt; 50%<br>• <b>Hay sai</b>: đã sai ≥ 2 lần<br>• <b>Chưa ôn</b>: lần đầu gặp từ<br>• <b style="color:#86efac;">✅ Hệ thống tự cập nhật</b> lịch ôn sau mỗi câu</div>';
-var g2a=document.getElementById('group-2a');
-if(g2a)g2a.style.display='block';
-var fb=document.getElementById('btn-flashcard');
-if(fb)fb.style.display='inline-flex';
-},150);
-}else{alert('Lỗi khởi động quiz.');}
-};
-})();
-</script>
+            function toQuizItems(reviewItems, allItems) {
+                var meaningPool = [];
+                var kanaPool = [];
+                allItems.forEach(function (it) {
+                    var m = (it.c3 || it.ans || '').trim();
+                    if (m && meaningPool.indexOf(m) === -1) meaningPool.push(m);
+                    var k = (it.c2 || '').trim();
+                    if (k && kanaPool.indexOf(k) === -1) kanaPool.push(k);
+                });
+                return reviewItems.filter(function (item) {
+                    var m = (item.c3 || item.ans || '').trim();
+                    return m && m.length > 0;
+                }).map(function (item) {
+                    if (item.gramType === 'quiz' && item.w1) return item;
+                    var meaning = (item.c3 || item.ans || '').trim(), word = (item.c1 || item.q || '').trim(), kana = (item.c2 || '').trim();
+                    if (!meaning || !word) return null;
+                    var askReading = kana && kana !== word && Math.random() < 0.5;
+                    var q, ans, wrongs;
+                    if (askReading) {
+                        q = meaning;
+                        ans = kana;
+                        wrongs = kanaPool.filter(function (k) { return k !== ans; }).sort(function () { return 0.5 - Math.random(); }).slice(0, 3);
+                        if (wrongs.length < 3) {
+                            wrongs = meaningPool.filter(function (m) { return m !== meaning; }).sort(function () { return 0.5 - Math.random(); }).slice(0, 3);
+                        }
+                        if (wrongs.length < 3) while (wrongs.length < 3) wrongs.push('Tùy chọn ' + (wrongs.length + 1));
+                    } else {
+                        q = word;
+                        ans = meaning;
+                        wrongs = meaningPool.filter(function (m) { return m !== ans; }).sort(function () { return 0.5 - Math.random(); }).slice(0, 3);
+                        if (wrongs.length < 3) {
+                            wrongs = kanaPool.filter(function (k) { return k !== kana; }).sort(function () { return 0.5 - Math.random(); }).slice(0, 3);
+                        }
+                        if (wrongs.length < 3) while (wrongs.length < 3) wrongs.push('Tùy chọn ' + (wrongs.length + 1));
+                    }
+                    var explain = askReading ? ('Cách đọc: ' + kana) : (kana ? 'Cách đọc: ' + kana : (item.explain || item.c6 || ''));
+                    return { gramType: 'quiz', type: askReading ? 'reading' : 'meaning', q: q, ans: ans, w1: wrongs[0] || '', w2: wrongs[1] || '', w3: wrongs[2] || '', explain: explain, c1: word, c2: kana, c3: meaning, count: item.count || 0 };
+                }).filter(function (x) { return x !== null; });
+            }
+            window.startSmartReviewNow = function () {
+                var limit = parseInt(document.getElementById('sr-limit-slider').value) || 20, cat = document.getElementById('sr-selected-category').value || 'all', stats = window._srStats, allItems = window.collectAllItemsForSR(), srcItems = allItems;
+                var categoryName = { 'due': 'Từ sắp quên', 'wrong': 'Từ hay sai', 'new': 'Chưa ôn', 'star': 'Đánh dấu sao', 'all': 'Tổng hợp' }[cat] || 'Tổng hợp';
+                if (stats && cat !== 'all' && stats.tagged[cat] && stats.tagged[cat].length > 0) srcItems = stats.tagged[cat];
+                if (srcItems.length === 0) { alert('Chưa có dữ liệu! Hãy học thêm một vài bài trước nhé 🌟'); return; }
+                var picked = buildReviewList(srcItems, limit), quizList = toQuizItems(picked, allItems);
+                if (quizList.length === 0) { alert('Không đủ từ để tạo đề.'); return; }
+                closeSmartReviewModal();
+                window._inSmartReviewMode = true;
+                if (typeof selectDay === 'function') {
+                    selectDay('custom', 'voca_quiz', '🧠 Ôn tập thông minh', quizList, 0);
+                    setTimeout(function () {
+                        var h = document.getElementById('header-title'), v = document.getElementById('view-title');
+                        if (h) h.innerText = '🧠 Ôn tập thông minh';
+                        if (v) v.textContent = '🧠 Ôn tập thông minh';
+                        var quote = document.getElementById('motivational-quote');
+                        if (quote) quote.innerHTML = '<div style="font-size:13px;line-height:1.7;color:#cbd5e1;background:rgba(249,115,22,0.08);padding:14px;border-radius:12px;border:1px dashed rgba(249,115,22,0.3);margin-top:10px;text-align:left;"><b style="color:#f97316;font-size:14px;display:block;margin-bottom:4px;">🧠 Ôn theo đường cong lãng quên</b>• <b>Loại đề:</b> ' + categoryName + '<br>• <b>Sắp quên</b>: memory score &lt; 50%<br>• <b>Hay sai</b>: đã sai ≥ 2 lần<br>• <b>Chưa ôn</b>: lần đầu gặp từ<br>• <b style="color:#86efac;">✅ Hệ thống tự cập nhật</b> lịch ôn sau mỗi câu</div>';
+                        var g2a = document.getElementById('group-2a');
+                        if (g2a) g2a.style.display = 'block';
+                        var fb = document.getElementById('btn-flashcard');
+                        if (fb) fb.style.display = 'inline-flex';
+                    }, 150);
+                } else { alert('Lỗi khởi động quiz.'); }
+            };
+        })();
+    </script>
 
-<style>
-@keyframes srPulse{0%,100%{box-shadow:0 4px 20px rgba(249,115,22,0.55);}50%{box-shadow:0 4px 32px rgba(249,115,22,0.9),0 0 0 5px rgba(249,115,22,0.18);}}
-.sr-stat-card{transition:transform 0.15s,box-shadow 0.15s,outline-color 0.15s;}
-.sr-stat-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.35);}
-.sr-stat-card.active{outline:2.5px solid #f97316;transform:translateY(-3px);box-shadow:0 12px 30px rgba(249,115,22,0.25);}
-</style>
+    <style>
+        @keyframes srPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 4px 20px rgba(249, 115, 22, 0.55);
+            }
+
+            50% {
+                box-shadow: 0 4px 32px rgba(249, 115, 22, 0.9), 0 0 0 5px rgba(249, 115, 22, 0.18);
+            }
+        }
+
+        .sr-stat-card {
+            transition: transform 0.15s, box-shadow 0.15s, outline-color 0.15s;
+        }
+
+        .sr-stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .sr-stat-card.active {
+            outline: 2.5px solid #f97316;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(249, 115, 22, 0.25);
+        }
+    </style>
 </body>
 
-</html><script>
-(function(){
-    var msgs=["💭 Ôn tập đúng lúc là chìa khóa — não bộ sẽ nhớ mãi mãi!","🌸 Hôm nay bạn đã sẵn sàng chinh phục những từ đã lâu không gặp chưa?","⚡ Học 1 lần, quên 10 lần — ôn đúng lúc, nhớ mãi không quên!","🎯 Hệ thống đã chọn ra những từ BẠN CẦN ÔN nhất hôm nay.","🔥 Đừng để bộ nhớ phai — mỗi ngày 10 phút ôn tập là đủ!","✨ Spaced Repetition: Bí quyết của các polyglot thế giới.","🧩 Từ nào hay quên, từ nào sắp quên — AI đã biết rồi!","🌙 Não bộ củng cố ký ức khi ngủ — hãy ôn trước khi đi ngủ nhé!","📈 Mỗi lần ôn đúng lịch, khoảng nhắc lại tăng gấp đôi!","💪 Bộ não như cơ bắp — cần tập luyện đều đặn!","🌟 Những từ bạn hay sai đang chờ được ôn lại hôm nay!","🎵 Học nhẹ nhàng, ôn thông minh — tiến bộ mỗi ngày!"];
-    var dayIdx=Math.floor(Date.now()/86400000)%msgs.length;
-    var el=document.getElementById('sr-banner-msg');
-    if(el) el.textContent=msgs[dayIdx];
-    window.addEventListener('load',function(){
-        setTimeout(function(){
-            try{
-                var items=window.collectAllItemsForSR?window.collectAllItemsForSR():[];
-                var stats=window.computeSrStats?window.computeSrStats(items):null;
-                if(!stats)return;
-                var total=stats.due+stats.wrong;
-                var sideBadge=document.getElementById('sr-due-badge');
-                if(sideBadge&&total>0){sideBadge.style.display='flex';sideBadge.textContent=total;}
-                var bBadge=document.getElementById('sr-banner-badge');
-                if(bBadge&&total>0){bBadge.style.display='flex';bBadge.textContent=total;}
-                if(stats.due>0){var d=document.getElementById('sr-banner-due'),dn=document.getElementById('sr-banner-due-n');if(d)d.style.display='inline-flex';if(dn)dn.textContent=stats.due;}
-                if(stats.wrong>0){var w=document.getElementById('sr-banner-wrong'),wn=document.getElementById('sr-banner-wrong-n');if(w)w.style.display='inline-flex';if(wn)wn.textContent=stats.wrong;}
-                if(stats['new']>0){var nw=document.getElementById('sr-banner-new'),nwn=document.getElementById('sr-banner-new-n');if(nw)nw.style.display='inline-flex';if(nwn)nwn.textContent=stats['new'];}
-            }catch(e){}
-        },2500);
-    });
-})();
+</html>
+<script>
+    (function () {
+        var msgs = ["💭 Ôn tập đúng lúc là chìa khóa — não bộ sẽ nhớ mãi mãi!", "🌸 Hôm nay bạn đã sẵn sàng chinh phục những từ đã lâu không gặp chưa?", "⚡ Học 1 lần, quên 10 lần — ôn đúng lúc, nhớ mãi không quên!", "🎯 Hệ thống đã chọn ra những từ BẠN CẦN ÔN nhất hôm nay.", "🔥 Đừng để bộ nhớ phai — mỗi ngày 10 phút ôn tập là đủ!", "✨ Spaced Repetition: Bí quyết của các polyglot thế giới.", "🧩 Từ nào hay quên, từ nào sắp quên — AI đã biết rồi!", "🌙 Não bộ củng cố ký ức khi ngủ — hãy ôn trước khi đi ngủ nhé!", "📈 Mỗi lần ôn đúng lịch, khoảng nhắc lại tăng gấp đôi!", "💪 Bộ não như cơ bắp — cần tập luyện đều đặn!", "🌟 Những từ bạn hay sai đang chờ được ôn lại hôm nay!", "🎵 Học nhẹ nhàng, ôn thông minh — tiến bộ mỗi ngày!"];
+        var dayIdx = Math.floor(Date.now() / 86400000) % msgs.length;
+        var el = document.getElementById('sr-banner-msg');
+        if (el) el.textContent = msgs[dayIdx];
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                try {
+                    var items = window.collectAllItemsForSR ? window.collectAllItemsForSR() : [];
+                    var stats = window.computeSrStats ? window.computeSrStats(items) : null;
+                    if (!stats) return;
+                    var total = stats.due + stats.wrong;
+                    var sideBadge = document.getElementById('sr-due-badge');
+                    if (sideBadge && total > 0) { sideBadge.style.display = 'flex'; sideBadge.textContent = total; }
+                    var bBadge = document.getElementById('sr-banner-badge');
+                    if (bBadge && total > 0) { bBadge.style.display = 'flex'; bBadge.textContent = total; }
+                    if (stats.due > 0) { var d = document.getElementById('sr-banner-due'), dn = document.getElementById('sr-banner-due-n'); if (d) d.style.display = 'inline-flex'; if (dn) dn.textContent = stats.due; }
+                    if (stats.wrong > 0) { var w = document.getElementById('sr-banner-wrong'), wn = document.getElementById('sr-banner-wrong-n'); if (w) w.style.display = 'inline-flex'; if (wn) wn.textContent = stats.wrong; }
+                    if (stats['new'] > 0) { var nw = document.getElementById('sr-banner-new'), nwn = document.getElementById('sr-banner-new-n'); if (nw) nw.style.display = 'inline-flex'; if (nwn) nwn.textContent = stats['new']; }
+                } catch (e) { }
+            }, 2500);
+        });
+    })();
 </script>
