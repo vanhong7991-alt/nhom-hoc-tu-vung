@@ -4403,8 +4403,10 @@
 
                     const savedStart = localStorage.getItem('mgao_journey_start');
                     const savedEnd = localStorage.getItem('mgao_journey_end');
-                    if (savedStart) document.getElementById('journey-start').value = savedStart;
-                    if (savedEnd) document.getElementById('journey-end').value = savedEnd;
+                    const journeyStartInput = document.getElementById('journey-start');
+                    const journeyEndInput = document.getElementById('journey-end');
+                    if (journeyStartInput && savedStart !== null) journeyStartInput.value = savedStart;
+                    if (journeyEndInput && savedEnd !== null) journeyEndInput.value = savedEnd;
                     updateJourney();
                 };
 
@@ -4426,11 +4428,11 @@
                     const endInput = document.getElementById('journey-end');
                     const sidebarText = document.getElementById('sidebar-journey-text');
 
-                    const startVal = startInput.value;
-                    const endVal = endInput.value;
+                    const startVal = startInput ? startInput.value : '';
+                    const endVal = endInput ? endInput.value : '';
 
-                    localStorage.setItem('mgao_journey_start', startVal);
-                    localStorage.setItem('mgao_journey_end', endVal);
+                    if (startInput) localStorage.setItem('mgao_journey_start', startVal);
+                    if (endInput) localStorage.setItem('mgao_journey_end', endVal);
 
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
