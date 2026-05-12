@@ -1,0 +1,30 @@
+            ,
+            {
+                name: "Bài 3 (51-75)", list: [
+                    { gramType: "quiz", q: "商品名について、いくつか（___________）を出してみてください。", ans: "案", w1: "件", w2: "状", w3: "章", explain: "件（けん）: vụ việc\n状（じょう）: trạng thái\n章（しょう）: chương\n案（あん）: phương án, ý tưởng\nDịch: Về tên sản phẩm, hãy đưa ra một vài phương án.", count: 0 },
+                    { gramType: "quiz", q: "オンライン（___________）は、回答の集計を自動で行えるため、データ収集や分析が容易だ。", ans: "アンケート", w1: "アンダーライン", w2: "アレンジ", w3: "アドバイス", explain: "アンケート: khảo sát\nアンダーライン: gạch chân\nアレンジ: điều chỉnh\nアドバイス: lời khuyên\nDịch: Khảo sát online giúp tổng hợp dữ liệu dễ dàng.", count: 0 },
+                    { gramType: "quiz", q: "この問題は、明日の会議の最重要（___________）として扱われる。", ans: "案件", w1: "案内", w2: "安全", w3: "安健", explain: "案内（あんない）: hướng dẫn\n安全（あんぜん）: an toàn\n案件（あんけん）: vấn đề, hạng mục\nDịch: Đây là nội dung quan trọng nhất của cuộc họp.", count: 0 },
+                    { gramType: "quiz", q: "カメラは利用者が（___________）を入力するときの手元を撮影していた。", ans: "暗証番号", w1: "明証番号", w2: "暗征番号", w3: "明征番号", explain: "暗証番号（あんしょうばんごう）: mã PIN\nDịch: Camera quay lúc nhập mã PIN.", count: 0 },
+                    { gramType: "quiz", q: "修正部分には、（___________）が引いてあります。", ans: "アンダーライン", w1: "アンデルセン", w2: "アンケート", w3: "アンティーク", explain: "アンデルセン: tên riêng\nアンケート: khảo sát\nアンダーライン: gạch chân\nアンティーク: đồ cổ\nDịch: Phần sửa đã được gạch chân.", count: 0 },
+                    { gramType: "quiz", q: "担当の責任者まで（___________）してくれませんか。", ans: "案内", w1: "感染", w2: "間税", w3: "貢献", explain: "案内（あんない）: dẫn đường\n感染（かんせん）: lây nhiễm\n間税（かんぜい）: thuế gián tiếp\n貢献（こうけん）: đóng góp\nDịch: Có thể dẫn tôi đến người phụ trách không?", count: 0 },
+                    { gramType: "quiz", q: "そういう（___________）なやり方じゃ、困ります。", ans: "いい加減", w1: "いい政権", w2: "いい改選", w3: "いい納税", explain: "いい加減（いいかげん）: qua loa\nDịch: Cách làm qua loa như vậy thì không ổn.", count: 0 },
+                    { gramType: "quiz", q: "遅刻の（___________）をした。", ans: "言い訳", w1: "お詫び", w2: "お礼", w3: "相談", explain: "お詫び（おわび）: xin lỗi\n言い訳（いいわけ）: biện minh\nお礼（おれい）: cảm ơn\n相談（そうだん）: trao đổi\nDịch: Đã biện minh cho việc đi muộn.", count: 0 },
+                    { gramType: "quiz", q: "このような欠陥が見つかり、（___________）に思います。", ans: "遺憾", w1: "責任", w2: "貢献", w3: "感染", explain: "責任（せきにん）: trách nhiệm\n貢献（こうけん）: đóng góp\n遺憾（いかん）: đáng tiếc\n感染（かんせん）: lây nhiễm\nDịch: Cảm thấy rất đáng tiếc.", count: 0 },
+                    { gramType: "quiz", q: "この企画、（___________）じゃないかな。", ans: "いけるん", w1: "あかるん", w2: "なげるん", w3: "けざるん", explain: "いける: khả thi\nDịch: Kế hoạch này có vẻ làm được.", count: 0 },
+                    { gramType: "quiz", q: "利益率を（___________）するのは難しい。", ans: "維持", w1: "拡大", w2: "拡張", w3: "発展", explain: "維持（いじ）: duy trì\n拡大（かくだい）: mở rộng\n拡張（かくちょう）: mở rộng\n発展（はってん）: phát triển\nDịch: Khó duy trì lợi nhuận.", count: 0 },
+                    { gramType: "quiz", q: "プロ（___________）を持ってほしい。", ans: "意識", w1: "意味", w2: "常識", w3: "日常", explain: "意識（いしき）: ý thức\n意味（いみ）: ý nghĩa\n常識（じょうしき）: thường thức\n日常（にちじょう）: hàng ngày\nDịch: Hãy có ý thức chuyên nghiệp.", count: 0 },
+                    { gramType: "quiz", q: "ネット販売は（___________）、好調を維持している。", ans: "依然", w1: "当然", w2: "間然", w3: "自然", explain: "当然（とうぜん）: đương nhiên\n自然（しぜん）: tự nhiên\n依然（いぜん）: vẫn\nDịch: Vẫn duy trì tốt.", count: 0 },
+                    { gramType: "quiz", q: "ぜひ（___________）ご連絡ください。", ans: "急ぎ", w1: "忙し", w2: "依託", w3: "投げ", explain: "急ぎ（いそぎ）: gấp\n依託（いたく）: gửi nhờ\n投げ（なげ）: ném\nDịch: Hãy liên hệ gấp.", count: 0 },
+                    { gramType: "quiz", q: "サービスを民間に（___________）する。", ans: "委託", w1: "遺伝", w2: "依託", w3: "請託", explain: "遺伝（いでん）: di truyền\n依託（いたく）: gửi nhờ\n委託（いたく）: ủy thác\n請託（せいたく）: nhờ vả\nDịch: Ủy thác cho tư nhân.", count: 0 },
+                    { gramType: "quiz", q: "上司と部下の間で（___________）になってストレスがたまる。", ans: "板ばさみ", w1: "枝ばさみ", w2: "板はさみ", w3: "枝はさみ", explain: "板ばさみ（いたばさみ）: bị kẹt giữa\n枝ばさみ（えだばさみ）: kéo cắt cành\nDịch: Bị kẹt giữa cấp trên và dưới.", count: 0 },
+                    { gramType: "quiz", q: "商品が汚れたり（___________）する。", ans: "傷んだり", w1: "揚んだり", w2: "腸んだり", w3: "楊んだり", explain: "傷む（いたむ）: hư hỏng\nDịch: Hàng có thể bị hỏng.", count: 0 },
+                    { gramType: "quiz", q: "当店（___________）の商品です。", ans: "一押し", w1: "一掃し", w2: "一升し", w3: "一貫し", explain: "一貫（いっかん）: nhất quán\n一押し（いちおし）: đề xuất số 1\nDịch: Sản phẩm đề xuất hàng đầu.", count: 0 },
+                    { gramType: "quiz", q: "この業界で（___________）になる。", ans: "一人前", w1: "子供", w2: "一人", w3: "二人後", explain: "子供（こども）: trẻ con\n一人（ひとり）: một người\n一人前（いちにんまえ）: thành thạo\nDịch: Trở thành người chuyên nghiệp.", count: 0 },
+                    { gramType: "quiz", q: "市場に（___________）対応した。", ans: "いち早く", w1: "いち遅く", w2: "いち速く", w3: "いち高く", explain: "いち早く: nhanh chóng\nDịch: Phản ứng nhanh với thị trường.", count: 0 },
+                    { gramType: "quiz", q: "取引先を（___________）にしてください。", ans: "一覧", w1: "一層", w2: "一律", w3: "一項", explain: "一覧（いちらん）: danh sách\n一層（いっそう）: hơn nữa\n一律（いちりつ）: đồng loạt\n一項（いっこう）: một mục\nDịch: Hãy lập danh sách đối tác.", count: 0 },
+                    { gramType: "quiz", q: "送料（___________）500円です。", ans: "一律", w1: "一介", w2: "一掃", w3: "一床", explain: "一介（いっかい）: chỉ là\n一掃（いっそう）: quét sạch\n一律（いちりつ）: đồng loạt\nDịch: Phí ship cố định 500 yên.", count: 0 },
+                    { gramType: "quiz", q: "（___________）に返事します。", ans: "一両日中", w1: "一再日中", w2: "一切日中", w3: "一掃日中", explain: "一両日中（いちりょうにちちゅう）: trong 1–2 ngày\nDịch: Sẽ trả lời trong 1–2 ngày.", count: 0 },
+                    { gramType: "quiz", q: "支払いは（___________）払いです。", ans: "一括", w1: "一話", w2: "一憩", w3: "一舌", explain: "一括（いっかつ）: trả một lần\n一話（いちわ）: một câu chuyện\n一憩（いっけい）: nghỉ ngắn\nDịch: Thanh toán một lần.", count: 0 },
+                    { gramType: "quiz", q: "郊外の（___________）からマンションへ移る。", ans: "一戸建て", w1: "一所建て", w2: "一掃建て", w3: "一升建て", explain: "一戸建て（いっこだて）: nhà riêng\nDịch: Chuyển từ nhà riêng sang chung cư.", count: 0 }
+                ]
+            }
