@@ -8430,7 +8430,151 @@
             box-shadow: 0 12px 30px rgba(249, 115, 22, 0.25);
         }
     </style>
+
+    <!-- ===== NÚT ĐỔI ẢNH NỀN ===== -->
+    <button id="bg-picker-btn" onclick="openBgPicker()" title="Đổi ảnh nền"
+        style="position:fixed; bottom:20px; right:20px; z-index:9000; width:48px; height:48px; border-radius:50%; border:2px solid rgba(255,255,255,0.25); background:rgba(15,23,42,0.75); backdrop-filter:blur(12px); color:#fff; font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(0,0,0,0.4); transition:all 0.2s;"
+        onmouseover="this.style.transform='scale(1.12)';this.style.background='rgba(99,102,241,0.8)'"
+        onmouseout="this.style.transform='scale(1)';this.style.background='rgba(15,23,42,0.75)'">🖼️</button>
+
+    <!-- ===== MODAL CHỌN ẢNH NỀN ===== -->
+    <div id="bg-picker-modal" style="display:none; position:fixed; inset:0; z-index:9100; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); align-items:center; justify-content:center;">
+        <div style="background:linear-gradient(145deg,#1e1b4b,#0f172a); border:1.5px solid rgba(165,180,252,0.2); border-radius:20px; padding:24px; width:min(420px,92vw); font-family:'Baloo 2',sans-serif; box-shadow:0 25px 60px rgba(0,0,0,0.6);">
+            <!-- Header -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+                <div style="font-size:16px; font-weight:900; color:#e2e8f0;">🖼️ Đổi ảnh nền</div>
+                <button onclick="closeBgPicker()" style="background:rgba(255,255,255,0.08); border:none; color:#94a3b8; font-size:18px; cursor:pointer; border-radius:8px; width:32px; height:32px; display:flex; align-items:center; justify-content:center;">✕</button>
+            </div>
+
+            <!-- Ảnh hệ thống -->
+            <div style="font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">🎨 Ảnh hệ thống</div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px;">
+                <!-- Default (no image) -->
+                <div onclick="applyBg('default')" class="bg-thumb"
+                    style="aspect-ratio:16/9; border-radius:10px; cursor:pointer; border:2px solid rgba(255,255,255,0.1); background:linear-gradient(135deg,#1e1b4b,#0f172a); display:flex; align-items:center; justify-content:center; font-size:22px; transition:all 0.2s; position:relative; overflow:hidden;"
+                    title="Mặc định (không ảnh)">
+                    🌌
+                    <div style="position:absolute; bottom:4px; font-size:10px; color:#94a3b8; font-weight:700;">Mặc định</div>
+                </div>
+                <!-- anhnen.png -->
+                <div onclick="applyBg('anhnen.png')" class="bg-thumb"
+                    style="aspect-ratio:16/9; border-radius:10px; cursor:pointer; border:2px solid rgba(255,255,255,0.1); background:url('anhnen.png') center/cover; transition:all 0.2s; position:relative; overflow:hidden;"
+                    title="Ảnh nền 1">
+                    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:flex-end; padding:4px; border-radius:8px;">
+                        <span style="font-size:10px; color:#fff; font-weight:700;">Ảnh 1</span>
+                    </div>
+                </div>
+                <!-- anhnen4.png -->
+                <div onclick="applyBg('anhnen4.png')" class="bg-thumb"
+                    style="aspect-ratio:16/9; border-radius:10px; cursor:pointer; border:2px solid rgba(255,255,255,0.1); background:url('anhnen4.png') center/cover; transition:all 0.2s; position:relative; overflow:hidden;"
+                    title="Ảnh nền 2">
+                    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:flex-end; padding:4px; border-radius:8px;">
+                        <span style="font-size:10px; color:#fff; font-weight:700;">Ảnh 2</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload ảnh -->
+            <div style="font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">📤 Tải ảnh của bạn</div>
+            <label for="bg-upload-input"
+                style="display:flex; align-items:center; gap:10px; padding:12px 16px; background:rgba(99,102,241,0.1); border:1.5px dashed rgba(99,102,241,0.4); border-radius:12px; cursor:pointer; color:#a5b4fc; font-size:13px; font-weight:700; transition:all 0.2s;"
+                onmouseover="this.style.background='rgba(99,102,241,0.2)'"
+                onmouseout="this.style.background='rgba(99,102,241,0.1)'">
+                <span style="font-size:24px;">📁</span>
+                <div>
+                    <div>Chọn ảnh từ máy tính</div>
+                    <div style="font-size:11px; color:#64748b; font-weight:500;">JPG, PNG, WebP — khuyến nghị 1920×1080</div>
+                </div>
+            </label>
+            <input type="file" id="bg-upload-input" accept="image/*" style="display:none;" onchange="handleBgUpload(this)">
+
+            <!-- Preview ảnh đang dùng -->
+            <div id="bg-current-info" style="margin-top:14px; padding:10px 14px; background:rgba(255,255,255,0.04); border-radius:10px; font-size:12px; color:#64748b; display:flex; align-items:center; gap:8px;">
+                <span>🖼️</span><span id="bg-current-label">Đang dùng: Mặc định</span>
+                <button onclick="applyBg('default')" style="margin-left:auto; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; border-radius:6px; padding:3px 10px; font-size:11px; cursor:pointer; font-family:'Baloo 2';">✕ Xóa ảnh</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        var BG_KEY = 'app_bg_setting';
+
+        function applyBg(value) {
+            window._currentBg = value;
+            if (value === 'default') {
+                document.body.style.backgroundImage = "url('anhnen.png')";
+                localStorage.setItem(BG_KEY, 'anhnen.png');
+                updateBgLabel('Mặc định (anhnen.png)');
+            } else if (value.startsWith('data:')) {
+                // base64 từ upload
+                document.body.style.backgroundImage = "url('" + value + "')";
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+                document.body.style.backgroundAttachment = 'fixed';
+                try { localStorage.setItem(BG_KEY, value); } catch(e) { alert('Ảnh quá lớn để lưu, sẽ không giữ sau khi tải lại.'); }
+                updateBgLabel('Ảnh tùy chỉnh của bạn');
+            } else {
+                document.body.style.backgroundImage = "url('" + value + "')";
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+                document.body.style.backgroundAttachment = 'fixed';
+                localStorage.setItem(BG_KEY, value);
+                var label = {
+                    'anhnen.png': 'Ảnh 1 (anhnen.png)',
+                    'anhnen4.png': 'Ảnh 2 (anhnen4.png)'
+                }[value] || value;
+                updateBgLabel(label);
+            }
+            // highlight selected thumb
+            document.querySelectorAll('.bg-thumb').forEach(function(el) {
+                el.style.borderColor = 'rgba(255,255,255,0.1)';
+                el.style.boxShadow = 'none';
+            });
+        }
+        window.applyBg = applyBg;
+
+        function updateBgLabel(label) {
+            var el = document.getElementById('bg-current-label');
+            if (el) el.textContent = 'Đang dùng: ' + label;
+        }
+
+        function handleBgUpload(input) {
+            var file = input.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function(e) { applyBg(e.target.result); };
+            reader.readAsDataURL(file);
+        }
+        window.handleBgUpload = handleBgUpload;
+
+        function openBgPicker() {
+            var m = document.getElementById('bg-picker-modal');
+            if (m) { m.style.display = 'flex'; }
+        }
+        window.openBgPicker = openBgPicker;
+
+        function closeBgPicker() {
+            var m = document.getElementById('bg-picker-modal');
+            if (m) m.style.display = 'none';
+        }
+        window.closeBgPicker = closeBgPicker;
+
+        // Click backdrop to close
+        document.getElementById('bg-picker-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeBgPicker();
+        });
+
+        // Restore saved bg on load
+        var saved = localStorage.getItem(BG_KEY);
+        if (saved) {
+            applyBg(saved);
+        }
+    })();
+    </script>
+
 </body>
+
 
 </html>
 <script>
