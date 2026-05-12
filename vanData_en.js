@@ -228,3 +228,5 @@ const vanData = {
         ]
     }
 };
+
+vanData.freevoca = { struct: [], quiz: [] };

@@ -311,3 +311,5 @@ const vanData = {
     // ➜ THÊM HSK6 Ở ĐÂY NẾU CẦN:
     // ,hsk6voca: { struct: [...], quiz: [...] }
 };
+
+vanData.freevoca = { struct: [], quiz: [] };
