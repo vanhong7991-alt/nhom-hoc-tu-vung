@@ -1067,6 +1067,17 @@
             background: linear-gradient(90deg, rgba(16, 185, 129, 0.32) 0%, rgba(16, 185, 129, 0.10) 100%);
         }
 
+        /* Học tự do - Hồng */
+        .lvl1-freevoca {
+            background: linear-gradient(90deg, rgba(236, 72, 153, 0.18) 0%, rgba(236, 72, 153, 0.04) 100%);
+            color: #f9a8d4;
+            border-left-color: #ec4899;
+        }
+
+        .lvl1-freevoca:hover {
+            background: linear-gradient(90deg, rgba(236, 72, 153, 0.32) 0%, rgba(236, 72, 153, 0.10) 100%);
+        }
+
         /* ── GROUP HEADERS (JLPT / BJT) ── */
         .sidebar-group-header {
             padding: 7px 20px;
@@ -1253,6 +1264,10 @@
 
         .sidebar-group-header.bjt-user {
             color: #fb923c;
+        }
+
+        .sidebar-group-header.free-user, .sidebar-group-header.free-learn {
+            color: #ec4899;
         }
 
         /* ── REACTION GAME MODAL ── */
@@ -2149,6 +2164,8 @@
                         <div class="menu-lvl2" onclick="toggleSub('van-bjtvoca-quiz')">📝 Trắc nghiệm</div>
                         <div id="van-bjtvoca-quiz" class="sub-menu"></div>
                     </div>
+
+
                 </div>
             </div> <!-- end van-section-wrapper JP -->
 
@@ -2243,6 +2260,18 @@
                 </div>
             </div>
 
+            <!-- ===== GÓC HỌC TỰ DO (ADMIN) ===== -->
+            <div id="van-free-wrapper">
+                <div class="sidebar-group-header free-learn">🎯 HỌC TỰ DO</div>
+                <div class="van-menu-lvl1 lvl1-freevoca" onclick="toggleSub('van-freevoca-sub')">🎯 Học tự do Từ Vựng ▼</div>
+                <div id="van-freevoca-sub" class="sub-menu">
+                    <div class="menu-lvl2" onclick="toggleSub('van-freevoca-struct')">📚 Từ đơn</div>
+                    <div id="van-freevoca-struct" class="sub-menu"></div>
+                    <div class="menu-lvl2" onclick="toggleSub('van-freevoca-quiz')">📝 Trắc nghiệm</div>
+                    <div id="van-freevoca-quiz" class="sub-menu"></div>
+                </div>
+            </div>
+
 
 
 
@@ -2304,6 +2333,8 @@
                         <div class="menu-lvl2" onclick="toggleSub('bjt-gram_quiz')">🎯 Ngữ pháp trắc nghiệm</div>
                         <div id="bjt-gram_quiz" class="sub-menu"></div>
                     </div>
+
+
                 </div>
 
                 <!-- Nhóm TOEIC -->
@@ -2337,6 +2368,22 @@
                         <div id="hsk-gram" class="sub-menu"></div>
                         <div class="menu-lvl2" onclick="toggleSub('hsk-gram_quiz')">🎯 Ngữ pháp trắc nghiệm</div>
                         <div id="hsk-gram_quiz" class="sub-menu"></div>
+                    </div>
+                </div>
+
+                <!-- GÓC HỌC TỰ DO USER -->
+                <div id="free-group">
+                    <div class="sidebar-group-header free-user">🎯 HỌC TỰ DO</div>
+                    <div class="menu-lvl1" onclick="toggleSub('free-sub')">HỌC TỰ DO ▼</div>
+                    <div id="free-sub" class="sub-menu">
+                        <div class="menu-lvl2" onclick="toggleSub('free-voca')">📚 Luyện tập từ đơn</div>
+                        <div id="free-voca" class="sub-menu"></div>
+                        <div class="menu-lvl2" onclick="toggleSub('free-voca_quiz')">📝 Luyện tập trắc nghiệm</div>
+                        <div id="free-voca_quiz" class="sub-menu"></div>
+                        <div class="menu-lvl2" onclick="toggleSub('free-gram')">✍️ Ngữ pháp đơn</div>
+                        <div id="free-gram" class="sub-menu"></div>
+                        <div class="menu-lvl2" onclick="toggleSub('free-gram_quiz')">🎯 Ngữ pháp trắc nghiệm</div>
+                        <div id="free-gram_quiz" class="sub-menu"></div>
                     </div>
                 </div>
 
@@ -3507,10 +3554,12 @@
                         'n1voca': { struct: 'van-n1voca-struct', quiz: 'van-n1voca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
                         'n2voca': { struct: 'van-n2voca-struct', quiz: 'van-n2voca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
                         'n2gram': { struct: 'van-n2gram-struct', quiz: 'van-n2gram-quiz', type_struct: 'gram', type_quiz: 'gram_quiz' },
-                        'bjtvoca': { struct: 'van-bjtvoca-struct', quiz: 'van-bjtvoca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' }
+                        'bjtvoca': { struct: 'van-bjtvoca-struct', quiz: 'van-bjtvoca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
+                        'freevoca': { struct: 'van-freevoca-struct', quiz: 'van-freevoca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' }
                     },
                     en: {
-                        'toeic600': { struct: 'van-toeic600-struct', quiz: 'van-toeic600-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' }
+                        'toeic600': { struct: 'van-toeic600-struct', quiz: 'van-toeic600-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
+                        'freevoca': { struct: 'van-freevoca-struct', quiz: 'van-freevoca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' }
                     },
                     cn: {
                         'hsk1voca': { struct: 'van-hsk1voca-struct', quiz: 'van-hsk1voca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
@@ -3518,7 +3567,8 @@
                         'hsk3voca': { struct: 'van-hsk3voca-struct', quiz: 'van-hsk3voca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
                         'hsk4voca': { struct: 'van-hsk4voca-struct', quiz: 'van-hsk4voca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
                         'hsk5voca': { struct: 'van-hsk5voca-struct', quiz: 'van-hsk5voca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
-                        'hskgram': { struct: 'van-hskgram-struct', quiz: 'van-hskgram-quiz', type_struct: 'gram', type_quiz: 'gram_quiz' }
+                        'hskgram': { struct: 'van-hskgram-struct', quiz: 'van-hskgram-quiz', type_struct: 'gram', type_quiz: 'gram_quiz' },
+                        'freevoca': { struct: 'van-freevoca-struct', quiz: 'van-freevoca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' }
                     }
                 };
                 var _currentLangParam = new URLSearchParams(window.location.search).get('lang') || 'jp';
@@ -3755,16 +3805,16 @@
                 // --- LANGUAGE & PORTAL SETTINGS ---
                 const urlParams = new URLSearchParams(window.location.search);
                 let currentLang = urlParams.get('lang') || 'jp';
-                let activeLevels = ["n1", "n2", "n3", "bjt"];
+                let activeLevels = ["n1", "n2", "n3", "bjt", "free"];
                 let currentDbKey = 'mgao_v37_db';
                 let langLabel = '🎌 JLPT & BJT';
 
                 if (currentLang === 'en') {
-                    activeLevels = ["toeic"];
+                    activeLevels = ["toeic", "free"];
                     currentDbKey = 'mgao_v37_db_en';
                     langLabel = '🇺🇸 TOEIC';
                 } else if (currentLang === 'cn') {
-                    activeLevels = ["hsk"];
+                    activeLevels = ["hsk", "free"];
                     currentDbKey = 'mgao_v37_db_cn';
                     langLabel = '🇨🇳 HSK';
                 }
@@ -6532,7 +6582,8 @@
                                 if (confirm("⚠️ CẢNH BÁO: Dữ liệu hiện tại trên máy này sẽ bị GHI ĐÈ TOÀN BỘ bằng dữ liệu từ File mới.\nBạn có chắc chắn muốn phục hồi không?")) {
                                     if (!parsed.n3) { parsed.n3 = { voca: {}, voca_quiz: {}, gram: {} };["voca", "voca_quiz", "gram"].forEach(ty => { for (let i = 1; i <= 10; i++) parsed.n3[ty][`Ngày ${i}`] = { list: [], done: [false, false, false] }; }); }
                                     if (!parsed.bjt) { parsed.bjt = { voca: {}, voca_quiz: {}, gram: {} };["voca", "voca_quiz", "gram"].forEach(ty => { for (let i = 1; i <= 10; i++) parsed.bjt[ty][`Ngày ${i}`] = { list: [], done: [false, false, false] }; }); }
-                                    ["n1", "n2", "n3", "bjt"].forEach(lv => { if (!parsed[lv].voca_quiz) { parsed[lv].voca_quiz = {}; for (let i = 1; i <= 10; i++) parsed[lv].voca_quiz[`Ngày ${i}`] = { list: [], done: [false, false, false] }; } });
+                                    if (!parsed.free) { parsed.free = { voca: {}, voca_quiz: {}, gram: {}, gram_quiz: {} };["voca", "voca_quiz", "gram", "gram_quiz"].forEach(ty => { for (let i = 1; i <= 10; i++) parsed.free[ty][`Ngày ${i}`] = { list: [], done: [false, false, false] }; }); }
+                                    ["n1", "n2", "n3", "bjt", "free"].forEach(lv => { if (!parsed[lv].voca_quiz) { parsed[lv].voca_quiz = {}; for (let i = 1; i <= 10; i++) parsed[lv].voca_quiz[`Ngày ${i}`] = { list: [], done: [false, false, false] }; } });
                                     localStorage.setItem('mgao_v37_db', JSON.stringify(parsed));
                                     alert("✅ Phục hồi dữ liệu thành công! Màn hình sẽ tải lại.");
                                     location.reload();
@@ -6781,9 +6832,11 @@
                         ? `<div style="padding:12px; color:#475569; text-align:center; font-size:13px; font-style:italic;">Không có bài nào phù hợp với bộ lọc.</div>`
                         : lessons.map(l => {
                             const checked = prevChecked.size === 0 || prevChecked.has(l.id) ? 'checked' : '';
+                            const count = (l.structItems ? l.structItems.length : 0) + (l.quizItems ? l.quizItems.length : 0);
                             return `<label class="cq-lesson-item">
                         <input type="checkbox" value="${l.id}" ${checked} onchange="cqUpdateCount()">
-                        <span>${l.label}</span>
+                        <span style="flex:1;">${l.label}</span>
+                        <span style="font-size:11px; font-weight:800; color:#38bdf8; border:1px solid #38bdf8; background:rgba(56,189,248,0.1); padding:2px 8px; border-radius:12px; box-shadow:0 0 5px rgba(56,189,248,0.3);">${count} câu</span>
                     </label>`;
                         }).join('');
 
@@ -7073,7 +7126,7 @@
 
             <!-- BỘ LỌC THỜI GIAN -->
             <div class="cq-section">
-                <div class="cq-section-label">⏳ Lọc theo thời gian tạo <span style="color:#64748b; font-size:10px;">(Góc của Bạn)</span></div>
+                <div class="cq-section-label">⏳ Lọc theo thời gian tạo <span style="color:#fbbf24; font-size:10px; font-weight:900; background:rgba(251,191,36,0.15); padding:2px 6px; border-radius:4px; border:1px dashed #fbbf24; margin-left:6px;">(ÁP DỤNG CẢ 2 GÓC)</span></div>
                 <div style="margin-top:6px;">
                     <select id="cq-time-filter" onchange="cqRefresh()" style="background:rgba(0,0,0,0.3); color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:8px 12px; font-size:14px; width:100%; outline:none; font-family:'Baloo 2'; cursor:pointer;">
                         <option value="0">Tất cả thời gian</option>
