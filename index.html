@@ -3929,10 +3929,12 @@
                 function updateGlobalStats() {
                     let totalVoca = 0, totalVocaQuiz = 0, totalGram = 0, totalGramQuiz = 0;
                     activeLevels.forEach(lv => {
-                        Object.keys(db[lv].voca).forEach(day => totalVoca += db[lv].voca[day].list.filter(it => (it.count || 0) >= 1).length);
-                        Object.keys(db[lv].voca_quiz).forEach(day => totalVocaQuiz += db[lv].voca_quiz[day].list.filter(it => (it.count || 0) >= 1).length);
-                        Object.keys(db[lv].gram).forEach(day => totalGram += db[lv].gram[day].list.filter(it => (it.count || 0) >= 1).length);
-                        Object.keys(db[lv].gram_quiz).forEach(day => totalGramQuiz += db[lv].gram_quiz[day].list.filter(it => (it.count || 0) >= 1).length);
+                        if (db[lv]) {
+                            if (db[lv].voca) Object.keys(db[lv].voca).forEach(day => totalVoca += db[lv].voca[day].list.filter(it => (it.count || 0) >= 1).length);
+                            if (db[lv].voca_quiz) Object.keys(db[lv].voca_quiz).forEach(day => totalVocaQuiz += db[lv].voca_quiz[day].list.filter(it => (it.count || 0) >= 1).length);
+                            if (db[lv].gram) Object.keys(db[lv].gram).forEach(day => totalGram += db[lv].gram[day].list.filter(it => (it.count || 0) >= 1).length);
+                            if (db[lv].gram_quiz) Object.keys(db[lv].gram_quiz).forEach(day => totalGramQuiz += db[lv].gram_quiz[day].list.filter(it => (it.count || 0) >= 1).length);
+                        }
                     });
                     const e1 = document.getElementById('stat-voca-total'), e2 = document.getElementById('stat-voca-quiz-total'), e3 = document.getElementById('stat-gram-total'), e4 = document.getElementById('stat-gram-quiz-total');
                     if (e1) e1.innerText = totalVoca; if (e2) e2.innerText = totalVocaQuiz; if (e3) e3.innerText = totalGram; if (e4) e4.innerText = totalGramQuiz;
@@ -4387,7 +4389,9 @@
                                 ["voca", "voca_quiz", "gram", "gram_quiz"].forEach(ty => { for (let i = 1; i <= 10; i++) db[lv][ty][`Ngày ${i}`] = { list: [], done: [false, false, false] }; });
                                 updated = true;
                             } else {
+                                if (!db[lv].voca) { db[lv].voca = {}; for (let i = 1; i <= 10; i++) db[lv].voca[`Ngày ${i}`] = { list: [], done: [false, false, false] }; updated = true; }
                                 if (!db[lv].voca_quiz) { db[lv].voca_quiz = {}; for (let i = 1; i <= 10; i++) db[lv].voca_quiz[`Ngày ${i}`] = { list: [], done: [false, false, false] }; updated = true; }
+                                if (!db[lv].gram) { db[lv].gram = {}; for (let i = 1; i <= 10; i++) db[lv].gram[`Ngày ${i}`] = { list: [], done: [false, false, false] }; updated = true; }
                                 if (!db[lv].gram_quiz) { db[lv].gram_quiz = {}; for (let i = 1; i <= 10; i++) db[lv].gram_quiz[`Ngày ${i}`] = { list: [], done: [false, false, false] }; updated = true; }
                             }
                         });
