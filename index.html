@@ -1980,6 +1980,10 @@
                     style="background:linear-gradient(135deg,#8b5cf6,#ec4899);border:none;color:white;font-size:18px;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(139,92,246,0.5);transition:0.2s;flex-shrink:0;"
                     onmouseover="this.style.transform='scale(1.1)'"
                     onmouseout="this.style.transform='scale(1)'">📊</button>
+                <button onclick="openBgPicker()" id="bg-picker-btn" title="Đổi ảnh nền"
+                    style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;font-size:18px;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:0.2s;flex-shrink:0;"
+                    onmouseover="this.style.background='rgba(99,102,241,0.5)';this.style.transform='scale(1.1)'"
+                    onmouseout="this.style.background='rgba(255,255,255,0.1)';this.style.transform='scale(1)'">🖼️</button>
             </div>
         </div>
 
@@ -2731,6 +2735,21 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- ===== ẢNH MÈO ===== -->
+                <div id="anhmeo-block" style="display:flex; justify-content:center; margin-bottom:10px; pointer-events:none;">
+                    <img src="anhmeo.png" alt="Mèo cute"
+                        style="width:220px; max-width:45vw; object-fit:contain;
+                               border:3px solid rgba(255,255,255,0.9);
+                               border-radius:20px;
+                               box-shadow: 0 0 0 1px rgba(255,255,255,0.3), 0 12px 40px rgba(0,0,0,0.6), 0 0 30px rgba(255,255,255,0.15);
+                               filter: contrast(1.1) saturate(1.2) brightness(1.05) drop-shadow(0 4px 16px rgba(0,0,0,0.7));
+                               image-rendering: -webkit-optimize-contrast;
+                               image-rendering: crisp-edges;
+                               background: rgba(0,0,0,0.2);"
+                        onerror="this.parentElement.style.display='none'">
+                </div>
+
                 <!-- ===== STATS SCREEN ===== -->
                 <div id="stats-screen" style="display:none;">
                     <div
@@ -8482,11 +8501,7 @@
         }
     </style>
 
-    <!-- ===== NÚT ĐỔI ẢNH NỀN ===== -->
-    <button id="bg-picker-btn" onclick="openBgPicker()" title="Đổi ảnh nền"
-        style="position:fixed; bottom:20px; right:20px; z-index:9000; width:48px; height:48px; border-radius:50%; border:2px solid rgba(255,255,255,0.25); background:rgba(15,23,42,0.75); backdrop-filter:blur(12px); color:#fff; font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(0,0,0,0.4); transition:all 0.2s;"
-        onmouseover="this.style.transform='scale(1.12)';this.style.background='rgba(99,102,241,0.8)'"
-        onmouseout="this.style.transform='scale(1)';this.style.background='rgba(15,23,42,0.75)'">🖼️</button>
+    <!-- ===== NÚT ĐỔI ẢNH NỀN (đã chuyển vào header) ===== -->
 
     <!-- ===== MODAL CHỌN ẢNH NỀN ===== -->
     <div id="bg-picker-modal"
