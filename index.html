@@ -4408,8 +4408,8 @@
                     const startVal = startInput.value;
                     const endVal = endInput.value;
 
-                    if (startVal) localStorage.setItem('mgao_journey_start', startVal);
-                    if (endVal) localStorage.setItem('mgao_journey_end', endVal);
+                    localStorage.setItem('mgao_journey_start', startVal);
+                    localStorage.setItem('mgao_journey_end', endVal);
 
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
@@ -4420,12 +4420,13 @@
                         startDate.setHours(0, 0, 0, 0);
                         daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
                         if (daysPassed < 0) daysPassed = 0;
-                        sidebarText.innerHTML = `Bạn đã học được <b style="color:#fff; background:#ec4899; padding:2px 6px; border-radius:6px;">${daysPassed}</b> ngày rồi 🔥`;
+                        if (sidebarText) sidebarText.innerHTML = `Bạn đã học được <b style="color:#fff; background:#ec4899; padding:2px 6px; border-radius:6px;">${daysPassed}</b> ngày rồi 🔥`;
                     } else {
-                        sidebarText.innerText = "Bạn chưa thiết lập ngày bắt đầu!";
+                        if (sidebarText) sidebarText.innerText = "Bạn chưa thiết lập ngày bắt đầu!";
                     }
 
-                    document.getElementById('journey-days-passed-big').innerText = daysPassed;
+                    const daysPassedBig = document.getElementById('journey-days-passed-big');
+                    if (daysPassedBig) daysPassedBig.innerText = daysPassed;
 
                     if (startVal && endVal) {
                         const startDate = new Date(startVal);
@@ -4443,25 +4444,39 @@
                         let percent = (daysPassed / totalDays) * 100;
                         if (percent > 100) percent = 100;
 
-                        document.getElementById('journey-days-total-text').innerText = `/ ${totalDays}`;
-                        document.getElementById('journey-total-days-label').innerText = `🏆 ${totalDays} ngày`;
-                        document.getElementById('journey-percent').innerText = `${Math.round(percent)}%`;
-                        document.getElementById('journey-progress-bar').style.width = `${percent}%`;
+                        const totalDaysText = document.getElementById('journey-days-total-text');
+                        if (totalDaysText) totalDaysText.innerText = `/ ${totalDays}`;
+                        const totalDaysLabel = document.getElementById('journey-total-days-label');
+                        if (totalDaysLabel) totalDaysLabel.innerText = `🏆 ${totalDays} ngày`;
+                        const percentLabel = document.getElementById('journey-percent');
+                        if (percentLabel) percentLabel.innerText = `${Math.round(percent)}%`;
+                        const progressBar = document.getElementById('journey-progress-bar');
+                        if (progressBar) progressBar.style.width = `${percent}%`;
 
-                        if (percent === 100) {
-                            document.getElementById('journey-message').innerText = "🎉 Chúc mừng! Bạn đã hoàn thành mục tiêu!";
-                            document.getElementById('journey-message').style.color = 'var(--success)';
-                        } else {
-                            document.getElementById('journey-message').innerText = `🌿 Còn ${daysLeft} ngày nữa. Cố lên nhé! 💪`;
-                            document.getElementById('journey-message').style.color = '#cbd5e1';
+                        const journeyMsg = document.getElementById('journey-message');
+                        if (journeyMsg) {
+                            if (percent === 100) {
+                                journeyMsg.innerText = "🎉 Chúc mừng! Bạn đã hoàn thành mục tiêu!";
+                                journeyMsg.style.color = 'var(--success)';
+                            } else {
+                                journeyMsg.innerText = `🌿 Còn ${daysLeft} ngày nữa. Cố lên nhé! 💪`;
+                                journeyMsg.style.color = '#cbd5e1';
+                            }
                         }
                     } else {
-                        document.getElementById('journey-days-total-text').innerText = `/ ∞`;
-                        document.getElementById('journey-total-days-label').innerText = `🏆 ∞ ngày`;
-                        document.getElementById('journey-percent').innerText = startVal ? `100%` : `0%`;
-                        document.getElementById('journey-progress-bar').style.width = startVal ? `100%` : `0%`;
-                        document.getElementById('journey-message').innerText = startVal ? "🚀 Hành trình ngàn dặm bắt đầu từ một bước chân." : "Vui lòng chọn Ngày bắt đầu và kết thúc!";
-                        document.getElementById('journey-message').style.color = '#cbd5e1';
+                        const totalDaysText = document.getElementById('journey-days-total-text');
+                        if (totalDaysText) totalDaysText.innerText = `/ ∞`;
+                        const totalDaysLabel = document.getElementById('journey-total-days-label');
+                        if (totalDaysLabel) totalDaysLabel.innerText = `🏆 ∞ ngày`;
+                        const percentLabel = document.getElementById('journey-percent');
+                        if (percentLabel) percentLabel.innerText = startVal ? `100%` : `0%`;
+                        const progressBar = document.getElementById('journey-progress-bar');
+                        if (progressBar) progressBar.style.width = startVal ? `100%` : `0%`;
+                        const journeyMsg = document.getElementById('journey-message');
+                        if (journeyMsg) {
+                            journeyMsg.innerText = startVal ? "🚀 Hành trình ngàn dặm bắt đầu từ một bước chân." : "Vui lòng chọn Ngày bắt đầu và kết thúc!";
+                            journeyMsg.style.color = '#cbd5e1';
+                        }
                     }
                 }
 
