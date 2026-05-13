@@ -70,7 +70,7 @@
             position: fixed;
             inset: -20px;
             background: inherit;
-            filter: blur(0px) brightness(0.5);
+            filter: blur(0px) brightness(0.85);
             z-index: -1;
             pointer-events: none;
         }
@@ -1988,7 +1988,7 @@
             <button onclick="goHome()" id="header-home-btn"
                 style="margin-left:auto; margin-right: 10px; background: rgba(16,185,129,0.15); border: 1px solid rgba(34,197,94,0.4); color:#bbf7d0; font-size:13px; cursor:pointer; padding:4px 10px; border-radius:8px; font-weight:800; display:flex; align-items:center; gap:4px; font-family:'Baloo 2'; transition:0.2s; box-shadow: 0 2px 8px rgba(34,197,94,0.2);"
                 onmouseover="this.style.background='rgba(34,197,94,0.25)'"
-                onmouseout="this.style.background='rgba(16,185,129,0.15)'" title="Về trang chủ">🏠</button>
+                onmouseout="this.style.background='rgba(16,185,129,0.15)'" title="Về trang chủ">🏠 Trang chủ</button>
 
             <div id="header-test-timer-display"
                 style="display:flex; align-items:center; gap:6px; font-weight:900; color:#fbbf24; font-size:18px; background:rgba(0,0,0,0.5); padding:4px 12px; border-radius:10px; border:2px solid #fbbf24; font-variant-numeric:tabular-nums; letter-spacing:1px; box-shadow:0 0 10px rgba(251,191,36,0.3); margin-right:10px;">
@@ -3007,16 +3007,18 @@
                             style="position: absolute; top: -15px; right: 20px; background: #1e293b; border: 1px solid #475569; color: #cbd5e1; padding: 5px 14px; border-radius: 14px; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10;">▼
                             Thu gọn</button>
 
-                        <button class="btn btn-gray" style="flex: 1; font-size: 16px; padding: 16px; font-weight: 800;"
-                            onclick="resetQuiz()">🔄 LÀM LẠI</button>
-                        <button class="btn btn-warning" id="bottom-pause-btn"
-                            style="flex: 1.2; font-size: 16px; padding: 16px; font-weight: 800; display: none;"
-                            onclick="toggleTestTimer()">⏸️ Tạm dừng</button>
-                        <button class="btn btn-blue" style="flex: 2; font-size: 18px; padding: 16px; font-weight: 800;"
-                            onclick="submitQuiz()">✅ NỘP BÀI</button>
-                        <button class="btn btn-indigo" id="bottom-mute-btn"
-                            style="flex: 1.2; font-size: 16px; padding: 16px; font-weight: 800;"
-                            onclick="toggleMute()">🔊 Âm thanh</button>
+                        <button style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af;border:2px solid #93c5fd;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(59,130,246,0.25);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
+                            onclick="if(window._goBackFn){window._goBackFn();}else{goHome();}"><span style="font-size:16px;">◀</span>Quay lại</button>
+                        <button style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#e2e8f0,#cbd5e1);color:#334155;border:2px solid #94a3b8;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(100,116,139,0.25);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
+                            onclick="resetQuiz()"><span style="font-size:16px;">🔄</span>Làm lại</button>
+                        <button id="bottom-pause-btn"
+                            style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;display:none;background:linear-gradient(135deg,#fef9c3,#fde68a);color:#92400e;border:2px solid #fbbf24;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(251,191,36,0.3);line-height:1.3;flex-direction:column;align-items:center;gap:2px;"
+                            onclick="toggleTestTimer()"><span style="font-size:16px;">⏸️</span>Tạm dừng</button>
+                        <button style="flex:1.5;font-size:14px;padding:10px 8px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:2px solid #4ade80;border-radius:12px;cursor:pointer;box-shadow:0 4px 14px rgba(34,197,94,0.4);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
+                            onclick="submitQuiz()"><span style="font-size:18px;">✅</span>NỘP BÀI</button>
+                        <button id="bottom-mute-btn"
+                            style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#ede9fe,#ddd6fe);color:#5b21b6;border:2px solid #a78bfa;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(167,139,250,0.3);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
+                            onclick="toggleMute()"><span style="font-size:16px;">🔊</span>Nhạc nền</button>
                     </div>
 
                     <!-- Nút Mở Rộng -->
@@ -3804,6 +3806,11 @@
                     document.getElementById('journey-card').style.display = 'none';
                     var srb = document.getElementById('smart-review-banner');
                     if (srb) srb.style.display = 'none';
+                    // Xoá mô tả Ôn tập thông minh khi chuyển sang bài học bình thường
+                    if (sectionKey !== 'custom') {
+                        var _quote = document.getElementById('motivational-quote');
+                        if (_quote) _quote.innerHTML = '';
+                    }
                     const mainTimerBox = document.getElementById('main-timer-box');
                     if (mainTimerBox) mainTimerBox.style.display = 'block';
                     document.getElementById('mode-box-container').style.display = (currentList.length > 0 ? 'block' : 'none');
@@ -5233,6 +5240,26 @@
                         return;
                     }
                     var _ss = document.getElementById('stats-screen'); if (_ss) _ss.style.display = 'none';
+                    // Lưu callback quay lại màn hình trước đó
+                    var _prevLv = curLevel, _prevTy = curType, _prevDay = curDay;
+                    window._goBackFn = function() {
+                        if (listOverride) {
+                            // Nếu đang trong chế độ override (Smart Review, ôn sai...) → quay về màn chọn bài cũ
+                            var _qc2 = document.getElementById('quiz-container');
+                            var _sc3 = document.getElementById('submit-container');
+                            if (_qc2) _qc2.style.display = 'none';
+                            if (_sc3) _sc3.style.display = 'none';
+                            var _mbc = document.getElementById('mode-box-container');
+                            if (_mbc) _mbc.style.display = 'block';
+                            // Khôi phục lại các nút và nhóm
+                            ['group-1','group-2a','group-2b'].forEach(function(id) { var el = document.getElementById(id); if (el) el.style.display = 'block'; });
+                            ['btn-add-word','btn-import','btn-edit-list','btn-show-list','btn-shuffle','btn-flashcard','btn-match-game','btn-reaction-game'].forEach(function(id) { var el = document.getElementById(id); if (el) el.style.display = ''; });
+                            var jc = document.getElementById('journey-card'); if (jc) jc.style.display = '';
+                            var srb2 = document.getElementById('smart-review-banner'); if (srb2) srb2.style.display = '';
+                        } else {
+                            goHome();
+                        }
+                    };
                     var _qc = document.getElementById('quiz-container'); if (_qc) _qc.style.display = listOverride ? '' : 'none'; var _sc2 = document.getElementById('submit-container'); if (_sc2) _sc2.style.display = listOverride ? 'flex' : 'none'; var _rt2 = document.getElementById('rt-wrapper'); if (_rt2 && _rt2.style.display === 'none') _rt2.style.display = '';
                     curVanMode = false;
                     updateVanFab();
@@ -5268,6 +5295,11 @@
                     if (journeyCard) journeyCard.style.display = 'none';
                     var srb = document.getElementById('smart-review-banner');
                     if (srb) srb.style.display = 'none';
+                    // Xoa mo ta On tap thong minh khi chuyen sang bai hoc binh thuong
+                    if (lv !== 'custom') {
+                        var _quote2 = document.getElementById('motivational-quote');
+                        if (_quote2) _quote2.innerHTML = '';
+                    }
                     const mainTimerBox = document.getElementById('main-timer-box');
                     if (mainTimerBox) mainTimerBox.style.display = 'block';
 
@@ -6122,6 +6154,8 @@
                             if (exp) exp.style.display = 'block';
                         }
                     });
+                    // Tự động cuộn lên câu 1 để xem từ đầu
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
 
                 // ===== TIMER SYSTEM =====
@@ -6335,7 +6369,7 @@
 
                     ${curLevel === 'custom'
                             ? `<div style="display:flex;flex-direction:column;gap:10px;"><button onclick="showAllAnswers(); document.getElementById('completion-overlay').remove();" style="padding:16px;border-radius:14px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:white;font-size:17px;font-weight:900;border:none;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 20px rgba(59,130,246,0.4);">&#128203; XEM &#272;&#193;P &#193;N</button><button onclick="document.getElementById('completion-overlay').remove();" style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);color:#94a3b8;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.08);cursor:pointer;">&#x2715; &#272;&#243;ng</button></div>`
-                            : `<div style="display:flex;flex-direction:column;gap:10px;"><button onclick="markDayComplete(); document.getElementById('completion-overlay').remove(); confetti({particleCount:250,spread:80});" style="padding:16px;border-radius:14px;background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:17px;font-weight:900;border:none;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 20px rgba(16,185,129,0.4);">&#9989; HO&#192;N TH&#192;NH NG&#192;Y H&#7885;C!</button><button onclick="document.getElementById('completion-overlay').remove(); selectDay(curLevel, curType, curDay);" style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);color:#94a3b8;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.08);cursor:pointer;">&#128260; L&#224;m l&#7841;i t&#7915; &#273;&#7847;u</button></div>`}
+                            : `<div style="display:flex;flex-direction:column;gap:10px;"><button onclick="markDayComplete(); document.getElementById('completion-overlay').remove(); confetti({particleCount:250,spread:80});" style="padding:16px;border-radius:14px;background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:17px;font-weight:900;border:none;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 20px rgba(16,185,129,0.4);">&#9989; HO&#192;N TH&#192;NH NG&#192;Y H&#7885;C!</button><button onclick="document.getElementById('completion-overlay').remove(); renderQuiz(); if(typeof resetTimer==='function') resetTimer(); window.scrollTo({top:0,behavior:'smooth'});" style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);color:#94a3b8;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.08);cursor:pointer;">&#128260; L&#224;m l&#7841;i t&#7915; &#273;&#7847;u</button></div>`}
 
                 </div>`;
                     document.body.appendChild(overlay);
@@ -8616,34 +8650,62 @@
                     d[id] = s;
                     saveSrsDb(d);
                 },
-                // Ghi nhận lần TRẢ LỜI ĐÚNG — nếu đúng 3 lần liên tiếp thì thoát "hay sai"
+                // Ghi nhận lần TRẢ LỜI ĐÚNG — đúng 3 lần liên tiếp → wrongCount giảm 1, thoát hay sai khi < 2
                 recordCorrectAnswer: function (item) {
                     var id = itemId(item); if (!id) return;
                     var d = getSrsDb();
                     var s = d[id];
-                    if (!s) return; // Nếu chưa từng sai thì không cần xử lý gì đặc biệt
+                    if (!s) return;
                     if (!s.consecutiveCorrect) s.consecutiveCorrect = 0;
-                    // Chỉ tăng chuỗi đúng nếu từ đang ở trạng thái "hay sai"
+                    // Chỉ đếm chuỗi đúng khi từ đang ở trạng thái "hay sai"
                     if ((s.wrongCount || 0) >= 2) {
                         s.consecutiveCorrect = (s.consecutiveCorrect || 0) + 1;
-                        // Đúng >= 3 lần liên tiếp → thoát "hay sai"
                         if (s.consecutiveCorrect >= 3) {
-                            s.wrongCount = 0;       // Reset về 0 → không còn hay sai
-                            s.typingMistakes = 0;   // Reset đếm lỗi gõ
-                            s.consecutiveCorrect = 0;
-                            // Advance lên bậc tiếp theo trong lịch cố định
-                            var curIdx = s.stepIdx !== undefined ? s.stepIdx : getStepIdx(s.interval || 0);
-                            var nextIdx = Math.min(curIdx + 1, SRS_STEPS.length - 1);
-                            s.stepIdx = nextIdx;
-                            s.interval = getStepInterval(nextIdx);
-                            s.nextAt = Date.now() + (s.interval * 86400000);
+                            // Đúng 3 lần liên tiếp → giảm wrongCount đi 1
+                            s.wrongCount = Math.max(0, (s.wrongCount || 0) - 1);
+                            s.typingMistakes = Math.max(0, (s.typingMistakes || 0) - 1);
+                            s.consecutiveCorrect = 0; // Reset chuỗi để đếm lại
+                            // Nếu đã giảm xuống dưới ngưỡng → thoát hay sai, advance bậc
+                            if (s.wrongCount < 2) {
+                                var curIdx = s.stepIdx !== undefined ? s.stepIdx : getStepIdx(s.interval || 0);
+                                var nextIdx = Math.min(curIdx + 1, SRS_STEPS.length - 1);
+                                s.stepIdx = nextIdx;
+                                s.interval = getStepInterval(nextIdx);
+                                s.nextAt = Date.now() + (s.interval * 86400000);
+                            }
                         }
                     }
                     saveSrsDb(d);
                 }
             };
             window.collectAllItemsForSR = function () { var all = []; try { if (typeof db !== 'undefined' && typeof activeLevels !== 'undefined') { activeLevels.forEach(function (lv) { ['voca', 'gram', 'voca_quiz', 'gram_quiz'].forEach(function (ty) { var b = (db[lv] || {})[ty]; if (!b) return; Object.values(b).forEach(function (day) { (day.list || []).forEach(function (it) { it._src = 'user'; all.push(it); }); }); }); }); } } catch (e) { } try { if (typeof vanData !== 'undefined' && typeof VAN_CONTAINERS_MAP !== 'undefined') { var map = VAN_CONTAINERS_MAP[currentLang] || {}; Object.keys(map).forEach(function (sec) { var sd = vanData[sec]; if (!sd) return;[].concat(sd.struct || []).forEach(function (lesson) { (lesson.list || []).forEach(function (it) { if (typeof loadVanItemExtra === 'function') loadVanItemExtra(it); it._src = 'van'; all.push(it); }); }); }); } } catch (e) { } return all; };
-            window.computeSrStats = function (items) { var srsDb = getSrsDb(), fcStars = new Set(JSON.parse(localStorage.getItem('fc_starred_keys') || '[]')), now = Date.now(), tagged = { due: [], wrong: [], new: [], star: [], all: [] }; items.forEach(function (item) { var id = itemId(item); if (!id) return; var s = srsDb[id], key = (item.q || item.c1 || '').trim(), isStar = fcStars.has(key); if (!s || !s.lastAt) { if (item._src === 'user') tagged.new.push(item); } else { var mem = memScore(s); if ((s.nextAt && s.nextAt <= now) || mem < 50) tagged.due.push(item); if ((s.wrongCount || 0) >= 2) tagged.wrong.push(item); } if (isStar) tagged.star.push(item); tagged.all.push(item); }); return { due: tagged.due.length, wrong: tagged.wrong.length, 'new': tagged.new.length, star: tagged.star.length, tagged: tagged }; };
+            window.computeSrStats = function (items) {
+                var srsDb = getSrsDb(),
+                    fcStars = new Set(JSON.parse(localStorage.getItem('fc_starred_keys') || '[]')),
+                    now = Date.now(),
+                    tagged = { due: [], wrong: [], new: [], star: [], all: [] };
+                items.forEach(function (item) {
+                    var id = itemId(item); if (!id) return;
+                    var s = srsDb[id], key = (item.q || item.c1 || '').trim(), isStar = fcStars.has(key);
+                    if (!s || !s.lastAt) {
+                        if (item._src === 'user') tagged.new.push(item);
+                    } else {
+                        var isHaySai = (s.wrongCount || 0) >= 2;
+                        if (isHaySai) {
+                            // Từ hay sai — đưa vào wrong, KHÔNG đưa vào due để tránh trùng
+                            tagged.wrong.push(item);
+                        } else {
+                            // Từ bình thường: sắp quên khi ngày hiện tại − ngày ôn gần nhất >= interval
+                            var daysSinceLast = (now - s.lastAt) / 86400000;
+                            var isDue = daysSinceLast >= (s.interval || 1);
+                            if (isDue) tagged.due.push(item);
+                        }
+                    }
+                    if (isStar) tagged.star.push(item);
+                    tagged.all.push(item);
+                });
+                return { due: tagged.due.length, wrong: tagged.wrong.length, 'new': tagged.new.length, star: tagged.star.length, tagged: tagged };
+            };
             window.openSmartReviewModal = function () { var modal = document.getElementById('smart-review-modal'); if (!modal) return; modal.style.display = 'block'; document.getElementById('sr-selected-category').value = 'all'; document.querySelectorAll('.sr-stat-card').forEach(function (c) { c.style.outline = 'none'; c.classList.remove('active'); }); var defaultCard = document.getElementById('sr-card-all'); if (defaultCard) { defaultCard.style.outline = '2.5px solid #f97316'; defaultCard.classList.add('active'); } setTimeout(function () { var items = window.collectAllItemsForSR(), stats = window.computeSrStats(items); window._srStats = stats; document.getElementById('sr-count-due').textContent = stats.due + ' từ'; document.getElementById('sr-count-wrong').textContent = stats.wrong + ' từ'; document.getElementById('sr-count-new').textContent = stats['new'] + ' từ'; document.getElementById('sr-count-star').textContent = stats.star + ' từ'; var badge = document.getElementById('sr-due-badge'); if (badge) { var t = stats.due + stats.wrong; if (t > 0) { badge.style.display = 'block'; badge.textContent = t; } else badge.style.display = 'none'; } }, 80); };
             window.closeSmartReviewModal = function () { document.getElementById('smart-review-modal').style.display = 'none'; };
             window._inSmartReviewMode = false;
@@ -8947,7 +9009,8 @@
         var el = document.getElementById('sr-banner-msg');
         if (el) el.textContent = msgs[dayIdx];
 
-        window.addEventListener('load', function () {
+        // Chạy ngay sau DOMContentLoaded (không đợi toàn bộ trang load xong)
+        function runSrBannerUpdate() {
             setTimeout(function () {
                 try {
                     var items = window.collectAllItemsForSR ? window.collectAllItemsForSR() : [];
@@ -8961,9 +9024,7 @@
                     if (sideBadge && total > 0) { sideBadge.style.display = 'flex'; sideBadge.textContent = total; }
                     var bBadge = document.getElementById('sr-banner-badge');
                     if (bBadge && total > 0) { bBadge.style.display = 'flex'; bBadge.textContent = total; }
-                    if (stats.due > 0) { var d = document.getElementById('sr-banner-due'), dn = document.getElementById('sr-banner-due-n'); if (d) d.style.display = 'inline-flex'; if (dn) dn.textContent = stats.due; }
-                    if (stats.wrong > 0) { var w = document.getElementById('sr-banner-wrong'), wn = document.getElementById('sr-banner-wrong-n'); if (w) w.style.display = 'inline-flex'; if (wn) wn.textContent = stats.wrong; }
-                    if (stats['new'] > 0) { var nw = document.getElementById('sr-banner-new'), nwn = document.getElementById('sr-banner-new-n'); if (nw) nw.style.display = 'inline-flex'; if (nwn) nwn.textContent = stats['new']; }
+                    // Badges sr-banner-due/wrong/new ẩn — breakdown đã hiển thị trong khung chính
 
                     // ── THÔNG BÁO CÁ NHÂN HOÁ ──────────────────────────────
                     var msgEl = document.getElementById('sr-banner-msg');
@@ -8971,45 +9032,61 @@
 
                     // Lấy tên người dùng (biến toàn cục userName từ extracted_script.js)
                     var name = (typeof userName !== 'undefined' && userName && userName.trim()) ? userName.trim() : '';
-                    var greeting = name ? ('Chào <b style="color:#fde68a;">' + name + '</b>! ') : 'Chào bạn! ';
 
                     var html = '';
                     if (total === 0 && stats['new'] === 0) {
-                        // Không có gì cần ôn hôm nay
-                        html = greeting + '<span style="color:#86efac;">Tuyệt vời — hôm nay bạn không có từ nào cần ôn lại! 🎉 Hãy thêm từ mới hoặc quay lại sau nhé.</span>';
+                        // Không có gì cần ôn — hiện thông báo ổn áp ✅
+                        html = '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
+                            + '<div style="background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(5,150,105,0.15));border:1.5px solid rgba(16,185,129,0.4);border-radius:14px;padding:10px 16px;display:flex;align-items:center;gap:10px;">'
+                            + '<span style="font-size:24px;">🎉</span>'
+                            + '<div>'
+                            + '<div style="font-size:13px;font-weight:900;color:#6ee7b7;">⭐ ' + (name ? 'Chào <b style="color:#fde68a;">' + name + '</b>!' : 'Chào bạn!') + '</div>'
+                            + '<div style="font-size:12px;color:#a7f3d0;margin-top:2px;">Hôm nay không có từ nào cần ôn — tuyệt vời!</div>'
+                            + '</div></div></div>';
                     } else if (total === 0 && stats['new'] > 0) {
-                        // Chỉ có từ chưa ôn
-                        html = greeting
-                            + 'Có <b style="color:#a5b4fc;">' + stats['new'] + ' từ mới</b> chưa từng ôn đang chờ bạn kích hoạt! 🟣';
+                        // Chỉ có từ mới chưa ôn
+                        html = '<div style="background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(139,92,246,0.15));border:1.5px solid rgba(165,180,252,0.4);border-radius:14px;padding:10px 16px;display:flex;align-items:center;gap:10px;">'
+                            + '<span style="font-size:26px;font-weight:900;color:#a5b4fc;font-family:\'Baloo 2\',sans-serif;">' + stats['new'] + '</span>'
+                            + '<div>'
+                            + '<div style="font-size:12px;font-weight:900;color:#c4b5fd;">⭐ ' + (name ? 'Chào <b style="color:#fde68a;">' + name + '</b>!' : 'Chào bạn!') + '</div>'
+                            + '<div style="font-size:12px;color:#ddd6fe;margin-top:1px;">từ mới chờ bạn kích hoạt! 🟣</div>'
+                            + '</div></div>';
                     } else {
-                        // Có từ cần ôn theo lịch SRS
-                        var detail = [];
-                        if (stats.due > 0) detail.push('<span style="color:#fca5a5;">🔴 ' + stats.due + ' sắp quên</span>');
-                        if (stats.wrong > 0) detail.push('<span style="color:#fdba74;">🟠 ' + stats.wrong + ' hay sai</span>');
+                        // Có từ cần ôn theo lịch SRS — KHUNG NỔI BẬT CHÍNH
+                        var urgencyIcon = total >= 20 ? '🚨' : (total >= 10 ? '💪' : '⚡');
+                        var urgencyText = total >= 20 ? 'Ôn ngay kẻo não quên mất!' : (total >= 10 ? 'Dành 10 phút ôn ngay!' : 'Nhanh thôi, vài phút thôi!');
+                        var nameTag = name ? ('Chào <b style="color:#fde68a;font-size:14px;">' + name + '</b>! &nbsp;') : 'Chào bạn! ';
 
-                        var urgency = '';
-                        if (total >= 20) urgency = ' Ôn ngay kẻo não quên mất! 🚨';
-                        else if (total >= 10) urgency = ' Dành 10 phút ôn ngay nào! 💪';
-                        else urgency = ' Nhanh thôi, chỉ vài phút thôi! ⚡';
-
-                        var nameInMsg = name ? ('<b style="color:#fde68a;">' + name + '</b>') : 'bạn';
-                        html = greeting
-                            + 'Hôm nay ' + nameInMsg + ' cần ôn lại '
-                            + '<b style="color:#fb923c;font-size:15px;">' + total + ' từ</b> nhé!'
-                            + urgency
-                            + '<span style="display:block;margin-top:4px;font-size:11.5px;opacity:0.85;">'
-                            + detail.join(' &nbsp;+&nbsp; ')
-                            + (stats['new'] > 0 ? ' &nbsp;+&nbsp; <span style="color:#a5b4fc;">🟣 ' + stats['new'] + ' từ mới</span>' : '')
-                            + '</span>';
+                        html = '<div style="font-size:12px;color:#94a3b8;margin-bottom:6px;">⭐ ' + nameTag + 'Hôm nay bạn cần ôn:</div>'
+                            + '<div style="background:linear-gradient(135deg,rgba(249,115,22,0.22),rgba(239,68,68,0.18));border:2px solid rgba(249,115,22,0.55);border-radius:14px;padding:10px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 20px rgba(249,115,22,0.25);">'
+                            + '<div style="text-align:center;flex-shrink:0;">'
+                            + '  <div style="font-size:36px;font-weight:900;color:#fb923c;font-family:\'Baloo 2\',sans-serif;line-height:1;">' + total + '</div>'
+                            + '  <div style="font-size:10px;color:#fed7aa;font-weight:800;letter-spacing:0.5px;margin-top:-2px;">TỪ</div>'
+                            + '</div>'
+                            + '<div style="width:1px;height:44px;background:rgba(249,115,22,0.35);flex-shrink:0;"></div>'
+                            + '<div style="flex:1;">'
+                            + '<div style="font-size:13px;font-weight:900;color:#fff;line-height:1.3;">C&#7847;n &#244;n h&#244;m nay ' + urgencyIcon + '</div>'
+                            + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;">'
+                            + '<span style="background:rgba(239,68,68,0.25);border:1px solid rgba(239,68,68,0.5);border-radius:8px;padding:2px 8px;font-size:11px;color:#fca5a5;font-weight:800;">&#128308; ' + stats.due + ' sắp quên</span>'
+                            + '<span style="background:rgba(249,115,22,0.25);border:1px solid rgba(249,115,22,0.5);border-radius:8px;padding:2px 8px;font-size:11px;color:#fdba74;font-weight:800;">&#128992; ' + stats.wrong + ' hay sai</span>'
+                            + (stats['new'] > 0 ? '<span style="background:rgba(99,102,241,0.2);border:1px solid rgba(165,180,252,0.4);border-radius:8px;padding:2px 8px;font-size:11px;color:#a5b4fc;font-weight:800;">&#128995; ' + stats['new'] + ' từ mới</span>' : '')
+                            + '</div>'
+                            + '</div>'
+                            + '</div>';
                     }
 
                     msgEl.style.fontStyle = 'normal';
                     msgEl.style.color = '#cbd5e1';
-                    msgEl.style.lineHeight = '1.6';
+                    msgEl.style.lineHeight = '1.4';
                     msgEl.innerHTML = html;
 
                 } catch (e) { }
-            }, 2500);
-        });
+            }, 300);
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', runSrBannerUpdate);
+        } else {
+            runSrBannerUpdate();
+        }
     })();
 </script>
