@@ -527,54 +527,90 @@
             font-weight: 800;
         }
 
+        @keyframes mg-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
         /* MATCH GAME STYLES */
         .mg-item {
-            background: rgba(30, 41, 59, 0.8);
-            border: 2px solid #334155;
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 16px;
+            padding: clamp(12px, 2vw, 20px);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
             text-align: center;
-            font-weight: 600;
+            font-weight: 800;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 60px;
+            min-height: clamp(65px, 8vh, 85px);
             user-select: none;
-            color: #f8fafc;
+            font-family: 'Baloo 2', 'Kosugi Maru', sans-serif;
+            font-size: clamp(16px, 2.5vw, 22px);
         }
 
-        .mg-item:hover {
-            background: rgba(51, 65, 85, 0.8);
-            transform: translateY(-2px);
+        /* Cột trái: tím indigo */
+        .mg-item.mg-left {
+            background: #ede9fe;
+            border: 3px solid #7c3aed;
+            color: #3b0764;
+            box-shadow: 0 3px 8px rgba(124,58,237,0.18);
+        }
+        .mg-item.mg-left:hover {
+            background: #ddd6fe;
+            border-color: #5b21b6;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(91,33,182,0.28);
+        }
+        .mg-item.mg-left.selected {
+            background: #c4b5fd;
+            border-color: #4c1d95;
+            border-width: 4px;
+            box-shadow: 0 0 0 3px rgba(76,29,149,0.2), 0 6px 18px rgba(76,29,149,0.3);
+            transform: scale(1.03);
+            color: #2e1065;
         }
 
-        .mg-item.selected {
-            background: rgba(59, 130, 246, 0.2);
-            border-color: #3b82f6;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
-            transform: scale(1.02);
+        /* Cột phải: cam amber */
+        .mg-item.mg-right {
+            background: #fff7ed;
+            border: 3px solid #ea580c;
+            color: #7c2d12;
+            box-shadow: 0 3px 8px rgba(234,88,12,0.15);
+        }
+        .mg-item.mg-right:hover {
+            background: #fed7aa;
+            border-color: #c2410c;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(194,65,12,0.28);
+        }
+        .mg-item.mg-right.selected {
+            background: #fdba74;
+            border-color: #9a3412;
+            border-width: 4px;
+            box-shadow: 0 0 0 3px rgba(154,52,18,0.2), 0 6px 18px rgba(154,52,18,0.3);
+            transform: scale(1.03);
+            color: #431407;
         }
 
         .mg-item.matched {
             animation: matchAnim 0.8s forwards;
             pointer-events: none;
-            color: #fff;
         }
 
         @keyframes matchAnim {
             0% {
-                background: rgba(16, 185, 129, 0.5);
-                border-color: #fbbf24;
-                box-shadow: 0 0 20px rgba(251, 191, 36, 0.8);
-                transform: scale(1.05);
+                background: #bbf7d0;
+                border-color: #16a34a;
+                box-shadow: 0 0 20px rgba(22,163,74,0.5);
+                transform: scale(1.06);
+                color: #14532d;
             }
 
             40% {
-                background: rgba(16, 185, 129, 0.9);
-                border-color: #fbbf24;
-                box-shadow: 0 0 30px rgba(251, 191, 36, 1);
+                background: #86efac;
+                border-color: #15803d;
+                box-shadow: 0 0 30px rgba(22,163,74,0.8);
                 transform: scale(1.1);
             }
 
@@ -586,9 +622,11 @@
         }
 
         .mg-item.error {
-            background: rgba(239, 68, 68, 0.2);
-            border-color: #ef4444;
+            background: #fee2e2;
+            border-color: #dc2626;
+            border-width: 3px;
             animation: shake 0.4s ease-in-out;
+            color: #991b1b;
         }
 
         @keyframes shake {
@@ -3529,63 +3567,73 @@
 
             <!-- MATCH GAME MODAL -->
             <div id="match-game-modal" class="modal">
-                <div class="modal-content"
-                    style="max-width: 800px; width: 95%; padding: 25px; background: #0f172a; position: relative; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh;">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: #f97316; margin: 0; font-size: 22px;">🎮 NỐI TỪ</h2>
-                        <div style="display: flex; gap: 10px; font-weight: bold; font-size: 13px;">
-                            <div
-                                style="background: rgba(249, 115, 22, 0.2); padding: 5px 10px; border-radius: 8px; color: #fdba74;">
-                                Tiến độ: <span id="mg-progress">0/0</span></div>
-                            <div
-                                style="background: rgba(16, 185, 129, 0.2); padding: 5px 10px; border-radius: 8px; color: #6ee7b7;">
-                                Điểm: <span id="mg-score">0</span></div>
-                            <div
-                                style="background: rgba(59, 130, 246, 0.2); padding: 5px 10px; border-radius: 8px; color: #93c5fd;">
-                                ⏳ <span id="mg-timer">00:00</span></div>
+                <div class="modal-content" style="max-width:1100px;width:98%;padding:100px 70px 70px 70px;background:url('khunggame.png') center/100% 100% no-repeat, #f0f4ff;border:none;border-radius:30px;position:relative;overflow:hidden;display:flex;flex-direction:column;max-height:96vh;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+
+                    <!-- ① START SCREEN -->
+                    <div id="mg-start-screen" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:18px;padding:24px 0;text-align:center;">
+                        <div style="font-size:70px;animation:mg-bounce 1.2s ease infinite;">🎮</div>
+                        <h2 style="color:#1e3a8a;font-size:26px;font-weight:900;margin:0;font-family:'Baloo 2',sans-serif;">GAME NỐI TỪ</h2>
+                        <p style="color:#475569;font-size:14px;margin:0;line-height:1.8;">Nối từ bên trái <b style="color:#7c3aed">tím</b> với nghĩa bên phải <b style="color:#ea580c">cam</b>.<br>Nối đúng càng nhiều càng tốt! ⭐</p>
+                        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+                            <div style="background:#ede9fe;border:2px solid #7c3aed;border-radius:12px;padding:12px 22px;text-align:center;">
+                                <div style="font-size:20px;">📚</div>
+                                <div style="color:#4c1d95;font-weight:800;font-size:14px;" id="mg-word-count">-- từ</div>
+                            </div>
+                            <div style="background:#fff7ed;border:2px solid #ea580c;border-radius:12px;padding:12px 22px;text-align:center;">
+                                <div style="font-size:20px;">🧩</div>
+                                <div style="color:#9a3412;font-weight:800;font-size:14px;" id="mg-round-count">-- vòng</div>
+                            </div>
+                        </div>
+                        <button onclick="startMatchGame()"
+                            style="background:linear-gradient(135deg,#1e3a8a,#3b82f6,#6366f1);color:white;padding:16px 52px;font-size:18px;font-weight:900;border:none;border-radius:20px;cursor:pointer;box-shadow:0 6px 20px rgba(30,58,138,0.4);transition:0.2s;font-family:'Baloo 2',sans-serif;letter-spacing:1px;"
+                            onmouseover="this.style.transform='scale(1.05)'"
+                            onmouseout="this.style.transform='scale(1)'">▶ BẮT ĐẦU</button>
+                        <button onclick="closeMatchGame()"
+                            style="background:transparent;color:#94a3b8;padding:8px 20px;font-size:13px;font-weight:700;border:1.5px solid #cbd5e1;border-radius:10px;cursor:pointer;">✕ Đóng</button>
+                    </div>
+
+                    <!-- ② GAME HEADER -->
+                    <div id="mg-game-header" style="display:none;justify-content:space-between;align-items:center;margin-bottom:16px;flex-shrink:0;">
+                        <h2 style="color:#1e3a8a;margin:0;font-size:22px;font-weight:900;font-family:'Baloo 2',sans-serif;">🎮 NỐI TỪ</h2>
+                        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                            <div style="background:#dbeafe;border:2px solid #3b82f6;padding:5px 12px;border-radius:20px;color:#1e40af;font-weight:800;font-size:13px;">Tiến độ: <span id="mg-progress">0/0</span></div>
+                            <div style="background:#dcfce7;border:2px solid #16a34a;padding:5px 12px;border-radius:20px;color:#166534;font-weight:800;font-size:13px;">Điểm: <span id="mg-score">0</span></div>
+                            <div style="background:#fef9c3;border:2px solid #ca8a04;padding:5px 12px;border-radius:20px;color:#854d0e;font-weight:800;font-size:13px;">⏱ <span id="mg-timer">00:00</span></div>
+                            <button id="mg-mute-btn" onclick="toggleMgMusic()" title="Tắt/Bật nhạc"
+                                style="background:#e0e7ff;border:2px solid #6366f1;color:#312e81;width:34px;height:34px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🔊</button>
+                            <button onclick="closeMatchGame()" title="Đóng game"
+                                style="background:#fee2e2;border:2px solid #ef4444;color:#991b1b;width:34px;height:34px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✕</button>
                         </div>
                     </div>
 
-                    <div id="mg-board"
-                        style="display: flex; gap: 20px; flex: 1; overflow-y: auto; margin-bottom: 20px;">
-                        <!-- Left Column (Japanese) -->
-                        <div id="mg-left-col" style="flex: 1; display: flex; flex-direction: column; gap: 10px;"></div>
-                        <!-- Right Column (Vietnamese) -->
-                        <div id="mg-right-col" style="flex: 1; display: flex; flex-direction: column; gap: 10px;"></div>
+                    <!-- ③ GAME BOARD -->
+                    <div id="mg-board" style="display:none;gap:16px;flex:1;overflow-y:auto;">
+                        <div id="mg-left-col" style="flex:1;display:flex;flex-direction:column;gap:10px;"></div>
+                        <div id="mg-right-col" style="flex:1;display:flex;flex-direction:column;gap:10px;"></div>
                     </div>
 
-                    <!-- End Screen -->
-                    <div id="mg-end-screen"
-                        style="display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; margin-bottom: 20px;">
-                        <h2 style="color: #10b981; font-size: 28px; margin-bottom: 10px;">🎉 CHÚC MỪNG BẠN!</h2>
-                        <p style="color: #cbd5e1; font-size: 16px; margin-bottom: 20px; text-align: center;">Bạn đã hoàn
-                            thành trò chơi.</p>
-                        <div style="display: flex; gap: 20px; margin-bottom: 30px;">
-                            <div
-                                style="background: rgba(16, 185, 129, 0.2); padding: 15px 25px; border-radius: 12px; text-align: center;">
-                                <div style="color: #6ee7b7; font-size: 14px; margin-bottom: 5px;">TỔNG ĐIỂM</div>
-                                <div style="color: #fff; font-size: 24px; font-weight: bold;" id="mg-final-score">0
-                                </div>
+                    <!-- ④ END SCREEN -->
+                    <div id="mg-end-screen" style="display:none;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:16px;text-align:center;padding:20px 0;">
+                        <div style="font-size:60px;">🎉</div>
+                        <h2 style="color:#1e3a8a;font-size:28px;font-weight:900;margin:0;">CHÚC MỪNG!</h2>
+                        <p style="color:#334155;font-size:15px;margin:0;">Bạn đã hoàn thành trò chơi!</p>
+                        <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
+                            <div style="background:#dcfce7;border:3px solid #16a34a;padding:16px 28px;border-radius:16px;text-align:center;">
+                                <div style="color:#166534;font-size:12px;font-weight:800;margin-bottom:4px;">TỔNG ĐIỂM</div>
+                                <div style="color:#14532d;font-size:28px;font-weight:900;" id="mg-final-score">0</div>
                             </div>
-                            <div
-                                style="background: rgba(59, 130, 246, 0.2); padding: 15px 25px; border-radius: 12px; text-align: center;">
-                                <div style="color: #93c5fd; font-size: 14px; margin-bottom: 5px;">THỜI GIAN</div>
-                                <div style="color: #fff; font-size: 24px; font-weight: bold;" id="mg-final-time">00:00
-                                </div>
+                            <div style="background:#dbeafe;border:3px solid #3b82f6;padding:16px 28px;border-radius:16px;text-align:center;">
+                                <div style="color:#1e40af;font-size:12px;font-weight:800;margin-bottom:4px;">THỜI GIAN</div>
+                                <div style="color:#1e3a8a;font-size:28px;font-weight:900;" id="mg-final-time">00:00</div>
                             </div>
                         </div>
-                        <button class="btn"
-                            style="background: linear-gradient(135deg, #f43f5e, #f97316); color: white; padding: 15px 30px; font-size: 16px; border-radius: 12px; font-weight: bold; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(244,63,94,0.4);"
-                            onclick="startMatchGame()">🔄 CHƠI LẠI</button>
+                        <div style="display:flex;gap:12px;">
+                            <button onclick="startMatchGame()" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6);color:white;padding:13px 28px;font-size:15px;border-radius:14px;font-weight:900;border:none;cursor:pointer;box-shadow:0 4px 15px rgba(30,58,138,0.35);">🔄 Chơi lại</button>
+                            <button onclick="closeMatchGame()" style="background:#e2e8f0;color:#1e3a8a;padding:13px 28px;font-size:15px;border-radius:14px;font-weight:900;border:2px solid #94a3b8;cursor:pointer;">✕ Đóng</button>
+                        </div>
                     </div>
-
-                    <button class="btn btn-gray"
-                        style="width: 100%; font-size: 16px; padding: 15px; justify-content: center;"
-                        onclick="closeMatchGame()">ĐÓNG GAME</button>
                 </div>
             </div>
-
             <!-- EDIT DAY MODAL -->
             <div id="edit-day-modal" class="modal">
                 <div class="modal-content" style="max-width: 400px; padding: 25px;">
@@ -4192,23 +4240,54 @@
                         mgChunks.push(mgData.slice(i, i + 6));
                     }
 
+                    // Cập nhật thống kê trên màn hình start
+                    const wc = document.getElementById('mg-word-count');
+                    const rc = document.getElementById('mg-round-count');
+                    if (wc) wc.textContent = mgData.length + ' từ';
+                    if (rc) rc.textContent = mgChunks.length + ' vòng';
+
                     document.getElementById('match-game-modal').style.display = 'flex';
-                    startMatchGame();
+                    // Hiện start screen, ẩn game
+                    document.getElementById('mg-start-screen').style.display = 'flex';
+                    document.getElementById('mg-game-header').style.display = 'none';
+                    document.getElementById('mg-board').style.display = 'none';
+                    document.getElementById('mg-end-screen').style.display = 'none';
                 }
 
                 function closeMatchGame() {
                     document.getElementById('match-game-modal').style.display = 'none';
                     clearInterval(mgInterval);
+                    // Dừng nhạc game
+                    if (window._mgAudio) {
+                        window._mgAudio.pause();
+                        window._mgAudio.currentTime = 0;
+                    }
                 }
 
                 function startMatchGame() {
+                    // Ẩn start screen, hiện game
+                    document.getElementById('mg-start-screen').style.display = 'none';
+                    document.getElementById('mg-game-header').style.display = 'flex';
+                    document.getElementById('mg-board').style.display = 'flex';
+
                     mgCurrentChunkIdx = 0;
                     mgScore = 0;
                     mgTimer = 0;
                     document.getElementById('mg-score').innerText = '0';
                     document.getElementById('mg-timer').innerText = '00:00';
                     document.getElementById('mg-end-screen').style.display = 'none';
-                    document.getElementById('mg-board').style.display = 'flex';
+
+                    // Phát nhạc game
+                    if (!window._mgAudio) {
+                        window._mgAudio = new Audio('nhacgame.mp3');
+                        window._mgAudio.loop = true;
+                        window._mgAudio.volume = 0.5;
+                    }
+                    window._mgMuted = false;
+                    const muteBtn = document.getElementById('mg-mute-btn');
+                    if (muteBtn) muteBtn.textContent = '🔊';
+                    window._mgAudio.currentTime = 0;
+                    window._mgAudio.play().catch(() => {});
 
                     clearInterval(mgInterval);
                     mgInterval = setInterval(() => {
@@ -4251,7 +4330,7 @@
 
                     mgLeftItems.forEach(item => {
                         const div = document.createElement('div');
-                        div.className = 'mg-item';
+                        div.className = 'mg-item mg-left';
                         div.id = `mg-left-${item.id}`;
                         div.innerText = item.text;
                         div.onclick = () => selectMgItem('left', item.id, div);
@@ -4260,7 +4339,7 @@
 
                     mgRightItems.forEach(item => {
                         const div = document.createElement('div');
-                        div.className = 'mg-item';
+                        div.className = 'mg-item mg-right';
                         div.id = `mg-right-${item.id}`;
                         div.innerText = item.text;
                         div.onclick = () => selectMgItem('right', item.id, div);
@@ -4369,12 +4448,19 @@
                 function endMatchGame() {
                     clearInterval(mgInterval);
                     document.getElementById('mg-board').style.display = 'none';
+                    document.getElementById('mg-game-header').style.display = 'none';
                     document.getElementById('mg-end-screen').style.display = 'flex';
                     document.getElementById('mg-final-score').innerText = mgScore;
 
                     const mins = Math.floor(mgTimer / 60).toString().padStart(2, '0');
                     const secs = (mgTimer % 60).toString().padStart(2, '0');
                     document.getElementById('mg-final-time').innerText = `${mins}:${secs}`;
+
+                    // Dừng nhạc khi kết thúc
+                    if (window._mgAudio) {
+                        window._mgAudio.pause();
+                        window._mgAudio.currentTime = 0;
+                    }
 
                     if (typeof confetti === 'function') {
                         confetti({
@@ -4384,6 +4470,14 @@
                             origin: { y: 0.6 }
                         });
                     }
+                }
+
+                function toggleMgMusic() {
+                    if (!window._mgAudio) return;
+                    const btn = document.getElementById('mg-mute-btn');
+                    window._mgMuted = !window._mgMuted;
+                    window._mgAudio.muted = window._mgMuted;
+                    if (btn) btn.textContent = window._mgMuted ? '🔇' : '🔊';
                 }
 
                 function openFlashcard() {
