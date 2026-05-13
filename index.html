@@ -91,7 +91,7 @@
         /* --- SIDEBAR --- */
         .sidebar {
             width: var(--sidebar-width);
-            background: linear-gradient(160deg, #0f0c29 0%, #302b63 45%, #24243e 75%, #1a1a3e 100%);
+            background: linear-gradient(160deg, #05040f 0%, #130f2e 35%, #0e0c22 65%, #08071a 100%);
             background-size: 200% 200%;
             animation: headerShimmer 10s ease infinite;
             height: 100vh;
@@ -342,9 +342,11 @@
             background: var(--card-bg);
             border-radius: 24px;
             padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 3px solid #b8860b;
             margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
+                        0 0 0 1px rgba(255, 215, 0, 0.15),
+                        0 0 16px rgba(184, 134, 11, 0.25);
         }
 
         .btn {
