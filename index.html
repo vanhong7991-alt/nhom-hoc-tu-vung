@@ -342,11 +342,11 @@
             background: var(--card-bg);
             border-radius: 24px;
             padding: 25px;
-            border: 3px solid #b8860b;
+            border: 4px solid #7dd3fc;
             margin-bottom: 25px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
-                        0 0 0 1px rgba(255, 215, 0, 0.15),
-                        0 0 16px rgba(184, 134, 11, 0.25);
+                        0 0 0 1px rgba(186, 230, 253, 0.2),
+                        0 0 20px rgba(125, 211, 252, 0.2);
         }
 
         .btn {
@@ -6309,12 +6309,18 @@
 
                     // Xác định nhánh prompt
                     let branch = 'free_corner';
+                    const isToeicSection = curVanSection && curVanSection.toLowerCase().includes('toeic');
+                    const isHskSection = curVanSection && curVanSection.toLowerCase().includes('hsk');
                     if (curVanMode) {
-                        if (curVanSection === 'n1voca' || curVanSection === 'n2voca') branch = (curVanSub === 'quiz') ? 'jlpt_quiz' : 'jlpt_voca';
+                        if (isToeicSection) branch = 'en_voca';
+                        else if (isHskSection) branch = 'cn_voca';
+                        else if (curVanSection === 'n1voca' || curVanSection === 'n2voca') branch = (curVanSub === 'quiz') ? 'jlpt_quiz' : 'jlpt_voca';
                         else if (curVanSection === 'n2gram') branch = (curVanSub === 'quiz') ? 'jlpt_gram_quiz' : 'jlpt_gram';
                         else if (curVanSection === 'bjtvoca') branch = (curVanSub === 'quiz') ? 'bjt_quiz' : 'bjt_voca';
                     } else {
-                        if (curType === 'voca') branch = 'jlpt_voca';
+                        if (currentLang === 'en') branch = 'en_voca';
+                        else if (currentLang === 'cn') branch = 'cn_voca';
+                        else if (curType === 'voca') branch = 'jlpt_voca';
                         else if (curType === 'voca_quiz') branch = 'jlpt_quiz';
                         else if (curType === 'gram') branch = 'jlpt_gram';
                         else if (curType === 'gram_quiz') branch = 'jlpt_gram_quiz';
