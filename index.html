@@ -1968,6 +1968,46 @@
         </div>
     </div>
 
+    <!-- ===== AI SETTINGS MODAL ===== -->
+    <div id="ai-settings-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.9); z-index: 9999; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px);">
+        <div class="modal-content" style="border-color: #10b981; max-width: 420px;">
+            <h2 style="color: #34d399; margin-top: 0; text-align:center;">🤖 Cài Đặt AI Phân Tích</h2>
+            <div style="background:rgba(16,185,129,0.1); border:1px dashed #34d399; border-radius:12px; padding:15px; margin-bottom:20px; text-align:left; color:#e2e8f0; font-size:14.5px; line-height:1.6;">
+                <p style="margin:0 0 8px 0; font-weight:800; color:#6ee7b7;">Xin chào! 🌸</p>
+                <p style="margin:0 0 8px 0;">Để chị AI có thể giúp bạn giải thích chi tiết từng câu hỏi, bạn cần lấy một chiếc <b>API Key</b> miễn phí từ Google nhé.</p>
+                <p style="margin:0 0 8px 0; font-weight:700;">Hướng dẫn nhanh 3 bước:</p>
+                <ol style="margin:0; padding-left:20px; color:#cbd5e1; font-size:13.5px;">
+                    <li style="margin-bottom:4px;">Bấm vào trang <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#60a5fa; text-decoration:underline; font-weight:bold;">Google AI Studio</a> (đăng nhập Gmail).</li>
+                    <li style="margin-bottom:4px;">Bấm nút <b>"Create API Key"</b> màu xanh.</li>
+                    <li>Copy đoạn mã vừa tạo và dán vào ô bên dưới 👇</li>
+                </ol>
+            </div>
+            <input type="password" id="ai-api-key-input" placeholder="Dán API Key của bạn vào đây..." style="margin-bottom: 20px; text-align: center; border:2px solid #10b981; background:rgba(255,255,255,0.05); color:white; font-family:monospace; width:100%; box-sizing:border-box;">
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-gray" style="flex: 1; justify-content:center;" onclick="document.getElementById('ai-settings-modal').style.display='none'">Đóng</button>
+                <button class="btn btn-green" style="flex: 1; justify-content:center; background:linear-gradient(135deg, #10b981, #059669);" onclick="saveAiKey()">💾 Lưu Key</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function openAiSettings() {
+            const key = localStorage.getItem('ai_api_key') || '';
+            document.getElementById('ai-api-key-input').value = key;
+            document.getElementById('ai-settings-modal').style.display = 'flex';
+        }
+        function saveAiKey() {
+            const val = document.getElementById('ai-api-key-input').value.trim();
+            if (val) {
+                localStorage.setItem('ai_api_key', val);
+                alert('Đã lưu API Key thành công!');
+            } else {
+                localStorage.removeItem('ai_api_key');
+                alert('Đã xóa API Key!');
+            }
+            document.getElementById('ai-settings-modal').style.display = 'none';
+        }
+    </script>
+
     <!-- ===== WELCOME SCREEN (nhập tên) ===== -->
     <div id="welcome-screen"
         style="display: none; position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; align-items: center; justify-content: center; padding: 20px;">
@@ -2031,6 +2071,9 @@
             <div id="sidebar-journey-text"
                 style="padding: 8px 10px; text-align: center; color: #fbbf24; font-weight: bold; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2);">
                 Bạn chưa thiết lập hành trình!</div>
+
+
+
             <div class="sidebar-stats-container">
                 <div class="stat-box voca-box" style="flex-direction: column; align-items: stretch; gap: 8px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
@@ -2475,6 +2518,7 @@
                     onclick="openModal('sync-modal')">💾 SAO LƯU DỮ LIỆU</button>
                 <button class="btn btn-danger" style="font-size: 14px; background: #ef4444; justify-content: center;"
                     onclick="resetUserData()">🗑 XOÁ TẤT CẢ DỮ LIỆU</button>
+                <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669); font-size: 14px; justify-content: center; box-shadow: 0 4px 15px rgba(16,185,129,0.4);" onclick="openAiSettings()">🤖 CÀI ĐẶT AI PHÂN TÍCH</button>
             </div>
         </div>
 
@@ -3038,21 +3082,30 @@
                             Thu gọn</button>
 
                         <button
-                            style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af;border:2px solid #93c5fd;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(59,130,246,0.25);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
-                            onclick="if(window._goBackFn){window._goBackFn();}else{goHome();}"><span
-                                style="font-size:16px;">◀</span>Quay lại</button>
+                            style="flex:1; aspect-ratio:1; max-height:56px; background:linear-gradient(135deg,#dbeafe,#bfdbfe); color:#1e40af; border:2px solid #93c5fd; border-radius:14px; cursor:pointer; box-shadow:0 3px 10px rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:center; transition:0.2s;"
+                            onclick="if(window._goBackFn){window._goBackFn();}else{goHome();}" title="Quay lại">
+                            <span style="font-size:24px;">◀</span>
+                        </button>
                         <button
-                            style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#e2e8f0,#cbd5e1);color:#334155;border:2px solid #94a3b8;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(100,116,139,0.25);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
-                            onclick="resetQuiz()"><span style="font-size:16px;">🔄</span>Làm lại</button>
+                            style="flex:1; aspect-ratio:1; max-height:56px; background:linear-gradient(135deg,#e2e8f0,#cbd5e1); color:#334155; border:2px solid #94a3b8; border-radius:14px; cursor:pointer; box-shadow:0 3px 10px rgba(100,116,139,0.25); display:flex; align-items:center; justify-content:center; transition:0.2s;"
+                            onclick="resetQuiz()" title="Làm lại">
+                            <span style="font-size:24px;">🔄</span>
+                        </button>
                         <button id="bottom-pause-btn"
-                            style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;display:none;background:linear-gradient(135deg,#fef9c3,#fde68a);color:#92400e;border:2px solid #fbbf24;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(251,191,36,0.3);line-height:1.3;flex-direction:column;align-items:center;gap:2px;"
-                            onclick="toggleTestTimer()"><span style="font-size:16px;">⏸️</span>Tạm dừng</button>
+                            style="flex:1; aspect-ratio:1; max-height:56px; display:none; background:linear-gradient(135deg,#fef9c3,#fde68a); color:#92400e; border:2px solid #fbbf24; border-radius:14px; cursor:pointer; box-shadow:0 3px 10px rgba(251,191,36,0.3); align-items:center; justify-content:center; transition:0.2s;"
+                            onclick="toggleTestTimer()" title="Tạm dừng/Tiếp tục">
+                            <span style="font-size:24px;">⏸️</span>
+                        </button>
                         <button
-                            style="flex:1.5;font-size:14px;padding:10px 8px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:2px solid #4ade80;border-radius:12px;cursor:pointer;box-shadow:0 4px 14px rgba(34,197,94,0.4);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
-                            onclick="submitQuiz()"><span style="font-size:18px;">✅</span>NỘP BÀI</button>
+                            style="flex:1; aspect-ratio:1; max-height:56px; background:linear-gradient(135deg,#22c55e,#16a34a); color:#fff; border:2px solid #4ade80; border-radius:14px; cursor:pointer; box-shadow:0 4px 14px rgba(34,197,94,0.4); display:flex; align-items:center; justify-content:center; transition:0.2s;"
+                            onclick="submitQuiz()" title="Nộp bài">
+                            <span style="font-size:26px;">✅</span>
+                        </button>
                         <button id="bottom-mute-btn"
-                            style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#ede9fe,#ddd6fe);color:#5b21b6;border:2px solid #a78bfa;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(167,139,250,0.3);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
-                            onclick="toggleMute()"><span style="font-size:16px;">🔊</span>Nhạc nền</button>
+                            style="flex:1; aspect-ratio:1; max-height:56px; background:linear-gradient(135deg,#ede9fe,#ddd6fe); color:#5b21b6; border:2px solid #a78bfa; border-radius:14px; cursor:pointer; box-shadow:0 3px 10px rgba(167,139,250,0.3); display:flex; align-items:center; justify-content:center; transition:0.2s;"
+                            onclick="toggleMute()" title="Nhạc nền">
+                            <span style="font-size:24px;">🔊</span>
+                        </button>
                     </div>
 
                     <!-- Nút Mở Rộng -->
@@ -5476,6 +5529,8 @@
                     </div>
                     <div id="msg-${i}" class="fb-msg" style="text-align:center; margin-top:15px; font-size:18px;"></div>
                     ${item.explain ? `<div id="explain-${i}" style="display:none; margin-top:15px; background:#fef3c7; color:#0f172a; border:2px solid #ea580c; border-radius:12px; padding:15px; font-size:17px; font-weight:700; text-align:left; line-height:1.5; box-shadow:0 4px 10px rgba(234,88,12,0.2);">💡 <b>Giải thích:</b><br>${fT(item.explain)}</div>` : ''}
+                    <div id="ai-explain-container-${i}" style="display:none; margin-top:15px; background:#fffbeb; color:#1e3a8a; border:2px solid #b45309; border-radius:14px; padding:20px; font-size:16px; font-weight:700; text-align:left; line-height:1.8; box-shadow:0 4px 16px rgba(180,83,9,0.13); font-family:'Baloo 2','Kosugi Maru',sans-serif;"></div>
+                    <button id="btn-ai-${i}" style="margin-top:15px; width:100%; background:linear-gradient(135deg, #8b5cf6, #3b82f6); color:white; border:none; border-radius:12px; padding:12px; font-weight:800; font-family:'Baloo 2', sans-serif; cursor:pointer; font-size:16px; box-shadow: 0 4px 10px rgba(139,92,246,0.3); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'" onclick="callAI(${i})">✨ AI PHÂN TÍCH</button>
                 </div>`;
                         } else {
                             let ques = '', ans = '';
@@ -5502,9 +5557,11 @@
                         </div>
                     </div>
                     ${item.c4 ? `<div style="font-size:16px; color:#cbd5e1; margin-bottom:15px; background:rgba(0,0,0,0.2); padding:10px 15px; border-radius:10px; border-left:4px solid var(--warning);">💡 ${fT(item.c4)}</div>` : ''}
-                    <div style="display:flex; gap:12px;">
-                         ${!ans.trim() ? '<div id="input-' + i + '" data-ans="" data-skip="true" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(251,191,36,0.13),rgba(251,191,36,0.06));border:1.5px dashed #fbbf24;border-radius:12px;padding:10px 18px;color:#fde68a;font-size:14px;font-weight:700;text-shadow:0 0 8px rgba(251,191,36,0.4);box-shadow:0 2px 10px rgba(251,191,36,0.12);width:100%;text-align:center;"><span style="font-size:16px;">🌺</span>Kh\u00f4ng c\u00f3 c\u00e1ch \u0111\u1ecdc n\u00ean b\u1ea1n k c\u1ea7n \u0111i\u1ec1n n\u00e8</div>' : '<input type="text" id="input-' + i + '" data-ans="' + ans + '" oninput="check(' + i + ')" onkeydown="handleKey(event, ' + i + ')" autocomplete="off" placeholder="..."><button class="btn btn-gray" style="width:70px; font-size:24px;" onclick="showHint(' + i + ')">👁️</button>'}
-                     </div>
+                    <div id="ai-explain-container-${i}" style="display:none; margin-bottom:10px; background:#fffbeb; color:#1e3a8a; border:2px solid #b45309; border-radius:14px; padding:20px; font-size:16px; font-weight:700; text-align:left; line-height:1.8; box-shadow:0 4px 16px rgba(180,83,9,0.13); font-family:'Baloo 2','Kosugi Maru',sans-serif;"></div>
+                    <div style="display:flex; gap:12px; align-items:center;">
+                         ${!ans.trim() ? '<div id="input-' + i + '" data-ans="" data-skip="true" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(251,191,36,0.13),rgba(251,191,36,0.06));border:1.5px dashed #fbbf24;border-radius:12px;padding:10px 18px;color:#fde68a;font-size:14px;font-weight:700;text-shadow:0 0 8px rgba(251,191,36,0.4);box-shadow:0 2px 10px rgba(251,191,36,0.12);flex:1;text-align:center;"><span style="font-size:16px;">🌺</span>Kh\u00f4ng c\u00f3 c\u00e1ch \u0111\u1ecdc n\u00ean b\u1ea1n k c\u1ea7n \u0111i\u1ec1n n\u00e8</div>' : '<input type="text" id="input-' + i + '" data-ans="' + ans + '" oninput="check(' + i + ')" onkeydown="handleKey(event, ' + i + ')" autocomplete="off" placeholder="..."><button class="btn btn-gray" style="width:70px; font-size:24px;" onclick="showHint(' + i + ')">👁️</button>'}
+                         <button class="btn btn-purple" style="width:70px; font-size:24px; flex-shrink:0; padding:0;" onclick="callAI(${i})" title="AI Phân Tích">✨</button>
+                    </div>
                 </div>`;
                         }
                     }).join('');
@@ -5558,8 +5615,10 @@
                 function updateMuteButtons() {
                     const btn = document.getElementById('bottom-mute-btn');
                     if (btn) {
-                        btn.innerHTML = window.isBgmMuted ? '🔇 Tắt nhạc' : '🔊 Nhạc nền';
-                        btn.style.background = window.isBgmMuted ? '#475569' : '';
+                        btn.innerHTML = window.isBgmMuted ? '<span style="font-size:24px;">🔇</span>' : '<span style="font-size:24px;">🔊</span>';
+                        btn.style.background = window.isBgmMuted ? '#475569' : 'linear-gradient(135deg,#ede9fe,#ddd6fe)';
+                        btn.style.borderColor = window.isBgmMuted ? '#334155' : '#a78bfa';
+                        btn.style.color = window.isBgmMuted ? '#cbd5e1' : '#5b21b6';
                     }
                 }
                 // Initial update
@@ -5850,9 +5909,10 @@
                             }
                         } else {
                             const input = document.getElementById(`input-${idx}`);
+                            const isSkip = input && input.getAttribute('data-skip') === 'true';
                             const ans = input ? input.getAttribute('data-ans').trim() : '';
                             const ansLower = ans.toLowerCase();
-                            const val = input ? input.value.trim() : '';
+                            const val = (input && !isSkip) ? (input.value || '').trim() : '';
                             const valLower = val.toLowerCase();
 
                             const exp = document.getElementById(`explain-${idx}`);
@@ -6021,7 +6081,7 @@
                             mode: currentMode,
                             ok: ok,
                             failed: failed,
-                            total: total,
+                        total: total,
                             duration: seconds || 0,
                             source: curVanMode ? 'van' : 'user',
                             percent: Math.round((ok / total) * 100)
@@ -6030,6 +6090,270 @@
                         localStorage.setItem(_logKey, JSON.stringify(_log));
                     })();
                     openModal('congrats-modal');
+                }
+
+                // ===== AI PHÂN TÍCH =====
+
+                // --- CSS cho nút action của AI ---
+                (function() {
+                    if (document.getElementById('ai-action-styles')) return;
+                    const s = document.createElement('style');
+                    s.id = 'ai-action-styles';
+                    s.innerHTML = `
+                        .ai-action-bar { display:flex; align-items:center; justify-content:flex-end; gap:8px; margin-top:14px; padding-top:10px; border-top:1px solid rgba(30,58,138,0.2); flex-wrap:wrap; }
+                        .ai-btn-save { background:linear-gradient(135deg,#16a34a,#15803d); color:#fff; border:none; border-radius:10px; padding:7px 14px; font-size:13px; font-weight:800; cursor:pointer; font-family:'Baloo 2',sans-serif; display:flex; align-items:center; gap:5px; transition:0.15s; }
+                        .ai-btn-save:hover { filter:brightness(1.1); transform:translateY(-1px); }
+                        .ai-btn-save:disabled { opacity:0.6; cursor:default; }
+                        .ai-btn-del  { background:linear-gradient(135deg,#dc2626,#b91c1c); color:#fff; border:none; border-radius:10px; padding:7px 14px; font-size:13px; font-weight:800; cursor:pointer; font-family:'Baloo 2',sans-serif; display:flex; align-items:center; gap:5px; transition:0.15s; }
+                        .ai-btn-del:hover  { filter:brightness(1.1); transform:translateY(-1px); }
+                        .ai-btn-ref  { background:linear-gradient(135deg,#6b21a8,#7c3aed); color:#fff; border:none; border-radius:10px; padding:7px 14px; font-size:13px; font-weight:800; cursor:pointer; font-family:'Baloo 2',sans-serif; display:flex; align-items:center; gap:5px; transition:0.15s; }
+                        .ai-btn-ref:hover  { filter:brightness(1.1); transform:translateY(-1px); }
+                        .ai-saved-badge { font-size:11px; color:#92400e; background:rgba(180,83,9,0.1); border:1px solid rgba(180,83,9,0.3); border-radius:8px; padding:3px 9px; font-weight:700; }
+                        @keyframes ai-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                    `;
+                    document.head.appendChild(s);
+                })();
+
+                // --- Helpers lưu trữ ---
+                function _aiCacheKey(item) {
+                    const k = typeof _itemKey === 'function' ? _itemKey(item) : ((item.c1||'')+'_'+(item.c3||''));
+                    return 'ai_cache_' + k;
+                }
+
+                function _saveAIToStorage(item, contentHtml) {
+                    try {
+                        const data = {
+                            html: contentHtml,
+                            word: item.c1 || '',
+                            savedAt: new Date().toLocaleString('vi-VN', { hour12: false })
+                        };
+                        localStorage.setItem(_aiCacheKey(item), JSON.stringify(data));
+                        return true;
+                    } catch(e) { return false; }
+                }
+
+                function _getAISaved(item) {
+                    try {
+                        const raw = localStorage.getItem(_aiCacheKey(item));
+                        return raw ? JSON.parse(raw) : null;
+                    } catch(e) { return null; }
+                }
+
+                // --- Hàm gọi từ onclick các nút ---
+                function saveAIOutput(index) {
+                    const item = currentList[index];
+                    const container = document.getElementById('ai-explain-container-' + index);
+                    if (!item || !container) return;
+                    const contentEl = container.querySelector('.ai-content');
+                    if (!contentEl) return;
+                    const ok = _saveAIToStorage(item, contentEl.innerHTML);
+                    const btn = container.querySelector('.ai-btn-save');
+                    if (btn) {
+                        btn.innerHTML = ok ? '✅ Đã lưu!' : '❌ Lỗi lưu';
+                        btn.disabled = true;
+                        setTimeout(() => {
+                            // Rebuild với trạng thái "đã lưu"
+                            _renderSavedAI(index, item, container);
+                        }, 1000);
+                    }
+                }
+
+                function deleteAIOutput(index) {
+                    const item = currentList[index];
+                    if (!item) return;
+                    localStorage.removeItem(_aiCacheKey(item));
+                    const container = document.getElementById('ai-explain-container-' + index);
+                    if (container) { container.innerHTML = ''; container.style.display = 'none'; }
+                }
+
+                function refreshAIOutput(index) {
+                    const item = currentList[index];
+                    if (item) localStorage.removeItem(_aiCacheKey(item));
+                    const container = document.getElementById('ai-explain-container-' + index);
+                    if (container) { container.style.display = 'none'; }
+                    callAI(index);
+                }
+
+                // --- Render nội dung đã lưu ---
+                function _renderSavedAI(index, item, container) {
+                    const saved = _getAISaved(item);
+                    if (!saved) return false;
+                    container.innerHTML =
+                        '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:12px;">' +
+                            '<b style="color:#dc2626;font-size:18px;font-weight:900;font-family:\'Baloo 2\',sans-serif;">🤖 AI Giải Thích</b>' +
+                            '<span class="ai-saved-badge" style="font-size:12px;">💾 Đã lưu · ' + saved.savedAt + '</span>' +
+                        '</div>' +
+                        '<div class="ai-content" style="color:#1e3a8a; line-height:1.8; font-size:16px; font-weight:700; font-family:\'Baloo 2\',\'Kosugi Maru\',sans-serif;">' + saved.html + '</div>' +
+                        '<div class="ai-action-bar">' +
+                            '<button class="ai-btn-ref" onclick="refreshAIOutput(' + index + ')">🔄 Làm mới từ AI</button>' +
+                            '<button class="ai-btn-del" onclick="deleteAIOutput(' + index + ')">🗑️ Xóa</button>' +
+                        '</div>';
+                    return true;
+                }
+
+                // --- Markdown parser ---
+                function parseBasicMarkdown(text) {
+                    let html = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+                    
+                    // Giới hạn tối đa 2 dấu xuống dòng liên tiếp
+                    html = html.replace(/\n{3,}/g, '\n\n');
+                    
+                    html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+                    // Tiêu đề H2: Nâu cam đậm, gạch chân
+                    html = html.replace(/^## (.*$)/gim,
+                        '<h2 style="color:#92400e; font-size:18px; font-weight:900; margin:16px 0 8px 0; ' +
+                        'text-decoration:underline; text-underline-offset:4px; text-decoration-color:rgba(146,64,14,0.4); ' +
+                        'font-family:\'Baloo 2\',\'Kosugi Maru\',sans-serif; letter-spacing:0.3px;">$1</h2>');
+
+                    // Tiêu đề H3: Nâu cam đậm, gạch chân
+                    html = html.replace(/^### (.*$)/gim,
+                        '<h3 style="color:#92400e; font-size:16px; font-weight:800; margin:12px 0 6px 0; ' +
+                        'text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(146,64,14,0.3); ' +
+                        'font-family:\'Baloo 2\',\'Kosugi Maru\',sans-serif;">$1</h3>');
+
+                    // Danh sách
+                    html = html.replace(/^\* (.*$)/gim,
+                        '<li style="margin-left:16px; margin-bottom:5px; color:#1e3a8a; line-height:1.7; font-family:\'Baloo 2\',\'Kosugi Maru\',sans-serif; font-weight:700;">$1</li>');
+
+                    // Bold
+                    html = html.replace(/\*\*(.*?)\*\*/g,
+                        '<strong style="color:#dc2626; font-weight:900;">$1</strong>');
+
+                    // Bôi xanh, TUYỆT ĐỐI không in nghiêng
+                    html = html.replace(/\*(.*?)\*/g,
+                        '<em style="color:#2563eb; font-weight:700; font-style:normal;">$1</em>');
+
+                    html = html.replace(/^---\s*$/gim, '');
+
+                    // Đổi xuống dòng thành <br>
+                    html = html.replace(/\n/g, '<br>');
+                    
+                    // Xóa các <br> dư thừa quanh heading và list để tránh khoảng trống quá xa
+                    html = html.replace(/(<\/h[23]>)<br>+/gi, '$1');
+                    html = html.replace(/<br>+(<h[23]>)/gi, '$1');
+                    html = html.replace(/(<\/li>)<br>+/gi, '$1');
+                    html = html.replace(/<br>+(<li)/gi, '$1');
+
+                    return html;
+                }
+
+                // --- Hàm chính ---
+                async function callAI(index) {
+                    if (!currentList || currentList.length === 0) return;
+                    const item = currentList[index];
+                    if (!item) return;
+
+                    const aiContainer = document.getElementById('ai-explain-container-' + index);
+                    if (!aiContainer) return;
+                    let loader = document.getElementById('ai-loading-' + index);
+
+                    if (aiContainer.style.display === 'block' || (loader && loader.style.display === 'flex')) {
+                        aiContainer.style.display = 'none';
+                        if (loader) loader.style.display = 'none';
+                        return;
+                    }
+
+                    // Ưu tiên 1: Admin tĩnh
+                    if (item.aiExplanation) {
+                        aiContainer.style.display = 'block';
+                        aiContainer.innerHTML =
+                            '<div style="margin-bottom:12px;">' +
+                                '<b style="color:#dc2626;font-size:18px;font-family:\'Kosugi Maru\',\'Baloo 2\',sans-serif;">' +
+                                '👑 Giải thích từ Góc của Vân:</b>' +
+                            '</div>' +
+                            '<div class="ai-content" style="color:#1e3a8a; line-height:1.8; font-size:16px; font-weight:700; font-family:\'Baloo 2\',\'Kosugi Maru\',sans-serif;">' + parseBasicMarkdown(item.aiExplanation) + '</div>';
+                        return;
+                    }
+
+                    // Ưu tiên 2: Đã lưu trong localStorage
+                    if (_renderSavedAI(index, item, aiContainer)) {
+                        aiContainer.style.display = 'block';
+                        return;
+                    }
+
+                    // --- TRẠNG THÁI LOADING ---
+                    if (!loader) {
+                        loader = document.createElement('div');
+                        loader.id = 'ai-loading-' + index;
+                        loader.style.cssText = 'margin-top:15px; background:rgba(255,255,255,0.8); backdrop-filter:blur(5px); border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:12px 20px; box-shadow:0 4px 15px rgba(59,130,246,0.1); display:none; align-items:center; gap:12px;';
+                        aiContainer.parentNode.insertBefore(loader, aiContainer);
+                    }
+                    loader.innerHTML = '<div style="width:22px;height:22px;border:4px solid rgba(59,130,246,0.25);border-top:4px solid #2563eb;border-radius:50%;animation:ai-spin 1s linear infinite;"></div><span style="font-weight:900;font-size:16px;background:linear-gradient(90deg, #1d4ed8, #0ea5e9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;color:transparent;display:inline-block;font-family:\'Baloo 2\',sans-serif;letter-spacing:0.3px;">✨ AI đang phân tích... Vui lòng đợi nhé! 🌸</span>';
+                    loader.style.display = 'flex';
+                    aiContainer.style.display = 'none';
+
+                    // Ưu tiên 3: Gọi Gemini API
+                    const apiKey = localStorage.getItem('ai_api_key');
+                    if (!apiKey) {
+                        loader.style.display = 'none';
+                        aiContainer.style.display = 'block';
+                        aiContainer.innerHTML =
+                            '<span style="color:#dc2626;font-weight:700;">⚠️ Bạn chưa cài đặt Google Gemini API Key.</span><br>' +
+                            '<span style="color:#1e3a5f;">Vui lòng mở Menu và bấm <b>"🤖 Cài Đặt AI"</b> để nhập Key nhé.</span>';
+                        return;
+                    }
+
+                    // Xác định nhánh prompt
+                    let branch = 'free_corner';
+                    if (curVanMode) {
+                        if (curVanSection === 'n1voca' || curVanSection === 'n2voca') branch = (curVanSub === 'quiz') ? 'jlpt_quiz' : 'jlpt_voca';
+                        else if (curVanSection === 'n2gram') branch = (curVanSub === 'quiz') ? 'jlpt_gram_quiz' : 'jlpt_gram';
+                        else if (curVanSection === 'bjtvoca') branch = (curVanSub === 'quiz') ? 'bjt_quiz' : 'bjt_voca';
+                    } else {
+                        if (curType === 'voca') branch = 'jlpt_voca';
+                        else if (curType === 'voca_quiz') branch = 'jlpt_quiz';
+                        else if (curType === 'gram') branch = 'jlpt_gram';
+                        else if (curType === 'gram_quiz') branch = 'jlpt_gram_quiz';
+                    }
+
+                    const promptTemplate = (typeof AI_PROMPTS !== 'undefined' && AI_PROMPTS[branch])
+                        ? AI_PROMPTS[branch]
+                        : "Hãy giải thích từ vựng '{question}' (nghĩa: '{answer}') theo ngữ cảnh thực tế.";
+
+                    let qText = '', aText = '';
+                    const isQuizItem = (item.gramType === 'quiz') || (curType === 'voca_quiz' || curType === 'gram_quiz');
+                    if (isQuizItem) {
+                        qText = item.q || item.c1 || ''; aText = item.ans || '';
+                    } else if (curType === 'gram') {
+                        qText = item.c1 || ''; aText = item.c3 || '';
+                    } else {
+                        qText = item.c1 || '';
+                        aText = (item.c2 ? item.c2 + ' / ' : '') + (item.c3 || '');
+                    }
+
+                    const finalPrompt = promptTemplate.replace(/{question}/g, qText.trim()).replace(/{answer}/g, aText.trim());
+
+                    try {
+                        const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + apiKey, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ contents: [{ parts: [{ text: finalPrompt }] }] })
+                        });
+                        
+                        loader.style.display = 'none';
+                        aiContainer.style.display = 'block';
+                        
+                        if (!response.ok) throw new Error('API Error ' + response.status);
+                        const data = await response.json();
+                        const aiText = data.candidates[0].content.parts[0].text;
+                        const parsedHtml = parseBasicMarkdown(aiText);
+                        aiContainer.innerHTML =
+                            '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:12px;">' +
+                                '<b style="color:#dc2626;font-size:18px;font-weight:900;font-family:\'Baloo 2\',sans-serif;">🤖 AI Giải Thích</b>' +
+                            '</div>' +
+                            '<div class="ai-content" style="color:#1e3a8a; line-height:1.8; font-size:16px; font-weight:700; font-family:\'Baloo 2\',\'Kosugi Maru\',sans-serif;">' + parsedHtml + '</div>' +
+                            '<div class="ai-action-bar">' +
+                                '<button class="ai-btn-save" onclick="saveAIOutput(' + index + ')">💾 Lưu lại</button>' +
+                            '</div>';
+                    } catch (e) {
+                        loader.style.display = 'none';
+                        aiContainer.style.display = 'block';
+                        aiContainer.innerHTML =
+                            '<span style="color:#dc2626;font-weight:700;">❌ Có lỗi xảy ra: ' + e.message + '</span><br>' +
+                            '<span style="color:#1e3a5f;">Vui lòng kiểm tra lại API Key hoặc kết nối mạng.</span>';
+                        console.error(e);
+                    }
                 }
 
                 // ===== VAN SPEED DIAL FAB HELPERS =====
@@ -6201,7 +6525,12 @@
                         clearInterval(timerInterval); timerInterval = null;
                         if (btn) { btn.innerHTML = '▶ TIẾP TỤC'; btn.className = 'btn btn-green'; }
                         const bPause = document.getElementById('bottom-pause-btn');
-                        if (bPause) { bPause.innerHTML = '▶ TIẾP TỤC'; bPause.className = 'btn btn-green'; }
+                        if (bPause) { 
+                            bPause.innerHTML = '<span style="font-size:24px;">▶</span>'; 
+                            bPause.style.background = 'linear-gradient(135deg,#dcfce7,#bbf7d0)'; 
+                            bPause.style.color = '#166534'; 
+                            bPause.style.borderColor = '#86efac'; 
+                        }
                         if (typeof ytBgmPlayer !== 'undefined' && ytBgmPlayer.pauseVideo) ytBgmPlayer.pauseVideo();
                         else if (iframe && iframe.contentWindow) iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
                         if (!fromSubmit) {
@@ -6213,7 +6542,13 @@
                         timerInterval = setInterval(() => { seconds++; updateTestTime(); }, 1000);
                         if (btn) { btn.innerHTML = '⏸ TẠM DỪNG'; btn.className = 'btn btn-danger'; }
                         const bPause = document.getElementById('bottom-pause-btn');
-                        if (bPause) { bPause.innerHTML = '⏸ TẠM DỪNG'; bPause.className = 'btn btn-danger'; bPause.style.display = 'inline-flex'; }
+                        if (bPause) { 
+                            bPause.innerHTML = '<span style="font-size:24px;">⏸️</span>'; 
+                            bPause.style.display = 'flex';
+                            bPause.style.background = 'linear-gradient(135deg,#fef9c3,#fde68a)'; 
+                            bPause.style.color = '#92400e'; 
+                            bPause.style.borderColor = '#fbbf24'; 
+                        }
                         if (typeof ytBgmPlayer !== 'undefined' && ytBgmPlayer.playVideo) {
                             ytBgmPlayer.playVideo();
                             if (window.isBgmMuted) ytBgmPlayer.mute(); else ytBgmPlayer.unMute();
@@ -9062,6 +9397,7 @@
         })();
     </script>
 
+    <script src="ai_prompts.js"></script>
 </body>
 
 

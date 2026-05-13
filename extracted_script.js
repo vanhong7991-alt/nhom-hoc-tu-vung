@@ -1688,84 +1688,7 @@
                     return array;
                 }
 
-                function renderQuiz() {
-                    document.getElementById('quiz-container').innerHTML = currentList.map((item, i) => {
-                        const isQuizMode = (curType === 'voca_quiz' || curType === 'gram_quiz');
-                        const isQuizItem = (item.gramType === 'quiz');
-                        if (isQuizMode && !isQuizItem) return '';
-                        if (!isQuizMode && isQuizItem) return '';
 
-                        if (isQuizItem) {
-                            let opts = [
-                                { t: item.ans, v: 1 },
-                                { t: item.w1, v: 0 },
-                                { t: item.w2, v: 0 },
-                                { t: item.w3, v: 0 }
-                            ].filter(o => o.t);
-                            shuffleArray(opts);
-                            let optHtml = opts.map((o, idx) => `
-                    <button class="quiz-opt" id="opt-${i}-${idx}" data-correct="${o.v === 1}" onclick="checkQuiz(${i}, ${idx}, ${o.v === 1})">${fT(o.t)}</button>
-                `).join('');
-
-                            return `<div class="card" id="q-${i}" data-idx="${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s; padding: 25px; border-radius: 16px; background: linear-gradient(145deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9)); box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
-                    <div style="position:relative; font-size:20px; font-weight:800; margin-bottom:25px; color:#0f172a; background:#f8fafc; padding:20px 50px 20px 25px; border-radius:12px; text-align:left; line-height:1.6; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 6px solid #3b82f6;">
-                        <button id="star-btn-${i}" onclick="toggleListStar(${i}, 'star-btn-${i}', event)" style="position:absolute; top:15px; right:15px; background:transparent; border:none; font-size:24px; cursor:pointer; color:${fcStarredKeys.has(_itemKey(item)) ? '#fbbf24' : '#94a3b8'}; text-shadow:${fcStarredKeys.has(_itemKey(item)) ? '0 0 10px rgba(251,191,36,0.5)' : 'none'}; padding:0;" title="Đánh dấu sao (Lưu ý)">${fcStarredKeys.has(_itemKey(item)) ? '⭐' : '☆'}</button>
-                        <div style="position:absolute; top:-15px; left:-15px; background:var(--accent); color:white; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:bold; box-shadow:0 4px 10px rgba(59,130,246,0.5); border:3px solid #f8fafc;">${i + 1}</div>
-                        <div style="width:100%;">${fT(item.q)}</div>
-                    </div>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;" id="opts-wrap-${i}">
-                        ${optHtml}
-                    </div>
-                    <div id="msg-${i}" class="fb-msg" style="text-align:center; margin-top:15px; font-size:18px;"></div>
-                    ${item.explain ? `<div id="explain-${i}" style="display:none; margin-top:15px; background:#fef3c7; color:#0f172a; border:2px solid #ea580c; border-radius:12px; padding:15px; font-size:17px; font-weight:700; text-align:left; line-height:1.5; box-shadow:0 4px 10px rgba(234,88,12,0.2);">💡 <b>Giải thích:</b><br>${fT(item.explain)}</div>` : ''}
-                </div>`;
-                        } else {
-                            let ques = '', ans = '';
-                            if (curType === 'gram') {
-                                if (currentMode === 0) { ques = item.c1 || ''; ans = item.c3 || ''; }
-                                else if (currentMode === 1) { ques = item.c3 || ''; ans = item.c1 || ''; }
-                            } else {
-                                if (currentLang === 'en') {
-                                    if (currentMode === 0) { ques = item.c1 || ''; ans = item.c3 || ''; }
-                                    else if (currentMode === 1) { ques = item.c3 || ''; ans = item.c1 || ''; }
-                                } else {
-                                    if (currentMode === 0) { ques = item.c1 || ''; ans = item.c2 || ''; }
-                                    else if (currentMode === 1) { ques = item.c1 || ''; ans = item.c3 || ''; }
-                                    else { ques = item.c3 || ''; ans = item.c1 || ''; }
-                                }
-                            }
-                            return `<div class="card" id="q-${i}" data-idx="${i}" style="border-left: 10px solid #334155; transition: border-color 0.3s; position:relative; padding-right:50px;">
-                    <button id="star-btn-${i}" onclick="toggleListStar(${i}, 'star-btn-${i}', event)" style="position:absolute; top:20px; right:20px; background:transparent; border:none; font-size:28px; cursor:pointer; color:${fcStarredKeys.has(_itemKey(item)) ? '#fbbf24' : '#64748b'}; text-shadow:${fcStarredKeys.has(_itemKey(item)) ? '0 0 10px rgba(251,191,36,0.5)' : 'none'}; padding:0;" title="Đánh dấu sao (Lưu ý)">${fcStarredKeys.has(_itemKey(item)) ? '⭐' : '☆'}</button>
-                    <div style="display:flex; flex-direction:column; margin-bottom:10px;">
-                        ${(currentLang === 'en' && ques === item.c1 && item.c2) ? `<span style="font-size:16px; color:#e879f9; font-weight:700; margin-bottom:-2px; text-shadow: 0 0 5px rgba(232,121,249,0.3); font-family: 'Baloo 2', sans-serif;">${item.c2}</span>` : ''}
-                        <div style="font-size:26px; font-weight:800; display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
-                            <span>${fT(ques)} ${item.count >= 5 ? '⭐' : ''} <a href="https://www.google.com/search?q=${encodeURIComponent('Giải thích nghĩa của ' + (item.c1 || '') + (currentLang === 'en' ? ' trong tiếng anh' : ' và cách sử dụng trong tiếng nhật'))}" target="_blank" style="text-decoration:none; margin-left:8px; display:inline-flex; align-items:center; transition:0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Tra cứu trên Google"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(244,114,182,0.8));"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></a></span>
-                            <span id="msg-${i}" class="fb-msg"></span>
-                        </div>
-                    </div>
-                    ${item.c4 ? `<div style="font-size:16px; color:#cbd5e1; margin-bottom:15px; background:rgba(0,0,0,0.2); padding:10px 15px; border-radius:10px; border-left:4px solid var(--warning);">💡 ${fT(item.c4)}</div>` : ''}
-                    <div style="display:flex; gap:12px;">
-                        <input type="text" id="input-${i}" data-ans="${ans}" oninput="check(${i})" onkeydown="handleKey(event, ${i})" autocomplete="off" placeholder="...">
-                        <button class="btn btn-gray" style="width:70px; font-size:24px;" onclick="showHint(${i})">👁️</button>
-                    </div>
-                </div>`;
-                        }
-                    }).join('');
-
-                    if (!document.getElementById('quiz-styles')) {
-                        const style = document.createElement('style');
-                        style.id = 'quiz-styles';
-                        style.innerHTML = `
-            .quiz-opt { background: rgba(30,41,59,0.7); border: 2px solid #3b82f6; border-radius: 12px; padding: 15px; color: white; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: 'Baloo 2', 'Kosugi Maru', sans-serif; text-align: left; }
-            .quiz-opt:hover { background: rgba(59,130,246,0.3); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(59,130,246,0.4); }
-            .quiz-opt.correct { background: var(--success) !important; border-color: #4ade80 !important; box-shadow: 0 0 20px var(--success) !important; color: #fff; transform: scale(1.02); }
-            .quiz-opt.wrong { background: var(--danger) !important; border-color: #f87171 !important; box-shadow: 0 0 20px var(--danger) !important; animation: shake 0.4s; }
-            .quiz-opt.selected { background: rgba(59,130,246,0.6) !important; border-color: #60a5fa !important; box-shadow: 0 0 15px rgba(59,130,246,0.6) !important; transform: scale(1.02); }
-            `;
-                        document.head.appendChild(style);
-                    }
-                    updateChart();
-                }
 
                 let audioCtx = null;
                 function unlockAudio() {
@@ -3509,5 +3432,3 @@
                         localStorage.setItem('sidebar_hidden', '1');
                     }
                 }
-
-            
