@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🌸Vượt lười học mỗi ngày🌸</title>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Kosugi+Maru&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Kosugi+Maru&family=Dancing+Script:wght@700&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -34,12 +35,15 @@
         #top-control-card:not(:has(#btn-start-lesson[style*="display: none"])) #view-title {
             display: none !important;
         }
+
         #top-control-card:not(:has(#btn-start-lesson[style*="display: none"])) #motivational-quote {
             display: none !important;
         }
+
         #top-control-card:not(:has(#btn-start-lesson[style*="display: none"])) #btn-start-lesson {
             display: none !important;
         }
+
         /* Khi home: xoá padding card, chỉ để ảnh */
         #top-control-card:not(:has(#btn-start-lesson[style*="display: none"])) {
             padding: 0 !important;
@@ -47,10 +51,12 @@
             border: none !important;
             box-shadow: none !important;
         }
+
         /* Ẩn nút thu gọn khi home */
         #top-control-card:not(:has(#btn-start-lesson[style*="display: none"])) #top-card-toggle-btn-default {
             display: none !important;
         }
+
         /* Khi vào bài học (btn-start-lesson ẩn) → ẩn ảnh mục tiêu */
         #top-control-card:has(#btn-start-lesson[style*="display: none"]) #anhmuctieu-banner {
             display: none !important;
@@ -1014,23 +1020,20 @@
         }
 
         .section-header-user {
-            padding: 12px 20px;
-            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
-            color: white;
-            font-weight: 900;
-            font-size: 15px;
-            letter-spacing: 1px;
+            padding: 0;
+            background: none;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 2px solid rgba(59, 130, 246, 0.5);
+            display: block;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.4);
             margin-top: 8px;
             user-select: none;
+            height: 140px;
         }
 
-        .section-header-user:hover {
-            background: linear-gradient(135deg, #1e40af, #2563eb);
+        .section-header-user:hover .user-banner-overlay {
+            opacity: 0.6 !important;
         }
 
         .van-menu-lvl1 {
@@ -2316,8 +2319,37 @@
 
             <!-- ===== GÓC CỦA USER ===== -->
             <div class="section-header-user" onclick="toggleSub('user-section')">
-                <span id="user-section-label">&#x1F338; GÓC CỦA BẠN</span>
-                <span id="user-section-arrow" style="font-size:12px;">▼</span>
+                <!-- BG: dùng ảnh nền hoặc gradient pastel xanh -->
+                <div
+                    style="position:absolute;inset:0;background:linear-gradient(135deg,#e0f2fe 0%,#bae6fd 40%,#93c5fd 70%,#7dd3fc 100%);">
+                </div>
+                <div style="position:absolute;inset:0;background:url('anhnen1.png') center/cover;opacity:0.28;"
+                    onerror="this.style.display='none'"></div>
+                <!-- Overlay gradient mềm phía dưới -->
+                <div class="user-banner-overlay"
+                    style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(186,230,253,0.1) 0%,rgba(14,116,144,0.25) 100%);opacity:0.4;transition:opacity 0.3s;">
+                </div>
+                <!-- Hoa trang trí -->
+                <div
+                    style="position:absolute;top:10px;left:14px;font-size:22px;opacity:0.5;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+                    🍀</div>
+                <div
+                    style="position:absolute;bottom:10px;right:14px;font-size:20px;opacity:0.45;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+                    🍀</div>
+                <!-- Nội dung chính -->
+                <div
+                    style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0 36px;">
+                    <div id="user-section-label"
+                        style="font-size:30px;font-weight:900;color:#1e40af;text-shadow:0 1px 6px rgba(255,255,255,0.9),0 0 20px rgba(147,197,253,0.6);-webkit-text-stroke:0.8px #1e40af;letter-spacing:0.5px;text-align:center;line-height:1.4;font-family:'Dancing Script', cursive;">
+                        🍀 Góc nhỏ của <span
+                            style="color:#0369a1; -webkit-text-stroke:1.2px #0369a1; text-shadow: 0 0 8px #fbbf24, 0 0 15px #fbbf24, 0 0 20px #fde047;">Tên</span>
+                        🍀
+                    </div>
+                    <div style="font-size:10.5px;color:#0369a1;font-weight:700;letter-spacing:2px;opacity:0.85;">✨ Hứa
+                        chăm học mỗi ngày ✨</div>
+                </div>
+                <span id="user-section-arrow"
+                    style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:14px;color:#1e40af;text-shadow:0 1px 4px rgba(255,255,255,0.8);">▼</span>
             </div>
             <div id="user-section">
 
@@ -2486,11 +2518,9 @@
                         ti&#234;u h&#244;m nay! &#127919;</h2>
 
                     <!-- ===== ẢNH MỤC TIÊU (thay thế home banner) ===== -->
-                    <div id="anhmuctieu-banner"
-                        style="width:100%; cursor:pointer; border-radius:24px; overflow:hidden;"
+                    <div id="anhmuctieu-banner" style="width:100%; cursor:pointer; border-radius:24px; overflow:hidden;"
                         onclick="toggleMenu()">
-                        <img src="anhmuctieu.png" alt="Mục tiêu hôm nay"
-                            style="width:100%; height:auto; display:block;
+                        <img src="anhmuctieu.png" alt="Mục tiêu hôm nay" style="width:100%; height:auto; display:block;
                                    filter:contrast(1.05) saturate(1.1);"
                             onerror="this.parentElement.style.display='none'">
                     </div>
@@ -2662,8 +2692,7 @@
                     </div>
                 </div>
 
-                <div class="card" id="journey-card"
-                    style="position: relative; margin-bottom: 20px;
+                <div class="card" id="journey-card" style="position: relative; margin-bottom: 20px;
                            background: linear-gradient(135deg, #1a0533 0%, #2d1060 40%, #0f0a2e 100%);
                            border-radius: 20px; padding: 25px;
                            display: flex; flex-direction: row; gap: 20px;
@@ -2671,8 +2700,7 @@
                            box-shadow: 0 12px 40px rgba(91,33,182,0.6), 0 0 0 1.5px rgba(255,255,255,0.08);
                            border: none; outline: 2.5px solid transparent;
                            background-clip: padding-box;
-                           position: relative;"
-                    >
+                           position: relative;">
                     <!-- Viền gradient trắng -->
                     <div style="position:absolute; inset:0; border-radius:20px; padding:2px;
                                 background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(180,120,255,0.4) 40%, rgba(255,200,80,0.5) 70%, rgba(255,255,255,0.6) 100%);
@@ -2683,23 +2711,27 @@
 
                     <!-- Left Section -->
                     <div style="display: flex; flex-direction: column; gap: 2px; position:relative; z-index:2;">
-                        <div style="font-size: 14px; font-weight: 900; color: #fff; letter-spacing: 1.5px; text-shadow: 0 1px 8px rgba(255,255,255,0.3);">HÔM NAY LÀ
+                        <div
+                            style="font-size: 14px; font-weight: 900; color: #fff; letter-spacing: 1.5px; text-shadow: 0 1px 8px rgba(255,255,255,0.3);">
+                            HÔM NAY LÀ
                             NGÀY
                         </div>
                         <div style="display: flex; align-items: baseline; gap: 5px;">
                             <span id="journey-days-passed-big"
                                 style="font-size: 56px; font-weight: 900; color: #fde047; line-height: 1; text-shadow: 0 4px 20px rgba(253,224,71,0.7), 0 0 40px rgba(253,224,71,0.3);">0</span>
                             <span id="journey-days-total-text"
-                                style="font-size: 24px; font-weight: 800; color: rgba(255,255,255,0.7);"/>
-                                0</span>
+                                style="font-size: 24px; font-weight: 800; color: rgba(255,255,255,0.7);" />
+                            0</span>
                         </div>
                         <div id="journey-message"
-                            style="font-size: 14px; color: #e2e8f0; margin-top: 5px; font-weight: 700; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">🌿
+                            style="font-size: 14px; color: #e2e8f0; margin-top: 5px; font-weight: 700; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
+                            🌿
                             Còn 0 ngày nữa. Cố lên nhé! 💪</div>
                     </div>
 
                     <!-- Middle Section -->
-                    <div style="flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 8px; position:relative; z-index:2;">
+                    <div
+                        style="flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 8px; position:relative; z-index:2;">
                         <div
                             style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
                             <span>🌱 Bắt đầu</span>
@@ -2718,8 +2750,7 @@
                     </div>
 
                     <!-- Right Section -->
-                    <div
-                        style="display: flex; flex-direction: column; gap: 15px;
+                    <div style="display: flex; flex-direction: column; gap: 15px;
                                background: rgba(0,0,0,0.35);
                                padding: 15px 20px; border-radius: 16px;
                                border: 1px solid rgba(255,255,255,0.18);
@@ -2795,17 +2826,16 @@
                 </div>
 
                 <!-- ===== ẢNH MÈO ===== -->
-                <div id="anhmeo-block" style="display:flex; justify-content:center; margin-bottom:10px; pointer-events:none;">
-                    <img src="anhmeo.png" alt="Mèo cute"
-                        style="width:220px; max-width:45vw; object-fit:contain;
+                <div id="anhmeo-block"
+                    style="display:flex; justify-content:center; margin-bottom:10px; pointer-events:none;">
+                    <img src="anhmeo.png" alt="Mèo cute" style="width:220px; max-width:45vw; object-fit:contain;
                                border:3px solid rgba(255,255,255,0.9);
                                border-radius:20px;
                                box-shadow: 0 0 0 1px rgba(255,255,255,0.3), 0 12px 40px rgba(0,0,0,0.6), 0 0 30px rgba(255,255,255,0.15);
                                filter: contrast(1.1) saturate(1.2) brightness(1.05) drop-shadow(0 4px 16px rgba(0,0,0,0.7));
                                image-rendering: -webkit-optimize-contrast;
                                image-rendering: crisp-edges;
-                               background: rgba(0,0,0,0.2);"
-                        onerror="this.parentElement.style.display='none'">
+                               background: rgba(0,0,0,0.2);" onerror="this.parentElement.style.display='none'">
                 </div>
 
                 <!-- ===== STATS SCREEN ===== -->
@@ -3007,14 +3037,18 @@
                             style="position: absolute; top: -15px; right: 20px; background: #1e293b; border: 1px solid #475569; color: #cbd5e1; padding: 5px 14px; border-radius: 14px; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10;">▼
                             Thu gọn</button>
 
-                        <button style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af;border:2px solid #93c5fd;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(59,130,246,0.25);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
-                            onclick="if(window._goBackFn){window._goBackFn();}else{goHome();}"><span style="font-size:16px;">◀</span>Quay lại</button>
-                        <button style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#e2e8f0,#cbd5e1);color:#334155;border:2px solid #94a3b8;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(100,116,139,0.25);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
+                        <button
+                            style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af;border:2px solid #93c5fd;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(59,130,246,0.25);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
+                            onclick="if(window._goBackFn){window._goBackFn();}else{goHome();}"><span
+                                style="font-size:16px;">◀</span>Quay lại</button>
+                        <button
+                            style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#e2e8f0,#cbd5e1);color:#334155;border:2px solid #94a3b8;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(100,116,139,0.25);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
                             onclick="resetQuiz()"><span style="font-size:16px;">🔄</span>Làm lại</button>
                         <button id="bottom-pause-btn"
                             style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;display:none;background:linear-gradient(135deg,#fef9c3,#fde68a);color:#92400e;border:2px solid #fbbf24;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(251,191,36,0.3);line-height:1.3;flex-direction:column;align-items:center;gap:2px;"
                             onclick="toggleTestTimer()"><span style="font-size:16px;">⏸️</span>Tạm dừng</button>
-                        <button style="flex:1.5;font-size:14px;padding:10px 8px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:2px solid #4ade80;border-radius:12px;cursor:pointer;box-shadow:0 4px 14px rgba(34,197,94,0.4);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
+                        <button
+                            style="flex:1.5;font-size:14px;padding:10px 8px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:2px solid #4ade80;border-radius:12px;cursor:pointer;box-shadow:0 4px 14px rgba(34,197,94,0.4);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
                             onclick="submitQuiz()"><span style="font-size:18px;">✅</span>NỘP BÀI</button>
                         <button id="bottom-mute-btn"
                             style="flex:1;font-size:12.5px;padding:10px 6px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,#ede9fe,#ddd6fe);color:#5b21b6;border:2px solid #a78bfa;border-radius:12px;cursor:pointer;box-shadow:0 3px 10px rgba(167,139,250,0.3);line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:2px;"
@@ -4604,7 +4638,7 @@
                 function applyUser() {
                     document.getElementById('header-user-name').innerText = `${userName} cố lên nhé! 🌸`;
                     const userLabel = document.getElementById('user-section-label');
-                    if (userLabel) userLabel.innerHTML = `&#x1F338; GÓC CỦA ${userName.toUpperCase()}`;
+                    if (userLabel) userLabel.innerHTML = `🍀 Góc nhỏ của <span style="color:#0369a1; -webkit-text-stroke:1.2px #0369a1; text-shadow: 0 0 8px #fbbf24, 0 0 15px #fbbf24, 0 0 20px #fde047;">${userName}</span> 🍀`;
                     if (document.getElementById('view-title').innerText.includes("Mục tiêu")) {
                         document.getElementById('view-title').innerText = `Mục tiêu hôm nay! 🎯`;
                     }
@@ -5242,7 +5276,7 @@
                     var _ss = document.getElementById('stats-screen'); if (_ss) _ss.style.display = 'none';
                     // Lưu callback quay lại màn hình trước đó
                     var _prevLv = curLevel, _prevTy = curType, _prevDay = curDay;
-                    window._goBackFn = function() {
+                    window._goBackFn = function () {
                         if (listOverride) {
                             // Nếu đang trong chế độ override (Smart Review, ôn sai...) → quay về màn chọn bài cũ
                             var _qc2 = document.getElementById('quiz-container');
@@ -5252,8 +5286,8 @@
                             var _mbc = document.getElementById('mode-box-container');
                             if (_mbc) _mbc.style.display = 'block';
                             // Khôi phục lại các nút và nhóm
-                            ['group-1','group-2a','group-2b'].forEach(function(id) { var el = document.getElementById(id); if (el) el.style.display = 'block'; });
-                            ['btn-add-word','btn-import','btn-edit-list','btn-show-list','btn-shuffle','btn-flashcard','btn-match-game','btn-reaction-game'].forEach(function(id) { var el = document.getElementById(id); if (el) el.style.display = ''; });
+                            ['group-1', 'group-2a', 'group-2b'].forEach(function (id) { var el = document.getElementById(id); if (el) el.style.display = 'block'; });
+                            ['btn-add-word', 'btn-import', 'btn-edit-list', 'btn-show-list', 'btn-shuffle', 'btn-flashcard', 'btn-match-game', 'btn-reaction-game'].forEach(function (id) { var el = document.getElementById(id); if (el) el.style.display = ''; });
                             var jc = document.getElementById('journey-card'); if (jc) jc.style.display = '';
                             var srb2 = document.getElementById('smart-review-banner'); if (srb2) srb2.style.display = '';
                         } else {
@@ -5469,7 +5503,7 @@
                     </div>
                     ${item.c4 ? `<div style="font-size:16px; color:#cbd5e1; margin-bottom:15px; background:rgba(0,0,0,0.2); padding:10px 15px; border-radius:10px; border-left:4px solid var(--warning);">💡 ${fT(item.c4)}</div>` : ''}
                     <div style="display:flex; gap:12px;">
-                         ${!ans.trim() ? '<div id="input-'+i+'" data-ans="" data-skip="true" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(251,191,36,0.13),rgba(251,191,36,0.06));border:1.5px dashed #fbbf24;border-radius:12px;padding:10px 18px;color:#fde68a;font-size:14px;font-weight:700;text-shadow:0 0 8px rgba(251,191,36,0.4);box-shadow:0 2px 10px rgba(251,191,36,0.12);width:100%;text-align:center;"><span style="font-size:16px;">🌺</span>Kh\u00f4ng c\u00f3 c\u00e1ch \u0111\u1ecdc n\u00ean b\u1ea1n k c\u1ea7n \u0111i\u1ec1n n\u00e8</div>' : '<input type="text" id="input-'+i+'" data-ans="'+ans+'" oninput="check('+i+')" onkeydown="handleKey(event, '+i+')" autocomplete="off" placeholder="..."><button class="btn btn-gray" style="width:70px; font-size:24px;" onclick="showHint('+i+')">👁️</button>'}
+                         ${!ans.trim() ? '<div id="input-' + i + '" data-ans="" data-skip="true" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(251,191,36,0.13),rgba(251,191,36,0.06));border:1.5px dashed #fbbf24;border-radius:12px;padding:10px 18px;color:#fde68a;font-size:14px;font-weight:700;text-shadow:0 0 8px rgba(251,191,36,0.4);box-shadow:0 2px 10px rgba(251,191,36,0.12);width:100%;text-align:center;"><span style="font-size:16px;">🌺</span>Kh\u00f4ng c\u00f3 c\u00e1ch \u0111\u1ecdc n\u00ean b\u1ea1n k c\u1ea7n \u0111i\u1ec1n n\u00e8</div>' : '<input type="text" id="input-' + i + '" data-ans="' + ans + '" oninput="check(' + i + ')" onkeydown="handleKey(event, ' + i + ')" autocomplete="off" placeholder="..."><button class="btn btn-gray" style="width:70px; font-size:24px;" onclick="showHint(' + i + ')">👁️</button>'}
                      </div>
                 </div>`;
                         }
@@ -5843,13 +5877,13 @@
                                 }
                             }
                             // Câu không có cách đọc → bỏ qua, không tính điểm
-                             else if (ans === '' && val === '') {
-                                 skipped++;
-                                 card.setAttribute('data-res', 'skip');
-                                 card.style.borderLeftColor = '#334155';
-                                 if (input) { input.style.opacity = '0.4'; }
-                             }
-                             // Câu sai hoặc chưa điền (val === '' nhưng ans !== '')
+                            else if (ans === '' && val === '') {
+                                skipped++;
+                                card.setAttribute('data-res', 'skip');
+                                card.style.borderLeftColor = '#334155';
+                                if (input) { input.style.opacity = '0.4'; }
+                            }
+                            // Câu sai hoặc chưa điền (val === '' nhưng ans !== '')
                             else {
                                 failed++;
                                 if (card.getAttribute('data-res') !== 'forgot') card.setAttribute('data-res', 'ng');
@@ -6192,7 +6226,7 @@
                         const qc = document.getElementById('quiz-container'); if (qc) qc.style.display = '';
                         const sc = document.getElementById('submit-container'); if (sc && currentList.length > 0) sc.style.display = 'flex';
                         // Cuộn để câu đầu tiên lên đầu màn hình
-                        setTimeout(function() {
+                        setTimeout(function () {
                             var firstQ = document.querySelector('#quiz-container .q-block, #quiz-container .quiz-item, #quiz-container > *:first-child');
                             if (firstQ) {
                                 var top = firstQ.getBoundingClientRect().top + window.scrollY - 80;
@@ -8446,8 +8480,10 @@
                             Ôn NGAY kẻo mất!</div>
                         <div style="font-size:11.5px; color:#57534e; line-height:1.65;">
                             Lịch ôn cố định: <b style="color:#dc2626;">1 → 3 → 7 → 14 → 30 ngày</b><br>
-                            Trả lời <b>đúng</b> → lên bậc tiếp theo 📈 &nbsp;|&nbsp; Trả lời <b>sai</b> → reset về 1 ngày 🔄<br>
-                            <span style="color:#78716c; font-size:11px;">👉 Từ quá hạn ôn hoặc điểm nhớ &lt; 50% → rơi vào đây 🚨</span>
+                            Trả lời <b>đúng</b> → lên bậc tiếp theo 📈 &nbsp;|&nbsp; Trả lời <b>sai</b> → reset về 1
+                            ngày 🔄<br>
+                            <span style="color:#78716c; font-size:11px;">👉 Từ quá hạn ôn hoặc điểm nhớ &lt; 50% → rơi
+                                vào đây 🚨</span>
                         </div>
                     </div>
                     <!-- Từ hay sai -->
@@ -8456,9 +8492,12 @@
                         <div style="font-size:12px; font-weight:900; color:#ea580c; margin-bottom:3px;">🟠 Từ hay sai —
                             Điểm yếu cần chinh phục!</div>
                         <div style="font-size:11.5px; color:#57534e; line-height:1.65;">
-                            Bất kỳ lần gõ sai / chọn sai nào đều được ghi lại <b style="color:#ea580c;">tức thì</b> — không cần nộp bài.<br>
-                            Gõ sai / chọn sai <b style="color:#ea580c;">≥ 2 lần</b> → từ bị liệt kê là <b>hay sai</b>, interval tự rút về 1 ngày.<br>
-                            Làm đúng từ đó <b style="color:#10b981;">3 lần liên tiếp</b> → thoát danh sách hay sai, ôn bình thường trở lại.
+                            Bất kỳ lần gõ sai / chọn sai nào đều được ghi lại <b style="color:#ea580c;">tức thì</b> —
+                            không cần nộp bài.<br>
+                            Gõ sai / chọn sai <b style="color:#ea580c;">≥ 2 lần</b> → từ bị liệt kê là <b>hay sai</b>,
+                            interval tự rút về 1 ngày.<br>
+                            Làm đúng từ đó <b style="color:#10b981;">3 lần liên tiếp</b> → thoát danh sách hay sai, ôn
+                            bình thường trở lại.
                         </div>
                     </div>
                     <!-- Chưa từng ôn -->
@@ -8485,69 +8524,96 @@
 
             <!-- ✨ TIMELINE LỊCH ÔN CỐ ĐỊNH -->
             <div style="padding:14px 24px 0;">
-                <div style="background:linear-gradient(135deg,#0f172a,#1e1b4b); border:1.5px solid rgba(165,180,252,0.25); border-radius:16px; padding:16px 18px; font-family:'Baloo 2',sans-serif;">
-                    <div style="font-size:12px; font-weight:900; color:#a5b4fc; letter-spacing:0.5px; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+                <div
+                    style="background:linear-gradient(135deg,#0f172a,#1e1b4b); border:1.5px solid rgba(165,180,252,0.25); border-radius:16px; padding:16px 18px; font-family:'Baloo 2',sans-serif;">
+                    <div
+                        style="font-size:12px; font-weight:900; color:#a5b4fc; letter-spacing:0.5px; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
                         📅 LỊCH ÔN CỐ ĐỊNH CỦA BẠN
-                        <span style="background:rgba(165,180,252,0.15); color:#818cf8; font-size:10px; padding:1px 7px; border-radius:6px; border:1px solid rgba(165,180,252,0.3);">Spaced Repetition</span>
+                        <span
+                            style="background:rgba(165,180,252,0.15); color:#818cf8; font-size:10px; padding:1px 7px; border-radius:6px; border:1px solid rgba(165,180,252,0.3);">Spaced
+                            Repetition</span>
                     </div>
                     <!-- Timeline steps -->
-                    <div style="display:flex; align-items:center; justify-content:space-between; gap:4px; margin-bottom:10px;">
+                    <div
+                        style="display:flex; align-items:center; justify-content:space-between; gap:4px; margin-bottom:10px;">
                         <!-- Bậc 1 -->
                         <div style="flex:1; text-align:center;">
-                            <div style="background:linear-gradient(135deg,#ef4444,#dc2626); border-radius:10px; padding:7px 4px; margin-bottom:4px; box-shadow:0 4px 12px rgba(239,68,68,0.4);">
+                            <div
+                                style="background:linear-gradient(135deg,#ef4444,#dc2626); border-radius:10px; padding:7px 4px; margin-bottom:4px; box-shadow:0 4px 12px rgba(239,68,68,0.4);">
                                 <div style="font-size:15px; font-weight:900; color:#fff; line-height:1;">1</div>
-                                <div style="font-size:9px; color:rgba(255,255,255,0.8); font-weight:700; margin-top:1px;">ngày</div>
+                                <div
+                                    style="font-size:9px; color:rgba(255,255,255,0.8); font-weight:700; margin-top:1px;">
+                                    ngày</div>
                             </div>
                             <div style="font-size:9px; color:#94a3b8; font-weight:700;">Mới / Reset</div>
                         </div>
-                        <div style="color:#475569; font-size:14px; font-weight:900; flex-shrink:0; margin-bottom:14px;">→</div>
+                        <div style="color:#475569; font-size:14px; font-weight:900; flex-shrink:0; margin-bottom:14px;">
+                            →</div>
                         <!-- Bậc 2 -->
                         <div style="flex:1; text-align:center;">
-                            <div style="background:linear-gradient(135deg,#f97316,#ea580c); border-radius:10px; padding:7px 4px; margin-bottom:4px; box-shadow:0 4px 12px rgba(249,115,22,0.4);">
+                            <div
+                                style="background:linear-gradient(135deg,#f97316,#ea580c); border-radius:10px; padding:7px 4px; margin-bottom:4px; box-shadow:0 4px 12px rgba(249,115,22,0.4);">
                                 <div style="font-size:15px; font-weight:900; color:#fff; line-height:1;">3</div>
-                                <div style="font-size:9px; color:rgba(255,255,255,0.8); font-weight:700; margin-top:1px;">ngày</div>
+                                <div
+                                    style="font-size:9px; color:rgba(255,255,255,0.8); font-weight:700; margin-top:1px;">
+                                    ngày</div>
                             </div>
                             <div style="font-size:9px; color:#fb923c; font-weight:700;">Đúng 1 lần ✓</div>
                         </div>
-                        <div style="color:#475569; font-size:14px; font-weight:900; flex-shrink:0; margin-bottom:14px;">→</div>
+                        <div style="color:#475569; font-size:14px; font-weight:900; flex-shrink:0; margin-bottom:14px;">
+                            →</div>
                         <!-- Bậc 3 -->
                         <div style="flex:1; text-align:center;">
-                            <div style="background:linear-gradient(135deg,#eab308,#ca8a04); border-radius:10px; padding:7px 4px; margin-bottom:4px; box-shadow:0 4px 12px rgba(234,179,8,0.4);">
+                            <div
+                                style="background:linear-gradient(135deg,#eab308,#ca8a04); border-radius:10px; padding:7px 4px; margin-bottom:4px; box-shadow:0 4px 12px rgba(234,179,8,0.4);">
                                 <div style="font-size:15px; font-weight:900; color:#fff; line-height:1;">7</div>
-                                <div style="font-size:9px; color:rgba(255,255,255,0.8); font-weight:700; margin-top:1px;">ngày</div>
+                                <div
+                                    style="font-size:9px; color:rgba(255,255,255,0.8); font-weight:700; margin-top:1px;">
+                                    ngày</div>
                             </div>
                             <div style="font-size:9px; color:#fbbf24; font-weight:700;">Đúng 2 lần ✓✓</div>
                         </div>
-                        <div style="color:#475569; font-size:14px; font-weight:900; flex-shrink:0; margin-bottom:14px;">→</div>
+                        <div style="color:#475569; font-size:14px; font-weight:900; flex-shrink:0; margin-bottom:14px;">
+                            →</div>
                         <!-- Bậc 4 -->
                         <div style="flex:1; text-align:center;">
-                            <div style="background:linear-gradient(135deg,#22c55e,#16a34a); border-radius:10px; padding:7px 4px; margin-bottom:4px; box-shadow:0 4px 12px rgba(34,197,94,0.4);">
+                            <div
+                                style="background:linear-gradient(135deg,#22c55e,#16a34a); border-radius:10px; padding:7px 4px; margin-bottom:4px; box-shadow:0 4px 12px rgba(34,197,94,0.4);">
                                 <div style="font-size:15px; font-weight:900; color:#fff; line-height:1;">14</div>
-                                <div style="font-size:9px; color:rgba(255,255,255,0.8); font-weight:700; margin-top:1px;">ngày</div>
+                                <div
+                                    style="font-size:9px; color:rgba(255,255,255,0.8); font-weight:700; margin-top:1px;">
+                                    ngày</div>
                             </div>
                             <div style="font-size:9px; color:#4ade80; font-weight:700;">Đúng 3 lần ✓✓✓</div>
                         </div>
-                        <div style="color:#475569; font-size:14px; font-weight:900; flex-shrink:0; margin-bottom:14px;">→</div>
+                        <div style="color:#475569; font-size:14px; font-weight:900; flex-shrink:0; margin-bottom:14px;">
+                            →</div>
                         <!-- Bậc 5 -->
                         <div style="flex:1; text-align:center;">
-                            <div style="background:linear-gradient(135deg,#6366f1,#4f46e5); border-radius:10px; padding:7px 4px; margin-bottom:4px; box-shadow:0 4px 12px rgba(99,102,241,0.5);">
+                            <div
+                                style="background:linear-gradient(135deg,#6366f1,#4f46e5); border-radius:10px; padding:7px 4px; margin-bottom:4px; box-shadow:0 4px 12px rgba(99,102,241,0.5);">
                                 <div style="font-size:15px; font-weight:900; color:#fff; line-height:1;">30</div>
-                                <div style="font-size:9px; color:rgba(255,255,255,0.8); font-weight:700; margin-top:1px;">ngày</div>
+                                <div
+                                    style="font-size:9px; color:rgba(255,255,255,0.8); font-weight:700; margin-top:1px;">
+                                    ngày</div>
                             </div>
                             <div style="font-size:9px; color:#a5b4fc; font-weight:700;">Đúng 4 lần 🏆</div>
                         </div>
                     </div>
                     <!-- Ghi chú -->
                     <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                        <div style="display:flex; align-items:center; gap:4px; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.25); border-radius:8px; padding:4px 10px;">
+                        <div
+                            style="display:flex; align-items:center; gap:4px; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.25); border-radius:8px; padding:4px 10px;">
                             <span style="font-size:13px;">✅</span>
                             <span style="font-size:11px; color:#86efac; font-weight:700;">Đúng → lên bậc</span>
                         </div>
-                        <div style="display:flex; align-items:center; gap:4px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); border-radius:8px; padding:4px 10px;">
+                        <div
+                            style="display:flex; align-items:center; gap:4px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); border-radius:8px; padding:4px 10px;">
                             <span style="font-size:13px;">❌</span>
                             <span style="font-size:11px; color:#fca5a5; font-weight:700;">Sai → reset 1 ngày</span>
                         </div>
-                        <div style="display:flex; align-items:center; gap:4px; background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.25); border-radius:8px; padding:4px 10px;">
+                        <div
+                            style="display:flex; align-items:center; gap:4px; background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.25); border-radius:8px; padding:4px 10px;">
                             <span style="font-size:13px;">😅</span>
                             <span style="font-size:11px; color:#fde68a; font-weight:700;">Khó → giữ nguyên</span>
                         </div>
@@ -8805,7 +8871,7 @@
                         if (fb) fb.style.display = 'inline-flex';
                         // Tự động bắt đầu đồng hồ ngay khi vào Ôn tập thông minh
                         if (typeof resetTestTimer === 'function') resetTestTimer();
-                        setTimeout(function() {
+                        setTimeout(function () {
                             if (typeof toggleTestTimer === 'function') toggleTestTimer();
                         }, 100);
                     }, 150);

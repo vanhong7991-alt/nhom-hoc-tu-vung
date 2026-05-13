@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hana Reaction – Phản Xạ Nhanh</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+
+:root {
+  --c1: #0f0c29; --c2: #302b63; --c3: #24243e;
+  --accent: #f72585; --accent2: #7209b7; --accent3: #4cc9f0;
+  --gold: #ffd60a; --green: #06d6a0;
+}
+
+* { box-sizing: border-box; user-select: none; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 50%, var(--c3) 100%);
+  min-height: 100vh; height: 100vh; overflow: hidden;
+  display: flex; flex-direction: column; align-items: center;
+  color: #fff; position: relative;
+}
+
+/* ---- Animated bg ---- */
+.bg-orb {
+  position: fixed; border-radius: 50%; filter: blur(80px);
+  pointer-events: none; z-index: 0; animation: orbPulse 6s ease-in-out infinite alternate;
+}
+.bg-orb.o1 { width:400px;height:400px;top:-100px;left:-100px;background:rgba(247,37,133,0.18); }
+.bg-orb.o2 { width:350px;height:350px;bottom:-80px;right:-80px;background:rgba(114,9,183,0.22); animation-delay:-3s; }
+.bg-orb.o3 { width:250px;height:250px;top:40%;left:60%;background:rgba(76,201,240,0.12); animation-delay:-1.5s; }
+@keyframes orbPulse { from{transform:scale(1);} to{transform:scale(1.3);} }
+
+/* ---- Header ---- */
+#game-header {
+  position: relative; z-index: 100; width: 100%; max-width: 900px;
+  padding: 14px 24px; display: flex; justify-content: space-between; align-items: center;
+  gap: 10px;
+}
+
+.stat-pill {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  padding: 8px 20px; border-radius: 40px;
+  font-size: 1rem; font-weight: 700; letter-spacing: 0.5px;
+  display: flex; align-items: center; gap: 8px;
+}
+.stat-pill span { color: var(--gold); font-size: 1.25rem; }
+#timer-pill span { color: var(--accent3); font-size: 1.35rem; }
+#timer-pill.warning span { color: var(--accent); animation: blinkRed 0.4s infinite; }
+@keyframes blinkRed { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* ---- Timer bar ---- */
+#bar-track {
+  position: relative; z-index: 100; width: 100%; max-width: 900px;
+  padding: 0 24px 8px;
+}
+#bar-bg {
+  height: 8px; background: rgba(255,255,255,0.1);
+  border-radius: 8px; overflow: hidden;
+}
+#bar-fill {
+  height: 100%; width: 100%; border-radius: 8px;
+  background: linear-gradient(90deg, var(--accent3), var(--accent2), var(--accent));
+  transition: width 0.1s linear;
+}
+#bar-fill.warn { background: linear-gradient(90deg, #ff6b6b, var(--accent)); }
+
+/* ---- Question area ---- */
+#question-container {
+  position: relative; z-index: 50;
+  text-align: center; width: 95%; max-width: 600px;
+  padding: 10px 0;
+}
+#progress-text {
+  font-size: 0.9rem; font-weight: 700; color: rgba(255,255,255,0.5);
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px;
+}
+#round-text {
+  font-size: 0.8rem; color: var(--accent3); margin-bottom: 6px;
+}
+#question-text {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+  border: 2px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(16px);
+  padding: 22px 48px; border-radius: 60px;
+  font-size: 3rem; font-weight: 900; letter-spacing: 2px;
+  background-clip: text; -webkit-background-clip: unset;
+  color: #fff; text-shadow: 0 0 30px rgba(76,201,240,0.6);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+/* ---- Canvas ---- */
+#game-canvas {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 60; pointer-events: none;
+}
+
+.bubble {
+  position: absolute; pointer-events: auto; cursor: pointer;
+  /* width/height set dynamically in JS */
+  display: flex; justify-content: center; align-items: center;
+  text-align: center; padding: 18px;
+  font-weight: 800; font-size: 0.9rem; line-height: 1.3;
+  /* Never break inside a word – only at spaces */
+  overflow-wrap: normal; word-break: normal; hyphens: none;
+  overflow: visible;
+  border-radius: 50%; border: 3px solid rgba(255,255,255,0.35);
+  backdrop-filter: blur(10px);
+  transition: transform 0.15s ease;
+  color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.bubble:hover { transform: scale(1.12) !important; }
+.bubble.t1 { background: radial-gradient(circle at 35% 35%, #f72585cc, #7209b7cc); }
+.bubble.t2 { background: radial-gradient(circle at 35% 35%, #4cc9f0cc, #4361eecc); }
+.bubble.t3 { background: radial-gradient(circle at 35% 35%, #06d6a0cc, #0077b6cc); }
+.bubble.t4 { background: radial-gradient(circle at 35% 35%, #ffd60acc, #f77f00cc); }
+.bubble.t5 { background: radial-gradient(circle at 35% 35%, #ff6b6bcc, #c9184acc); }
+.bubble.t6 { background: radial-gradient(circle at 35% 35%, #a8dadc99, #457b9dcc); }
+
+.bubble.correct { animation: popUp 0.5s forwards; pointer-events: none; }
+.bubble.wrong { animation: shakeWrong 0.4s forwards; pointer-events: none; }
+
+@keyframes popUp {
+  0%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.6);opacity:0.8;filter:brightness(2)}
+  100%{transform:scale(2.5) translateY(-80px);opacity:0}
+}
+@keyframes shakeWrong {
+  0%,100%{transform:translateX(0) scale(1)}
+  20%{transform:translateX(-18px) scale(1.05)}
+  40%{transform:translateX(18px) scale(1.05)}
+  60%{transform:translateX(-12px)}
+  80%{transform:translateX(12px)}
+}
+
+/* ---- Feedback text ---- */
+#feedback-text {
+  position: fixed; top: 18%; left: 50%; transform: translateX(-50%);
+  font-size: 3.5rem; font-weight: 900; pointer-events: none; z-index: 300;
+  opacity: 0; white-space: nowrap;
+}
+.fb-correct { color: var(--gold); text-shadow: 0 0 20px var(--gold), 0 0 40px var(--gold); }
+.fb-wrong { color: var(--accent); text-shadow: 0 0 20px var(--accent), 0 0 40px #ff0055; }
+.show-fb { animation: fbAnim 0.7s ease-out forwards; }
+@keyframes fbAnim {
+  0%{transform:translate(-50%,0) scale(0.4);opacity:0}
+  40%{transform:translate(-50%,-20px) scale(1.15);opacity:1}
+  100%{transform:translate(-50%,-60px) scale(1);opacity:0}
+}
+
+/* ---- Modals ---- */
+.modal {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 30px; text-align: center;
+  background: linear-gradient(135deg, rgba(15,12,41,0.97), rgba(48,43,99,0.97));
+  backdrop-filter: blur(20px);
+}
+.modal.hidden { display: none !important; }
+
+.modal h1 {
+  font-size: 3.2rem; font-weight: 900; margin-bottom: 8px;
+  background: linear-gradient(90deg, var(--accent), var(--accent3));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.modal p { color: rgba(255,255,255,0.7); font-size: 1.1rem; line-height: 1.7; }
+.modal .big { font-size: 1.8rem; font-weight: 700; color: #fff; margin: 8px 0; }
+.modal .score-big {
+  font-size: 2.8rem; font-weight: 900;
+  color: var(--gold); text-shadow: 0 0 20px rgba(255,214,10,0.5);
+  margin: 12px 0;
+}
+
+.btn {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none; color: #fff; padding: 18px 56px;
+  font-size: 1.5rem; font-weight: 900; border-radius: 50px; cursor: pointer;
+  margin-top: 28px; letter-spacing: 1px;
+  box-shadow: 0 6px 30px rgba(247,37,133,0.4);
+  transition: all 0.2s ease;
+}
+.btn:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(247,37,133,0.6); }
+.btn:active { transform: translateY(1px); }
+
+.badge {
+  display: inline-block; padding: 5px 16px; border-radius: 20px;
+  font-size: 0.85rem; font-weight: 700; margin: 4px;
+}
+.badge-info { background: rgba(76,201,240,0.2); border: 1px solid var(--accent3); color: var(--accent3); }
+.badge-warn { background: rgba(247,37,133,0.2); border: 1px solid var(--accent); color: var(--accent); }
+
+/* ---- Particles ---- */
+.spark {
+  position: fixed; pointer-events: none; z-index: 500;
+  width: 8px; height: 8px; border-radius: 50%;
+  animation: sparkFly 0.8s ease-out forwards;
+}
+@keyframes sparkFly {
+  0%{opacity:1;transform:translate(0,0) scale(1)}
+  100%{opacity:0;transform:var(--tx,0) var(--ty,0) scale(0)}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orb o1"></div>
+<div class="bg-orb o2"></div>
+<div class="bg-orb o3"></div>
+
+<!-- Header -->
+<div id="game-header">
+  <div class="stat-pill">🔥 Streak <span id="streak-val">0</span></div>
+  <div class="stat-pill" id="timer-pill">⏱ <span id="time-val">90</span>s</div>
+  <div class="stat-pill">⭐ <span id="score-val">0</span></div>
+</div>
+
+<!-- Timer bar -->
+<div id="bar-track"><div id="bar-bg"><div id="bar-fill"></div></div></div>
+
+<!-- Question -->
+<div id="question-container" class="hidden">
+  <div id="round-text">Lượt 1 | Từ 1/0</div>
+  <div id="progress-text">Câu 1</div>
+  <div id="question-text">準備完了</div>
+</div>
+
+<div id="game-canvas"></div>
+<div id="feedback-text"></div>
+
+<!-- Start Modal -->
+<div id="start-modal" class="modal">
+  <h1>⚡ Phản Xạ Nhanh</h1>
+  <p>Chọn đúng bong bóng để ghi điểm.<br>
+    <b style="color:var(--accent)">Sai 1 câu → Game Over ngay!</b><br>
+    Mỗi từ xuất hiện tối thiểu <b style="color:var(--gold)">2 lần</b>.
+  </p>
+  <div style="margin:16px 0">
+    <span class="badge badge-info">⏱ 90 giây</span>
+    <span class="badge badge-warn">💥 Sai là thua</span>
+    <span class="badge badge-info">🔄 Xoay vòng từ vựng</span>
+  </div>
+  <p id="word-count-info" style="color:var(--accent3);margin-top:8px;font-weight:700"></p>
+  <div style="margin: 15px 0;">
+      <label style="font-weight:700; color:#fff; margin-right:10px;">Tốc độ rơi:</label>
+      <select id="game-speed-select" style="padding:8px 16px; border-radius:12px; border:2px solid var(--accent); font-weight:700; font-family:'Outfit', sans-serif; color:#0f0c29; outline:none; cursor:pointer;">
+          <option value="medium">Vừa (Bình thường)</option>
+          <option value="fast">Nhanh (Thử thách)</option>
+      </select>
+  </div>
+  <button class="btn" onclick="startGame()">BẮT ĐẦU ⚡</button>
+</div>
+
+<!-- Over Modal -->
+<div id="over-modal" class="modal hidden">
+  <h1 id="result-title">Game Over!</h1>
+  <p id="result-msg" class="big"></p>
+  <p id="final-stats" style="color:rgba(255,255,255,0.6);font-size:1rem;margin:4px 0"></p>
+  <p class="score-big" id="final-score">0 điểm</p>
+  <button class="btn" onclick="startGame()">🔄 Chơi lại</button>
+</div>
+
+<script src="vanData.js"></script>
+<script>
+// ============ DATA LOADING ============
+function loadAllWords() {
+  const words = [];
+  if (typeof vanData === 'undefined') return words;
+  Object.values(vanData).forEach(section => {
+    if (section.struct) {
+      section.struct.forEach(lesson => {
+        lesson.list.forEach(item => {
+          if (item.c1 && item.c3) {
+            words.push({ q: item.c1, a: item.c3, r: item.c2 || '' });
+          }
+        });
+      });
+    }
+  });
+  return words;
+}
+
+// ============ STATE ============
+const MAX_PER_ROUND = 20;   // max questions per round
+let allWords = [];
+let roundWords = [];       // words for the current round (≤20)
+let roundPool = [];        // remaining words not yet used this pass
+let queueIdx = 0;          // index within roundWords
+let currentQuestion = null;
+let score = 0, streak = 0;
+let timeLeft = 90;
+const TOTAL_TIME = 90;
+let gameActive = false;
+let timerInterval = null;
+let audioCtx = null;
+let round = 1;
+let totalAnswered = 0;    // total questions answered this session
+let fallSpeedMode = 'medium';
+
+const canvas = document.getElementById('game-canvas');
+const scoreEl = document.getElementById('score-val');
+const timeEl = document.getElementById('time-val');
+const streakEl = document.getElementById('streak-val');
+const barFill = document.getElementById('bar-fill');
+const timerPill = document.getElementById('timer-pill');
+const questionText = document.getElementById('question-text');
+const progressText = document.getElementById('progress-text');
+const roundText = document.getElementById('round-text');
+const feedbackText = document.getElementById('feedback-text');
+
+// ============ AUDIO ============
+function initAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+function playTone(freq, type, duration, vol=0.15, freqEnd=null) {
+  if (!audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  const now = audioCtx.currentTime;
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, now);
+  if (freqEnd) osc.frequency.exponentialRampToValueAtTime(freqEnd, now + duration);
+  gain.gain.setValueAtTime(vol, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+  osc.start(now); osc.stop(now + duration);
+}
+
+function playCorrect() {
+  playTone(440, 'sine', 0.08, 0.2, 880);
+  setTimeout(() => playTone(880, 'sine', 0.1, 0.15, 1100), 80);
+}
+
+function playWrong() {
+  playTone(200, 'sawtooth', 0.15, 0.2, 80);
+  setTimeout(() => playTone(100, 'sawtooth', 0.2, 0.15, 60), 150);
+}
+
+function playWin() {
+  [0, 100, 200, 300].forEach((d, i) => {
+    setTimeout(() => playTone([523, 659, 784, 1047][i], 'sine', 0.25, 0.18), d);
+  });
+}
+
+// Tick-tock countdown sound for last 20s
+// Countdown tick – driven directly inside the timer loop to avoid duplicate intervals
+let _tickPhase = 0;   // 0=none 1=slow(≤20s) 2=fast(≤10s)
+let _lastTickTime = 0;
+
+function handleTickSound() {
+  if (!gameActive || timeLeft <= 0) return;
+  const now = performance.now();
+  let interval;
+  let newPhase;
+  if (timeLeft <= 10) {
+    interval = 350; newPhase = 2;
+  } else if (timeLeft <= 20) {
+    interval = 700; newPhase = 1;
+  } else {
+    _tickPhase = 0; _lastTickTime = 0; return;
+  }
+  // Reset last tick time when entering a new phase
+  if (newPhase !== _tickPhase) {
+    _tickPhase = newPhase;
+    _lastTickTime = now;
+    // Play immediately on phase entry
+    if (newPhase === 2) playTone(960, 'square', 0.07, 0.18);
+    else               playTone(700, 'square', 0.06, 0.13);
+    return;
+  }
+  if (now - _lastTickTime >= interval) {
+    _lastTickTime = now;
+    if (newPhase === 2) playTone(960, 'square', 0.07, 0.18);
+    else               playTone(700, 'square', 0.06, 0.13);
+  }
+}
+
+function stopTickSound() {
+  _tickPhase = 0; _lastTickTime = 0;
+}
+
+// ============ BUILD QUEUE ============
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Pick up to MAX_PER_ROUND words from roundPool for the next round
+function buildRoundWords() {
+  if (roundPool.length === 0) {
+    // All words used at least once – refill and continue
+    roundPool = shuffle(allWords);
+  }
+  const take = Math.min(MAX_PER_ROUND, roundPool.length);
+  const chosen = roundPool.splice(0, take);
+  return chosen;
+}
+
+// ============ GAME FLOW ============
+function startGame() {
+  const speedEl = document.getElementById('game-speed-select');
+  if(speedEl) fallSpeedMode = speedEl.value;
+
+  initAudio();
+  allWords = loadAllWords();
+  if (allWords.length < 4) {
+    alert('Cần ít nhất 4 từ vựng trong vanData.js'); return;
+  }
+
+  // Init round pool with all words shuffled
+  roundPool = shuffle(allWords);
+  roundWords = buildRoundWords();
+  queueIdx = 0;
+  score = 0; streak = 0; round = 1; totalAnswered = 0;
+  timeLeft = TOTAL_TIME;
+  gameActive = true;
+
+  scoreEl.innerText = 0;
+  streakEl.innerText = 0;
+  timeEl.innerText = Math.ceil(timeLeft);
+  barFill.style.width = '100%';
+  barFill.classList.remove('warn');
+  timerPill.classList.remove('warning');
+
+  document.getElementById('start-modal').classList.add('hidden');
+  document.getElementById('over-modal').classList.add('hidden');
+  document.getElementById('question-container').classList.remove('hidden');
+
+  startTimer();
+  nextQuestion();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  stopTickSound();
+  timerInterval = setInterval(() => {
+    timeLeft -= 0.1;
+    if (timeLeft <= 0) {
+      timeLeft = 0;
+      updateUI();
+      endGame('Hết thời gian! ⏳', false);
+      return;
+    }
+    updateUI();
+    handleTickSound(); // countdown beep logic
+  }, 100);
+}
+
+function updateUI() {
+  const t = Math.ceil(timeLeft);
+  timeEl.innerText = t;
+  const pct = (timeLeft / TOTAL_TIME) * 100;
+  barFill.style.width = pct + '%';
+  if (timeLeft <= 20) {
+    barFill.classList.add('warn');
+    timerPill.classList.add('warning');
+  } else {
+    barFill.classList.remove('warn');
+    timerPill.classList.remove('warning');
+  }
+}
+
+function nextQuestion() {
+  if (!gameActive) return;
+  canvas.innerHTML = '';
+
+  if (queueIdx >= roundWords.length) {
+    // Current round exhausted – start next round
+    round++;
+    roundWords = buildRoundWords();
+    queueIdx = 0;
+  }
+
+  currentQuestion = roundWords[queueIdx];
+  queueIdx++;
+  totalAnswered++;
+
+  progressText.innerText = `Câu ${queueIdx}/${roundWords.length}`;
+  roundText.innerText = `Lượt ${round} | Câu ${queueIdx}/${roundWords.length}`;
+  questionText.innerText = currentQuestion.q;
+
+  // Build answers: 1 correct + 5 distractors
+  const pool = allWords.filter(w => w.a !== currentQuestion.a);
+  const shuffled = shuffle(pool).slice(0, 5);
+  const answers = [
+    { text: currentQuestion.a, correct: true },
+    ...shuffled.map(w => ({ text: w.a, correct: false }))
+  ].sort(() => Math.random() - 0.5);
+
+  answers.forEach((ans, i) => spawnBubble(ans.text, ans.correct, i, answers.length));
+}
+
+function spawnBubble(text, isCorrect, idx, total) {
+  const el = document.createElement('div');
+  const t = (idx % 6) + 1;
+  el.className = `bubble t${t}`;
+  el.innerText = text;
+
+  // ---- Dynamic bubble size ----
+  // Estimate rendered text width: Vietnamese chars avg ~9px at 0.9rem/16px base
+  // For a circle of diameter D, safe text-line width ≈ D * 0.68 (chord)
+  // Allow max 2 lines → each line ≤ total_text / 2 chars
+  const FONT_PX = 14.4;          // 0.9rem at 16px base
+  const CHAR_W  = FONT_PX * 0.62; // avg char width (Vietnamese with diacritics)
+  const words   = text.split(' ');
+  // Find longest word to ensure it fits on one line (no mid-word break)
+  const longestWord = words.reduce((a, b) => a.length > b.length ? a : b, '');
+  const longestWordPx = longestWord.length * CHAR_W;
+  // Half total text (2 lines scenario)
+  const halfTextPx = (text.length * CHAR_W) / 2;
+  // Required chord = max of longest single word and half of total
+  const neededChord = Math.max(longestWordPx, halfTextPx);
+  // Diameter from chord: D = chord / 0.68, plus padding
+  const rawSize = Math.ceil(neededChord / 0.68) + 36; // 36px = 2*18px padding
+  const BUBBLE = Math.max(155, Math.min(270, rawSize));
+
+  el.style.width  = BUBBLE + 'px';
+  el.style.height = BUBBLE + 'px';
+
+  // Position in a lane – center each bubble within its lane, clamped to screen
+  const screenW = window.innerWidth;
+  const laneW = screenW / total;
+  const centerX = laneW * idx + laneW / 2 - BUBBLE / 2;
+  // Clamp so bubble never goes off-screen
+  const clampedX = Math.max(4, Math.min(screenW - BUBBLE - 4, centerX));
+  el.style.left = clampedX + 'px';
+
+  // Start above screen, stagger start positions so they don't all arrive at once
+  let posY = -BUBBLE - Math.random() * 300 - idx * 60;
+  let swayT = Math.random() * Math.PI * 2;
+  const swaySpd = 0.018 + Math.random() * 0.015;
+  const fallSpd = fallSpeedMode === 'fast' ? (4.2 + Math.random() * 1.8) : (2.5 + Math.random() * 1.0);
+
+  const animate = () => {
+    if (!gameActive || el.classList.contains('correct')) return;
+    posY += fallSpd;
+    swayT += swaySpd;
+    const dx = Math.sin(swayT) * 28;
+    el.style.transform = `translateY(${posY}px) translateX(${dx}px) rotate(${Math.sin(swayT) * 6}deg)`;
+
+    if (posY > window.innerHeight + 60) {
+      if (isCorrect && gameActive) posY = -BUBBLE - 40; // loop correct bubble
+      else { el.remove(); return; }
+    }
+    requestAnimationFrame(animate);
+  };
+
+  el.onclick = (e) => { e.stopPropagation(); handleAnswer(isCorrect, el); };
+  canvas.appendChild(el);
+  requestAnimationFrame(animate);
+}
+
+function handleAnswer(isCorrect, el) {
+  if (!gameActive) return;
+  if (isCorrect) {
+    streak++;
+    const pts = Math.ceil(timeLeft * 2) + streak * 5;
+    score += pts;
+    scoreEl.innerText = score;
+    streakEl.innerText = streak;
+
+    el.classList.add('correct');
+    playCorrect();
+    spawnSparks(el);
+    showFeedback('CHÍNH XÁC! ✨', true);
+    setTimeout(nextQuestion, 450);
+  } else {
+    el.classList.add('wrong');
+    playWrong();
+    showFeedback('SAI RỒI! 💥', false);
+    setTimeout(() => endGame('Thất bại! Hãy thử lại 💪', true), 600);
+  }
+}
+
+function showFeedback(msg, ok) {
+  feedbackText.innerText = msg;
+  feedbackText.className = ok ? 'fb-correct' : 'fb-wrong';
+  void feedbackText.offsetWidth;
+  feedbackText.classList.add('show-fb');
+  feedbackText.addEventListener('animationend', () => feedbackText.className = '', { once: true });
+}
+
+function spawnSparks(el) {
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const colors = ['#ffd60a','#f72585','#4cc9f0','#06d6a0','#ff6b6b'];
+  for (let i = 0; i < 12; i++) {
+    const s = document.createElement('div');
+    s.className = 'spark';
+    const angle = (i / 12) * Math.PI * 2;
+    const dist = 60 + Math.random() * 60;
+    s.style.left = cx + 'px'; s.style.top = cy + 'px';
+    s.style.background = colors[i % colors.length];
+    s.style.setProperty('--tx', `translateX(${Math.cos(angle)*dist}px)`);
+    s.style.setProperty('--ty', `translateY(${Math.sin(angle)*dist}px)`);
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 900);
+  }
+}
+
+function endGame(title, byWrong) {
+  if (!gameActive) return;
+  gameActive = false;
+  clearInterval(timerInterval);
+  stopTickSound();
+  canvas.innerHTML = '';
+  document.getElementById('question-container').classList.add('hidden');
+
+  if (!byWrong) playWin();
+
+  const correctCount = byWrong ? totalAnswered - 1 : totalAnswered;
+  document.getElementById('result-title').innerText = title;
+  document.getElementById('result-msg').innerText = byWrong
+    ? `Đã trả lời đúng ${correctCount} câu liên tiếp`
+    : `Hoàn thành ${totalAnswered} câu – ${Math.round(TOTAL_TIME - timeLeft)}s`;
+  const roundsDesc = allWords.length > MAX_PER_ROUND
+    ? `${allWords.length} từ ÷ ${MAX_PER_ROUND}/lượt = ${Math.ceil(allWords.length/MAX_PER_ROUND)} lượt/vòng`
+    : `${allWords.length} từ · 1 lượt/vòng`;
+  document.getElementById('final-stats').innerText =
+    `Streak: ${streak} | Lượt ${round} | ${roundsDesc}`;
+  document.getElementById('final-score').innerText = `${score} điểm`;
+
+  document.getElementById('over-modal').classList.remove('hidden');
+}
+
+// Show word count on start screen
+window.addEventListener('DOMContentLoaded', () => {
+  const words = loadAllWords();
+  const el = document.getElementById('word-count-info');
+  if (el) {
+    const rounds = Math.ceil(words.length / MAX_PER_ROUND);
+    const roundsNote = words.length > MAX_PER_ROUND
+      ? ` · ${rounds} lượt/vòng (tối đa ${MAX_PER_ROUND} câu/lượt)`
+      : ` · ${MAX_PER_ROUND} câu/lượt`;
+    el.innerText = `📚 ${words.length} từ vựng${roundsNote}`;
+  }
+});
+</script>
+</body>
+</html>
