@@ -3108,25 +3108,153 @@
                         </div>
                     </div>
 
-                    <!-- HISTORY TABLE -->
-                    <div class="stats-card" style="margin-bottom:20px;">
-                        <div class="stats-card-title">📋 Lịch sử làm bài theo ngày</div>
-                        <div style="overflow-x:auto;margin-top:12px;">
-                            <table id="stats-history-table" style="width:100%;border-collapse:collapse;font-size:14px;">
-                                <thead>
-                                    <tr
-                                        style="background:rgba(59,130,246,0.15);color:#93c5fd;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">
-                                        <th style="padding:10px 12px;text-align:left;font-weight:900;">Ngày</th>
-                                        <th style="padding:10px 12px;text-align:left;font-weight:900;">Bài học</th>
-                                        <th style="padding:10px 8px;text-align:center;font-weight:900;">Đã làm</th>
-                                        <th style="padding:10px 8px;text-align:center;font-weight:900;">Đúng ✅</th>
-                                        <th style="padding:10px 8px;text-align:center;font-weight:900;">Sai ❌</th>
-                                        <th style="padding:10px 8px;text-align:center;font-weight:900;">Điểm %</th>
-                                        <th style="padding:10px 8px;text-align:center;font-weight:900;">Thời gian</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="stats-history-tbody"></tbody>
-                            </table>
+                    <!-- HISTORY TABLE — KAWAII FRAME -->
+                    <style>
+                    /* ===== KAWAII CHALKBOARD FRAME ===== */
+                    .kawaii-frame-wrap {
+                        position: relative;
+                        margin: 0 auto 28px auto;
+                        width: 100%;
+                        box-sizing: border-box;
+                    }
+                    .kawaii-board {
+                        position: relative;
+                        background: linear-gradient(160deg, #1a3557 0%, #16305a 40%, #1e3a6e 100%);
+                        border-radius: 22px;
+                        border: 6px solid #c8a26e;
+                        box-shadow:
+                            0 0 0 3px #e8c98a,
+                            0 0 0 6px #c8a26e,
+                            0 12px 40px rgba(0,0,0,0.45),
+                            inset 0 2px 8px rgba(255,255,255,0.06);
+                        padding: 20px 18px 22px 18px;
+                        overflow: visible;
+                    }
+                    /* Gỗ viền giả */
+                    .kawaii-board::before {
+                        content: '';
+                        position: absolute;
+                        inset: -10px;
+                        border-radius: 28px;
+                        background: linear-gradient(135deg, #d4a96a, #c8874a, #e8c98a, #c8874a, #d4a96a);
+                        z-index: -1;
+                        box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+                    }
+                    /* Title banner */
+                    .kawaii-title-banner {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 10px;
+                        margin: -8px auto 18px auto;
+                        background: linear-gradient(135deg, #fff0f5, #ffe4ef);
+                        border: 3px solid #f9a8c9;
+                        border-radius: 50px;
+                        padding: 8px 24px;
+                        width: fit-content;
+                        box-shadow: 0 4px 14px rgba(249,168,201,0.5), 0 0 0 2px #fff;
+                        position: relative;
+                        z-index: 2;
+                    }
+                    .kawaii-title-banner span.title-text {
+                        font-size: 18px;
+                        font-weight: 900;
+                        color: #c2185b;
+                        letter-spacing: 0.5px;
+                        font-family: 'Baloo 2', sans-serif;
+                        text-shadow: 0 1px 3px rgba(194,24,91,0.2);
+                    }
+                    /* Deco corners */
+                    .kawaii-deco {
+                        position: absolute;
+                        font-size: 28px;
+                        pointer-events: none;
+                        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+                        line-height: 1;
+                    }
+                    .kawaii-deco.tl { top: -18px; left: -10px; transform: rotate(-15deg); font-size: 32px; }
+                    .kawaii-deco.tr { top: -18px; right: -10px; transform: rotate(15deg); font-size: 32px; }
+                    .kawaii-deco.bl { bottom: -18px; left: -10px; transform: rotate(10deg); font-size: 28px; }
+                    .kawaii-deco.br { bottom: -18px; right: -10px; transform: rotate(-10deg); font-size: 28px; }
+                    /* Sparkle decos */
+                    .kawaii-deco.sp1 { top: 12px; left: 14px; font-size: 14px; animation: kwSpark 2.5s ease-in-out infinite; }
+                    .kawaii-deco.sp2 { top: 8px; right: 16px; font-size: 12px; animation: kwSpark 3s ease-in-out infinite 0.7s; }
+                    .kawaii-deco.sp3 { bottom: 10px; left: 18px; font-size: 11px; animation: kwSpark 2.8s ease-in-out infinite 1.2s; }
+                    @keyframes kwSpark {
+                        0%, 100% { opacity: 0.5; transform: scale(1); }
+                        50% { opacity: 1; transform: scale(1.4) rotate(20deg); }
+                    }
+                    /* Table inside board */
+                    #stats-history-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        font-size: 13px;
+                    }
+                    #stats-history-table thead tr {
+                        background: linear-gradient(90deg, rgba(30,60,114,0.95), rgba(42,82,152,0.9));
+                        color: #ffffff;
+                        font-size: 11.5px;
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                    }
+                    #stats-history-table thead th {
+                        padding: 12px 10px;
+                        font-weight: 900;
+                        border-bottom: 3px solid rgba(99,179,255,0.5);
+                        text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+                    }
+                    #stats-history-table tbody tr {
+                        border-bottom: 1px solid rgba(255,255,255,0.08);
+                        transition: background 0.15s;
+                    }
+                    #stats-history-table tbody tr:nth-child(even) {
+                        background: rgba(255,255,255,0.04);
+                    }
+                    #stats-history-table tbody tr:hover {
+                        background: rgba(99,179,255,0.12);
+                    }
+                    #stats-history-table tbody td {
+                        padding: 10px 10px;
+                        color: #e2e8f0;
+                    }
+                    </style>
+
+                    <div class="kawaii-frame-wrap">
+                        <div class="kawaii-board">
+                            <!-- Corner flowers -->
+                            <span class="kawaii-deco tl">🌸</span>
+                            <span class="kawaii-deco tr">🌸</span>
+                            <span class="kawaii-deco bl">🌺</span>
+                            <span class="kawaii-deco br">🌺</span>
+                            <!-- Sparkles -->
+                            <span class="kawaii-deco sp1">✨</span>
+                            <span class="kawaii-deco sp2">⭐</span>
+                            <span class="kawaii-deco sp3">💫</span>
+
+                            <!-- Title banner -->
+                            <div class="kawaii-title-banner">
+                                <span style="font-size:20px;">📋</span>
+                                <span class="title-text">Lịch sử làm bài theo ngày</span>
+                                <span style="font-size:18px;">🌸</span>
+                            </div>
+
+                            <!-- Table -->
+                            <div style="overflow-x:auto;">
+                                <table id="stats-history-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:left;">Ngày</th>
+                                            <th style="text-align:left;">Bài học</th>
+                                            <th style="text-align:center;">Đã làm</th>
+                                            <th style="text-align:center;">Đúng ✅</th>
+                                            <th style="text-align:center;">Sai ❌</th>
+                                            <th style="text-align:center;">Điểm %</th>
+                                            <th style="text-align:center;">Thời gian</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="stats-history-tbody"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
@@ -4042,6 +4170,7 @@
                     resetTotalTimer();
                     lessonTimes = [];
                     sessionScores = [];
+                    isRetrySession = false;
                     updateVanFab();
 
                     // Breadcrumb & back button
@@ -4249,6 +4378,16 @@
                 let totalSeconds = 0, totalTimerInterval = null;
                 let lessonTimes = []; // stores time (seconds) for each completed lesson
                 let sessionScores = []; // stores {ok, total, mode} for each lesson
+                // Expose to window so other script blocks can reset them
+                window._getLessonTimes = () => lessonTimes;
+                window._resetLessonTimes = () => { lessonTimes = []; };
+                window._pushLessonTime = (t) => { lessonTimes.push(t); };
+                window._getSessionScores = () => sessionScores;
+                window._resetSessionScores = () => { sessionScores = []; };
+                window._pushSessionScore = (s) => { sessionScores.push(s); };
+                let isRetrySession = false; // true khi đang làm lại câu sai/sao
+                window._setIsRetrySession = (v) => { isRetrySession = v; };
+                window._getIsRetrySession = () => isRetrySession;
                 var showAnswerImmediately = true;
                 let pendingDeletes = new Set();
 
@@ -5566,8 +5705,10 @@
                     changeMode(bestMode);
                     resetLessonTimer();
                     resetTotalTimer();
-                    lessonTimes = [];
-                    sessionScores = [];
+                    // Reset qua window helpers (tránh cross-script-block scope issue)
+                    if (typeof window._resetLessonTimes === 'function') window._resetLessonTimes(); else lessonTimes = [];
+                    if (typeof window._resetSessionScores === 'function') window._resetSessionScores(); else sessionScores = [];
+                    if (typeof window._setIsRetrySession === 'function') window._setIsRetrySession(false);
 
                     // Breadcrumb & back button
                     const lvLabel = { 'n1': 'Năng lực N1', 'n2': 'Năng lực N2', 'n3': 'Trình độ N3', 'bjt': 'BJT' }[lv] || lv;
@@ -6201,28 +6342,57 @@
                     lessonTimes.push(seconds);
                     sessionScores.push({ ok, total, mode: currentMode });
 
+                    // Đọc trạng thái retry (hỗ trợ cross-script-block)
+                    const _isRetry = isRetrySession || (typeof window._getIsRetrySession === 'function' && window._getIsRetrySession());
+
                     // Show/hide "Next lesson" button
-                    // Show/hide Next lesson button - De tuy y chi co 1 lan nop nen maxMode=1
                     const maxMode = curLevel === 'custom' ? 1 : getMaxModeForType();
                     const btnNext = document.getElementById('btn-next-lesson');
                     const btnClose = document.getElementById('btn-close-congrats');
                     const uniqueCompletedModes = new Set(sessionScores.map(s => s.mode)).size;
-                    if (curLevel !== 'custom' && currentMode < maxMode - 1) {
+
+                    if (_isRetry) {
+                        // ── CHẾ ĐỘ LÀM LẠI CÂU SAI: không hiện màn tổng kết, không sang bài tiếp theo
+                        if (btnNext) btnNext.style.display = 'none';
+                        if (btnClose) {
+                            if (percent === 100) {
+                                btnClose.innerText = '🎉 TUYỆT VỜI! ĐÃ LÀM ĐÚNG HẾT!';
+                                btnClose.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                                btnClose.style.boxShadow = '0 10px 25px rgba(16,185,129,0.5)';
+                                btnClose.style.color = 'white';
+                                btnClose.onclick = () => { showAllAnswers(); closeModal('congrats-modal'); };
+                            } else {
+                                btnClose.innerText = 'ĐÓNG VÀ XEM ĐÁP ÁN';
+                                btnClose.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                                btnClose.style.color = 'white';
+                                btnClose.style.boxShadow = '0 10px 25px rgba(16,185,129,0.4)';
+                                btnClose.onclick = () => { showAllAnswers(); closeModal('congrats-modal'); };
+                            }
+                        }
+                    } else if (curLevel !== 'custom' && currentMode < maxMode - 1) {
                         const modeLabels = { 0: 'Bài 1', 1: 'Bài 2', 2: 'Bài 3' };
                         if (btnNext) { btnNext.style.display = 'block'; btnNext.textContent = `→ SANG ${modeLabels[currentMode + 1] || 'BÀI TIẾP THEO'}`; }
-                        if (btnClose) { btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; btnClose.onclick = () => { showAllAnswers(); closeModal('congrats-modal'); }; }
-                    } else if (uniqueCompletedModes >= maxMode) {
+                        if (btnClose) { btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; btnClose.style.background = 'linear-gradient(135deg, #10b981, #059669)'; btnClose.style.color = 'white'; btnClose.style.boxShadow = '0 10px 25px rgba(16,185,129,0.4)'; btnClose.onclick = () => { showAllAnswers(); closeModal('congrats-modal'); }; }
+                    } else if (curLevel !== 'custom' && uniqueCompletedModes >= maxMode) {
                         // Đã làm đủ số test yêu cầu — hiện nút Xem kết quả tổng
                         if (btnNext) btnNext.style.display = 'none';
                         if (btnClose) {
                             btnClose.innerText = "🎉 XEM KẾT QUẢ TỔNG";
                             btnClose.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
                             btnClose.style.boxShadow = '0 10px 25px rgba(245,158,11,0.5)';
+                            btnClose.style.color = 'white';
                             btnClose.onclick = () => { closeModal('congrats-modal'); setTimeout(showCompletionScreen, 300); };
                         }
                     } else {
+                        // Dành cho custom (Tạo đề tuỳ ý, Ôn tập thông minh) hoặc các trường hợp khác
                         if (btnNext) btnNext.style.display = 'none';
-                        if (btnClose) { btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; btnClose.onclick = () => { showAllAnswers(); closeModal('congrats-modal'); }; }
+                        if (btnClose) { 
+                            btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; 
+                            btnClose.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                            btnClose.style.color = 'white';
+                            btnClose.style.boxShadow = '0 10px 25px rgba(16,185,129,0.4)';
+                            btnClose.onclick = () => { showAllAnswers(); closeModal('congrats-modal'); }; 
+                        }
                     }
                     // ── Ghi nhật ký học tập theo ngày ──
                     (function () {
@@ -6794,14 +6964,27 @@
                     const oldMode = currentMode;
                     document.querySelectorAll('.card[id^="q-"]').forEach((card) => {
                         const idx = card.getAttribute('data-idx');
-                        if (card.getAttribute('data-res') !== 'ok') wrongs.push(currentList[idx]);
+                        const res = card.getAttribute('data-res');
+                        // Loại trừ câu đúng (ok) và câu bỏ qua (skip)
+                        if (res !== 'ok' && res !== 'skip') wrongs.push(currentList[idx]);
                     });
+                    if (wrongs.length === 0) {
+                        closeModal('congrats-modal');
+                        alert('🎉 Tuyệt vời! Không còn câu sai nào để làm lại!');
+                        return;
+                    }
                     closeModal('congrats-modal');
+                    // Đánh dấu đây là session retry (không hiện màn tổng kết)
+                    isRetrySession = true;
+                    if (typeof window._setIsRetrySession === 'function') window._setIsRetrySession(true);
                     if (curVanMode) {
                         selectVanDay(curVanSection, curVanSub, curVanIdx, wrongs, oldMode);
                     } else {
                         selectDay(curLevel, curType, curDay, wrongs, oldMode);
                     }
+                    // Re-set sau khi selectDay reset (selectDay sẽ reset về false, ta set lại)
+                    isRetrySession = true;
+                    if (typeof window._setIsRetrySession === 'function') window._setIsRetrySession(true);
                 }
 
                 function retryStarredOnly() {
@@ -6809,11 +6992,17 @@
                     if (starredItems.length === 0) return;
                     const oldMode = currentMode;
                     closeModal('congrats-modal');
+                    // Đánh dấu đây là session retry
+                    isRetrySession = true;
+                    if (typeof window._setIsRetrySession === 'function') window._setIsRetrySession(true);
                     if (curVanMode) {
                         selectVanDay(curVanSection, curVanSub, curVanIdx, starredItems, oldMode);
                     } else {
                         selectDay(curLevel, curType, curDay, starredItems, oldMode);
                     }
+                    // Re-set sau khi selectDay reset
+                    isRetrySession = true;
+                    if (typeof window._setIsRetrySession === 'function') window._setIsRetrySession(true);
                 }
 
 
@@ -8803,16 +8992,22 @@
                 var typeLabel = { voca: 'Từ đơn', gram: 'Ngữ pháp', voca_quiz: 'TN Từ', gram_quiz: 'TN NP' }[e.type] || e.type;
                 var dayLabel = e.day || '—';
                 var modeLabel = ['Đề 1', 'Đề 2', 'Đề 3'][e.mode] || ('Đề ' + (e.mode + 1));
-                var badge = pct >= 90 ? ' <span style="color:#4ade80;font-size:12px;">🌟</span>' : '';
+                var badge = pct === 100
+                    ? ' <span style="font-size:14px;filter:drop-shadow(0 0 6px #fbbf24) drop-shadow(0 0 10px #fde047);">✨</span>'
+                    : pct >= 90 ? ' <span style="color:#4ade80;font-size:12px;">🌟</span>' : '';
                 var dur = e.duration ? _fmtDuration(e.duration) : '--';
+                var okBg = (e.ok || 0) > 0 ? 'background:rgba(74,222,128,0.12);' : '';
+                var failBg = (e.failed || 0) > 0 ? 'background:rgba(248,113,113,0.1);' : '';
                 return '<tr>' +
-                    '<td><b style="color:#94a3b8;">' + _fmtDate(e.date) + '</b></td>' +
-                    '<td style="max-width:180px;"><span style="color:#93c5fd;font-weight:800;">' + levelLabel + ' ' + typeLabel + '</span><br><span style="font-size:12px;color:#64748b;">' + dayLabel + ' · ' + modeLabel + '</span></td>' +
-                    '<td style="text-align:center;font-weight:800;">' + (e.total || 0) + '</td>' +
-                    '<td style="text-align:center;color:#4ade80;font-weight:800;">' + (e.ok || 0) + '</td>' +
-                    '<td style="text-align:center;color:#f87171;font-weight:800;">' + (e.failed || 0) + '</td>' +
-                    '<td style="text-align:center;"><b style="color:' + pctColor + ';">' + pct + '%</b>' + badge + '</td>' +
-                    '<td style="text-align:center;color:#94a3b8;">' + dur + '</td>' +
+                    '<td><b style="color:#cbd5e1;font-size:13px;">' + _fmtDate(e.date) + '</b></td>' +
+                    '<td style="max-width:180px;"><span style="color:#7dd3fc;font-weight:800;font-size:13px;">' + levelLabel + ' ' + typeLabel + '</span><br><span style="font-size:11.5px;color:#94a3b8;font-weight:600;">' + dayLabel + ' · ' + modeLabel + '</span></td>' +
+                    '<td style="text-align:center;font-weight:900;font-size:15px;color:#e2e8f0;">' + (e.total || 0) + '</td>' +
+                    '<td style="text-align:center;' + okBg + '"><b style="color:#4ade80;font-size:15px;font-weight:900;">' + (e.ok || 0) + '</b></td>' +
+                    '<td style="text-align:center;' + failBg + '"><b style="color:#f87171;font-size:15px;font-weight:900;">' + (e.failed || 0) + '</b></td>' +
+                    (pct === 100
+                        ? '<td style="text-align:center;background:linear-gradient(135deg,rgba(251,191,36,0.18),rgba(74,222,128,0.15));border-radius:8px;"><b class="pct-perfect" style="font-size:15px;font-weight:900;background:linear-gradient(90deg,#fde047,#4ade80,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px rgba(251,191,36,0.8));animation:pctGlow 1.5s ease-in-out infinite alternate;display:inline-block;">' + pct + '%</b>' + badge + '</td>'
+                        : '<td style="text-align:center;"><b style="color:' + pctColor + ';font-size:14px;font-weight:900;">' + pct + '%</b>' + badge + '</td>') +
+                    '<td style="text-align:center;"><span style="color:#cbd5e1;font-weight:700;background:rgba(255,255,255,0.08);padding:3px 8px;border-radius:8px;font-size:12px;">⏱ ' + dur + '</span></td>' +
                     '</tr>';
             }).join('');
         }
@@ -9391,6 +9586,17 @@
 
             50% {
                 box-shadow: 0 4px 32px rgba(249, 115, 22, 0.9), 0 0 0 5px rgba(249, 115, 22, 0.18);
+            }
+        }
+
+        @keyframes pctGlow {
+            from {
+                filter: drop-shadow(0 0 4px rgba(251,191,36,0.7)) drop-shadow(0 0 8px rgba(74,222,128,0.5));
+                transform: scale(1);
+            }
+            to {
+                filter: drop-shadow(0 0 10px rgba(253,224,71,1)) drop-shadow(0 0 18px rgba(74,222,128,0.9));
+                transform: scale(1.08);
             }
         }
 
