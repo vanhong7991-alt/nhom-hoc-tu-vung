@@ -91,7 +91,9 @@
         /* --- SIDEBAR --- */
         .sidebar {
             width: var(--sidebar-width);
-            background: var(--sidebar-bg);
+            background: linear-gradient(160deg, #0f0c29 0%, #302b63 45%, #24243e 75%, #1a1a3e 100%);
+            background-size: 200% 200%;
+            animation: headerShimmer 10s ease infinite;
             height: 100vh;
             position: fixed;
             left: 0;
@@ -100,7 +102,8 @@
             transition: transform 0.3s, width 0.3s;
             overflow-y: auto;
             overflow-x: hidden;
-            border-right: 2px solid var(--accent);
+            border-right: 2px solid rgba(139, 92, 246, 0.5);
+            box-shadow: 4px 0 20px rgba(99, 102, 241, 0.25);
             padding-bottom: 50px;
             flex-shrink: 0;
         }
@@ -286,13 +289,23 @@
             left: 0;
             right: 0;
             height: 70px;
-            background: var(--sidebar-bg);
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 40%, #24243e 70%, #1a1a3e 100%);
+            background-size: 200% 200%;
+            animation: headerShimmer 8s ease infinite;
             z-index: 1001;
             display: flex;
             align-items: center;
             padding: 0 20px;
-            border-bottom: 3px solid var(--accent);
+            border-bottom: 2px solid;
+            border-image: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899, #f43f5e, #8b5cf6, #6366f1) 1;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3), 0 1px 0 rgba(255,255,255,0.05) inset;
             justify-content: space-between;
+        }
+
+        @keyframes headerShimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .overlay {
@@ -2682,14 +2695,14 @@
                                     <label
                                         style="display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none;">
                                         <input type="radio" name="checkMode" value="immediate"
-                                            onchange="showAnswerImmediately = true;"
+                                            onchange="showAnswerImmediately = true;" checked
                                             style="accent-color: var(--success); width:16px; height:16px; cursor:pointer;">
                                         Hiện ngay
                                     </label>
                                     <label
                                         style="display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none;">
                                         <input type="radio" name="checkMode" value="after"
-                                            onchange="showAnswerImmediately = false;" checked
+                                            onchange="showAnswerImmediately = false;"
                                             style="accent-color: var(--success); width:16px; height:16px; cursor:pointer;">
                                         Hiện sau khi nộp
                                     </label>
@@ -4137,7 +4150,7 @@
                 let totalSeconds = 0, totalTimerInterval = null;
                 let lessonTimes = []; // stores time (seconds) for each completed lesson
                 let sessionScores = []; // stores {ok, total, mode} for each lesson
-                var showAnswerImmediately = false;
+                var showAnswerImmediately = true;
                 let pendingDeletes = new Set();
 
                 let currentFlashcardIndex = 0;
@@ -5528,7 +5541,7 @@
                     <div id="msg-${i}" class="fb-msg" style="text-align:center; margin-top:15px; font-size:18px;"></div>
                     ${item.explain ? `<div id="explain-${i}" style="display:none; margin-top:15px; background:#fef3c7; color:#0f172a; border:2px solid #ea580c; border-radius:12px; padding:15px; font-size:17px; font-weight:700; text-align:left; line-height:1.5; box-shadow:0 4px 10px rgba(234,88,12,0.2);">💡 <b>Giải thích:</b><br>${fT(item.explain)}</div>` : ''}
                     <div id="ai-explain-container-${i}" style="display:none; margin-top:15px; background:#fffbeb; color:#1e3a8a; border:2px solid #b45309; border-radius:14px; padding:20px; font-size:16px; font-weight:700; text-align:left; line-height:1.8; box-shadow:0 4px 16px rgba(180,83,9,0.13); font-family:'Baloo 2','Kosugi Maru',sans-serif;"></div>
-                    <button id="btn-ai-${i}" style="margin-top:15px; width:100%; background:linear-gradient(135deg, #8b5cf6, #3b82f6); color:white; border:none; border-radius:12px; padding:12px; font-weight:800; font-family:'Baloo 2', sans-serif; cursor:pointer; font-size:16px; box-shadow: 0 4px 10px rgba(139,92,246,0.3); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'" onclick="callAI(${i})">✨ AI PHÂN TÍCH</button>
+                    ${window._inSmartReviewMode ? '' : `<button id="btn-ai-${i}" style="margin-top:15px; width:100%; background:linear-gradient(135deg, #8b5cf6, #3b82f6); color:white; border:none; border-radius:12px; padding:12px; font-weight:800; font-family:'Baloo 2', sans-serif; cursor:pointer; font-size:16px; box-shadow: 0 4px 10px rgba(139,92,246,0.3); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'" onclick="callAI(${i})">✨ AI PHÂN TÍCH</button>`}
                 </div>`;
                         } else {
                             let ques = '', ans = '';
@@ -5559,7 +5572,7 @@
                          ${!ans.trim() ? '<div id="input-' + i + '" data-ans="" data-skip="true" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(251,191,36,0.13),rgba(251,191,36,0.06));border:1.5px dashed #fbbf24;border-radius:12px;padding:10px 18px;color:#fde68a;font-size:14px;font-weight:700;text-shadow:0 0 8px rgba(251,191,36,0.4);box-shadow:0 2px 10px rgba(251,191,36,0.12);flex:1;text-align:center;"><span style="font-size:16px;">🌺</span>Kh\u00f4ng c\u00f3 c\u00e1ch \u0111\u1ecdc n\u00ean b\u1ea1n k c\u1ea7n \u0111i\u1ec1n n\u00e8</div>' : '<input type="text" id="input-' + i + '" data-ans="' + ans + '" oninput="check(' + i + ')" onkeydown="handleKey(event, ' + i + ')" autocomplete="off" placeholder="..."><button class="btn btn-gray" style="width:70px; font-size:24px;" onclick="showHint(' + i + ')">👁️</button>'}
                     </div>
                     <div id="ai-explain-container-${i}" style="display:none; margin-bottom:15px; background:#fffbeb; color:#1e3a8a; border:2px solid #b45309; border-radius:14px; padding:20px; font-size:16px; font-weight:700; text-align:left; line-height:1.8; box-shadow:0 4px 16px rgba(180,83,9,0.13); font-family:'Baloo 2','Kosugi Maru',sans-serif;"></div>
-                    <button id="btn-ai-${i}" style="width:100%; background:linear-gradient(135deg, #6366f1, #3b82f6); color:white; font-size:15px; font-weight:800; padding:12px; border:none; border-radius:12px; cursor:pointer; box-shadow:0 4px 15px rgba(99,102,241,0.4); text-transform:uppercase; transition:0.2s;" onclick="callAI(${i})" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">✨ AI PHÂN TÍCH</button>
+                    ${window._inSmartReviewMode ? '' : `<button id="btn-ai-${i}" style="width:100%; background:linear-gradient(135deg, #6366f1, #3b82f6); color:white; font-size:15px; font-weight:800; padding:12px; border:none; border-radius:12px; cursor:pointer; box-shadow:0 4px 15px rgba(99,102,241,0.4); text-transform:uppercase; transition:0.2s;" onclick="callAI(${i})" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">✨ AI PHÂN TÍCH</button>`}
                 </div>`;
                         }
                     }).join('');
@@ -6558,10 +6571,14 @@
                         }
                         const qc = document.getElementById('quiz-container'); if (qc) qc.style.display = '';
                         const sc = document.getElementById('submit-container'); if (sc && currentList.length > 0) sc.style.display = 'flex';
-                        // Cuộn để câu đầu tiên lên đầu màn hình
+                        // Cuộn để ảnh mèo lên đầu màn hình (kèm các câu hỏi phía dưới)
                         setTimeout(function () {
+                            var anhMeo = document.getElementById('anhmeo-block');
                             var firstQ = document.querySelector('#quiz-container .q-block, #quiz-container .quiz-item, #quiz-container > *:first-child');
-                            if (firstQ) {
+                            if (anhMeo && anhMeo.style.display !== 'none') {
+                                var top = anhMeo.getBoundingClientRect().top + window.scrollY - 80;
+                                window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+                            } else if (firstQ) {
                                 var top = firstQ.getBoundingClientRect().top + window.scrollY - 80;
                                 window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
                             } else if (qc) {
