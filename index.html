@@ -3074,12 +3074,11 @@
                     style="display: none; flex-direction: column; align-items: center; justify-content: center; position: sticky; bottom: 20px; z-index: 1000; width: 100%; pointer-events: none;">
 
                     <div id="submit-bar-content"
-                        style="pointer-events: auto; display: flex; gap: 12px; background: rgba(30, 41, 59, 0.95); padding: 15px; border-radius: 20px; box-shadow: 0 -10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); width: 100%; box-sizing: border-box; position: relative;">
+                        style="pointer-events: auto; display: flex; gap: 12px; background: rgba(30, 41, 59, 0.95); padding: 15px; border-radius: 20px; box-shadow: 0 -10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); width: 100%; box-sizing: border-box; position: relative; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); transform: translateY(0); opacity: 1;">
                         <!-- Nút Thu Gọn -->
                         <button
-                            onclick="document.getElementById('submit-bar-content').style.display='none'; document.getElementById('submit-expand-btn').style.display='flex';"
-                            style="position: absolute; top: -15px; right: 20px; background: #1e293b; border: 1px solid #475569; color: #cbd5e1; padding: 5px 14px; border-radius: 14px; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10;">▼
-                            Thu gọn</button>
+                            onclick="const bar = document.getElementById('submit-bar-content'); bar.style.transform='translateY(120px) scale(0.95)'; bar.style.opacity='0'; bar.style.pointerEvents='none'; setTimeout(() => { document.getElementById('submit-expand-btn').style.display='flex'; }, 250);"
+                            style="position: absolute; top: -16px; left: 50%; transform: translateX(-50%); background: #1e293b; border: 2px solid #334155; color: #cbd5e1; padding: 4px 24px; border-radius: 20px; font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 -4px 12px rgba(0,0,0,0.3); z-index: 10; display:flex; align-items:center; gap:6px;">▼ Thu gọn</button>
 
                         <button
                             style="flex:1; aspect-ratio:1; max-height:56px; background:linear-gradient(135deg,#dbeafe,#bfdbfe); color:#1e40af; border:2px solid #93c5fd; border-radius:14px; cursor:pointer; box-shadow:0 3px 10px rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:center; transition:0.2s;"
@@ -3110,9 +3109,8 @@
 
                     <!-- Nút Mở Rộng -->
                     <button id="submit-expand-btn"
-                        onclick="document.getElementById('submit-bar-content').style.display='flex'; this.style.display='none';"
-                        style="pointer-events: auto; display: none; width: auto; padding: 12px 24px; border-radius: 30px; background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(59,130,246,0.5); color: #60a5fa; font-size: 14px; font-weight: 800; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer; align-items: center; gap: 8px; backdrop-filter: blur(10px);">▲
-                        MỞ THANH NỘP BÀI</button>
+                        onclick="const bar = document.getElementById('submit-bar-content'); bar.style.transform='translateY(0) scale(1)'; bar.style.opacity='1'; bar.style.pointerEvents='auto'; this.style.display='none';"
+                        style="pointer-events: auto; display: none; width: auto; padding: 12px 24px; border-radius: 30px; background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(59,130,246,0.5); color: #60a5fa; font-size: 14px; font-weight: 800; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer; align-items: center; justify-content:center; gap: 8px; backdrop-filter: blur(10px); margin: 0 auto;">▲ MỞ THANH NỘP BÀI</button>
                 </div>
             </div>
 
