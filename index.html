@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 
 <head>
@@ -320,6 +320,7 @@
             margin-top: auto;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
 
         /* ===== COIN SYSTEM STYLES ===== */
         #coin-widget {
@@ -6298,6 +6299,21 @@
                                 trackCorrect(currentList[idx]);
                                 card.setAttribute('data-tracked-correct', 'true');
                             }
+                            // ── AUTO-FOCUS CÂU TIẾP THEO ──
+                            // Tìm input tiếp theo chưa trả lời đúng, không bị skip
+                            setTimeout(() => {
+                                const allInputs = Array.from(document.querySelectorAll('#quiz-container input[type="text"]'))
+                                    .filter(inp => inp.getAttribute('data-skip') !== 'true' && !inp.disabled && !inp.classList.contains('correct'));
+                                const nextInput = allInputs[0]; // lấy cái đầu tiên chưa đúng
+                                if (nextInput) {
+                                    nextInput.focus();
+                                    // Scroll card chứa input đó vào giữa màn hình
+                                    const nextCard = nextInput.closest('.card') || nextInput.parentElement;
+                                    if (nextCard) {
+                                        nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    }
+                                }
+                            }, 300); // delay nhỏ để confetti animation kịp chạy
                         }
                     }
                     else if (val === "") {
