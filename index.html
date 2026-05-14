@@ -321,6 +321,114 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* ===== COIN SYSTEM STYLES ===== */
+        #coin-widget {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.18), rgba(245,158,11,0.10));
+            border: 1.5px solid rgba(251,191,36,0.45);
+            border-radius: 20px;
+            padding: 4px 11px 4px 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            position: relative;
+        }
+        #coin-widget:hover {
+            background: linear-gradient(135deg, rgba(251,191,36,0.30), rgba(245,158,11,0.20));
+            transform: scale(1.04);
+            box-shadow: 0 0 14px rgba(251,191,36,0.4);
+        }
+        #coin-widget .coin-icon { font-size: 17px; line-height:1; }
+        #coin-widget .coin-val {
+            font-size: 15px;
+            font-weight: 900;
+            color: #fde047;
+            font-family: 'Baloo 2', sans-serif;
+            letter-spacing: 0.5px;
+            min-width: 26px;
+            text-align: right;
+            transition: color 0.3s;
+        }
+        /* Coin toast */
+        .coin-toast {
+            position: fixed;
+            z-index: 99999;
+            top: 80px;
+            right: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+        .coin-toast-item {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            border: 2px solid #fbbf24;
+            border-radius: 16px;
+            padding: 10px 18px;
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 900;
+            font-size: 15px;
+            color: #fef9c3;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 20px rgba(251,191,36,0.3);
+            animation: coinToastIn 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 160px;
+        }
+        .coin-toast-item.negative {
+            border-color: #f87171;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 20px rgba(248,113,113,0.25);
+        }
+        .coin-toast-item.leaving {
+            animation: coinToastOut 0.4s ease forwards;
+        }
+        .coin-toast-detail {
+            font-size: 12px;
+            font-weight: 700;
+            color: #c7d2fe;
+            margin-top: 2px;
+            line-height: 1.4;
+        }
+        @keyframes coinToastIn {
+            from { opacity: 0; transform: translateX(60px) scale(0.8); }
+            to   { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes coinToastOut {
+            from { opacity: 1; transform: translateX(0); }
+            to   { opacity: 0; transform: translateX(80px); }
+        }
+        /* Coin history panel */
+        #coin-history-panel {
+            background: linear-gradient(135deg, rgba(30,27,75,0.9), rgba(49,46,129,0.8));
+            border: 2px solid rgba(251,191,36,0.35);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .coin-history-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            background: rgba(255,255,255,0.04);
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 13px;
+        }
+        .coin-history-row:hover { background: rgba(255,255,255,0.08); }
+        .coin-earned  { color: #4ade80; font-weight: 900; }
+        .coin-lost    { color: #f87171; font-weight: 900; }
+        /* Counter animation */
+        @keyframes coinPulse {
+            0%   { transform: scale(1); }
+            40%  { transform: scale(1.25); color: #fde047; }
+            100% { transform: scale(1); }
+        }
+        .coin-pulse { animation: coinPulse 0.45s ease; }
         /* --- HEADER --- */
         .mobile-header {
             position: fixed;
@@ -1973,6 +2081,69 @@
             padding: 9px 10px;
             color: #e2e8f0;
         }
+
+        /* ===== MODERN GRADIENT SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: linear-gradient(180deg,
+                rgba(15,10,46,0.0) 0%,
+                rgba(30,20,80,0.35) 30%,
+                rgba(30,20,80,0.35) 70%,
+                rgba(15,10,46,0.0) 100%);
+            border-radius: 100px;
+            margin: 6px 0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg,
+                #38bdf8 0%,
+                #818cf8 25%,
+                #a855f7 50%,
+                #ec4899 75%,
+                #f97316 100%);
+            border-radius: 100px;
+            border: 2px solid rgba(8, 5, 30, 0.6);
+            box-shadow:
+                0 0 6px rgba(168,85,247,0.6),
+                0 0 14px rgba(99,102,241,0.35),
+                inset 0 1px 0 rgba(255,255,255,0.25);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg,
+                #7dd3fc 0%,
+                #a5b4fc 25%,
+                #c084fc 50%,
+                #f472b6 75%,
+                #fb923c 100%);
+            box-shadow:
+                0 0 10px rgba(192,132,252,0.8),
+                0 0 22px rgba(99,102,241,0.5),
+                inset 0 1px 0 rgba(255,255,255,0.35);
+            border-color: rgba(10, 5, 40, 0.5);
+        }
+        ::-webkit-scrollbar-thumb:active {
+            background: linear-gradient(180deg,
+                #0ea5e9 0%,
+                #6366f1 40%,
+                #9333ea 70%,
+                #db2777 100%);
+            box-shadow:
+                0 0 14px rgba(99,102,241,0.9),
+                0 0 28px rgba(168,85,247,0.6);
+        }
+        ::-webkit-scrollbar-track:horizontal {
+            margin: 0 6px;
+        }
+        ::-webkit-scrollbar-corner {
+            background: transparent;
+        }
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #818cf8 rgba(20, 14, 60, 0.4);
+        }
     </style>
 </head>
 
@@ -2187,6 +2358,13 @@
                     <option value="en">en</option>
                     <option value="cn">cn</option>
                 </select>
+
+                <!-- 💰 COIN WIDGET -->
+                <div id="coin-widget" onclick="toggleStatsScreen()" title="Xu tích lũy — xem thống kê">
+                    <span class="coin-icon">💰</span>
+                    <span class="coin-val" id="header-coin-val">0</span>
+                </div>
+
                 <button onclick="toggleStatsScreen()" id="stats-toggle-btn" title="Thống kê học tập"
                     style="background:linear-gradient(135deg,#8b5cf6,#ec4899);border:none;color:white;font-size:18px;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(139,92,246,0.5);transition:0.2s;flex-shrink:0;"
                     onmouseover="this.style.transform='scale(1.1)'"
@@ -2196,6 +2374,8 @@
                     onmouseover="this.style.background='rgba(99,102,241,0.5)';this.style.transform='scale(1.1)'"
                     onmouseout="this.style.background='rgba(255,255,255,0.1)';this.style.transform='scale(1)'">🖼️</button>
             </div>
+            <!-- Toast container cho xu -->
+            <div class="coin-toast" id="coin-toast-container"></div>
         </div>
 
         <div class="overlay" id="overlay"></div>
@@ -2878,21 +3058,29 @@
                 </div>
 
                 <div class="card" id="journey-card" style="position: relative; margin-bottom: 20px;
-                           background: linear-gradient(135deg, #1a0533 0%, #2d1060 40%, #0f0a2e 100%);
+                           background: linear-gradient(135deg, #2e0d6e 0%, #4a1fa8 40%, #3b0f8c 70%, #5b21b6 100%);
                            border-radius: 20px; padding: 25px;
                            display: flex; flex-direction: row; gap: 20px;
                            align-items: center; justify-content: space-between; flex-wrap: wrap;
-                           box-shadow: 0 12px 40px rgba(91,33,182,0.6), 0 0 0 1.5px rgba(255,255,255,0.08);
-                           border: none; outline: 2.5px solid transparent;
-                           background-clip: padding-box;
+                           box-shadow: 0 12px 40px rgba(91,33,182,0.7),
+                                       0 0 0 3px rgba(255,255,255,0.95),
+                                       0 0 18px 4px rgba(255,255,255,0.55),
+                                       0 0 40px 8px rgba(167,139,250,0.4);
+                           border: none; outline: none;
                            position: relative;">
-                    <!-- Viền gradient trắng -->
-                    <div style="position:absolute; inset:0; border-radius:20px; padding:2px;
-                                background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(180,120,255,0.4) 40%, rgba(255,200,80,0.5) 70%, rgba(255,255,255,0.6) 100%);
+                    <!-- Viền gradient trắng loé sáng -->
+                    <div style="position:absolute; inset:0; border-radius:20px; padding:3px;
+                                background: linear-gradient(135deg,
+                                    #ffffff 0%,
+                                    rgba(220,200,255,0.9) 25%,
+                                    #ffffff 50%,
+                                    rgba(200,180,255,0.85) 75%,
+                                    #ffffff 100%);
                                 -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
                                 -webkit-mask-composite: destination-out;
                                 mask-composite: exclude;
-                                pointer-events:none; z-index:1;"></div>
+                                pointer-events:none; z-index:1;
+                                filter: drop-shadow(0 0 6px rgba(255,255,255,0.9));"></div>
 
                     <!-- Left Section -->
                     <div style="display: flex; flex-direction: column; gap: 2px; position:relative; z-index:2;">
@@ -3010,17 +3198,17 @@
                     </div>
                 </div>
 
-                <!-- ===== ẢNH MÈO ===== -->
+                <!-- ===== MÈO CỐ LÊN (anhmeo) ===== -->
                 <div id="anhmeo-block"
-                    style="display:flex; justify-content:center; margin-bottom:10px; pointer-events:none;">
-                    <img src="anhmeo.png" alt="Mèo cute" style="width:220px; max-width:45vw; object-fit:contain;
-                               border:3px solid rgba(255,255,255,0.9);
-                               border-radius:20px;
+                    style="display:flex; flex-direction:column; justify-content:center; align-items:center; margin-bottom:10px; pointer-events:none; min-height:auto; gap:15px;">
+                    <img src="anhmeo.png" alt="Mèo cố lên"
+                        style="width:220px; max-width:45vw; object-fit:contain;
+                               border:3px solid rgba(255,255,255,0.9); border-radius:20px;
                                box-shadow: 0 0 0 1px rgba(255,255,255,0.3), 0 12px 40px rgba(0,0,0,0.6), 0 0 30px rgba(255,255,255,0.15);
                                filter: contrast(1.1) saturate(1.2) brightness(1.05) drop-shadow(0 4px 16px rgba(0,0,0,0.7));
-                               image-rendering: -webkit-optimize-contrast;
-                               image-rendering: crisp-edges;
-                               background: rgba(0,0,0,0.2);" onerror="this.parentElement.style.display='none'">
+                               image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;
+                               background: transparent;"
+                        onerror="this.style.display='none'">
                 </div>
 
                 <!-- ===== STATS SCREEN ===== -->
@@ -3105,6 +3293,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- ===== COIN WALLET PANEL ===== -->
+                    <div id="coin-history-panel"></div>
 
                     <!-- 4-WEEK HEATMAP + DAILY TIME + SESSION -->
                     <div style="
@@ -5833,9 +6024,19 @@
                     }
 
                     // Always clear quiz container first to prevent stale content from previous selection
-                    document.getElementById('quiz-container').innerHTML = '';
-                    if (currentList.length > 0) renderQuiz();
-                    resetTestTimer();
+                    const qc = document.getElementById('quiz-container');
+                    if (qc && qc.style.display !== 'none') {
+                        qc.innerHTML = '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:60px 20px; color:#94a3b8;"><div style="width:40px;height:40px;border:4px solid rgba(59,130,246,0.3);border-top-color:#3b82f6;border-radius:50%;animation:spin 1s linear infinite;"></div><div style="margin-top:20px;font-weight:700;font-size:16px;font-family:\'Baloo 2\', sans-serif;">Đang tải dữ liệu...</div></div><style>@keyframes spin{to{transform:rotate(360deg);}}</style>';
+                    } else if (qc) {
+                        qc.innerHTML = '';
+                    }
+                    if (window._renderQuizTimeout) clearTimeout(window._renderQuizTimeout);
+                    window._renderQuizTimeout = setTimeout(() => {
+                        if (currentList.length > 0) renderQuiz();
+                        resetTestTimer();
+                    }, 50);
+
+
                 }
 
                 function shuffleArray(array) {
@@ -6499,6 +6700,12 @@
                         if (_log.length > 500) _log.length = 500;
                         localStorage.setItem(_logKey, JSON.stringify(_log));
                     })();
+
+                    // ── Tích/giảm xu sau khi nộp bài ──
+                    if (typeof awardCoins === 'function') {
+                        awardCoins(ok, failed, activeTotal);
+                    }
+
                     openModal('congrats-modal');
                 }
 
@@ -8593,14 +8800,15 @@
             var items = data.items;
             var total = data.userTotal;
             var learned = items.filter(function (it) { return (it.count || 0) >= 1; }).length;
-            var perfect = items.filter(function (it) { return (it.count || 0) >= 1 && (it.wrongCount || 0) === 0; }).length;
-            var wrongMany = items.filter(function (it) { return (it.wrongCount || 0) > 3; }).length;
-            var mastered = items.filter(function (it) { return (it.count || 0) > 10; }).length;
-            var forgotMany = items.filter(function (it) { return (it.forgotCount || 0) > 3; }).length;
-            // Dùng log key riêng theo ngôn ngữ để thống kê chính xác
+            // Dùng log key để đọc log (khai báo trước để tái sử dụng bên dưới)
             var logKey = (typeof currentDbKey !== 'undefined') ? currentDbKey + '_daily_log' : 'mgao_daily_log';
             var log = JSON.parse(localStorage.getItem(logKey) || '[]');
             var sessions_total = log.length;
+            // Làm đúng 100%: số lần nộp bài mà đúng tất cả câu (percent = 100)
+            var perfect = log.filter(function (e) { return e.total > 0 && e.percent === 100; }).length;
+            var wrongMany = items.filter(function (it) { return (it.wrongCount || 0) > 3; }).length;
+            var mastered = items.filter(function (it) { return (it.count || 0) > 10; }).length;
+            var forgotMany = items.filter(function (it) { return (it.forgotCount || 0) > 3; }).length;
             var pass90 = log.filter(function (e) { return e.total > 0 && (e.ok / e.total) >= 0.9; }).length;
             var vanLearned = items.filter(it => it.isVan && (it.count || 0) >= 1).length;
 
@@ -8729,6 +8937,7 @@
             _renderHistoryTable(stats.log);
             _renderWrongTable(stats.wrongItems);
             _renderForgotTable(stats.forgotItems);
+            if (typeof _renderCoinHistory === 'function') _renderCoinHistory();
         }
 
         function _localDateStr(d) {
@@ -9985,4 +10194,289 @@
             initFabObserver();
         }
     })();
+</script>
+
+<!-- ===== COIN SYSTEM ===== -->
+<script>
+(function () {
+    'use strict';
+
+    /* ---- cấu hình ---- */
+    var COIN_PER_CORRECT = 5;
+    var COIN_PER_WRONG   = 2;
+    var COIN_BONUS_100   = 30;
+    var COIN_BONUS_90    = 10;
+    var COIN_HISTORY_MAX = 200;
+
+    function _coinKey() {
+        var base = (typeof currentDbKey !== 'undefined' && currentDbKey) ? currentDbKey : 'mgao';
+        return base + '_coins';
+    }
+
+    function _loadCoins() {
+        try {
+            var raw = localStorage.getItem(_coinKey());
+            return raw ? JSON.parse(raw) : { total: 0, history: [] };
+        } catch(e) { return { total: 0, history: [] }; }
+    }
+
+    function _saveCoins(data) {
+        try { localStorage.setItem(_coinKey(), JSON.stringify(data)); } catch(e) {}
+    }
+
+    /* --- Cập nhật widget trên header --- */
+    function updateCoinWidget() {
+        var data = _loadCoins();
+        var el = document.getElementById('header-coin-val');
+        if (el) el.textContent = data.total.toLocaleString();
+        
+        var panelTotal = document.getElementById('coin-panel-total');
+        if (panelTotal) panelTotal.textContent = data.total.toLocaleString() + ' xu';
+    }
+    window.updateCoinWidget = updateCoinWidget;
+
+    function toggleCoinGuide(btn) {
+        var box = document.getElementById('coin-guide-box');
+        if (!box) return;
+        var arrow = btn.querySelector('.coin-guide-arrow');
+        if (box.style.display === 'none') {
+            box.style.display = 'block';
+            if (arrow) arrow.textContent = '▲';
+        } else {
+            box.style.display = 'none';
+            if (arrow) arrow.textContent = '▼';
+        }
+    }
+    window.toggleCoinGuide = toggleCoinGuide;
+
+    /* --- Toast nổi lên --- */
+    function showCoinToast(netChange, details) {
+        var container = document.getElementById('coin-toast-container');
+        if (!container) return;
+        var item = document.createElement('div');
+        var isPositive = netChange >= 0;
+        item.className = 'coin-toast-item' + (isPositive ? '' : ' negative');
+        var sign = isPositive ? '+' : '';
+        var icon = isPositive ? '\uD83C\uDF1F' : '\uD83D\uDCB8';
+        var detailHtml = details.map(function(d) {
+            return '<div class="coin-toast-detail">' + d + '</div>';
+        }).join('');
+        item.innerHTML = '<div><div style="font-size:22px;line-height:1;">' + icon + '</div></div>'
+            + '<div><div style="font-size:18px;">' + sign + netChange + ' xu</div>' + detailHtml + '</div>';
+        container.appendChild(item);
+        setTimeout(function() {
+            item.classList.add('leaving');
+            setTimeout(function() { if (item.parentNode) item.parentNode.removeChild(item); }, 450);
+        }, 3500);
+    }
+    window.showCoinToast = showCoinToast;
+
+    /* --- Pulse animation cho widget --- */
+    function _pulseWidget() {
+        var el = document.getElementById('header-coin-val');
+        if (!el) return;
+        el.classList.remove('coin-pulse');
+        void el.offsetWidth;
+        el.classList.add('coin-pulse');
+        setTimeout(function() { el.classList.remove('coin-pulse'); }, 500);
+    }
+
+    /* --- Hàm chính: tính và cấp phát xu --- */
+    function awardCoins(ok, failed, activeTotal) {
+        var data = _loadCoins();
+        var before = data.total;
+        var details = [];
+
+        var earned = ok * COIN_PER_CORRECT;
+        if (earned > 0) details.push('+' + earned + ' xu (' + ok + ' câu đúng x' + COIN_PER_CORRECT + ')');
+
+        var lost = failed * COIN_PER_WRONG;
+        if (lost > 0) details.push('-' + lost + ' xu (' + failed + ' câu sai x' + COIN_PER_WRONG + ')');
+
+        var bonus = 0;
+        if (activeTotal > 0 && ok === activeTotal) {
+            bonus = COIN_BONUS_100;
+            details.push('+' + bonus + ' bonus đúng 100%! \uD83C\uDFC6');
+        } else if (activeTotal > 0 && ok / activeTotal >= 0.9) {
+            bonus = COIN_BONUS_90;
+            details.push('+' + bonus + ' bonus >=90%! \uD83C\uDF1F');
+        }
+
+        var netChange = earned - lost + bonus;
+        var newTotal = Math.max(0, before + netChange);
+        data.total = newTotal;
+        data.history = data.history || [];
+        var nowStr = new Date().toLocaleString('vi-VN', { hour12: false });
+        data.history.unshift({
+            ts: Date.now(), date: nowStr,
+            ok: ok, failed: failed,
+            earned: earned, lost: lost, bonus: bonus,
+            net: netChange, before: before, after: newTotal
+        });
+        if (data.history.length > COIN_HISTORY_MAX) data.history.length = COIN_HISTORY_MAX;
+        _saveCoins(data);
+        updateCoinWidget();
+        _pulseWidget();
+        showCoinToast(netChange, details);
+    }
+    window.awardCoins = awardCoins;
+
+    /* --- Hệ thống rank --- */
+    var RANKS = [
+        { min: 0,     max: 199,        icon: '\uD83C\uDF31', label: 'Mầm non' },
+        { min: 200,   max: 499,        icon: '\uD83D\uDCDA', label: 'Học sinh' },
+        { min: 500,   max: 999,        icon: '\u2B50',       label: 'Chăm chỉ' },
+        { min: 1000,  max: 2499,       icon: '\uD83D\uDD25', label: 'Nhiệt huyết' },
+        { min: 2500,  max: 4999,       icon: '\uD83D\uDC8E', label: 'Xuất sắc' },
+        { min: 5000,  max: 9999,       icon: '\uD83D\uDC51', label: 'Bậc thầy' },
+        { min: 10000, max: Infinity,   icon: '\uD83C\uDF1F', label: 'Huyền thoại' }
+    ];
+    function _getCoinRank(total) {
+        for (var i = RANKS.length - 1; i >= 0; i--) {
+            if (total >= RANKS[i].min) return RANKS[i];
+        }
+        return RANKS[0];
+    }
+    function _rankProgress(total) {
+        var rank = _getCoinRank(total);
+        if (rank.max === Infinity) return null;
+        return ((total - rank.min) / (rank.max - rank.min + 1)) * 100;
+    }
+
+    /* --- Render lịch sử xu trong trang thống kê --- */
+    function _renderCoinHistory() {
+        var panel = document.getElementById('coin-history-panel');
+        if (!panel) return;
+        var data = _loadCoins();
+        var hist = (data.history || []).slice(0, 30);
+        var total = data.total;
+        var rankInfo = _getCoinRank(total);
+        var pct = _rankProgress(total);
+        var nextRank = null;
+        for (var ri = 0; ri < RANKS.length - 1; ri++) {
+            if (RANKS[ri].min <= total && total <= RANKS[ri].max) { nextRank = RANKS[ri + 1]; break; }
+        }
+        var needed = nextRank ? (nextRank.min - total) : 0;
+
+        // ─────────────────────────────────────────
+        // SECTION 1: Ảnh mèo + số xu nổi bật
+        // ─────────────────────────────────────────
+        var html = '<div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px 16px;background:linear-gradient(135deg,rgba(30,27,75,0.95),rgba(76,29,149,0.85),rgba(30,27,75,0.95));border:2px solid rgba(251,191,36,0.5);border-radius:24px;margin-bottom:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.5),0 0 60px rgba(251,191,36,0.08);">'
+
+        // Sparkle decoration
+        + '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 50% 0%,rgba(251,191,36,0.12),transparent 65%);pointer-events:none;"></div>'
+
+        // Cat image
+        + '<div style="position:relative;z-index:2;">'
+        + '<img src="huxu.png" alt="Hũ xu" style="width:160px;height:160px;object-fit:contain;filter:drop-shadow(0 8px 24px rgba(251,191,36,0.5));animation:huxuBob 2.5s ease-in-out infinite;" onerror="this.style.fontSize=\'72px\';this.style.lineHeight=\'1\';this.outerHTML=\'<div style=\\"font-size:72px;text-align:center;line-height:1.2;animation:huxuBob 2.5s ease-in-out infinite;\\">\uD83D\uDC08\uD83C\uDF1F</div>\'">'
+        + '</div>'
+
+        // Coin count badge (floats over image)
+        + '<div style="position:relative;z-index:3;margin-top:-20px;background:linear-gradient(135deg,#92400e,#b45309,#d97706);border:3px solid #fde047;border-radius:20px;padding:6px 22px;box-shadow:0 4px 20px rgba(251,191,36,0.6),0 0 0 1px rgba(255,255,255,0.15) inset;display:flex;align-items:center;gap:8px;">'
+        + '<span style="font-size:20px;">\uD83C\uDF1F</span>'
+        + '<span id="coin-panel-total" style="font-size:26px;font-weight:900;color:#fef9c3;font-family:\'Baloo 2\',sans-serif;letter-spacing:1px;text-shadow:0 2px 8px rgba(0,0,0,0.5);">' + total.toLocaleString() + ' xu</span>'
+        + '</div>'
+
+        // Rank label
+        + '<div style="margin-top:12px;z-index:2;display:flex;align-items:center;gap:8px;">'
+        + '<span style="font-size:26px;">' + rankInfo.icon + '</span>'
+        + '<span style="font-size:16px;font-weight:900;color:#e9d5ff;font-family:\'Baloo 2\',sans-serif;">' + rankInfo.label + '</span>'
+        + '</div>'
+
+        // Progress bar
+        + (pct !== null ? (
+            '<div style="width:100%;max-width:280px;margin-top:10px;z-index:2;">'
+            + '<div style="font-size:11px;color:#fbbf24;font-weight:700;font-family:\'Baloo 2\',sans-serif;text-align:center;margin-bottom:5px;">Cần thêm ' + needed + ' xu \u2192 ' + (nextRank ? nextRank.icon + ' ' + nextRank.label : '') + '</div>'
+            + '<div style="height:12px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.3) inset;">'
+            + '<div style="height:100%;width:' + Math.min(100,pct) + '%;background:linear-gradient(90deg,#fbbf24,#f59e0b,#fde047);border-radius:10px;box-shadow:0 0 12px rgba(251,191,36,0.6);transition:width 0.8s cubic-bezier(.4,0,.2,1);"></div></div>'
+            + '<div style="font-size:11px;color:#a5b4fc;margin-top:3px;text-align:right;font-weight:700;font-family:\'Baloo 2\',sans-serif;">' + Math.round(pct) + '%</div>'
+            + '</div>'
+        ) : '<div style="font-size:13px;color:#fde047;font-weight:900;margin-top:8px;font-family:\'Baloo 2\',sans-serif;">\uD83C\uDF1F Rank cao nhất! Bạn quá xuất sắc!</div>')
+
+        + '</div>';
+
+        // ─────────────────────────────────────────
+        // SECTION 2: Nút "Hướng dẫn cách tích xu"
+        // ─────────────────────────────────────────
+        html += '<button onclick="toggleCoinGuide(this)" style="width:100%;background:linear-gradient(135deg,rgba(251,191,36,0.15),rgba(245,158,11,0.1));border:1.5px solid rgba(251,191,36,0.4);border-radius:14px;padding:12px 18px;color:#fde68a;font-size:14px;font-weight:900;cursor:pointer;font-family:\'Baloo 2\',sans-serif;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;transition:all 0.2s;" onmouseover="this.style.background=\'linear-gradient(135deg,rgba(251,191,36,0.28),rgba(245,158,11,0.2))\'" onmouseout="this.style.background=\'linear-gradient(135deg,rgba(251,191,36,0.15),rgba(245,158,11,0.1))\'">'
+        + '<span>\uD83D\uDCDA Hướng dẫn cách tích xu</span><span class="coin-guide-arrow">\u25BC</span></button>';
+
+        // ─────────────────────────────────────────
+        // SECTION 3: Giải thích quy tắc
+        // ─────────────────────────────────────────
+        html += '<div id="coin-guide-box" style="display:none;background:linear-gradient(135deg,rgba(30,27,75,0.95),rgba(49,46,129,0.9));border:1.5px solid rgba(251,191,36,0.3);border-radius:16px;padding:18px;margin-bottom:16px;font-family:\'Baloo 2\',sans-serif;">';
+
+        // Title
+        html += '<div style="text-align:center;font-size:16px;font-weight:900;color:#fde047;margin-bottom:14px;letter-spacing:0.5px;">\uD83C\uDF1F Quy tắc Hũ Xu của bạn</div>';
+
+        // Rules cards
+        var rules = [
+            { icon:'\u2705', color:'#4ade80', bg:'rgba(74,222,128,0.08)', border:'rgba(74,222,128,0.25)', title:'+5 xu mỗi câu đúng', desc:'Mỗi câu trả lời chính xác khi nộp bài → cộng 5 xu vào hũ nhé!' },
+            { icon:'\u274C', color:'#f87171', bg:'rgba(248,113,113,0.08)', border:'rgba(248,113,113,0.25)', title:'-2 xu mỗi câu sai', desc:'Câu trả lời sai sẽ trừ 2 xu — nhưng hũ không bao giờ xuống dưới 0 đâu, yên tâm~' },
+            { icon:'\uD83C\uDFC6', color:'#fde047', bg:'rgba(253,224,71,0.08)', border:'rgba(253,224,71,0.25)', title:'+30 xu bonus đúng 100%!', desc:'Nếu làm đúng hết toàn bộ câu trong một bài → nhận ngay 30 xu thưởng đặc biệt!' },
+            { icon:'\uD83C\uDF1F', color:'#a78bfa', bg:'rgba(167,139,250,0.08)', border:'rgba(167,139,250,0.25)', title:'+10 xu bonus ≥90%', desc:'Điểm từ 90% trở lên cũng được thưởng 10 xu bonus — cố lên một chút nữa nhé~' },
+            { icon:'\uD83D\uDCC8', color:'#67e8f9', bg:'rgba(103,232,249,0.08)', border:'rgba(103,232,249,0.25)', title:'Tích nhiều xu → lên rank cao!', desc:'Xu tích lũy càng nhiều → rank càng cao. Từ 🌱 Mầm non đến 🌟 Huyền thoại!' }
+        ];
+
+        rules.forEach(function(r) {
+            html += '<div style="display:flex;align-items:flex-start;gap:12px;background:' + r.bg + ';border:1px solid ' + r.border + ';border-radius:12px;padding:12px 14px;margin-bottom:10px;">';
+            html += '<div style="font-size:22px;flex-shrink:0;margin-top:1px;">' + r.icon + '</div>';
+            html += '<div>';
+            html += '<div style="font-size:14px;font-weight:900;color:' + r.color + ';margin-bottom:2px;">' + r.title + '</div>';
+            html += '<div style="font-size:12px;color:#cbd5e1;line-height:1.5;">' + r.desc + '</div>';
+            html += '</div></div>';
+        });
+
+        // Rank table
+        html += '<div style="margin-top:14px;border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;">';
+        html += '<div style="font-size:13px;font-weight:900;color:#a5b4fc;margin-bottom:10px;text-align:center;">\uD83C\uDFAD Bảng xếp hạng Hũ Xu</div>';
+        html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">';
+        RANKS.forEach(function(r) {
+            var isActive = (total >= r.min && total <= r.max);
+            html += '<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:10px;background:' + (isActive ? 'rgba(251,191,36,0.18)' : 'rgba(255,255,255,0.04)') + ';border:1px solid ' + (isActive ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.06)') + ';">';
+            html += '<span style="font-size:18px;">' + r.icon + '</span>';
+            html += '<div>';
+            html += '<div style="font-size:12px;font-weight:900;color:' + (isActive ? '#fde047' : '#94a3b8') + ';">' + r.label + '</div>';
+            html += '<div style="font-size:10px;color:#64748b;">' + r.min.toLocaleString() + (r.max === Infinity ? '+' : (' – ' + r.max.toLocaleString())) + ' xu</div>';
+            html += '</div>';
+            if (isActive) html += '<span style="margin-left:auto;font-size:10px;font-weight:900;color:#fbbf24;">◀ bạn</span>';
+            html += '</div>';
+        });
+        html += '</div></div>';
+        html += '</div>'; // end coin-guide-box
+
+        // ─────────────────────────────────────────
+        // SECTION 4: Lịch sử gần đây
+        // ─────────────────────────────────────────
+        if (hist.length > 0) {
+            html += '<div style="font-size:13px;font-weight:900;color:#a5b4fc;margin-bottom:8px;font-family:\'Baloo 2\',sans-serif;">\uD83D\uDCCB Lịch sử gần đây</div>';
+            hist.forEach(function(h) {
+                var netClass = h.net >= 0 ? 'coin-earned' : 'coin-lost';
+                var netSign  = h.net >= 0 ? '+' : '';
+                var parts = [];
+                if (h.earned) parts.push('<span style="color:#4ade80;">+' + h.earned + '</span> (' + h.ok + ' đúng)');
+                if (h.lost)   parts.push('<span style="color:#f87171;">-' + h.lost + '</span> (' + h.failed + ' sai)');
+                if (h.bonus)  parts.push('<span style="color:#fbbf24;">+' + h.bonus + ' bonus</span>');
+                html += '<div class="coin-history-row">';
+                html += '<div style="color:#94a3b8;font-size:11px;min-width:110px;">' + h.date + '</div>';
+                html += '<div style="flex:1;padding:0 8px;">' + parts.join(' · ') + '</div>';
+                html += '<div class="' + netClass + '">' + netSign + h.net + ' \uD83C\uDF1F</div>';
+                html += '<div style="color:#64748b;font-size:11px;margin-left:8px;">\u2192 ' + h.after + '</div>';
+                html += '</div>';
+            });
+        } else {
+            html += '<div style="text-align:center;color:#64748b;padding:16px;font-family:\'Baloo 2\',sans-serif;font-size:13px;">Hũ xu đang trống — hãy làm bài đầu tiên nào! \uD83C\uDF1F</div>';
+        }
+
+        panel.innerHTML = html;
+    }
+    window._renderCoinHistory = _renderCoinHistory;
+
+    /* --- Khởi tạo khi load trang --- */
+    function _init() { updateCoinWidget(); }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', _init);
+    } else { _init(); }
+
+})();
 </script>
