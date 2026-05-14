@@ -168,6 +168,29 @@
             #mobile-menu-fab {
                 display: flex !important;
             }
+
+            /* FIX: Tránh submit bar bị FAB che - thêm padding-right */
+            #submit-bar-content {
+                padding-right: 72px !important;
+            }
+
+            /* FIX: submit-container dùng fixed thay sticky trên mobile */
+            #submit-container {
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                z-index: 8500 !important;
+                padding: 0 12px 8px !important;
+                box-sizing: border-box !important;
+                pointer-events: none;
+            }
+
+            /* Them padding-bottom de noi dung khong bi submit bar che */
+            #quiz-container {
+                padding-bottom: 100px !important;
+            }
         }
 
         @media (min-width: 481px) and (max-width: 768px) {
@@ -181,6 +204,11 @@
 
             .main-wrapper {
                 margin-left: 90vw;
+            }
+
+            /* FIX: Tránh submit bar bị FAB che trên tablet */
+            #submit-bar-content {
+                padding-right: 72px !important;
             }
         }
 
@@ -207,6 +235,17 @@
 
         #mobile-menu-fab:active {
             transform: scale(0.92);
+        }
+
+        /* FIX: Nang FAB len khi submit bar hien tren mobile */
+        @media (max-width: 768px) {
+            #mobile-menu-fab.fab-raised {
+                bottom: 98px !important;
+                transition: bottom 0.3s ease;
+            }
+            #mobile-menu-fab {
+                transition: bottom 0.3s ease;
+            }
         }
 
         .sidebar-stats-container {
@@ -4099,6 +4138,9 @@
                 }
 
                 function selectVanDay(sectionKey, sub, lessonIdx, listOverride = null, targetMode = null) {
+                    // FIX LOI 6: Xoa overlay tong ket neu con ton tai trong DOM
+                    var _co = document.getElementById('completion-overlay');
+                    if (_co) _co.remove();
                     if (window.innerWidth <= 768) {
                         document.body.classList.add('sidebar-hidden');
                         localStorage.setItem('sidebar_hidden', '1');
@@ -4168,9 +4210,12 @@
                     changeMode(bestMode);
                     resetTimer();
                     resetTotalTimer();
-                    lessonTimes = [];
-                    sessionScores = [];
-                    isRetrySession = false;
+                    // FIX LOI 3a: Chi reset session state khi KHONG phai retry
+                    if (!listOverride) {
+                        if (typeof window._resetLessonTimes === 'function') window._resetLessonTimes(); else lessonTimes = [];
+                        if (typeof window._resetSessionScores === 'function') window._resetSessionScores(); else sessionScores = [];
+                        if (typeof window._setIsRetrySession === 'function') window._setIsRetrySession(false); else isRetrySession = false;
+                    }
                     updateVanFab();
 
                     // Breadcrumb & back button
@@ -5609,6 +5654,9 @@
                 // ─── End lock screen helpers ───
 
                 function selectDay(lv, ty, day, listOverride = null, targetMode = null) {
+                    // FIX LỖI 6: Xóa overlay tổng kết nếu còn tồn tại trong DOM
+                    const _co2 = document.getElementById('completion-overlay');
+                    if (_co2) _co2.remove();
                     if (window.innerWidth <= 768) {
                         document.body.classList.add('sidebar-hidden');
                         localStorage.setItem('sidebar_hidden', '1');
@@ -5705,10 +5753,12 @@
                     changeMode(bestMode);
                     resetLessonTimer();
                     resetTotalTimer();
-                    // Reset qua window helpers (tránh cross-script-block scope issue)
-                    if (typeof window._resetLessonTimes === 'function') window._resetLessonTimes(); else lessonTimes = [];
-                    if (typeof window._resetSessionScores === 'function') window._resetSessionScores(); else sessionScores = [];
-                    if (typeof window._setIsRetrySession === 'function') window._setIsRetrySession(false);
+                    // FIX LOI 3b: Chi reset session state khi KHONG phai retry (listOverride = null)
+                    if (!listOverride) {
+                        if (typeof window._resetLessonTimes === 'function') window._resetLessonTimes(); else lessonTimes = [];
+                        if (typeof window._resetSessionScores === 'function') window._resetSessionScores(); else sessionScores = [];
+                        if (typeof window._setIsRetrySession === 'function') window._setIsRetrySession(false);
+                    }
 
                     // Breadcrumb & back button
                     const lvLabel = { 'n1': 'Năng lực N1', 'n2': 'Năng lực N2', 'n3': 'Trình độ N3', 'bjt': 'BJT' }[lv] || lv;
@@ -6035,6 +6085,10 @@
                             if (currentList[idx] && window.srsTracker) window.srsTracker.recordCorrectAnswer(currentList[idx]);
                             // Xóa cờ "đã ghi sai lần này" vì đã trả lời đúng rồi
                             input.removeAttribute('data-attempt-counted');
+                            if (card.getAttribute('data-tracked-correct') !== 'true') {
+                                trackCorrect(currentList[idx]);
+                                card.setAttribute('data-tracked-correct', 'true');
+                            }
                         }
                     }
                     else if (val === "") {
@@ -6174,7 +6228,10 @@
 
                             if (isCorrect) {
                                 ok++;
-                                trackCorrect(currentList[idx]);
+                                if (card.getAttribute('data-tracked-correct') !== 'true') {
+                                    trackCorrect(currentList[idx]);
+                                    card.setAttribute('data-tracked-correct', 'true');
+                                }
                                 card.setAttribute('data-res', 'ok');
                                 card.style.borderLeftColor = 'var(--success)';
                                 const btn = document.getElementById(`opt-${idx}-${selectedIdx}`);
@@ -6218,7 +6275,10 @@
                             // Câu đúng: data-res đã là 'ok' (đã gõ đúng trước đó)
                             if (card.getAttribute('data-res') === 'ok') {
                                 ok++;
-                                trackCorrect(currentList[idx]);
+                                if (card.getAttribute('data-tracked-correct') !== 'true') {
+                                    trackCorrect(currentList[idx]);
+                                    card.setAttribute('data-tracked-correct', 'true');
+                                }
                                 if (input) input.classList.add('correct');
                                 card.style.borderLeftColor = 'var(--success)';
                                 // Hiện badge xanh 'Tuyệt vời'
@@ -6308,11 +6368,33 @@
                     document.getElementById('res-ok').innerText = ok;
                     document.getElementById('res-ng').innerText = failed;
                     document.getElementById('res-time').innerText = document.getElementById('timer-display').textContent;
-                    document.getElementById('btn-retry-failed').style.display = failed > 0 ? 'block' : 'none';
+                    // FIX: C?p nh?t text b?t button retry-failed v?i s? lu?ng chnh xc
+                    const btnRetryFailed = document.getElementById('btn-retry-failed');
+                    if (btnRetryFailed) {
+                        if (failed > 0) {
+                            btnRetryFailed.style.display = 'block';
+                            let actualFailedCount = 0;
+                            document.querySelectorAll('.card[id^="q-"]').forEach(c => {
+                                const r = c.getAttribute('data-res');
+                                if (r === 'ng' || r === 'forgot') actualFailedCount++;
+                            });
+                            btnRetryFailed.innerHTML = '🔄 LÀM LẠI ' + actualFailedCount + ' CÂU QUÊN/SAI';
+                        } else {
+                            btnRetryFailed.style.display = 'none';
+                        }
+                    }
 
-                    const starredCount = currentList.filter(item => fcStarredKeys.has(_itemKey(item))).length;
+                    // FIX: C?p nh?t text button retry-starred
+                    const starredCount = currentList.filter(item => item && fcStarredKeys.has(_itemKey(item))).length;
                     const btnRetryStarred = document.getElementById('btn-retry-starred');
-                    if (btnRetryStarred) btnRetryStarred.style.display = starredCount > 0 ? 'block' : 'none';
+                    if (btnRetryStarred) {
+                        if (starredCount > 0) {
+                            btnRetryStarred.style.display = 'block';
+                            btnRetryStarred.innerHTML = '⭐ LÀM LẠI ' + starredCount + ' CÂU ĐÁNH SAO';
+                        } else {
+                            btnRetryStarred.style.display = 'none';
+                        }
+                    }
 
                     let title = "CỐ GẮNG THÊM 💪";
                     let subtitle = "Bạn đã rất cố gắng nhưng hãy làm thêm lần nữa nhé.";
@@ -6338,12 +6420,14 @@
 
                     document.getElementById('congrats-subtitle').innerText = subtitle;
 
-                    // Save this lesson's score
-                    lessonTimes.push(seconds);
-                    sessionScores.push({ ok, total, mode: currentMode });
-
-                    // Đọc trạng thái retry (hỗ trợ cross-script-block)
+                    // FIX LOI 2: Kiem tra retry TRUOC khi quyet dinh push score
                     const _isRetry = isRetrySession || (typeof window._getIsRetrySession === 'function' && window._getIsRetrySession());
+
+                    // Chi tich luy session score khi KHONG phai retry session
+                    if (!_isRetry) {
+                        lessonTimes.push(seconds);
+                        sessionScores.push({ ok, total, mode: currentMode });
+                    }
 
                     // Show/hide "Next lesson" button
                     const maxMode = curLevel === 'custom' ? 1 : getMaxModeForType();
@@ -6963,10 +7047,14 @@
                     const wrongs = [];
                     const oldMode = currentMode;
                     document.querySelectorAll('.card[id^="q-"]').forEach((card) => {
-                        const idx = card.getAttribute('data-idx');
+                        const idxStr = card.getAttribute('data-idx');
+                        const idx = parseInt(idxStr, 10);
                         const res = card.getAttribute('data-res');
-                        // Loại trừ câu đúng (ok) và câu bỏ qua (skip)
-                        if (res !== 'ok' && res !== 'skip') wrongs.push(currentList[idx]);
+                        // FIX: Ch? l?y cu th?c s? sai (ng) ho?c qun (forgot), v guard undefined
+                        if (res === 'ng' || res === 'forgot') {
+                            const item = currentList[idx] || currentList[idxStr];
+                            if (item) wrongs.push(item);
+                        }
                     });
                     if (wrongs.length === 0) {
                         closeModal('congrats-modal');
@@ -6988,7 +7076,8 @@
                 }
 
                 function retryStarredOnly() {
-                    const starredItems = currentList.filter(item => fcStarredKeys.has(_itemKey(item)));
+                    // FIX: Thêm guard item !== undefined
+                    const starredItems = currentList.filter(item => item && fcStarredKeys.has(_itemKey(item)));
                     if (starredItems.length === 0) return;
                     const oldMode = currentMode;
                     closeModal('congrats-modal');
@@ -7092,7 +7181,7 @@
 
                     ${curLevel === 'custom'
                             ? `<div style="display:flex;flex-direction:column;gap:10px;"><button onclick="showAllAnswers(); document.getElementById('completion-overlay').remove();" style="padding:16px;border-radius:14px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:white;font-size:17px;font-weight:900;border:none;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 20px rgba(59,130,246,0.4);">&#128203; XEM &#272;&#193;P &#193;N</button><button onclick="document.getElementById('completion-overlay').remove();" style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);color:#94a3b8;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.08);cursor:pointer;">&#x2715; &#272;&#243;ng</button></div>`
-                            : `<div style="display:flex;flex-direction:column;gap:10px;"><button onclick="markDayComplete(); document.getElementById('completion-overlay').remove(); confetti({particleCount:250,spread:80});" style="padding:16px;border-radius:14px;background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:17px;font-weight:900;border:none;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 20px rgba(16,185,129,0.4);">&#9989; HO&#192;N TH&#192;NH NG&#192;Y H&#7885;C!</button><button onclick="document.getElementById('completion-overlay').remove(); renderQuiz(); if(typeof resetTimer==='function') resetTimer(); window.scrollTo({top:0,behavior:'smooth'});" style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);color:#94a3b8;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.08);cursor:pointer;">&#128260; L&#224;m l&#7841;i t&#7915; &#273;&#7847;u</button></div>`}
+                            : `<div style="display:flex;flex-direction:column;gap:10px;"><button onclick="markDayComplete(); document.getElementById('completion-overlay').remove(); confetti({particleCount:250,spread:80});" style="padding:16px;border-radius:14px;background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:17px;font-weight:900;border:none;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 20px rgba(16,185,129,0.4);">&#9989; HO&#192;N TH&#192;NH NG&#192;Y H&#7885;C!</button><button onclick="document.getElementById('completion-overlay').remove(); if(typeof window._resetSessionScores==='function') window._resetSessionScores(); else sessionScores=[]; if(typeof window._resetLessonTimes==='function') window._resetLessonTimes(); else lessonTimes=[]; if(typeof window._setIsRetrySession==='function') window._setIsRetrySession(false); else isRetrySession=false; renderQuiz(); if(typeof resetTimer==='function') resetTimer(); if(typeof resetTotalTimer==='function') resetTotalTimer(); window.scrollTo({top:0,behavior:'smooth'});" style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);color:#94a3b8;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.08);cursor:pointer;">&#128260; L&#224;m l&#7841;i t&#7915; &#273;&#7847;u</button></div>`}
 
                 </div>`;
                     document.body.appendChild(overlay);
@@ -7660,6 +7749,8 @@
                     if (curLevel !== 'custom') {
                         if (!curVanMode) saveToLocal(); else saveVanItemExtra(item);
                     }
+                    if (typeof updateGlobalStats === 'function') updateGlobalStats();
+                    if (typeof renderStats === 'function') renderStats();
                 }
                 function trackWrong(item) {
                     item.wrongCount = (item.wrongCount || 0) + 1;
@@ -7667,6 +7758,8 @@
                     if (curLevel !== 'custom') {
                         if (!curVanMode) saveToLocal(); else saveVanItemExtra(item);
                     }
+                    if (typeof updateGlobalStats === 'function') updateGlobalStats();
+                    if (typeof renderStats === 'function') renderStats();
                 }
                 function trackForgot(item) {
                     item.forgotCount = (item.forgotCount || 0) + 1;
@@ -7674,6 +7767,8 @@
                     if (curLevel !== 'custom') {
                         if (!curVanMode) saveToLocal(); else saveVanItemExtra(item);
                     }
+                    if (typeof updateGlobalStats === 'function') updateGlobalStats();
+                    if (typeof renderStats === 'function') renderStats();
                 }
                 function saveVanItemExtra(item) {
                     // For vanData items: persist count/wrongCount/forgotCount by c1/q key
@@ -9860,6 +9955,34 @@
             document.addEventListener('DOMContentLoaded', runSrBannerUpdate);
         } else {
             runSrBannerUpdate();
+        }
+    })();
+
+    // ===== FIX MOBILE: Nang FAB len khi submit bar hien, tranh chong nut =====
+    (function() {
+        function syncFabWithSubmitBar() {
+            var fab = document.getElementById('mobile-menu-fab');
+            var sc = document.getElementById('submit-container');
+            if (!fab || !sc) return;
+            var isSubmitVisible = sc.style.display !== 'none' && sc.style.display !== '';
+            if (isSubmitVisible) {
+                fab.classList.add('fab-raised');
+            } else {
+                fab.classList.remove('fab-raised');
+            }
+        }
+        // MutationObserver theo doi submit-container
+        function initFabObserver() {
+            var sc = document.getElementById('submit-container');
+            if (!sc) return;
+            var obs = new MutationObserver(syncFabWithSubmitBar);
+            obs.observe(sc, { attributes: true, attributeFilter: ['style'] });
+            syncFabWithSubmitBar(); // initial sync
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initFabObserver);
+        } else {
+            initFabObserver();
         }
     })();
 </script>

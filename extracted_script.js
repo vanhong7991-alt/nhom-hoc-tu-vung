@@ -2125,11 +2125,11 @@
                     const btnClose = document.getElementById('btn-close-congrats');
                     const uniqueCompletedModes = new Set(sessionScores.map(s => s.mode)).size;
 
-                    if (currentMode < maxMode - 1 && !curVanMode) {
+                    if (curLevel !== 'custom' && currentMode < maxMode - 1 && !curVanMode) {
                         const modeLabels = { 0: 'Bài 1', 1: 'Bài 2', 2: 'Bài 3' };
                         if (btnNext) { btnNext.style.display = 'block'; btnNext.textContent = `→ SANG ${modeLabels[currentMode + 1] || 'BÀI TIẾP THEO'}`; }
                         if (btnClose) { btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; btnClose.onclick = () => { showAllAnswers(); closeModal('congrats-modal'); }; }
-                    } else if (!curVanMode && uniqueCompletedModes === maxMode) {
+                    } else if (curLevel !== 'custom' && !curVanMode && uniqueCompletedModes >= maxMode) {
                         // Đã làm đủ số test yêu cầu — hiện nút Xem kết quả tổng
                         if (btnNext) btnNext.style.display = 'none';
                         if (btnClose) {
@@ -2140,7 +2140,13 @@
                         }
                     } else {
                         if (btnNext) btnNext.style.display = 'none';
-                        if (btnClose) { btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; btnClose.onclick = () => { showAllAnswers(); closeModal('congrats-modal'); }; }
+                        if (btnClose) { 
+                            btnClose.innerText = "ĐÓNG VÀ XEM ĐÁP ÁN"; 
+                            btnClose.style.background = '#e2e8f0';
+                            btnClose.style.color = '#334155';
+                            btnClose.style.boxShadow = 'none';
+                            btnClose.onclick = () => { showAllAnswers(); closeModal('congrats-modal'); }; 
+                        }
                     }
                     // ── Ghi nhật ký học tập theo ngày ──
                     (function () {
