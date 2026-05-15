@@ -64,18 +64,17 @@
 
         body {
             font-family: 'Baloo 2', 'Kosugi Maru', cursive;
-            background: url('anhnen.png') center/cover fixed var(--bg-dark);
+            background-color: var(--bg-dark);
             color: var(--text);
             margin: 0;
             overflow-x: hidden;
             font-size: 18px;
         }
 
-        body::before {
-            content: "";
+        #app-fixed-bg {
             position: fixed;
             inset: -20px;
-            background: inherit;
+            background: url('anhnen.png') center/cover no-repeat;
             filter: blur(0px) brightness(0.85);
             z-index: -1;
             pointer-events: none;
@@ -2157,6 +2156,7 @@
 </head>
 
 <body>
+    <div id="app-fixed-bg"></div>
     <div id="rt-wrapper" class="rt-widget" onclick="toggleChartWidget()" title="Nhấn để thu gọn/mở rộng">
         <div id="rt-content" style="display: flex; align-items: center; gap: 20px;">
             <div class="donut-chart" id="rt-donut">
@@ -10061,31 +10061,28 @@
 
             function applyBg(value) {
                 window._currentBg = value;
+                var bgEl = document.getElementById('app-fixed-bg');
+                if (!bgEl) return;
+
                 if (value === 'default' || value === 'anhnen.png') {
-                    document.body.style.backgroundImage = "url('anhnen.png')";
-                    document.body.style.backgroundSize = 'cover';
-                    document.body.style.backgroundPosition = 'center';
-                    document.body.style.backgroundAttachment = 'fixed';
+                    bgEl.style.backgroundImage = "url('anhnen.png')";
+                    bgEl.style.display = 'block';
                     localStorage.setItem(BG_KEY, 'anhnen.png');
                     updateBgLabel('Mặc định (anhnen.png)');
                 } else if (value === 'dark_purple') {
-                    document.body.style.backgroundImage = "none";
+                    bgEl.style.display = 'none';
                     document.body.style.backgroundColor = "#0f172a";
                     localStorage.setItem(BG_KEY, 'dark_purple');
                     updateBgLabel('Lựa chọn 3 (Tím thẫm)');
                 } else if (value.startsWith('data:')) {
                     // base64 từ upload
-                    document.body.style.backgroundImage = "url('" + value + "')";
-                    document.body.style.backgroundSize = 'cover';
-                    document.body.style.backgroundPosition = 'center';
-                    document.body.style.backgroundAttachment = 'fixed';
+                    bgEl.style.backgroundImage = "url('" + value + "')";
+                    bgEl.style.display = 'block';
                     try { localStorage.setItem(BG_KEY, value); } catch (e) { alert('Ảnh quá lớn để lưu, sẽ không giữ sau khi tải lại.'); }
                     updateBgLabel('Ảnh tùy chỉnh của bạn');
                 } else {
-                    document.body.style.backgroundImage = "url('" + value + "')";
-                    document.body.style.backgroundSize = 'cover';
-                    document.body.style.backgroundPosition = 'center';
-                    document.body.style.backgroundAttachment = 'fixed';
+                    bgEl.style.backgroundImage = "url('" + value + "')";
+                    bgEl.style.display = 'block';
                     localStorage.setItem(BG_KEY, value);
                     var label = {
                         'anhnen1.png': 'Lựa chọn 1 (anhnen1.png)',
