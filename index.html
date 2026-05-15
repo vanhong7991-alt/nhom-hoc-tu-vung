@@ -2333,7 +2333,7 @@
     <div id="welcome-screen"
         style="display: none; position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; align-items: center; justify-content: center; padding: 20px;">
         <div class="modal-content" style="border-color: var(--accent);">
-            <h1 style="color: var(--warning);">Chào mừng bạn! 🌸</h1>
+            <h1 style="color: var(--warning); line-height: 1.4;">🌸 Chào mừng bạn! 🌸<br><span style="font-size: 24px; color: #fef08a;">Thành viên chăm chỉ</span></h1>
             <p style="color: #cbd5e1; font-size: 15px; margin-bottom: 20px;">Nhập tên để bắt đầu học nào!</p>
             <input type="text" id="user-name-input" placeholder="Tên của bạn..." maxlength="15"
                 style="margin-bottom: 20px;">
@@ -4219,7 +4219,7 @@
                     <div id="rg-feedback-text">CHÍNH XÁC! ✨</div>
 
                     <!-- Start Screen -->
-                    <div id="rg-start-screen" class="rg-modal-overlay">
+                    <div id="rg-start-screen" class="rg-modal-overlay" style="background: url('gamephanxa.png') center/cover no-repeat;">
                         <h2>🌸 Game Phản Xạ Nhanh</h2>
                         <p>Chọn đúng <b>nghĩa tiếng Việt</b> (hoặc cách đọc) của từ vựng xuất hiện!</p>
                         <p style="color:#888; font-size:0.95rem;">Bông hoa rơi = đáp án. Chọn đúng → sang câu tiếp. Chọn
@@ -5071,8 +5071,8 @@
                 }
 
                 window.onload = () => {
-                    // Restore sidebar state (default: visible)
-                    if (localStorage.getItem('sidebar_hidden') === '1') {
+                    // Restore sidebar state (mặc định là ẩn ở lần đầu, chỉ hiện khi user đã mở và lưu trạng thái 0)
+                    if (localStorage.getItem('sidebar_hidden') !== '0') {
                         document.body.classList.add('sidebar-hidden');
                     }
 
@@ -10136,6 +10136,8 @@
             var saved = localStorage.getItem(BG_KEY);
             if (saved) {
                 applyBg(saved);
+            } else {
+                applyBg('default');
             }
         })();
     </script>
