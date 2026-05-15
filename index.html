@@ -7431,6 +7431,8 @@
                         motivMsg = 'Mình biết bạn cũng đã cố gắng rồi, nhưng bạn hãy cố gắng thêm xíu nữa nhé 🥰';
                     }
 
+                    const calculatedTotalSeconds = lessonTimes.reduce((a, t) => a + t, 0);
+
                     const overlay = document.createElement('div');
                     overlay.id = 'completion-overlay';
                     overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);';
@@ -7445,7 +7447,7 @@
                             <div style="text-align:center;"><div style="font-size:34px;font-weight:900;color:#4ade80;">${totalOk}</div><div style="font-size:11px;color:#64748b;font-weight:700;">ĐÚNG</div></div>
                             <div style="text-align:center;"><div style="font-size:34px;font-weight:900;color:#f87171;">${totalQ - totalOk}</div><div style="font-size:11px;color:#64748b;font-weight:700;">SAI</div></div>
                             <div style="text-align:center;"><div style="font-size:34px;font-weight:900;color:var(--warning);">${pct}%</div><div style="font-size:11px;color:#64748b;font-weight:700;">ĐIỂM</div></div>
-                            <div style="text-align:center;"><div style="font-size:34px;font-weight:900;color:#a78bfa;">${toTime(totalSeconds)}</div><div style="font-size:11px;color:#64748b;font-weight:700;">TỔNG GIỜ</div></div>
+                            <div style="text-align:center;"><div style="font-size:34px;font-weight:900;color:#a78bfa;">${toTime(calculatedTotalSeconds)}</div><div style="font-size:11px;color:#64748b;font-weight:700;">TỔNG GIỜ</div></div>
                         </div>
                         <div style="text-align:left;">${breakdownHtml}</div>
                     </div>
