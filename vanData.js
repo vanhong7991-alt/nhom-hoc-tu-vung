@@ -1545,7 +1545,7 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 7",
+                name: "Bài 7 (151-175)",
                 free: true,
                 list: [
                     { gramType: "quiz", q: "健康ブームが（___________）となって、健康関連商品の売れ行きが好調だ。", ans: "追い風", w1: "追い着", w2: "追い春", w3: "追う題", explain: "追い風（おいかぜ）: thuận gió, điều kiện thuận lợi\nDịch: Nhờ trào lưu sức khỏe trở thành động lực thuận lợi nên các sản phẩm liên quan đến sức khỏe bán rất chạy.", count: 0 },
@@ -1576,7 +1576,7 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 8",
+                name: "Bài 8 (176-200)",
                 free: true,
                 list: [
                     { gramType: "quiz", q: "A社とは、納期と金額の面で（___________）、まだ契約には至っていない。", ans: "折り合わず", w1: "折り会わず", w2: "折り買わず", w3: "折り負わず", explain: "折り合う（おりあう）: đạt được thỏa thuận\n折り合わず: không đạt được thỏa thuận\nDịch: Với công ty A, do chưa thống nhất được về thời hạn giao hàng và giá cả nên vẫn chưa đi đến ký hợp đồng.", count: 0 },
@@ -1607,7 +1607,7 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 9",
+                name: "Bài 9 (201-225)",
                 free: true,
                 list: [
                     { gramType: "quiz", q: "業績の悪化に伴い、関連子会社を（___________）することに決定した。", ans: "解散", w1: "改善", w2: "解消", w3: "解党", explain: "解散（かいさん）: giải tán, giải thể\nDịch: Do tình hình kinh doanh xấu đi, công ty đã quyết định giải thể công ty con liên quan。", count: 0 },
@@ -1638,7 +1638,7 @@ const vanData = {
                 ]
             },
             {
-                name: "Bài 10",
+                name: "Bài 10 (226-250)",
                 free: true,
                 list: [
                     { gramType: "quiz", q: "CD2枚でこの値段だったら、かなりお（___________）だ。", ans: "買い得", w1: "買い高", w2: "買い損", w3: "買い特", explain: "買い高（かいだか）: mua đắt\n買い損（かいぞん）: mua lỗ, mua không đáng\n買い特（かいとく）: từ sai\n買い得（かいどく）: mua hời\nDịch: Nếu 2 chiếc CD mà giá này thì khá hời.", count: 0 },

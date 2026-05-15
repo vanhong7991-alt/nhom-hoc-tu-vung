@@ -2538,6 +2538,19 @@
 
                 <div id="van-section">
 
+                    <!-- ▸ NHÓM BJT -->
+                    <div class="sidebar-group-header bjt">💼 BJT</div>
+
+                    <!-- BJT Từ Vựng -->
+                    <div class="van-menu-lvl1 lvl1-bjtvoca" onclick="toggleSub('van-bjtvoca-sub')">💼 BJT Từ Vựng ▼
+                    </div>
+                    <div id="van-bjtvoca-sub" class="sub-menu" style="display: block;">
+                        <div class="menu-lvl2" onclick="toggleSub('van-bjtvoca-struct')">📚 Từ đơn</div>
+                        <div id="van-bjtvoca-struct" class="sub-menu"></div>
+                        <div class="menu-lvl2" onclick="toggleSub('van-bjtvoca-quiz')">📝 Trắc nghiệm</div>
+                        <div id="van-bjtvoca-quiz" class="sub-menu"></div>
+                    </div>
+
                     <!-- ▸ NHÓM JLPT -->
                     <div class="sidebar-group-header jlpt">🎌 JLPT</div>
 
@@ -2564,19 +2577,6 @@
                         <div id="van-n2gram-struct" class="sub-menu"></div>
                         <div class="menu-lvl2" onclick="toggleSub('van-n2gram-quiz')">🎯 Trắc nghiệm</div>
                         <div id="van-n2gram-quiz" class="sub-menu"></div>
-                    </div>
-
-                    <!-- ▸ NHÓM BJT -->
-                    <div class="sidebar-group-header bjt">💼 BJT</div>
-
-                    <!-- BJT Từ Vựng -->
-                    <div class="van-menu-lvl1 lvl1-bjtvoca" onclick="toggleSub('van-bjtvoca-sub')">💼 BJT Từ Vựng ▼
-                    </div>
-                    <div id="van-bjtvoca-sub" class="sub-menu">
-                        <div class="menu-lvl2" onclick="toggleSub('van-bjtvoca-struct')">📚 Từ đơn</div>
-                        <div id="van-bjtvoca-struct" class="sub-menu"></div>
-                        <div class="menu-lvl2" onclick="toggleSub('van-bjtvoca-quiz')">📝 Trắc nghiệm</div>
-                        <div id="van-bjtvoca-quiz" class="sub-menu"></div>
                     </div>
 
 
@@ -4220,7 +4220,7 @@
 
                     <!-- Start Screen -->
                     <div id="rg-start-screen" class="rg-modal-overlay" style="background: url('gamephanxa.png') center/cover no-repeat;">
-                        <h2>🌸 Game Phản Xạ Nhanh</h2>
+                        <h2>🌸 Cùng nhanh mắt nhanh tay nào</h2>
                         <p>Chọn đúng <b>nghĩa tiếng Việt</b> (hoặc cách đọc) của từ vựng xuất hiện!</p>
                         <p style="color:#888; font-size:0.95rem;">Bông hoa rơi = đáp án. Chọn đúng → sang câu tiếp. Chọn
                             sai → kết thúc!</p>
@@ -4297,8 +4297,28 @@
                             const containerEl = document.getElementById(containers[sub]);
                             if (!containerEl) continue;
                             containerEl.innerHTML = '';
-                            const lessons = vanData[sectionKey][sub] || [];
+                            const lessons = vanData[sectionKey]?.[sub] || [];
                             const vanType = containers[sub === 'struct' ? 'type_struct' : 'type_quiz'];
+
+                            let totalBranchItems = 0;
+                            lessons.forEach(l => { totalBranchItems += (l.list || []).length; });
+                            const unitTextBranch = (vanType === 'voca_quiz' || vanType === 'gram_quiz') ? 'câu' : (vanType === 'gram' ? 'mẫu' : 'từ');
+                            
+                            if (containerEl.previousElementSibling && containerEl.previousElementSibling.classList.contains('menu-lvl2')) {
+                                let badgeSpan = containerEl.previousElementSibling.querySelector('.branch-total-badge');
+                                if (!badgeSpan) {
+                                    badgeSpan = document.createElement('span');
+                                    badgeSpan.className = 'branch-total-badge';
+                                    badgeSpan.style.cssText = 'position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 13px; font-weight: 800; color: #fca5a5; border: 1px solid #ef4444; padding: 2px 8px; border-radius: 12px; box-shadow: 0 0 8px rgba(239,68,68,0.4); background: rgba(239,68,68,0.15); pointer-events: none;';
+                                    containerEl.previousElementSibling.appendChild(badgeSpan);
+                                }
+                                if (totalBranchItems > 0) {
+                                    badgeSpan.innerText = totalBranchItems + ' ' + unitTextBranch;
+                                    badgeSpan.style.display = 'inline-block';
+                                } else {
+                                    badgeSpan.style.display = 'none';
+                                }
+                            }
                             lessons.forEach((lesson, idx) => {
                                 const progressKey = 'van_' + sectionKey + '_' + sub + '_' + lesson.name;
                                 const progress = JSON.parse(localStorage.getItem(progressKey) || '{"done":[false,false,false]}');
@@ -6046,6 +6066,12 @@
                     window._renderQuizTimeout = setTimeout(() => {
                         if (currentList.length > 0) renderQuiz();
                         resetTestTimer();
+                        // Tự động khởi động timer nếu là phần ôn tập hoặc làm lại (không có nút BẮT ĐẦU)
+                        const mbox = document.getElementById('mode-box-container');
+                        const isOverride = mbox && mbox.style.display === 'none' && currentList.length > 0;
+                        if (isOverride) {
+                            toggleTestTimer(false);
+                        }
                     }, 50);
 
 
@@ -6259,6 +6285,17 @@
                             playSound('buzz');
                         }
                         updateChart();
+
+                        // Tự động đẩy lên câu tiếp theo sau khi biết kết quả
+                        const delayMs = isCorrect ? 600 : 1500;
+                        if (window._autoScrollTimeout) clearTimeout(window._autoScrollTimeout);
+                        window._autoScrollTimeout = setTimeout(() => {
+                            const nextCard = document.getElementById(`q-${i + 1}`);
+                            if (nextCard) {
+                                const top = nextCard.getBoundingClientRect().top + window.scrollY - 120;
+                                window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+                            }
+                        }, delayMs);
                     }
                 }
 
