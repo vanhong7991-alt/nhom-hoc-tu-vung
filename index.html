@@ -463,7 +463,7 @@
 
         /* --- UI COMPONENTS --- */
         .main {
-            padding: 90px 15px 120px 15px;
+            padding: 220px 15px 120px 15px;
             max-width: 800px;
             margin: 0 auto;
         }
@@ -3209,7 +3209,7 @@
 
                 <!-- ===== MÈO CỐ LÊN (anhmeo) ===== -->
                 <div id="anhmeo-block"
-                    style="display:flex; flex-direction:column; justify-content:center; align-items:center; margin-bottom:10px; pointer-events:none; min-height:auto; gap:15px;">
+                    style="display:none; flex-direction:column; justify-content:center; align-items:center; margin-bottom:10px; pointer-events:none; min-height:auto; gap:15px;">
                     <img src="anhmeo.png" alt="Mèo cố lên"
                         style="width:220px; max-width:45vw; object-fit:contain;
                                border:3px solid rgba(255,255,255,0.9); border-radius:20px;
@@ -3473,7 +3473,7 @@
                             <!-- Title banner -->
                             <div class="kawaii-title-banner">
                                 <span style="font-size:20px;">📋</span>
-                                <span class="title-text">Lịch sử làm bài theo ngày</span>
+                                <span class="title-text">Lịch sử học tập hôm nay</span>
                                 <span style="font-size:18px;">🌸</span>
                             </div>
 
@@ -5891,6 +5891,9 @@
                         }
                     };
                     var _qc = document.getElementById('quiz-container'); if (_qc) _qc.style.display = listOverride ? '' : 'none'; var _sc2 = document.getElementById('submit-container'); if (_sc2) _sc2.style.display = listOverride ? 'flex' : 'none'; var _rt2 = document.getElementById('rt-wrapper'); if (_rt2 && _rt2.style.display === 'none') _rt2.style.display = '';
+                    // Hiện ảnh mèo khi vào bài học
+                    var _amb = document.getElementById('anhmeo-block');
+                    if (_amb) _amb.style.display = 'flex';
                     curVanMode = false;
                     updateVanFab();
                     curLevel = lv; curType = ty; curDay = day; currentList = listOverride || ((db[lv] && db[lv][ty] && db[lv][ty][day]) ? db[lv][ty][day].list : []);
@@ -8560,7 +8563,25 @@
             var rgActiveFlowers = [];
             function $rg(id) { return document.getElementById(id); }
 
-            function rgInitAudio() { if (!rgAudioCtx) rgAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+            var rgBgm = null;
+            function rgInitAudio() { 
+                if (!rgAudioCtx) rgAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
+            }
+            function rgPlayBgm() {
+                if (!rgBgm) {
+                    rgBgm = new Audio('nhacgame.mp3');
+                    rgBgm.loop = true;
+                    rgBgm.volume = 0.6; // Đặt âm lượng nhạc nền
+                }
+                rgBgm.currentTime = 0;
+                rgBgm.play().catch(function(){});
+            }
+            function rgStopBgm() {
+                if (rgBgm) {
+                    rgBgm.pause();
+                    rgBgm.currentTime = 0;
+                }
+            }
             function rgPlaySound(type) {
                 if (!rgAudioCtx) return;
                 try {
@@ -8597,12 +8618,14 @@
             window.closeReactionGame = function () {
                 rgGameActive = false; clearInterval(rgTimerInterval); clearInterval(rgPetalInterval);
                 rgActiveFlowers.forEach(function (f) { f._dead = true; }); rgActiveFlowers = [];
+                rgStopBgm(); // Dừng nhạc khi đóng
                 $rg('reaction-game-modal').style.display = 'none'; $rg('rg-canvas').innerHTML = '';
             };
             window.startReactionGame = function () {
                 var spdSel = $rg('rg-speed-select');
                 if (spdSel) rgSpeedMode = spdSel.value;
-                rgInitAudio(); rgScore = 0; rgCurrentIdx = 0;
+                rgInitAudio(); rgPlayBgm(); // Bật nhạc
+                rgScore = 0; rgCurrentIdx = 0;
                 rgTimeLeft = rgTotalTime = Math.min(60 + Math.floor(rgQuestions.length / 2) * 5, 90);
                 rgGameActive = true;
                 $rg('rg-score-val').textContent = '0'; $rg('rg-time-val').textContent = rgTimeLeft;
@@ -8691,6 +8714,7 @@
             function rgEndGame(title) {
                 rgGameActive = false; clearInterval(rgTimerInterval); clearInterval(rgPetalInterval);
                 rgActiveFlowers.forEach(function (f) { f._dead = true; }); rgActiveFlowers = [];
+                rgStopBgm(); // Dừng nhạc khi hết giờ / xong bài
                 rgPlaySound('win');
                 $rg('rg-result-title').textContent = title;
                 $rg('rg-final-stats').textContent = 'Ho\u00e0n th\u00e0nh: ' + rgCurrentIdx + '/' + rgQuestions.length + ' c\u00e2u';
@@ -8905,7 +8929,8 @@
             var _btn = document.getElementById('stats-toggle-btn');
             if (_btn) { _btn.style.background = 'linear-gradient(135deg,#8b5cf6,#ec4899)'; _btn.title = 'Thống kê học tập'; }
             var amb = document.getElementById('anhmeo-block');
-            if (amb) amb.style.display = 'flex';
+            // Chỉ hiện lại ảnh mèo nếu đang có bài mở
+            if (amb) amb.style.display = (currentList && currentList.length > 0) ? 'flex' : 'none';
 
             var jc = document.getElementById('journey-card');
             var rt = document.getElementById('rt-wrapper');
@@ -9308,11 +9333,16 @@
             var tbody = document.getElementById('stats-history-tbody');
             if (!tbody) return;
             if (!log || log.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#475569;">Chưa có dữ liệu. Hãy làm bài và nộp để tích lũy lịch sử!</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#475569;">Hôm nay chưa có bài nào. Hãy làm bài và nộp nhé! 🌸</td></tr>';
                 return;
             }
-            // Hiển thị 50 lần gần nhất
-            var rows = log.slice(0, 50);
+            // Chỉ hiển thị bài làm hôm nay
+            var todayKey = _localDateStr(new Date());
+            var rows = log.filter(function(e) { return e.date === todayKey; });
+            if (rows.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#475569;">Hôm nay chưa có bài nào. Hãy bắt đầu học thôi! 🌸</td></tr>';
+                return;
+            }
             tbody.innerHTML = rows.map(function (e, i) {
                 var pct = e.total > 0 ? Math.round((e.ok / e.total) * 100) : 0;
                 var pctColor = pct >= 90 ? '#4ade80' : pct >= 70 ? '#fbbf24' : '#f87171';
@@ -9962,32 +9992,37 @@
             <div
                 style="font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">
                 🎨 Ảnh hệ thống</div>
-            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px;">
-                <!-- Default (no image) -->
+            <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:16px;">
+                <!-- Mặc định (anhnen.png) -->
                 <div onclick="applyBg('default')" class="bg-thumb"
-                    style="aspect-ratio:16/9; border-radius:10px; cursor:pointer; border:2px solid rgba(255,255,255,0.1); background:linear-gradient(135deg,#1e1b4b,#0f172a); display:flex; align-items:center; justify-content:center; font-size:22px; transition:all 0.2s; position:relative; overflow:hidden;"
-                    title="Mặc định (không ảnh)">
-                    🌌
-                    <div style="position:absolute; bottom:4px; font-size:10px; color:#94a3b8; font-weight:700;">Mặc định
+                    style="aspect-ratio:16/9; border-radius:10px; cursor:pointer; border:2px solid rgba(255,255,255,0.1); background:url('anhnen.png') center/cover; transition:all 0.2s; position:relative; overflow:hidden;"
+                    title="Ảnh nền mặc định">
+                    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:flex-end; padding:4px; border-radius:8px;">
+                        <span style="font-size:10px; color:#fff; font-weight:700;">Mặc định</span>
                     </div>
                 </div>
                 <!-- anhnen1.png -->
                 <div onclick="applyBg('anhnen1.png')" class="bg-thumb"
                     style="aspect-ratio:16/9; border-radius:10px; cursor:pointer; border:2px solid rgba(255,255,255,0.1); background:url('anhnen1.png') center/cover; transition:all 0.2s; position:relative; overflow:hidden;"
-                    title="Ảnh nền 1">
-                    <div
-                        style="position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:flex-end; padding:4px; border-radius:8px;">
-                        <span style="font-size:10px; color:#fff; font-weight:700;">Ảnh 1</span>
+                    title="Lựa chọn 1">
+                    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:flex-end; padding:4px; border-radius:8px;">
+                        <span style="font-size:10px; color:#fff; font-weight:700;">Lựa chọn 1</span>
                     </div>
                 </div>
                 <!-- anhnen2.png -->
                 <div onclick="applyBg('anhnen2.png')" class="bg-thumb"
                     style="aspect-ratio:16/9; border-radius:10px; cursor:pointer; border:2px solid rgba(255,255,255,0.1); background:url('anhnen2.png') center/cover; transition:all 0.2s; position:relative; overflow:hidden;"
-                    title="Ảnh nền 2">
-                    <div
-                        style="position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:flex-end; padding:4px; border-radius:8px;">
-                        <span style="font-size:10px; color:#fff; font-weight:700;">Ảnh 2</span>
+                    title="Lựa chọn 2">
+                    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:flex-end; padding:4px; border-radius:8px;">
+                        <span style="font-size:10px; color:#fff; font-weight:700;">Lựa chọn 2</span>
                     </div>
+                </div>
+                <!-- Lựa chọn 3: Tím thẫm -->
+                <div onclick="applyBg('dark_purple')" class="bg-thumb"
+                    style="aspect-ratio:16/9; border-radius:10px; cursor:pointer; border:2px solid rgba(255,255,255,0.1); background:linear-gradient(135deg,#1e1b4b,#0f172a); display:flex; align-items:center; justify-content:center; font-size:22px; transition:all 0.2s; position:relative; overflow:hidden;"
+                    title="Lựa chọn 3 (Tím thẫm tối)">
+                    🌌
+                    <div style="position:absolute; bottom:4px; font-size:10px; color:#94a3b8; font-weight:700;">Lựa chọn 3</div>
                 </div>
             </div>
 
@@ -10026,10 +10061,18 @@
 
             function applyBg(value) {
                 window._currentBg = value;
-                if (value === 'default') {
+                if (value === 'default' || value === 'anhnen.png') {
                     document.body.style.backgroundImage = "url('anhnen.png')";
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                    document.body.style.backgroundAttachment = 'fixed';
                     localStorage.setItem(BG_KEY, 'anhnen.png');
                     updateBgLabel('Mặc định (anhnen.png)');
+                } else if (value === 'dark_purple') {
+                    document.body.style.backgroundImage = "none";
+                    document.body.style.backgroundColor = "#0f172a";
+                    localStorage.setItem(BG_KEY, 'dark_purple');
+                    updateBgLabel('Lựa chọn 3 (Tím thẫm)');
                 } else if (value.startsWith('data:')) {
                     // base64 từ upload
                     document.body.style.backgroundImage = "url('" + value + "')";
@@ -10045,8 +10088,8 @@
                     document.body.style.backgroundAttachment = 'fixed';
                     localStorage.setItem(BG_KEY, value);
                     var label = {
-                        'anhnen1.png': 'Ảnh 1 (anhnen1.png)',
-                        'anhnen2.png': 'Ảnh 2 (anhnen2.png)'
+                        'anhnen1.png': 'Lựa chọn 1 (anhnen1.png)',
+                        'anhnen2.png': 'Lựa chọn 2 (anhnen2.png)'
                     }[value] || value;
                     updateBgLabel(label);
                 }
@@ -10230,11 +10273,29 @@
     var COIN_PER_WRONG   = 2;
     var COIN_BONUS_100   = 30;
     var COIN_BONUS_90    = 10;
-    var COIN_HISTORY_MAX = 200;
+    var COIN_HISTORY_MAX = 300;
+    var COIN_KEEP_DAYS   = 3; // Giữ lịch sử 3 ngày gần nhất
 
     function _coinKey() {
         var base = (typeof currentDbKey !== 'undefined' && currentDbKey) ? currentDbKey : 'mgao';
         return base + '_coins';
+    }
+
+    function _todayDateStr() {
+        var d = new Date();
+        return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    }
+
+    /* Lấy mảng COIN_KEEP_DAYS ngày gần nhất dạng 'YYYY-MM-DD' */
+    function _recentDateKeys() {
+        var keys = [];
+        var d = new Date();
+        for (var i = 0; i < COIN_KEEP_DAYS; i++) {
+            var dt = new Date(d);
+            dt.setDate(d.getDate() - i);
+            keys.push(dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0'));
+        }
+        return keys; // [hôm nay, hôm qua, hôm kia]
     }
 
     function _loadCoins() {
@@ -10245,7 +10306,15 @@
     }
 
     function _saveCoins(data) {
-        try { localStorage.setItem(_coinKey(), JSON.stringify(data)); } catch(e) {}
+        try {
+            // Lọc chỉ giữ lịch sử thuộc 3 ngày gần nhất
+            var allowed = _recentDateKeys();
+            data.history = (data.history || []).filter(function(h) {
+                return allowed.indexOf(h.dateKey || '') !== -1;
+            });
+            if (data.history.length > COIN_HISTORY_MAX) data.history.length = COIN_HISTORY_MAX;
+            localStorage.setItem(_coinKey(), JSON.stringify(data));
+        } catch(e) {}
     }
 
     /* --- Cập nhật widget trên header --- */
@@ -10333,12 +10402,12 @@
         var nowStr = new Date().toLocaleString('vi-VN', { hour12: false });
         data.history.unshift({
             ts: Date.now(), date: nowStr,
+            dateKey: _todayDateStr(),   // dùng để filter theo ngày
             ok: ok, failed: failed,
             earned: earned, lost: lost, bonus: bonus,
             net: netChange, before: before, after: newTotal
         });
-        if (data.history.length > COIN_HISTORY_MAX) data.history.length = COIN_HISTORY_MAX;
-        _saveCoins(data);
+        _saveCoins(data); // _saveCoins tự cắt theo 3 ngày
         updateCoinWidget();
         _pulseWidget();
         showCoinToast(netChange, details);
@@ -10470,26 +10539,40 @@
         html += '</div>'; // end coin-guide-box
 
         // ─────────────────────────────────────────
-        // SECTION 4: Lịch sử gần đây
+        // SECTION 4: Lịch sử xu 3 ngày gần nhất
         // ─────────────────────────────────────────
-        if (hist.length > 0) {
-            html += '<div style="font-size:13px;font-weight:900;color:#a5b4fc;margin-bottom:8px;font-family:\'Baloo 2\',sans-serif;">\uD83D\uDCCB Lịch sử gần đây</div>';
-            hist.forEach(function(h) {
+        var recentDays = _recentDateKeys(); // [hôm nay, hôm qua, hôm kia]
+        var dayLabels = { 0: 'Hôm nay', 1: 'Hôm qua', 2: 'Hôm kia' };
+        var hasAny = false;
+        html += '<div style="font-size:13px;font-weight:900;color:#a5b4fc;margin-bottom:8px;font-family:\'Baloo 2\',sans-serif;">\uD83D\uDCCB Lịch sử xu 3 ngày gần nhất</div>';
+        recentDays.forEach(function(dk, di) {
+            var dayHist = hist.filter(function(h) { return (h.dateKey || '') === dk; });
+            if (dayHist.length === 0) return;
+            hasAny = true;
+            // Header ngày
+            html += '<div style="display:flex;align-items:center;gap:8px;margin:10px 0 5px;">';
+            html += '<span style="font-size:11px;font-weight:900;color:' + (di===0?'#fde047':'#94a3b8') + ';background:rgba(255,255,255,0.07);border-radius:8px;padding:3px 10px;">' + dayLabels[di] + ' · ' + dk.slice(5).replace('-','/') + '</span>';
+            html += '<div style="flex:1;height:1px;background:rgba(255,255,255,0.07);"></div>';
+            html += '</div>';
+            dayHist.forEach(function(h) {
                 var netClass = h.net >= 0 ? 'coin-earned' : 'coin-lost';
                 var netSign  = h.net >= 0 ? '+' : '';
                 var parts = [];
                 if (h.earned) parts.push('<span style="color:#4ade80;">+' + h.earned + '</span> (' + h.ok + ' đúng)');
                 if (h.lost)   parts.push('<span style="color:#f87171;">-' + h.lost + '</span> (' + h.failed + ' sai)');
                 if (h.bonus)  parts.push('<span style="color:#fbbf24;">+' + h.bonus + ' bonus</span>');
+                // Lấy giờ từ h.date (chuỗi locale vi-VN)
+                var timeStr = h.date ? h.date.split(' ').pop() : '--:--';
                 html += '<div class="coin-history-row">';
-                html += '<div style="color:#94a3b8;font-size:11px;min-width:110px;">' + h.date + '</div>';
+                html += '<div style="color:#94a3b8;font-size:11px;min-width:58px;">' + timeStr + '</div>';
                 html += '<div style="flex:1;padding:0 8px;">' + parts.join(' · ') + '</div>';
                 html += '<div class="' + netClass + '">' + netSign + h.net + ' \uD83C\uDF1F</div>';
                 html += '<div style="color:#64748b;font-size:11px;margin-left:8px;">\u2192 ' + h.after + '</div>';
                 html += '</div>';
             });
-        } else {
-            html += '<div style="text-align:center;color:#64748b;padding:16px;font-family:\'Baloo 2\',sans-serif;font-size:13px;">Hũ xu đang trống — hãy làm bài đầu tiên nào! \uD83C\uDF1F</div>';
+        });
+        if (!hasAny) {
+            html += '<div style="text-align:center;color:#64748b;padding:16px;font-family:\'Baloo 2\',sans-serif;font-size:13px;">Chưa có giao dịch xu nào — hãy làm bài đầu tiên nào! \uD83C\uDF1F</div>';
         }
 
         panel.innerHTML = html;
