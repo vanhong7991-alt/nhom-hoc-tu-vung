@@ -639,6 +639,64 @@
             font-weight: 900 !important;
         }
 
+        /* ===== SCROLLABLE SUB-MENU (tối đa 15 mục) ===== */
+        /* Chỉ áp dụng cho sub-menu chứa trực tiếp menu-lvl3 */
+        .sub-menu:has(> .menu-lvl3) {
+            max-height: 690px;   /* ~15 items × 46px */
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(99, 102, 241, 0.45) transparent;
+            transition: max-height 0.2s ease;
+        }
+        .sub-menu:has(> .menu-lvl3)::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sub-menu:has(> .menu-lvl3)::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .sub-menu:has(> .menu-lvl3)::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 2px;
+        }
+        .sub-menu:has(> .menu-lvl3)::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.8);
+        }
+
+        /* Keyboard navigation highlight */
+        .menu-lvl3.kb-focus {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.3), rgba(168, 85, 247, 0.18)) !important;
+            border-left: 3px solid #60a5fa !important;
+            color: #e2e8f0 !important;
+            box-shadow: inset 0 0 10px rgba(59, 130, 246, 0.12);
+            outline: none;
+        }
+        .menu-lvl3.kb-focus .lesson-name-text {
+            color: #93c5fd !important;
+        }
+
+        /* ===== DRAG & DROP ===== */
+        .drag-handle {
+            cursor: grab;
+            color: rgba(255,255,255,0.18);
+            font-size: 13px;
+            padding: 0 4px 0 0;
+            user-select: none;
+            flex-shrink: 0;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+        .menu-lvl3:hover .drag-handle { color: rgba(255,255,255,0.5); }
+        .drag-handle:active { cursor: grabbing; }
+        .menu-lvl3[data-dnd] { user-select: none; }
+        .menu-lvl3.is-dragging {
+            opacity: 0.35;
+            background: rgba(59,130,246,0.08) !important;
+        }
+        .menu-lvl3.drop-above { border-top: 2px solid #60a5fa !important; }
+        .menu-lvl3.drop-below { border-bottom: 2px solid #60a5fa !important; }
+
         /* --- MODAL --- */
         .modal {
             display: none;
@@ -2156,6 +2214,8 @@
 </head>
 
 <body>
+    <!-- ===== CÁNH HOA & LÁ RƠI ===== -->
+    <canvas id="petals-canvas" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9998;"></canvas>
     <div id="app-fixed-bg"></div>
     <div id="rt-wrapper" class="rt-widget" onclick="toggleChartWidget()" title="Nhấn để thu gọn/mở rộng">
         <div id="rt-content" style="display: flex; align-items: center; gap: 20px;">
@@ -3701,19 +3761,8 @@
                                     onmouseover="this.style.background='rgba(251,191,36,0.2)'"
                                     onmouseout="this.style.background='rgba(251,191,36,0.1)'">⭐ LÀM LẠI CÂU ĐÁNH
                                     SAO</button>
-                                <button class="btn"
-                                    style="background: rgba(255,255,255,0.05); color: #94a3b8; font-size: 14px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); width: 100%; font-weight: 700; cursor: pointer;"
-                                    onclick="closeModal('congrats-modal'); window.scrollTo({top: 0, behavior: 'smooth'});"
-                                    onmouseover="this.style.background='rgba(255,255,255,0.1)'"
-                                    onmouseout="this.style.background='rgba(255,255,255,0.05)'">🔄 Chuyển bài khác (Cùng
-                                    ngày)</button>
-                                <button class="btn"
-                                    style="background: rgba(255,255,255,0.05); color: #94a3b8; font-size: 14px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); width: 100%; font-weight: 700; cursor: pointer;"
-                                    onclick="toggleMenu(); closeModal('congrats-modal')"
-                                    onmouseover="this.style.background='rgba(255,255,255,0.1)'"
-                                    onmouseout="this.style.background='rgba(255,255,255,0.05)'">⏭️ Chọn ngày
-                                    khác</button>
                             </div>
+
                         </div>
                     </div>
 
@@ -4319,6 +4368,16 @@
                                     badgeSpan.style.display = 'none';
                                 }
                             }
+                            // Áp dụng thứ tự đã lưu (nếu có)
+                            const _vanOrderKey = 'van_order_' + sectionKey + '_' + sub;
+                            const _savedOrder = JSON.parse(localStorage.getItem(_vanOrderKey) || 'null');
+                            if (_savedOrder && _savedOrder.length > 1 && lessons.length > 1) {
+                                lessons.sort((a, b) => {
+                                    const ai = _savedOrder.indexOf(a.name);
+                                    const bi = _savedOrder.indexOf(b.name);
+                                    return (ai === -1 ? 9999 : ai) - (bi === -1 ? 9999 : bi);
+                                });
+                            }
                             lessons.forEach((lesson, idx) => {
                                 const progressKey = 'van_' + sectionKey + '_' + sub + '_' + lesson.name;
                                 const progress = JSON.parse(localStorage.getItem(progressKey) || '{"done":[false,false,false]}');
@@ -4333,7 +4392,7 @@
                                 const div = document.createElement('div');
                                 div.className = 'menu-lvl3';
                                 const lockBadge = (!lesson.free && REQUIRE_LOCK.goc_cua_van)
-                                    ? '<span title="Bài học có khoá" style="font-size:12px;background:rgba(239,68,68,0.2);color:#fca5a5;padding:2px 6px;border-radius:10px;border:1px solid rgba(239,68,68,0.3);">🔒</span>'
+                                    ? '<span title="Bài học có khoá" style="font-size:12px;background:rgba(239,68,68,0.2);color:#fca5a5;padding:2px 6px;border-radius:10px;border:1px solid rgba(239,68,68,0.3);">&#128274;</span>'
                                     : '';
 
                                 div.innerHTML = `
@@ -4341,7 +4400,7 @@
                             ${rIcon} <span class="lesson-name-text">${lesson.name}</span>
                         </span>
                         <span style="display:flex;align-items:center;gap:8px;margin-right:12px;">
-                            ${isAllDone ? '<b class="done-check" style="font-size:18px;">✅</b>' : ''}
+                            ${isAllDone ? '<b class="done-check" style="font-size:18px;">&#x2705;</b>' : ''}
                             ${lockBadge}
                             <span style="font-size:13px;font-weight:800;color:#c4b5fd;border:1px solid #a855f7;padding:2px 8px;border-radius:12px;box-shadow:0 0 8px rgba(168,85,247,0.5);">${wordCount} ${unitText}</span>
                         </span>`;
@@ -5726,8 +5785,11 @@
                                 catTotal += wordCount;
                                 const unitText = (ty === 'voca_quiz' || ty === 'gram_quiz') ? "câu" : (ty === 'gram' ? "mẫu" : "từ");
                                 const div = document.createElement("div"); div.className = "menu-lvl3";
+                                div.dataset.lv = lv; div.dataset.ty = ty; div.dataset.day = dayKey;
+                                div.dataset.dnd = '1';
                                 const rIcon = icons[idx % icons.length];
                                 div.innerHTML = `
+                    <span class="drag-handle" draggable="true" title="Kéo để sắp xếp">⠿</span>
                     <span onclick="selectDay('${lv}', '${ty}', '${dayKey}')" style="flex:1; display:flex; align-items:center; gap:8px;">
                         ${rIcon} <span class="lesson-name-text">${dayKey}</span>
                     </span>
@@ -7385,6 +7447,19 @@
                 }
 
                 function markDayComplete() {
+                    if (curVanMode) {
+                        // Góc của Vân / Ôn tập thông minh → cập nhật _vanProgress
+                        if (window._vanProgress && window._vanProgressKey) {
+                            const maxMode = getMaxModeForType ? getMaxModeForType() : 3;
+                            for (let i = 0; i < maxMode; i++) {
+                                window._vanProgress.done[i] = true;
+                            }
+                            localStorage.setItem(window._vanProgressKey, JSON.stringify(window._vanProgress));
+                            renderVanSidebar();
+                        }
+                        return;
+                    }
+                    // Bài học thông thường
                     if (!curLevel || !curType || !curDay || !db[curLevel]?.[curType]?.[curDay]) return;
                     const maxMode = getMaxModeForType();
                     for (let i = 0; i < maxMode; i++) db[curLevel][curType][curDay].done[i] = true;
@@ -10625,5 +10700,364 @@
         document.addEventListener('DOMContentLoaded', _init);
     } else { _init(); }
 
+})();
+</script>
+
+<!-- ===== HIỆU ỨNG CÁNH HOA & LÁ RƠI ===== -->
+<script>
+(function() {
+    'use strict';
+    const canvas = document.getElementById('petals-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let W = window.innerWidth, H = window.innerHeight;
+    canvas.width = W; canvas.height = H;
+
+    window.addEventListener('resize', () => {
+        W = window.innerWidth; H = window.innerHeight;
+        canvas.width = W; canvas.height = H;
+    });
+
+    // ---- Cấu hình ----
+    const TOTAL = 22; // tổng số hạt
+    const LEAF_RATIO = 0.12; // 12% là lá, 88% là cánh hoa
+
+    // Bảng màu cánh hoa: hồng, đỏ hồng, tím nhạt, trắng, vàng nhạt
+    const PETAL_COLORS = [
+        ['#ffb7c5','#ff85a1'],
+        ['#ffd6e7','#ffaacf'],
+        ['#f9c6d0','#f0899c'],
+        ['#ffe4f0','#ffc0d4'],
+        ['#d4a5c9','#b87ab7'],
+        ['#fff0f5','#ffd6e7'],
+        ['#ffc8d4','#ff94a8'],
+        ['#e8b4cb','#d48fba'],
+    ];
+    // Bảng màu lá: xanh lá nhiều tông
+    const LEAF_COLORS = [
+        ['#7ec850','#5aab2d'],
+        ['#a3d977','#78c43c'],
+        ['#5cb85c','#3d9b3d'],
+        ['#86c96e','#5bae3e'],
+        ['#c5e8a0','#8dd160'],
+        ['#4caf50','#2e7d32'],
+        ['#aed881','#76bb3e'],
+    ];
+
+    // ---- Hàm vẽ hình ----
+    function drawPetal(ctx, w, h, color1, color2) {
+        const grad = ctx.createRadialGradient(0, 0, 0, 0, h*0.3, Math.max(w,h));
+        grad.addColorStop(0, color1);
+        grad.addColorStop(1, color2);
+        ctx.beginPath();
+        // Hình cánh hoa ellipse méo
+        ctx.save();
+        ctx.scale(1, 1.6);
+        ctx.arc(0, 0, w, 0, Math.PI * 2);
+        ctx.restore();
+        ctx.fillStyle = grad;
+        ctx.fill();
+        // Gân cánh
+        ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+        ctx.lineWidth = 0.6;
+        ctx.beginPath();
+        ctx.moveTo(0, -h*0.5);
+        ctx.quadraticCurveTo(w*0.2, 0, 0, h*0.5);
+        ctx.stroke();
+    }
+
+    function drawLeaf(ctx, size, color1, color2) {
+        const grad = ctx.createLinearGradient(-size*0.4, -size, size*0.4, size);
+        grad.addColorStop(0, color1);
+        grad.addColorStop(1, color2);
+        ctx.beginPath();
+        // Hình lá nhọn đầu
+        ctx.moveTo(0, -size);
+        ctx.bezierCurveTo(size*0.7, -size*0.4, size*0.7, size*0.4, 0, size);
+        ctx.bezierCurveTo(-size*0.7, size*0.4, -size*0.7, -size*0.4, 0, -size);
+        ctx.fillStyle = grad;
+        ctx.fill();
+        // Gân lá chính
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.moveTo(0, -size);
+        ctx.lineTo(0, size);
+        ctx.stroke();
+        // Gân phụ
+        ctx.lineWidth = 0.4;
+        for (let i = -0.6; i <= 0.6; i += 0.3) {
+            const y = i * size;
+            const xEnd = (size * 0.5) * (1 - Math.abs(i));
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(xEnd, y + size*0.15);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(-xEnd, y + size*0.15);
+            ctx.stroke();
+        }
+    }
+
+    // ---- Khởi tạo hạt ----
+    function createParticle(initialSpawn) {
+        const isLeaf = Math.random() < LEAF_RATIO;
+        const colors = isLeaf
+            ? LEAF_COLORS[Math.floor(Math.random() * LEAF_COLORS.length)]
+            : PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)];
+        const size = isLeaf
+            ? 7 + Math.random() * 10
+            : 3 + Math.random() * 4;
+        return {
+            x: Math.random() * W,
+            y: initialSpawn ? Math.random() * H : -30,
+            size,
+            isLeaf,
+            color1: colors[0],
+            color2: colors[1],
+            vx: (Math.random() - 0.5) * 1.2,      // gió ngang nhẹ
+            vy: 1.8 + Math.random() * 1.7,          // tốc độ rơi
+            angle: Math.random() * Math.PI * 2,
+            angleV: (Math.random() - 0.5) * 0.04,  // xoay chậm
+            swingPhase: Math.random() * Math.PI * 2,// pha lắc lư
+            swingAmp: 0.6 + Math.random() * 1.0,    // biên độ lắc
+            swingFreq: 0.015 + Math.random() * 0.02,
+            opacity: 0.7 + Math.random() * 0.3,
+            // scale breath (phập phồng nhẹ)
+            breathPhase: Math.random() * Math.PI * 2,
+            breathAmp: 0.04 + Math.random() * 0.06,
+        };
+    }
+
+    // Khởi tạo pool hạt
+    const particles = [];
+    for (let i = 0; i < TOTAL; i++) {
+        particles.push(createParticle(true));
+    }
+
+    let frame = 0;
+
+    function animate() {
+        requestAnimationFrame(animate);
+        ctx.clearRect(0, 0, W, H);
+        frame++;
+
+        for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+
+            // Cập nhật vị trí
+            p.swingPhase += p.swingFreq;
+            p.breathPhase += 0.02;
+            p.x += p.vx + Math.sin(p.swingPhase) * p.swingAmp;
+            p.y += p.vy;
+            p.angle += p.angleV + Math.sin(p.swingPhase * 0.5) * 0.008;
+
+            // Scale nhịp thở
+            const breathScale = 1 + Math.sin(p.breathPhase) * p.breathAmp;
+
+            // Fade in khi mới xuất hiện, fade out khi sắp thoát
+            let alpha = p.opacity;
+            if (p.y < 60) alpha *= Math.max(0, p.y / 60);
+            if (p.y > H - 60) alpha *= Math.max(0, (H - p.y) / 60);
+
+            // Vẽ
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.angle);
+            ctx.scale(breathScale, breathScale);
+            ctx.globalAlpha = alpha;
+
+            if (p.isLeaf) {
+                drawLeaf(ctx, p.size, p.color1, p.color2);
+            } else {
+                drawPetal(ctx, p.size * 0.55, p.size, p.color1, p.color2);
+            }
+            ctx.restore();
+
+            // Reset nếu thoát ra ngoài màn hình
+            if (p.y > H + 40 || p.x < -60 || p.x > W + 60) {
+                particles[i] = createParticle(false);
+            }
+        }
+    }
+
+    animate();
+
+    // Thêm hiệu ứng gió ngẫu nhiên
+    setInterval(() => {
+        const windStrength = (Math.random() - 0.5) * 0.4;
+        particles.forEach(p => {
+            p.vx += windStrength;
+            // Giới hạn tốc độ ngang
+            p.vx = Math.max(-2, Math.min(2, p.vx));
+        });
+    }, 3000);
+
+})();
+</script>
+
+<!-- ===== PHÍM MŨI TÊN ĐIỀU HƯỚNG MENU ===== -->
+<script>
+(function () {
+    'use strict';
+    let _kbIdx = -1;
+
+    /** Lấy tất cả menu-lvl3 đang hiển thị (parent sub-menu không bị ẩn) */
+    function _getVisibleItems() {
+        return Array.from(document.querySelectorAll('.menu-lvl3')).filter(el => {
+            let p = el.parentElement;
+            while (p) {
+                if (p.classList && p.classList.contains('sub-menu') && p.style.display === 'none') return false;
+                if (p.classList && p.classList.contains('sidebar')) break;
+                p = p.parentElement;
+            }
+            return true;
+        });
+    }
+
+    function _clearFocus() {
+        document.querySelectorAll('.menu-lvl3.kb-focus').forEach(el => el.classList.remove('kb-focus'));
+    }
+
+    function _setFocus(idx) {
+        const items = _getVisibleItems();
+        if (!items.length) return;
+        // Vòng tròn
+        if (idx < 0) idx = items.length - 1;
+        if (idx >= items.length) idx = 0;
+        _kbIdx = idx;
+        _clearFocus();
+        const el = items[_kbIdx];
+        if (!el) return;
+        el.classList.add('kb-focus');
+        // Cuộn phần tử vào tầm nhìn trong scrollable container
+        el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    document.addEventListener('keydown', function (e) {
+        // Bỏ qua khi đang gõ vào input/textarea
+        const tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+        // Bỏ qua khi sidebar bị ẩn
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar && document.body.classList.contains('sidebar-hidden')) return;
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            _setFocus(_kbIdx + 1);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            _setFocus(_kbIdx - 1);
+        } else if (e.key === 'Enter') {
+            const items = _getVisibleItems();
+            const el = items[_kbIdx];
+            if (el) {
+                const clickable = el.querySelector('span[onclick]');
+                if (clickable) clickable.click();
+                else el.click();
+            }
+        } else if (e.key === 'Escape') {
+            _clearFocus();
+            _kbIdx = -1;
+        }
+    });
+
+    // Khi click vào menu-lvl3 thì đồng bộ _kbIdx
+    document.addEventListener('click', function (e) {
+        const el = e.target.closest('.menu-lvl3');
+        if (el) {
+            _clearFocus();
+            const items = _getVisibleItems();
+            _kbIdx = items.indexOf(el);
+            el.classList.add('kb-focus');
+        }
+    });
+
+})();
+</script>
+
+<!-- ===== KÉO THẢ SẮP XẾP MENU ===== -->
+<script>
+(function () {
+    'use strict';
+    let _dragging = null;
+
+    function _isDb(el) { return el && el.dataset && el.dataset.lv; }
+    function _isVan(el) { return el && el.dataset && el.dataset.section; }
+    function _sameGroup(a, b) {
+        if (_isDb(a) && _isDb(b)) return a.dataset.lv === b.dataset.lv && a.dataset.ty === b.dataset.ty;
+        if (_isVan(a) && _isVan(b)) return a.dataset.section === b.dataset.section && a.dataset.sub === b.dataset.sub;
+        return false;
+    }
+    function _clearMark() {
+        document.querySelectorAll('.menu-lvl3.drop-above, .menu-lvl3.drop-below')
+            .forEach(el => el.classList.remove('drop-above', 'drop-below'));
+    }
+
+    // dragstart: bắt đầu từ handle span
+    document.addEventListener('dragstart', function (e) {
+        const handle = e.target.closest('.drag-handle[draggable]');
+        if (!handle) return;
+        const el = handle.closest('.menu-lvl3[data-dnd]');
+        if (!el) return;
+        _dragging = el;
+        el.classList.add('is-dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', el.dataset.day || '');
+    });
+
+    document.addEventListener('dragend', function () {
+        if (_dragging) _dragging.classList.remove('is-dragging');
+        _clearMark();
+        _dragging = null;
+    });
+
+    document.addEventListener('dragover', function (e) {
+        if (!_dragging) return;
+        const el = e.target.closest('.menu-lvl3[data-dnd]');
+        if (!el || el === _dragging || el.dataset.lv !== _dragging.dataset.lv || el.dataset.ty !== _dragging.dataset.ty) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        _clearMark();
+        const r = el.getBoundingClientRect();
+        el.classList.add(e.clientY < r.top + r.height / 2 ? 'drop-above' : 'drop-below');
+    });
+
+    document.addEventListener('dragleave', function (e) {
+        const el = e.target.closest('.menu-lvl3[data-dnd]');
+        if (el) el.classList.remove('drop-above', 'drop-below');
+    });
+
+    document.addEventListener('drop', function (e) {
+        if (!_dragging) return;
+        const target = e.target.closest('.menu-lvl3[data-dnd]');
+        if (!target || target === _dragging || target.dataset.lv !== _dragging.dataset.lv || target.dataset.ty !== _dragging.dataset.ty) {
+            _clearMark(); return;
+        }
+        e.preventDefault();
+        const before = target.classList.contains('drop-above');
+        _clearMark();
+        _reorderDb(_dragging.dataset.lv, _dragging.dataset.ty, _dragging.dataset.day, target.dataset.day, before);
+    });
+
+    function _reorderDb(lv, ty, fromDay, toDay, before) {
+        if (!window.db || !db[lv] || !db[lv][ty]) return;
+        const keys = Object.keys(db[lv][ty]);
+        const fi = keys.indexOf(fromDay);
+        if (fi === -1) return;
+        keys.splice(fi, 1);
+        let at = keys.indexOf(toDay);
+        if (at === -1) return;
+        if (!before) at++;
+        keys.splice(at, 0, fromDay);
+        const old = db[lv][ty], newObj = {};
+        keys.forEach(k => newObj[k] = old[k]);
+        db[lv][ty] = newObj;
+        if (typeof saveToLocal === 'function') saveToLocal();
+        if (typeof renderSidebar === 'function') renderSidebar();
+    }
 })();
 </script>
