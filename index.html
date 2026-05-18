@@ -3218,24 +3218,38 @@
                                         BẮT ĐẦU LÀM BÀI</button>
                                 </div>
 
-                                <!-- Tùy chọn hiển thị đáp án -->
+                                <!-- Tùy chọn hiển thị đáp án & tự động nhảy câu -->
                                 <div
-                                    style="display: flex; gap: 10px; justify-content: center; align-items: center; font-size: 13px; color: #cbd5e1; flex-wrap: wrap; background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 10px; margin-top:10px;">
-                                    <span style="font-weight:800; color: #fbbf24;">Hiển thị đáp án:</span>
-                                    <label
-                                        style="display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none;">
-                                        <input type="radio" name="checkMode" value="immediate"
-                                            onchange="showAnswerImmediately = true;" checked
-                                            style="accent-color: var(--success); width:16px; height:16px; cursor:pointer;">
-                                        Hiện ngay
+                                    style="display: flex; gap: 15px; justify-content: center; align-items: center; font-size: 13px; color: #cbd5e1; flex-wrap: wrap; background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 10px; margin-top:10px;">
+                                    <div style="display: flex; gap: 10px; align-items: center;">
+                                        <span style="font-weight:800; color: #fbbf24;">Hiển thị đáp án:</span>
+                                        <label
+                                            style="display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none;">
+                                            <input type="radio" name="checkMode" value="immediate"
+                                                onchange="showAnswerImmediately = true;" checked
+                                                style="accent-color: var(--success); width:16px; height:16px; cursor:pointer;">
+                                            Hiện ngay
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none;">
+                                            <input type="radio" name="checkMode" value="after"
+                                                onchange="showAnswerImmediately = false;"
+                                                style="accent-color: var(--success); width:16px; height:16px; cursor:pointer;">
+                                            Hiện sau khi nộp
+                                        </label>
+                                    </div>
+                                    <div style="width: 1px; height: 16px; background: rgba(255,255,255,0.2);"></div>
+                                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none; font-weight:700; color:#818cf8;">
+                                        <input type="checkbox" id="auto-scroll-toggle"
+                                            onchange="localStorage.setItem('mgao_auto_scroll', this.checked);" checked
+                                            style="accent-color: #6366f1; width:16px; height:16px; cursor:pointer;">
+                                        Tự động chuyển câu
                                     </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none;">
-                                        <input type="radio" name="checkMode" value="after"
-                                            onchange="showAnswerImmediately = false;"
-                                            style="accent-color: var(--success); width:16px; height:16px; cursor:pointer;">
-                                        Hiện sau khi nộp
-                                    </label>
+                                    <script>
+                                        if (localStorage.getItem('mgao_auto_scroll') === 'false') {
+                                            document.getElementById('auto-scroll-toggle').checked = false;
+                                        }
+                                    </script>
                                 </div>
 
                                 <!-- Trộn từ + Hoàn thành -->
@@ -6448,7 +6462,7 @@
                         ${optHtml}
                     </div>
                     <div id="msg-${i}" class="fb-msg" style="text-align:center; margin-top:15px; font-size:18px;"></div>
-                    ${item.explain ? `<div id="explain-${i}" style="display:none; margin-top:15px; background:#fef3c7; color:#0f172a; border:2px solid #ea580c; border-radius:12px; padding:15px; font-size:17px; font-weight:700; text-align:left; line-height:1.5; box-shadow:0 4px 10px rgba(234,88,12,0.2);">💡 <b>Giải thích:</b><br>${fT(item.explain)}</div>` : ''}
+                    ${item.explain ? `<div id="explain-${i}" style="display:none; margin-top:15px; background:#fef3c7; color:#0f172a; border:2px solid #ea580c; border-radius:12px; padding:15px; font-size:17px; font-weight:700; text-align:left; line-height:1.5; box-shadow:0 4px 10px rgba(234,88,12,0.2);">💡 <b style="color:red; text-decoration:underline;">Giải thích:</b><br>${fT(item.explain)}</div>` : ''}
                     <div id="ai-explain-container-${i}" style="display:none; margin-top:15px; background:#fffbeb; color:#1e3a8a; border:2px solid #b45309; border-radius:14px; padding:20px; font-size:16px; font-weight:700; text-align:left; line-height:1.8; box-shadow:0 4px 16px rgba(180,83,9,0.13); font-family:'Baloo 2','Kosugi Maru',sans-serif;"></div>
                     ${window._inSmartReviewMode ? '' : `<button id="btn-ai-${i}" style="margin-top:15px; width:100%; background:linear-gradient(135deg, #8b5cf6, #3b82f6); color:white; border:none; border-radius:12px; padding:12px; font-weight:800; font-family:'Baloo 2', sans-serif; cursor:pointer; font-size:16px; box-shadow: 0 4px 10px rgba(139,92,246,0.3); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'" onclick="callAI(${i})">✨ AI PHÂN TÍCH</button>`}
                 </div>`;
@@ -6621,15 +6635,18 @@
                         updateChart();
 
                         // Tự động đẩy lên câu tiếp theo sau khi biết kết quả
-                        const delayMs = isCorrect ? 600 : 1500;
-                        if (window._autoScrollTimeout) clearTimeout(window._autoScrollTimeout);
-                        window._autoScrollTimeout = setTimeout(() => {
-                            const nextCard = document.getElementById(`q-${i + 1}`);
-                            if (nextCard) {
-                                const top = nextCard.getBoundingClientRect().top + window.scrollY - 120;
-                                window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
-                            }
-                        }, delayMs);
+                        const autoScrollToggle = document.getElementById('auto-scroll-toggle');
+                        if (!autoScrollToggle || autoScrollToggle.checked !== false) {
+                            const delayMs = isCorrect ? 600 : 1500;
+                            if (window._autoScrollTimeout) clearTimeout(window._autoScrollTimeout);
+                            window._autoScrollTimeout = setTimeout(() => {
+                                const nextCard = document.getElementById(`q-${i + 1}`);
+                                if (nextCard) {
+                                    const top = nextCard.getBoundingClientRect().top + window.scrollY - 120;
+                                    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+                                }
+                            }, delayMs);
+                        }
                     }
                 }
 
@@ -6698,27 +6715,30 @@
                             }
                             // ── AUTO-FOCUS CÂU TIẾP THEO ──
                             // Tìm input tiếp theo chưa trả lời đúng, không bị skip
-                            setTimeout(() => {
-                                const allInputs = Array.from(document.querySelectorAll('#quiz-container .quiz-input'))
-                                    .filter(inp => inp.getAttribute('data-skip') !== 'true' && !inp.disabled && !inp.classList.contains('correct'));
-                                
-                                // Tìm input chưa đúng NẰM SAU input hiện tại
-                                let nextInput = allInputs.find(inp => {
-                                    const inpIdx = parseInt(inp.id.replace('input-', ''));
-                                    return inpIdx > idx;
-                                });
-                                // Nếu không có câu nào ở dưới, vòng lại từ đầu
-                                if (!nextInput) nextInput = allInputs[0];
+                            const autoScrollToggle = document.getElementById('auto-scroll-toggle');
+                            if (!autoScrollToggle || autoScrollToggle.checked !== false) {
+                                setTimeout(() => {
+                                    const allInputs = Array.from(document.querySelectorAll('#quiz-container .quiz-input'))
+                                        .filter(inp => inp.getAttribute('data-skip') !== 'true' && !inp.disabled && !inp.classList.contains('correct'));
+                                    
+                                    // Tìm input chưa đúng NẰM SAU input hiện tại
+                                    let nextInput = allInputs.find(inp => {
+                                        const inpIdx = parseInt(inp.id.replace('input-', ''));
+                                        return inpIdx > idx;
+                                    });
+                                    // Nếu không có câu nào ở dưới, vòng lại từ đầu
+                                    if (!nextInput) nextInput = allInputs[0];
 
-                                if (nextInput) {
-                                    nextInput.focus();
-                                    // Scroll card chứa input đó vào giữa màn hình
-                                    const nextCard = nextInput.closest('.card') || nextInput.parentElement;
-                                    if (nextCard) {
-                                        nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    if (nextInput) {
+                                        nextInput.focus();
+                                        // Scroll card chứa input đó vào giữa màn hình
+                                        const nextCard = nextInput.closest('.card') || nextInput.parentElement;
+                                        if (nextCard) {
+                                            nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                        }
                                     }
-                                }
-                            }, 300); // delay nhỏ để confetti animation kịp chạy
+                                }, 300); // delay nhỏ để confetti animation kịp chạy
+                            }
                         }
                     }
                     else if (val === "") {
