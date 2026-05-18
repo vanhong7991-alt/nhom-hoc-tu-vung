@@ -4521,6 +4521,29 @@
                                     badgeSpan.style.display = 'none';
                                 }
                             }
+                            // Thêm badge cho menu lvl1 (nhóm cha)
+                            if (sub === 'struct') {
+                                let lvl1El = document.querySelector(`.lvl1-${sectionKey}`);
+                                if (lvl1El) {
+                                    let secTotal = 0;
+                                    (vanData[sectionKey]?.struct || []).forEach(l => { secTotal += (l.list || []).length; });
+                                    (vanData[sectionKey]?.quiz || []).forEach(l => { secTotal += (l.list || []).length; });
+                                    let b1 = lvl1El.querySelector('.lvl1-total-badge');
+                                    if (!b1) {
+                                        b1 = document.createElement('span');
+                                        b1.className = 'lvl1-total-badge';
+                                        b1.style.cssText = 'position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 13px; font-weight: 800; color: #fde047; border: 1px solid #eab308; padding: 2px 8px; border-radius: 12px; box-shadow: 0 0 8px rgba(234,179,8,0.4); background: rgba(234,179,8,0.15); pointer-events: none;';
+                                        lvl1El.style.position = 'relative';
+                                        lvl1El.appendChild(b1);
+                                    }
+                                    if (secTotal > 0) {
+                                        b1.innerText = secTotal;
+                                        b1.style.display = 'inline-block';
+                                    } else {
+                                        b1.style.display = 'none';
+                                    }
+                                }
+                            }
                             // Áp dụng thứ tự đã lưu (nếu có)
                             const _vanOrderKey = 'van_order_' + sectionKey + '_' + sub;
                             const _savedOrder = JSON.parse(localStorage.getItem(_vanOrderKey) || 'null');
@@ -4665,13 +4688,16 @@
 
                 function fT(text) {
                     if (!text) return '';
-                    return String(text)
+                    let processed = String(text)
                         .replace(/\\n/g, '<br>')
                         .replace(/\n/g, '<br>')
-                        .replace(/(?:🇻🇳)?\s*Dịch\s*:/gi, 'Dịch:')
-                        .replace(/Dịch:/g, '<br><span style="color:#059669; font-weight:900;">&#x1F1FB;&#x1F1F3; Dịch:</span>')
+                        .replace(/(?:🇻🇳)?\s*(Dịch|Ý)\s*:\s*(.*?)(?=<br>|$)/gi, function(match, p1, p2) {
+                            const label = p1.toLowerCase() === 'ý' ? '&#x1F1FB;&#x1F1F3;' : '&#x1F1FB;&#x1F1F3; Dịch:';
+                            return '<br><span style="color:#1d4ed8; font-weight:bold;">' + label + ' ' + p2 + '</span>';
+                        })
                         .replace(/\[\[(.*?)\]\]/g, '<span style="color: #ef4444; font-weight: 900; text-decoration: underline; text-underline-offset: 4px;">$1</span>')
                         .replace(/\(\((.*?)\)\)/g, '<span style="color: #ef4444; font-weight: 900; text-decoration: underline; text-underline-offset: 4px;">$1</span>');
+                    return processed.replace(/<br>\s*<br><span style="color:#1d4ed8/g, '<br><span style="color:#1d4ed8').replace(/^<br><span style="color:#1d4ed8/, '<span style="color:#1d4ed8');
                 }
 
                 function toggleTopCard() {
