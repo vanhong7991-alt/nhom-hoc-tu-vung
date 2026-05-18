@@ -562,17 +562,19 @@
             border: 3px solid #cbd5e1;
             border-radius: 18px;
             padding: 16px;
-            color: #0f172a;
+            color: #1e3a8a;
             font-size: 22px;
             font-weight: 800;
             text-align: center;
             font-family: 'Baloo 2';
         }
 
-        input.correct {
+        input.correct,
+        textarea.correct {
             border-color: var(--success) !important;
             box-shadow: 0 0 25px rgba(34, 197, 94, 0.6) !important;
             background: #f0fdf4 !important;
+            color: #1e3a8a !important;
         }
 
         /* --- MENU --- */
@@ -6376,7 +6378,11 @@
                         } else if (curType === 'voca_quiz' || curType === 'gram_quiz') {
                             txt = "TRẮC NGHIỆM";
                         } else if (curType === 'gram') {
-                            txt = (i == 0 ? "TÌM NGHĨA" : i == 1 ? "TÌM CẤU TRÚC" : "");
+                            if (curLevel === 'chithuonglichsu') {
+                                txt = (i == 0 ? "CÁCH VIẾT LỊCH SỰ" : i == 1 ? "CÁCH VIẾT THÔNG THƯỜNG" : "");
+                            } else {
+                                txt = (i == 0 ? "TÌM NGHĨA" : i == 1 ? "TÌM CẤU TRÚC" : "");
+                            }
                         }
                         if (txt) {
                             btn.innerHTML = `<span style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">ĐỀ ${i + 1}</span><span>${txt}${isDone ? ' ✅' : ''}</span>`;
@@ -6472,9 +6478,9 @@
                     </div>
                     ${(item.c4 || item.c6) ? `<div style="font-size:16px; color:#cbd5e1; margin-bottom:15px; background:rgba(0,0,0,0.2); padding:10px 15px; border-radius:10px; border-left:4px solid var(--warning);">💡 ${fT(item.c4 || item.c6)}</div>` : ''}
                     <div style="display:flex; gap:12px; align-items:center; margin-bottom:15px;">
-                         ${!ans.trim() ? '<div id="input-' + i + '" data-ans="" data-skip="true" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(251,191,36,0.13),rgba(251,191,36,0.06));border:1.5px dashed #fbbf24;border-radius:12px;padding:10px 18px;color:#fde68a;font-size:14px;font-weight:700;text-shadow:0 0 8px rgba(251,191,36,0.4);box-shadow:0 2px 10px rgba(251,191,36,0.12);flex:1;text-align:center;"><span style="font-size:16px;">🌺</span>Kh\u00f4ng c\u00f3 c\u00e1ch \u0111\u1ecdc n\u00ean b\u1ea1n k c\u1ea7n \u0111i\u1ec1n n\u00e8</div>' : '<input type="text" id="input-' + i + '" data-ans="' + ans + '" style="transition: font-size 0.2s;" oninput="this.style.fontSize = this.value.length > 25 ? \'12px\' : (this.value.length > 18 ? \'16px\' : (this.value.length > 12 ? \'19px\' : \'22px\')); check(' + i + ')" onkeydown="handleKey(event, ' + i + ')" autocomplete="off" placeholder="..."><button class="btn btn-gray" style="width:70px; font-size:24px;" onclick="showHint(' + i + ')">👁️</button>'}
+                         ${!ans.trim() ? '<div id="input-' + i + '" data-ans="" data-skip="true" class="quiz-input" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(251,191,36,0.13),rgba(251,191,36,0.06));border:1.5px dashed #fbbf24;border-radius:12px;padding:10px 18px;color:#fde68a;font-size:14px;font-weight:700;text-shadow:0 0 8px rgba(251,191,36,0.4);box-shadow:0 2px 10px rgba(251,191,36,0.12);flex:1;text-align:center;"><span style="font-size:16px;">🌺</span>Kh\u00f4ng c\u00f3 c\u00e1ch \u0111\u1ecdc n\u00ean b\u1ea1n k c\u1ea7n \u0111i\u1ec1n n\u00e8</div>' : '<textarea class="quiz-input" id="input-' + i + '" data-ans="' + ans + '" rows="1" style="transition: font-size 0.2s, height 0.2s; resize: none; overflow: hidden; min-height: 48px; padding: 10px; width: 100%; box-sizing: border-box; line-height: 1.4; word-break: break-word; font-family: inherit; font-size: ' + (window.innerWidth > 768 ? '24px' : '18px') + ';" oninput="autoResizeInput(this); check(' + i + ')" onkeydown="handleKey(event, ' + i + ')" autocomplete="off" placeholder="..."></textarea><button class="btn btn-gray" style="width:70px; font-size:24px; flex-shrink:0;" onclick="showHint(' + i + ')">👁️</button>'}
                     </div>
-                    <div id="ai-explain-container-${i}" style="display:none; margin-bottom:15px; background:#fffbeb; color:#1e3a8a; border:2px solid #b45309; border-radius:14px; padding:20px; font-size:16px; font-weight:700; text-align:left; line-height:1.8; box-shadow:0 4px 16px rgba(180,83,9,0.13); font-family:'Baloo 2','Kosugi Maru',sans-serif;"></div>
+                    <div id="ai-explain-container-${i}" style="display:none; margin-bottom:15px; background:#fffbeb; color:#1e3a8a; border:2px solid #b45309; border-radius:14px; padding:20px; font-size:16px; font-weight:700; text-align:left; line-height:1.8; box-shadow:0 4px 16px rgba(180,83,9,0.13); font-family:\'Baloo 2\',\'Kosugi Maru\',sans-serif;"></div>
                     ${window._inSmartReviewMode ? '' : `<button id="btn-ai-${i}" style="width:100%; background:linear-gradient(135deg, #6366f1, #3b82f6); color:white; font-size:15px; font-weight:800; padding:12px; border:none; border-radius:12px; cursor:pointer; box-shadow:0 4px 15px rgba(99,102,241,0.4); text-transform:uppercase; transition:0.2s;" onclick="callAI(${i})" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">✨ AI PHÂN TÍCH</button>`}
                 </div>`;
                         }
@@ -6639,6 +6645,29 @@
                 }
 
 
+                function autoResizeInput(el) {
+                    const w = el.clientWidth || 300;
+                    const len = el.value.length;
+                    
+                    let fSize = window.innerWidth > 768 ? 24 : 18; 
+                    const avgCharWidth = fSize * 0.55;
+                    const charsPerLine = w / avgCharWidth; 
+                    
+                    if (len > charsPerLine) {
+                        fSize = window.innerWidth > 768 ? 20 : 16;
+                    }
+                    if (len > charsPerLine * 1.5) {
+                        fSize = window.innerWidth > 768 ? 16 : 14;
+                    }
+                    
+                    if (el.style.fontSize !== fSize + 'px') {
+                        el.style.fontSize = fSize + 'px';
+                    }
+
+                    el.style.height = '48px';
+                    el.style.height = el.scrollHeight + 'px';
+                }
+
                 function check(idx, isSubmit = false) {
                     const input = document.getElementById(`input-${idx}`);
                     if (!input || input.disabled || input.getAttribute('data-skip') === 'true') return; // bỏ qua câu không có đáp án
@@ -6670,9 +6699,17 @@
                             // ── AUTO-FOCUS CÂU TIẾP THEO ──
                             // Tìm input tiếp theo chưa trả lời đúng, không bị skip
                             setTimeout(() => {
-                                const allInputs = Array.from(document.querySelectorAll('#quiz-container input[type="text"]'))
+                                const allInputs = Array.from(document.querySelectorAll('#quiz-container .quiz-input'))
                                     .filter(inp => inp.getAttribute('data-skip') !== 'true' && !inp.disabled && !inp.classList.contains('correct'));
-                                const nextInput = allInputs[0]; // lấy cái đầu tiên chưa đúng
+                                
+                                // Tìm input chưa đúng NẰM SAU input hiện tại
+                                let nextInput = allInputs.find(inp => {
+                                    const inpIdx = parseInt(inp.id.replace('input-', ''));
+                                    return inpIdx > idx;
+                                });
+                                // Nếu không có câu nào ở dưới, vòng lại từ đầu
+                                if (!nextInput) nextInput = allInputs[0];
+
                                 if (nextInput) {
                                     nextInput.focus();
                                     // Scroll card chứa input đó vào giữa màn hình
@@ -7756,7 +7793,11 @@
                     const pct = totalQ > 0 ? Math.round((totalOk / totalQ) * 100) : 0;
                     let modeNames = { 0: 'Bài 1 (Cách đọc)', 1: 'Bài 2 (Nghĩa)', 2: 'Bài 3 (Tiếng Nhật)' };
                     if (curType === 'gram') {
-                        modeNames = { 0: 'Bài 1 (Tìm nghĩa)', 1: 'Bài 2 (Tìm cấu trúc)' };
+                        if (curLevel === 'chithuonglichsu') {
+                            modeNames = { 0: 'Đề 1 (Cách viết lịch sự)', 1: 'Đề 2 (Cách viết thông thường)' };
+                        } else {
+                            modeNames = { 0: 'Bài 1 (Tìm nghĩa)', 1: 'Bài 2 (Tìm cấu trúc)' };
+                        }
                     } else if (curType === 'voca_quiz' || curType === 'gram_quiz') {
                         modeNames = { 0: 'Trắc nghiệm' };
                     }
@@ -8052,8 +8093,7 @@
                 function showHint(idx) {
                     const input = document.getElementById(`input-${idx}`);
                     input.value = input.getAttribute('data-ans');
-                    const len = input.value.length;
-                    input.style.fontSize = len > 25 ? '12px' : (len > 18 ? '16px' : (len > 12 ? '19px' : '22px'));
+                    autoResizeInput(input);
                     input.classList.add('correct');
                     const card = document.getElementById(`q-${idx}`);
                     card.setAttribute('data-res', 'forgot');
