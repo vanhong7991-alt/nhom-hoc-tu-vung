@@ -31,6 +31,27 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* ===== HIỆU ỨNG SÓNG KHI CLICK BUTTON (RIPPLE EFFECT) ===== */
+        button, .btn, .cq-chip, .menu-lvl3, .mode-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple-circle {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-anim 0.6s linear;
+            background-color: rgba(255, 255, 255, 0.4);
+            pointer-events: none;
+            z-index: 10;
+        }
+        @keyframes ripple-anim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
         /* ===== ẢNH MỤC TIÊU: ẩn/hiện tự động theo trạng thái ===== */
         /* Khi đang ở home (btn-start-lesson hiện) → ẩn view-title + motivational-quote + btn-start-lesson */
         #top-control-card:not(:has(#btn-start-lesson[style*="display: none"])) #view-title {
@@ -108,27 +129,6 @@
             flex-shrink: 0;
         }
 
-        .resizer {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 6px;
-            height: 100%;
-            cursor: col-resize;
-            z-index: 2001;
-            transition: background 0.2s;
-        }
-
-        .resizer:hover,
-        .resizer.resizing {
-            background: rgba(59, 130, 246, 0.5);
-            width: 10px;
-        }
-
-        body.is-resizing .sidebar,
-        body.is-resizing .main-wrapper {
-            transition: none !important;
-        }
 
         /* Sidebar hidden state */
         body.sidebar-hidden .sidebar {
@@ -627,12 +627,28 @@
             display: none;
         }
 
-        /* Active menu item highlight */
+        /* Active menu item highlight (Hiệu ứng tỏa sáng như sóng) */
+        @keyframes activeWaveGlow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.5), inset 0 0 12px rgba(59, 130, 246, 0.2);
+                background: linear-gradient(90deg, rgba(59, 130, 246, 0.25), rgba(168, 85, 247, 0.15));
+            }
+            50% {
+                box-shadow: 0 0 0 12px rgba(96, 165, 250, 0), inset 0 0 15px rgba(168, 85, 247, 0.4);
+                background: linear-gradient(90deg, rgba(59, 130, 246, 0.4), rgba(168, 85, 247, 0.3));
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(96, 165, 250, 0), inset 0 0 12px rgba(59, 130, 246, 0.2);
+                background: linear-gradient(90deg, rgba(59, 130, 246, 0.25), rgba(168, 85, 247, 0.15));
+            }
+        }
+
         .menu-lvl3.active-lesson {
+            position: relative;
             background: linear-gradient(90deg, rgba(59, 130, 246, 0.25), rgba(168, 85, 247, 0.15)) !important;
             border-left: 4px solid #3b82f6 !important;
             color: #fff !important;
-            box-shadow: inset 0 0 12px rgba(59, 130, 246, 0.15);
+            animation: activeWaveGlow 2s infinite cubic-bezier(0.1, 0, 0.3, 1);
         }
 
         .menu-lvl3.active-lesson .lesson-name-text {
@@ -648,7 +664,7 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
             scrollbar-width: thin;
-            scrollbar-color: rgba(99, 102, 241, 0.45) transparent;
+            scrollbar-color: rgba(251, 191, 36, 0.6) transparent;
             transition: max-height 0.2s ease;
         }
         .sub-menu:has(> .menu-lvl3)::-webkit-scrollbar {
@@ -658,11 +674,11 @@
             background: transparent;
         }
         .sub-menu:has(> .menu-lvl3)::-webkit-scrollbar-thumb {
-            background: rgba(99, 102, 241, 0.5);
+            background: rgba(251, 191, 36, 0.65);
             border-radius: 2px;
         }
         .sub-menu:has(> .menu-lvl3)::-webkit-scrollbar-thumb:hover {
-            background: rgba(139, 92, 246, 0.8);
+            background: rgba(251, 191, 36, 1);
         }
 
         /* Keyboard navigation highlight */
@@ -1405,6 +1421,28 @@
             background: linear-gradient(90deg, rgba(16, 185, 129, 0.32) 0%, rgba(16, 185, 129, 0.10) 100%);
         }
 
+        /* BJT Ngữ Pháp - Vàng cam amber */
+        .lvl1-bjtgram {
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.18) 0%, rgba(245, 158, 11, 0.04) 100%);
+            color: #fcd34d;
+            border-left-color: #f59e0b;
+        }
+
+        .lvl1-bjtgram:hover {
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.32) 0%, rgba(245, 158, 11, 0.10) 100%);
+        }
+
+        /* Thông thường ⇔ Lịch sự - Tím violet */
+        .lvl1-chithuonglichsu {
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.18) 0%, rgba(139, 92, 246, 0.04) 100%);
+            color: #c4b5fd;
+            border-left-color: #8b5cf6;
+        }
+
+        .lvl1-chithuonglichsu:hover {
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.32) 0%, rgba(139, 92, 246, 0.10) 100%);
+        }
+
         /* Học tự do - Hồng */
         .lvl1-freevoca {
             background: linear-gradient(90deg, rgba(236, 72, 153, 0.18) 0%, rgba(236, 72, 153, 0.04) 100%);
@@ -1448,7 +1486,7 @@
         .cq-section-label {
             font-size: 11px;
             font-weight: 900;
-            color: #94a3b8;
+            color: #64748b;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             margin-bottom: 8px;
@@ -1463,93 +1501,130 @@
             gap: 7px;
         }
 
+        /* BASE CHIP — dark theme inactive */
         .cq-chip {
             padding: 6px 14px;
             border-radius: 20px;
-            border: 2px solid #a855f7;
-            background: #f3e8ff;
-            color: #4c1d95;
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            color: #475569;
             font-family: 'Baloo 2', cursive;
             font-size: 13px;
-            font-weight: 800;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.18s;
             user-select: none;
-            box-shadow: 0 1px 4px rgba(168, 85, 247, 0.15);
         }
 
         .cq-chip:hover {
-            border-color: #7c3aed;
-            background: #ede9fe;
-            color: #3b0764;
+            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
         }
 
+        /* ACTIVE variants — each group has its own accent color */
+
+        /* Nguon du lieu / Dang bai: blue */
         .cq-chip.active {
-            border-color: #7c3aed;
-            background: #ddd6fe;
-            color: #3b0764;
-            box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.3), 0 2px 8px rgba(124, 58, 237, 0.2);
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.18);
+            color: #93c5fd;
+            font-weight: 800;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25), 0 2px 8px rgba(59, 130, 246, 0.2);
         }
 
+        /* Cap do: indigo/purple */
+        .cq-chip.active-lv {
+            border-color: #818cf8;
+            background: rgba(99, 102, 241, 0.2);
+            color: #c7d2fe;
+            font-weight: 800;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+        }
+
+        /* Loai bai: green */
         .cq-chip.active-green {
-            border-color: var(--success);
-            background: #dcfce7;
-            color: #14532d;
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.15);
+            color: #86efac;
             font-weight: 800;
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
         }
 
+        /* Goc cua Van: pink/purple */
         .cq-chip.active-purple {
-            border-color: #7c3aed;
-            background: #ddd6fe;
-            color: #3b0764;
+            border-color: #c084fc;
+            background: rgba(192, 132, 252, 0.18);
+            color: #e9d5ff;
             font-weight: 800;
+            box-shadow: 0 0 0 2px rgba(192, 132, 252, 0.25);
         }
 
+        /* Bo loc dac biet: orange */
         .cq-chip.active-orange {
-            border-color: #ea580c;
-            background: #fff7ed;
-            color: #7c2d12;
+            border-color: #f97316;
+            background: rgba(249, 115, 22, 0.15);
+            color: #fdba74;
             font-weight: 800;
+            box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
         }
 
+        /* Dang bai mode: cyan */
+        .cq-chip.active-mode {
+            border-color: #22d3ee;
+            background: rgba(34, 211, 238, 0.15);
+            color: #a5f3fc;
+            font-weight: 800;
+            box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.2);
+        }
+
+        /* ── Lesson List ── */
         .cq-lesson-list {
-            max-height: 160px;
+            max-height: 180px;
             overflow-y: auto;
-            border: 1px solid #1e293b;
+            border: 1px solid rgba(255,255,255,0.07);
             border-radius: 10px;
-            padding: 6px;
+            padding: 5px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            background: rgba(0, 0, 0, 0.2);
+            gap: 2px;
+            background: rgba(0, 0, 0, 0.25);
         }
+
+        .cq-lesson-list::-webkit-scrollbar { width: 4px; }
+        .cq-lesson-list::-webkit-scrollbar-track { background: transparent; }
+        .cq-lesson-list::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.4); border-radius: 2px; }
 
         .cq-lesson-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 6px 10px;
+            padding: 7px 10px;
             border-radius: 8px;
             cursor: pointer;
             transition: background 0.15s;
             font-size: 13px;
-            font-weight: 700;
-            color: #cbd5e1;
+            font-weight: 600;
+            color: #94a3b8;
+            border: 1px solid transparent;
         }
 
         .cq-lesson-item:hover {
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.2);
+            color: #c7d2fe;
         }
 
         .cq-lesson-item input[type=checkbox] {
-            accent-color: var(--accent);
+            accent-color: #6366f1;
             width: 15px;
             height: 15px;
             cursor: pointer;
+            flex-shrink: 0;
         }
 
+        /* ── Preview Bar ── */
         .cq-preview-bar {
             display: flex;
             align-items: center;
@@ -2215,6 +2290,65 @@
 </head>
 
 <body>
+    <!-- ===== MODAL XÁC NHẬN THOÁT BÀI ===== -->
+    <div id="exit-quiz-modal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.7); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); align-items:center; justify-content:center;">
+        <div style="background:linear-gradient(145deg,#0f172a,#1e1b4b); border:1px solid rgba(139,92,246,0.4); border-radius:24px; padding:36px 32px; max-width:380px; width:90%; position:relative; box-shadow:0 30px 70px rgba(0,0,0,0.8), 0 0 40px rgba(139,92,246,0.15); animation:exitModalIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;">
+            <style>
+                @keyframes exitModalIn {
+                    from { opacity:0; transform:scale(0.8) translateY(20px); }
+                    to   { opacity:1; transform:scale(1) translateY(0); }
+                }
+                @keyframes exitModalOut {
+                    from { opacity:1; transform:scale(1); }
+                    to   { opacity:0; transform:scale(0.9) translateY(10px); }
+                }
+            </style>
+            <!-- Icon cảnh báo -->
+            <div style="text-align:center; margin-bottom:20px;">
+                <div style="width:64px; height:64px; background:linear-gradient(135deg,rgba(239,68,68,0.2),rgba(249,115,22,0.15)); border:2px solid rgba(239,68,68,0.4); border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:28px; box-shadow:0 0 20px rgba(239,68,68,0.2);">🚪</div>
+            </div>
+            <!-- Tiêu đề -->
+            <div style="text-align:center; margin-bottom:8px; font-size:19px; font-weight:900; color:#f1f5f9; font-family:'Baloo 2',cursive;">Kết thúc bài làm?</div>
+            <div style="text-align:center; color:#64748b; font-size:13px; font-weight:600; margin-bottom:24px; line-height:1.6;">
+                Tiến độ hiện tại sẽ được <span style="color:#86efac;">lưu lại</span>.<br>Bạn có thể tiếp tục sau.
+            </div>
+            <!-- Thống kê nhanh -->
+            <div id="exit-quiz-stats" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:12px 16px; margin-bottom:20px; display:flex; justify-content:space-around; gap:8px;">
+                <div style="text-align:center;">
+                    <div id="exit-stat-correct" style="font-size:22px; font-weight:900; color:#4ade80;">0</div>
+                    <div style="font-size:11px; color:#64748b; font-weight:700;">Đúng ✅</div>
+                </div>
+                <div style="width:1px; background:rgba(255,255,255,0.08);"></div>
+                <div style="text-align:center;">
+                    <div id="exit-stat-wrong" style="font-size:22px; font-weight:900; color:#f87171;">0</div>
+                    <div style="font-size:11px; color:#64748b; font-weight:700;">Sai ❌</div>
+                </div>
+                <div style="width:1px; background:rgba(255,255,255,0.08);"></div>
+                <div style="text-align:center;">
+                    <div id="exit-stat-remain" style="font-size:22px; font-weight:900; color:#a5b4fc;">0</div>
+                    <div style="font-size:11px; color:#64748b; font-weight:700;">Còn lại</div>
+                </div>
+            </div>
+            <!-- Nút hành động -->
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <button id="exit-confirm-btn"
+                    style="width:100%; padding:13px; font-size:15px; font-weight:900; font-family:'Baloo 2',cursive; border:none; border-radius:14px; cursor:pointer; background:linear-gradient(135deg,#dc2626,#b91c1c); color:#fff; box-shadow:0 4px 16px rgba(220,38,38,0.4); transition:all 0.15s; letter-spacing:0.3px;"
+                    onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(220,38,38,0.5)'"
+                    onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 16px rgba(220,38,38,0.4)'"
+                    onclick="exitQuizConfirmed()">
+                    🚪 Thoát &amp; lưu tiến độ
+                </button>
+                <button
+                    style="width:100%; padding:12px; font-size:14px; font-weight:800; font-family:'Baloo 2',cursive; border:1.5px solid rgba(99,102,241,0.4); border-radius:14px; cursor:pointer; background:rgba(99,102,241,0.12); color:#a5b4fc; transition:all 0.15s;"
+                    onmouseover="this.style.background='rgba(99,102,241,0.2)';this.style.borderColor='rgba(99,102,241,0.6)'"
+                    onmouseout="this.style.background='rgba(99,102,241,0.12)';this.style.borderColor='rgba(99,102,241,0.4)'"
+                    onclick="exitQuizCancel()">
+                    ↩ Tiếp tục làm bài
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== CÁNH HOA & LÁ RƠI ===== -->
     <canvas id="petals-canvas" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9998;"></canvas>
     <div id="app-fixed-bg"></div>
@@ -2610,6 +2744,22 @@
                         <div id="van-bjtvoca-struct" class="sub-menu"></div>
                         <div class="menu-lvl2" onclick="toggleSub('van-bjtvoca-quiz')">📝 Trắc nghiệm</div>
                         <div id="van-bjtvoca-quiz" class="sub-menu"></div>
+                    </div>
+
+                    <!-- BJT Ngữ Pháp -->
+                    <div class="van-menu-lvl1 lvl1-bjtgram" onclick="toggleSub('van-bjtgram-sub')">✍️ BJT Ngữ Pháp ▼
+                    </div>
+                    <div id="van-bjtgram-sub" class="sub-menu">
+                        <div class="menu-lvl2" onclick="toggleSub('van-bjtgram-quiz')">🎯 Trắc nghiệm</div>
+                        <div id="van-bjtgram-quiz" class="sub-menu"></div>
+                    </div>
+
+                    <!-- Thông thường ⇔ Lịch sự -->
+                    <div class="van-menu-lvl1 lvl1-chithuonglichsu" onclick="toggleSub('van-chithuonglichsu-sub')">🔄 Thông thường ⇔ Lịch sự ▼
+                    </div>
+                    <div id="van-chithuonglichsu-sub" class="sub-menu">
+                        <div id="van-chithuonglichsu-struct" class="sub-menu" style="display:block;"></div>
+                        <div id="van-chithuonglichsu-quiz" class="sub-menu"></div>
                     </div>
 
                     <!-- ▸ NHÓM JLPT -->
@@ -3612,7 +3762,7 @@
 
                         <button
                             style="flex:1; aspect-ratio:1; max-height:56px; background:linear-gradient(135deg,#dbeafe,#bfdbfe); color:#1e40af; border:2px solid #93c5fd; border-radius:14px; cursor:pointer; box-shadow:0 3px 10px rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:center; transition:0.2s;"
-                            onclick="if(window._goBackFn){window._goBackFn();}else{goHome();}" title="Quay lại">
+                            onclick="confirmExitQuiz(function(){ if(window._goBackFn){window._goBackFn();}else{location.reload();} })" title="Quay lại">
                             <span style="font-size:24px;">◀</span>
                         </button>
                         <button
@@ -4317,6 +4467,8 @@
                         'n2voca': { struct: 'van-n2voca-struct', quiz: 'van-n2voca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
                         'n2gram': { struct: 'van-n2gram-struct', quiz: 'van-n2gram-quiz', type_struct: 'gram', type_quiz: 'gram_quiz' },
                         'bjtvoca': { struct: 'van-bjtvoca-struct', quiz: 'van-bjtvoca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' },
+                        'bjtgram': { struct: 'van-bjtgram-struct', quiz: 'van-bjtgram-quiz', type_struct: 'gram', type_quiz: 'gram_quiz' },
+                        'chithuonglichsu': { struct: 'van-chithuonglichsu-struct', quiz: 'van-chithuonglichsu-quiz', type_struct: 'gram', type_quiz: 'gram_quiz' },
                         'freevoca': { struct: 'van-freevoca-struct', quiz: 'van-freevoca-quiz', type_struct: 'voca', type_quiz: 'voca_quiz' }
                     },
                     en: {
@@ -4352,7 +4504,7 @@
 
                             let totalBranchItems = 0;
                             lessons.forEach(l => { totalBranchItems += (l.list || []).length; });
-                            const unitTextBranch = (vanType === 'voca_quiz' || vanType === 'gram_quiz') ? 'câu' : (vanType === 'gram' ? 'mẫu' : 'từ');
+                            const unitTextBranch = (vanType === 'voca_quiz' || vanType === 'gram_quiz' || sectionKey === 'chithuonglichsu') ? 'câu' : (vanType === 'gram' ? 'mẫu' : 'từ');
                             
                             if (containerEl.previousElementSibling && containerEl.previousElementSibling.classList.contains('menu-lvl2')) {
                                 let badgeSpan = containerEl.previousElementSibling.querySelector('.branch-total-badge');
@@ -4388,7 +4540,7 @@
                                 else if (currentLang === 'en' && vanType === 'voca') maxMode = 2;
                                 const isAllDone = progress.done.slice(0, maxMode).every(v => v === true);
                                 const wordCount = lesson.list.length;
-                                const unitText = (vanType === 'voca_quiz' || vanType === 'gram_quiz') ? 'câu' : (vanType === 'gram' ? 'mẫu' : 'từ');
+                                const unitText = (vanType === 'voca_quiz' || vanType === 'gram_quiz' || sectionKey === 'chithuonglichsu') ? 'câu' : (vanType === 'gram' ? 'mẫu' : 'từ');
                                 const rIcon = icons[idx % icons.length];
                                 const div = document.createElement('div');
                                 div.className = 'menu-lvl3';
@@ -4501,6 +4653,7 @@
                     // Breadcrumb & back button
                     const secLabel = {
                         'n1voca': 'N1 Từ Vựng', 'n2voca': 'N2 Từ Vựng', 'n2gram': 'N2 Ngữ Pháp', 'bjtvoca': 'BJT Từ Vựng',
+                        'bjtgram': 'BJT Ngữ Pháp', 'chithuonglichsu': 'Thông thường ⇔ Lịch sự',
                         'toeicvoca': 'Từ vựng TOEIC', 'toeic600': '600 Từ vựng TOEIC', 'toeicpart5': 'Ngữ pháp Part 5'
                     }[sectionKey] || sectionKey;
                     const subLabel = sub === 'struct' ? 'Học từ vựng' : 'Trắc nghiệm';
@@ -4600,8 +4753,80 @@
                     scrollToActiveItem();
                 }
 
+                // ═══════════════════════════════════════════════════
+                // THOÁT BÀI: Kiểm tra đang làm bài trước khi thoát
+                // ═══════════════════════════════════════════════════
+                var _pendingExitFn = null; // callback thực hiện sau khi xác nhận
+
+                function _isQuizActive() {
+                    // Đang làm bài khi submit-container hiện và có câu trong currentList
+                    var sc = document.getElementById('submit-container');
+                    var qc = document.getElementById('quiz-container');
+                    var hasItems = (typeof currentList !== 'undefined' && currentList && currentList.length > 0);
+                    var scVisible = sc && sc.style.display !== 'none' && sc.style.display !== '';
+                    var qcVisible = qc && qc.style.display !== 'none';
+                    return hasItems && (scVisible || qcVisible);
+                }
+
+                function _countQuizProgress() {
+                    // Đếm số đúng/sai/còn lại từ các card trong DOM
+                    var correct = 0, wrong = 0, remain = 0;
+                    var cards = document.querySelectorAll('.q-block, .quiz-block, .fc-card');
+                    cards.forEach(function(card) {
+                        var res = card.dataset.res || card.getAttribute('data-res') || '';
+                        if (res === 'correct') correct++;
+                        else if (res === 'wrong' || res === 'forgot') wrong++;
+                        else remain++;
+                    });
+                    // Fallback: dùng currentList
+                    if (cards.length === 0 && typeof currentList !== 'undefined' && currentList) {
+                        remain = currentList.length;
+                    }
+                    return { correct: correct, wrong: wrong, remain: remain };
+                }
+
+                function confirmExitQuiz(onConfirmFn) {
+                    if (!_isQuizActive()) {
+                        // Không đang làm bài → thoát thẳng
+                        onConfirmFn();
+                        return;
+                    }
+                    _pendingExitFn = onConfirmFn;
+                    // Cập nhật thống kê nhanh
+                    var progress = _countQuizProgress();
+                    var el = document.getElementById('exit-stat-correct'); if (el) el.textContent = progress.correct;
+                    el = document.getElementById('exit-stat-wrong'); if (el) el.textContent = progress.wrong;
+                    el = document.getElementById('exit-stat-remain'); if (el) el.textContent = progress.remain;
+                    // Hiện modal
+                    var modal = document.getElementById('exit-quiz-modal');
+                    if (modal) {
+                        modal.style.display = 'flex';
+                        // Re-trigger animation
+                        var inner = modal.querySelector('div');
+                        if (inner) { inner.style.animation = 'none'; inner.offsetHeight; inner.style.animation = ''; }
+                    }
+                }
+
+                function exitQuizConfirmed() {
+                    // Lưu dữ liệu trước khi thoát
+                    try {
+                        if (typeof saveToLocal === 'function' && typeof curVanMode !== 'undefined' && !curVanMode) saveToLocal();
+                        if (typeof updateGlobalStats === 'function') updateGlobalStats();
+                    } catch(e) {}
+                    // Đóng modal rồi thực thi callback
+                    var modal = document.getElementById('exit-quiz-modal');
+                    if (modal) modal.style.display = 'none';
+                    if (_pendingExitFn) { var fn = _pendingExitFn; _pendingExitFn = null; fn(); }
+                }
+
+                function exitQuizCancel() {
+                    _pendingExitFn = null;
+                    var modal = document.getElementById('exit-quiz-modal');
+                    if (modal) modal.style.display = 'none';
+                }
+
                 function goHome() {
-                    location.reload();
+                    confirmExitQuiz(function() { location.reload(); });
                 }
                 /* ============================================= */
 
@@ -5031,9 +5256,9 @@
                         backExample.innerHTML = fT(item.explain || item.c6 || '');
                     } else if (gramType === 'struct') {
                         frontText.innerHTML = fT(item.c1 || '');
-                        backReading.innerHTML = '';
+                        backReading.innerHTML = fT(item.c2 || '');
                         backMeaning.innerHTML = fT(item.c3 || '');
-                        backExample.innerHTML = fT(item.c4 || '');
+                        backExample.innerHTML = fT(item.c6 || item.c4 || '');
                     } else {
                         frontText.innerHTML = fT(item.c1 || '');
                         backReading.innerHTML = fT(item.c2 || '');
@@ -5353,23 +5578,8 @@
                 function toggleSub(id) {
                     const el = document.getElementById(id);
                     if (!el) return;
-                    const isOpen = (el.style.display === 'block');
-
-                    // ── Accordion: đóng tất cả sub-menu anh em cùng cấp ──
-                    if (el.parentElement) {
-                        // Tìm tất cả sub-menu cùng cha (anh em)
-                        const siblings = el.parentElement.querySelectorAll(':scope > .sub-menu');
-                        siblings.forEach(s => {
-                            if (s !== el) {
-                                s.style.display = 'none';
-                                // Đóng luôn các sub-menu con bên trong
-                                s.querySelectorAll('.sub-menu').forEach(c => c.style.display = 'none');
-                            }
-                        });
-                    }
-
-                    // Toggle menu được chọn
-                    el.style.display = isOpen ? 'none' : 'block';
+                    // Simple toggle: mỗi menu hoạt động độc lập, không đóng menu khác
+                    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
                 }
                 let curSep = 'auto';
                 function updateImportUI() {
@@ -5639,6 +5849,7 @@
                     const showTrash = isEditMode;
 
                     const isGram = (curType === 'gram');
+                    const isChuyenCau = (curLevel === 'chithuonglichsu');
                     let gramType = 'voca';
                     if (curType === 'voca_quiz' || curType === 'gram_quiz') gramType = 'quiz';
                     else if (isGram) gramType = document.querySelector('input[name="gramType"]:checked')?.value || 'struct';
@@ -5647,6 +5858,8 @@
                     let headers = '';
                     if (isQuiz) {
                         headers = `<tr><th>#</th><th>Câu hỏi</th><th>ĐA Đúng</th><th>Các ĐA Sai</th><th>Giải thích</th>${showTrash ? '<th>Hành động</th>' : ''}</tr>`;
+                    } else if (isChuyenCau) {
+                        headers = `<tr><th>#</th><th>🗣️ Cách nói thông thường</th><th>🎩 Cách nói lịch sự</th>${showTrash ? '<th>Hành động</th>' : ''}</tr>`;
                     } else if (isGram) {
                         headers = `<tr><th>#</th><th>Cấu trúc</th><th>Ý nghĩa tiếng việt</th>${showTrash ? '<th>Hành động</th>' : ''}</tr>`;
                     } else {
@@ -5673,7 +5886,14 @@
                                 }
                             } else {
                                 if (showTrash) {
-                                    if (isGram) {
+                                    if (isChuyenCau) {
+                                        return `<tr>
+                              <td style="color:#475569">${i + 1}</td>
+                              <td><input type="text" value="${(w.c1 || '').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c1', this.value)" placeholder="Cách nói thông thường" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:var(--warning); border:1px solid #f59e0b; border-radius:4px; padding:6px; font-weight:800; font-family:'Baloo 2'; font-size:13px; box-sizing:border-box;"></td>
+                              <td><input type="text" value="${(w.c3 || '').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c3', this.value)" placeholder="Cách nói lịch sự" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:#a78bfa; border:1px solid #8b5cf6; border-radius:4px; padding:6px; font-family:'Baloo 2'; font-size:13px; box-sizing:border-box;"></td>
+                              <td><button class="wdel" onclick="directDeleteWord(${i})" title="Xoá từ này">🗑</button></td>
+                            </tr>`;
+                                    } else if (isGram) {
                                         return `<tr>
                               <td style="color:#475569">${i + 1}</td>
                               <td><input type="text" value="${(w.c1 || '').replace(/"/g, '&quot;')}" onchange="updateWordData(${i}, 'c1', this.value)" placeholder="Cấu trúc" style="width:100%; min-width:80px; background:rgba(0,0,0,0.3); color:var(--warning); border:1px solid #3b82f6; border-radius:4px; padding:6px; font-weight:800; font-family:'Baloo 2'; font-size:13px; box-sizing:border-box;"></td>
@@ -5701,7 +5921,13 @@
                             </tr>`;
                                     }
                                 } else {
-                                    if (isGram) {
+                                    if (isChuyenCau) {
+                                        return `<tr>
+                              <td style="color:#475569">${i + 1}</td>
+                              <td><b style="color:var(--warning); font-size:14px;">${fT(w.c1)}</b></td>
+                              <td style="color:#a78bfa; font-size:14px;">${fT(w.c3 || '')}</td>
+                            </tr>`;
+                                    } else if (isGram) {
                                         return `<tr>
                               <td style="color:#475569">${i + 1}</td>
                               <td><b style="color:var(--warning)">${fT(w.c1)}</b></td>
@@ -5784,7 +6010,7 @@
                                 const isAllDone = db[lv][ty][dayKey].done.slice(0, maxMode).every(v => v === true);
                                 const wordCount = db[lv][ty][dayKey].list.length;
                                 catTotal += wordCount;
-                                const unitText = (ty === 'voca_quiz' || ty === 'gram_quiz') ? "câu" : (ty === 'gram' ? "mẫu" : "từ");
+                                const unitText = (ty === 'voca_quiz' || ty === 'gram_quiz' || lv === 'chithuonglichsu') ? "câu" : (ty === 'gram' ? "mẫu" : "từ");
                                 const div = document.createElement("div"); div.className = "menu-lvl3";
                                 div.dataset.lv = lv; div.dataset.ty = ty; div.dataset.day = dayKey;
                                 div.dataset.dnd = '1';
@@ -5936,7 +6162,20 @@
                 }
                 // ─── End lock screen helpers ───
 
-                function selectDay(lv, ty, day, listOverride = null, targetMode = null) {
+                function selectDay(lv, ty, day, listOverride = null, targetMode = null, _bypassConfirm = false) {
+                    // Guard: nếu đang làm bài và đây là lần chọn bài mới (không phải callback sau xác nhận)
+                    // thì hiện modal xác nhận trước
+                    if (!_bypassConfirm && _isQuizActive()) {
+                        // Kiểm tra xem có thực sự đang chuyển sang bài KHÁC không
+                        const isSameLesson = (lv === curLevel && ty === curType && day === curDay && !listOverride);
+                        if (!isSameLesson) {
+                            confirmExitQuiz(function() {
+                                selectDay(lv, ty, day, listOverride, targetMode, true);
+                            });
+                            return;
+                        }
+                    }
+
                     // FIX LỖI 6: Xóa overlay tổng kết nếu còn tồn tại trong DOM
                     const _co2 = document.getElementById('completion-overlay');
                     if (_co2) _co2.remove();
@@ -5949,7 +6188,7 @@
                     // Kiểm tra khoá cho bài học tiêu chuẩn
                     const lockKey = lv + '_' + ty;
                     if (REQUIRE_LOCK[lockKey] && !_appUnlocked && !listOverride) {
-                        _requireAccess(() => selectDay(lv, ty, day, listOverride, targetMode));
+                        _requireAccess(() => selectDay(lv, ty, day, listOverride, targetMode, true));
                         return;
                     }
                     var _ss = document.getElementById('stats-screen'); if (_ss) _ss.style.display = 'none';
@@ -6205,7 +6444,7 @@
                             <span id="msg-${i}" class="fb-msg"></span>
                         </div>
                     </div>
-                    ${item.c4 ? `<div style="font-size:16px; color:#cbd5e1; margin-bottom:15px; background:rgba(0,0,0,0.2); padding:10px 15px; border-radius:10px; border-left:4px solid var(--warning);">💡 ${fT(item.c4)}</div>` : ''}
+                    ${(item.c4 || item.c6) ? `<div style="font-size:16px; color:#cbd5e1; margin-bottom:15px; background:rgba(0,0,0,0.2); padding:10px 15px; border-radius:10px; border-left:4px solid var(--warning);">💡 ${fT(item.c4 || item.c6)}</div>` : ''}
                     <div style="display:flex; gap:12px; align-items:center; margin-bottom:15px;">
                          ${!ans.trim() ? '<div id="input-' + i + '" data-ans="" data-skip="true" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(251,191,36,0.13),rgba(251,191,36,0.06));border:1.5px dashed #fbbf24;border-radius:12px;padding:10px 18px;color:#fde68a;font-size:14px;font-weight:700;text-shadow:0 0 8px rgba(251,191,36,0.4);box-shadow:0 2px 10px rgba(251,191,36,0.12);flex:1;text-align:center;"><span style="font-size:16px;">🌺</span>Kh\u00f4ng c\u00f3 c\u00e1ch \u0111\u1ecdc n\u00ean b\u1ea1n k c\u1ea7n \u0111i\u1ec1n n\u00e8</div>' : '<input type="text" id="input-' + i + '" data-ans="' + ans + '" style="transition: font-size 0.2s;" oninput="this.style.fontSize = this.value.length > 25 ? \'12px\' : (this.value.length > 18 ? \'16px\' : (this.value.length > 12 ? \'19px\' : \'22px\')); check(' + i + ')" onkeydown="handleKey(event, ' + i + ')" autocomplete="off" placeholder="..."><button class="btn btn-gray" style="width:70px; font-size:24px;" onclick="showHint(' + i + ')">👁️</button>'}
                     </div>
@@ -6451,7 +6690,8 @@
                             if (_ans_display) {
                                 let _solEl3 = card.querySelector('.answer-reveal');
                                 if (!_solEl3) { _solEl3 = document.createElement('div'); _solEl3.className = 'answer-reveal'; card.appendChild(_solEl3); }
-                                _solEl3.innerHTML = '✅ Đáp án đúng: <b>' + _ans_display + '</b>';
+                                const _explain = (currentList[idx] && (currentList[idx].c6 || currentList[idx].c4)) || '';
+                                _solEl3.innerHTML = '✅ Đáp án đúng: <b>' + _ans_display + '</b>' + (_explain ? '<br><span style="color:#fbbf24;font-size:14px;">💡 ' + _explain + '</span>' : '');
                             }
                             setTimeout(() => input.classList.remove('error-shake'), 400);
                             // Track sai vào SRS chính thống (cập nhật interval)
@@ -6631,19 +6871,29 @@
                             // Câu sai hoặc chưa điền (val === '' nhưng ans !== '')
                             else {
                                 failed++;
-                                if (card.getAttribute('data-res') !== 'forgot') card.setAttribute('data-res', 'ng');
+                                const _isForgot = card.getAttribute('data-res') === 'forgot';
+                                if (!_isForgot) card.setAttribute('data-res', 'ng');
                                 if (input) { input.classList.add('error-shake'); }
                                 card.style.borderLeftColor = 'var(--danger)';
                                 // Hiển thị msg đỏ + .answer-reveal
                                 const _msgEl = document.getElementById('msg-' + idx);
-                                if (_msgEl) { _msgEl.className = 'fb-msg show ng'; _msgEl.innerText = 'Tiếc quá sai rồi 😢'; }
+                                if (_msgEl) { _msgEl.className = 'fb-msg show ng'; _msgEl.innerText = _isForgot ? 'Từ này bạn quên 😅' : 'Tiếc quá sai rồi 😢'; }
                                 if (ans) {
                                     let _solEl2 = card.querySelector('.answer-reveal');
                                     if (!_solEl2) { _solEl2 = document.createElement('div'); _solEl2.className = 'answer-reveal'; card.appendChild(_solEl2); }
                                     _solEl2.innerHTML = '✅ Đáp án đúng: <b>' + ans + '</b>';
                                 }
-                                // Track sai
-                                if (currentList[idx]) trackWrong(currentList[idx]);
+                                // Track quên hoặc sai — Hay quên chỉ được ghi nhận khi NỘP BÀI
+                                if (currentList[idx]) {
+                                    if (_isForgot) {
+                                        if (card.getAttribute('data-tracked-forgot') !== 'true') {
+                                            trackForgot(currentList[idx]);
+                                            card.setAttribute('data-tracked-forgot', 'true');
+                                        }
+                                    } else {
+                                        trackWrong(currentList[idx]);
+                                    }
+                                }
                             }
 
                         }
@@ -7048,6 +7298,8 @@
                         else if (curVanSection === 'n1voca' || curVanSection === 'n2voca') branch = (curVanSub === 'quiz') ? 'jlpt_quiz' : 'jlpt_voca';
                         else if (curVanSection === 'n2gram') branch = (curVanSub === 'quiz') ? 'jlpt_gram_quiz' : 'jlpt_gram';
                         else if (curVanSection === 'bjtvoca') branch = (curVanSub === 'quiz') ? 'bjt_quiz' : 'bjt_voca';
+                        else if (curVanSection === 'bjtgram') branch = (curVanSub === 'quiz') ? 'jlpt_gram_quiz' : 'jlpt_gram';
+                        else if (curVanSection === 'chithuonglichsu') branch = (curVanSub === 'quiz') ? 'jlpt_gram_quiz' : 'jlpt_gram';
                     } else {
                         if (currentLang === 'en') branch = 'en_voca';
                         else if (currentLang === 'cn') branch = 'cn_voca';
@@ -7717,6 +7969,7 @@
 
                 function renderListTable() {
                     const listToRender = currentList || [];
+                    const isChuyenCau = (curLevel === 'chithuonglichsu');
                     document.getElementById('voca-list-body').innerHTML = listToRender.map((item, i) => {
                         const isGram = (curType === 'gram');
                         const isQuiz = item.gramType === 'quiz';
@@ -7728,6 +7981,14 @@
                             text3 = fT(item.w1 ? item.w1 + ' | ' + (item.w2 || '') + ' | ' + (item.w3 || '') : '');
                             const text4 = fT(item.explain || '');
                             return `<tr style="border-bottom:1px solid #334155"><td style="padding:10px; text-align: center;">${i + 1}</td><td style="font-weight:800; color:var(--warning); text-align: left; padding: 10px;">${text1}</td><td style="text-align: left; padding: 10px;">${text2}</td><td style="text-align: left; padding: 10px;">${text3}</td><td style="color:#f97316; font-size:12px; text-align: left; padding: 10px;">${text4}</td></tr>`;
+                        } else if (isChuyenCau) {
+                            text1 = fT(item.c1);
+                            text3 = fT(item.c3);
+                            return `<tr style="border-bottom:1px solid #334155">
+                                <td style="padding:10px; text-align:center; color:#475569">${i + 1}</td>
+                                <td style="font-weight:800; color:var(--warning); padding:10px; font-size:14px;">${text1}</td>
+                                <td style="color:#a78bfa; padding:10px; font-size:14px;">${text3}</td>
+                            </tr>`;
                         } else if (isGram) {
                             text1 = fT(item.c1);
                             text2 = fT(item.c2 || '');
@@ -7752,6 +8013,8 @@
                     if (listHeaderRow) {
                         if (curType === 'voca_quiz' || curType === 'gram_quiz') {
                             listHeaderRow.innerHTML = '<th style="padding:10px; width:50px; text-align:center;">STT</th><th style="text-align:left; padding: 10px;">Câu hỏi</th><th style="text-align:left; padding: 10px;">ĐA Đúng</th><th style="text-align:left; padding: 10px;">Các ĐA Sai</th><th style="text-align:left; padding: 10px;">Giải thích</th>';
+                        } else if (curLevel === 'chithuonglichsu') {
+                            listHeaderRow.innerHTML = '<th style="padding:10px; width:50px; text-align:center;">STT</th><th style="text-align:left; padding: 10px;">🗣️ Cách nói thông thường</th><th style="text-align:left; padding: 10px;">🎩 Cách nói lịch sự</th>';
                         } else if (curType === 'gram') {
                             listHeaderRow.innerHTML = '<th style="padding:10px; width:50px; text-align:center;">STT</th><th style="text-align:left; padding: 10px;">Cấu trúc</th><th style="text-align:left; padding: 10px;">Cách đọc</th><th style="text-align:left; padding: 10px;">Ý nghĩa tiếng việt</th>';
                         } else {
@@ -7772,8 +8035,7 @@
                     const msg = document.getElementById(`msg-${idx}`);
                     msg.className = 'fb-msg show forgot';
                     msg.innerText = 'Từ này bạn quên à 😅';
-                    // Track quên
-                    if (currentList[idx]) trackForgot(currentList[idx]);
+                    // KHÔNG gọi trackForgot ở đây — chỉ ghi nhận khi nộp bài (submitQuiz)
                     updateChart();
                 }
 
@@ -7815,8 +8077,13 @@
                     `;
 
                     const hasC1 = currentList.some(it => it.c1 !== undefined);
+                    const isChuyenCauExport = (curLevel === 'chithuonglichsu');
                     if (hasC1) {
-                        html += `<tr><th style="width:40px; text-align:center;">STT</th><th>Từ vựng / Cấu trúc</th><th>Cách đọc</th><th>Ý nghĩa</th></tr></thead><tbody>`;
+                        if (isChuyenCauExport) {
+                            html += `<tr><th style="width:40px; text-align:center;">STT</th><th>Cách nói thông thường</th><th>Cách nói lịch sự</th></tr></thead><tbody>`;
+                        } else {
+                            html += `<tr><th style="width:40px; text-align:center;">STT</th><th>Từ vựng / Cấu trúc</th><th>Cách đọc</th><th>Ý nghĩa</th></tr></thead><tbody>`;
+                        }
                     } else {
                         html += `<tr><th style="width:40px; text-align:center;">STT</th><th>Câu hỏi</th><th>Đáp án</th></tr></thead><tbody>`;
                     }
@@ -7824,7 +8091,11 @@
                     currentList.forEach((item, index) => {
                         html += `<tr><td style="text-align:center; font-weight:bold;">${index + 1}</td>`;
                         if (item.c1 !== undefined) {
-                            html += `<td>${item.c1 || ''}</td><td>${item.c2 || ''}</td><td>${item.c3 || ''}</td>`;
+                            if (isChuyenCauExport) {
+                                html += `<td>${item.c1 || ''}</td><td>${item.c3 || ''}</td>`;
+                            } else {
+                                html += `<td>${item.c1 || ''}</td><td>${item.c2 || ''}</td><td>${item.c3 || ''}</td>`;
+                            }
                         } else if (item.q !== undefined) {
                             html += `<td>${item.q || ''}</td><td>${item.ans || ''}</td>`;
                         } else {
@@ -8089,6 +8360,23 @@
                 }
                 function saveFcStarred() {
                     localStorage.setItem('fc_starred_keys', JSON.stringify([...fcStarredKeys]));
+                    // Realtime: cập nhật modal nếu đang mở
+                    _cqLiveUpdate();
+                }
+                // Helper: cập nhật số đếm trong modal nếu modal đang mở
+                function _cqLiveUpdate() {
+                    const modal = document.getElementById('custom-quiz-modal');
+                    if (!modal || modal.style.display === 'none' || !window._cqLessons) return;
+                    // Reload fcStarredKeys từ localStorage để lấy giá trị mới nhất
+                    fcStarredKeys = new Set(JSON.parse(localStorage.getItem('fc_starred_keys') || '[]'));
+                    // Reload vanItemExtra cho tất cả van items trong _cqLessons
+                    window._cqLessons.forEach(l => {
+                        if (l.src === 'van') {
+                            (l.structItems || []).forEach(loadVanItemExtra);
+                            (l.quizItems || []).forEach(loadVanItemExtra);
+                        }
+                    });
+                    cqUpdateCount();
                 }
 
                 // ══════════════════════════════════════════
@@ -8096,12 +8384,17 @@
                 // ══════════════════════════════════════════
                 function trackCorrect(item) {
                     item.count = (item.count || 0) + 1;
+                    // Giảm wrongCount mỗi khi làm đúng → giúp từ thoát khỏi danh sách "Hay sai"
+                    if ((item.wrongCount || 0) > 0) {
+                        item.wrongCount = Math.max(0, (item.wrongCount || 0) - 1);
+                    }
                     if (window.srsTracker) window.srsTracker.record(item, 'correct');
                     if (curLevel !== 'custom') {
                         if (!curVanMode) saveToLocal(); else saveVanItemExtra(item);
                     }
                     if (typeof updateGlobalStats === 'function') updateGlobalStats();
                     if (typeof renderStats === 'function') renderStats();
+                    _cqLiveUpdate();
                 }
                 function trackWrong(item) {
                     item.wrongCount = (item.wrongCount || 0) + 1;
@@ -8111,6 +8404,7 @@
                     }
                     if (typeof updateGlobalStats === 'function') updateGlobalStats();
                     if (typeof renderStats === 'function') renderStats();
+                    _cqLiveUpdate();
                 }
                 function trackForgot(item) {
                     item.forgotCount = (item.forgotCount || 0) + 1;
@@ -8120,6 +8414,7 @@
                     }
                     if (typeof updateGlobalStats === 'function') updateGlobalStats();
                     if (typeof renderStats === 'function') renderStats();
+                    _cqLiveUpdate();
                 }
                 function saveVanItemExtra(item) {
                     // For vanData items: persist count/wrongCount/forgotCount by c1/q key
@@ -8151,6 +8446,30 @@
                     el.classList.toggle(activeClass);
                     cqRefresh();
                 }
+                // Bộ lọc đặc biệt: AND logic + chip "Tất cả" loại trừ các filter khác
+                function cqToggleSpecialFilter(el) {
+                    const specialIds = ['cq-f-wrong', 'cq-f-forgot', 'cq-f-star'];
+                    const allChip = document.getElementById('cq-f-all');
+                    if (el.id === 'cq-f-all') {
+                        // Nhấn "Tất cả" → bắt buộc active, tắt hết các filter kia
+                        el.classList.add('active');
+                        specialIds.forEach(id => {
+                            const c = document.getElementById(id);
+                            if (c) c.classList.remove('active-orange');
+                        });
+                    } else {
+                        // Nhấn một filter cụ thể → toggle nó, tắt "Tất cả"
+                        el.classList.toggle('active-orange');
+                        if (allChip) allChip.classList.remove('active');
+                        // Nếu không còn filter nào active → tự động bật lại "Tất cả"
+                        const anyActive = specialIds.some(id => {
+                            const c = document.getElementById(id);
+                            return c && c.classList.contains('active-orange');
+                        });
+                        if (!anyActive && allChip) allChip.classList.add('active');
+                    }
+                    cqRefresh();
+                }
                 function cqSingleSelect(el, group, activeClass) {
                     document.querySelectorAll(`[id^="${group}-"]`).forEach(c => c.classList.remove(activeClass));
                     el.classList.add(activeClass);
@@ -8158,7 +8477,13 @@
                 function cqIsActive(id) {
                     const el = document.getElementById(id);
                     if (!el) return false;
-                    return el.className.includes('active');
+                    // Kiểm tra tất cả các class active variant
+                    return el.classList.contains('active') ||
+                           el.classList.contains('active-green') ||
+                           el.classList.contains('active-purple') ||
+                           el.classList.contains('active-orange') ||
+                           el.classList.contains('active-lv') ||
+                           el.classList.contains('active-mode');
                 }
                 function cqSelectAllLessons(val) {
                     document.querySelectorAll('#cq-lesson-list input[type=checkbox]').forEach(cb => cb.checked = val);
@@ -8172,10 +8497,10 @@
                         if (chip) {
                             if (activeLevels.includes(l)) {
                                 chip.style.display = 'inline-flex';
-                                if (!chip.classList.contains('active')) chip.classList.add('active');
+                                if (!chip.classList.contains('active-lv')) chip.classList.add('active-lv');
                             } else {
                                 chip.style.display = 'none';
-                                chip.classList.remove('active');
+                                chip.classList.remove('active-lv');
                             }
                         }
                     });
@@ -8233,7 +8558,9 @@
                         const VAN_MAP = {
                             n1voca: { lvs: ['n1'], types: ['voca'], label: 'N1 Từ vựng' },
                             n2gram: { lvs: ['n2'], types: ['gram'], label: 'N2 Ngữ pháp' },
-                            bjtvoca: { lvs: ['bjt'], types: ['voca'], label: 'BJT Từ vựng' }
+                            bjtvoca: { lvs: ['bjt'], types: ['voca'], label: 'BJT Từ vựng' },
+                            bjtgram: { lvs: ['bjt'], types: ['gram'], label: 'BJT Ngữ pháp' },
+                            chithuonglichsu: { lvs: ['bjt'], types: ['gram'], label: 'TT⇔Lịch sự' }
                         };
                         Object.entries(VAN_MAP).forEach(([sectionKey, meta]) => {
                             if (!lvs.some(l => meta.lvs.includes(l))) return;
@@ -8290,34 +8617,23 @@
                 }
 
                 function cqSelectTimeChip(el) {
-                    document.querySelectorAll('.cq-time-chip').forEach(btn => {
-                        btn.style.background = 'transparent';
-                        btn.style.color = '#94a3b8';
-                        btn.style.borderColor = 'rgba(255,255,255,0.1)';
-                        btn.classList.remove('active');
-                    });
-                    el.style.background = 'rgba(99,102,241,0.3)';
-                    el.style.color = '#a5b4fc';
-                    el.style.borderColor = 'rgba(165,180,252,0.5)';
-                    el.classList.add('active');
-                    cqApplyTimeFilter();
+                    // Legacy no-op — now using select dropdown (cq-time-select)
                 }
 
                 function cqApplyTimeFilter() {
-                    const activeChip = document.querySelector('.cq-time-chip.active');
-                    const days = activeChip ? parseInt(activeChip.dataset.days || '0') : 0;
+                    const sel = document.getElementById('cq-time-select');
+                    const days = sel ? parseInt(sel.value || '0') : 0;
                     const lessons = window._cqLessons || [];
                     document.querySelectorAll('.cq-lesson-item').forEach(el => {
-                        el.style.display = ''; // luôn hiện tất cả
+                        el.style.display = '';
                         const input = el.querySelector('input');
                         if (!input) return;
-                        if (!days) { input.checked = true; return; } // Tất cả thời gian → tick hết
+                        if (!days) { input.checked = true; return; }
                         const lessonId = input.value;
                         const lesson = lessons.find(l => l.id === lessonId);
                         if (!lesson) { input.checked = false; return; }
                         const now = Date.now();
                         const cutoff = now - days * 86400000;
-                        // Kiểm tra ngày trong label (dd/mm/yyyy)
                         const labelSpan = el.querySelector('span');
                         const label = labelSpan ? labelSpan.innerText : '';
                         const dateMatch = label.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
@@ -8325,19 +8641,21 @@
                         if (dateMatch) {
                             lessonDate = new Date(parseInt(dateMatch[3]), parseInt(dateMatch[2]) - 1, parseInt(dateMatch[1])).getTime();
                         }
-                        // Kiểm tra createdAt của items
                         const allItems = [...(lesson.structItems || []), ...(lesson.quizItems || [])];
                         const hasCreatedAt = allItems.some(it => it.createdAt);
                         const hasRecentItem = allItems.some(it => it.createdAt && it.createdAt >= cutoff);
-                        // Nếu không có thông tin ngày nào → giữ tick (không loại bài không biết tuổi)
-                        // Chỉ bỏ tick nếu CÓ thông tin ngày tạo nhưng NGOÀI khoảng thời gian
                         if (!lessonDate && !hasCreatedAt) {
-                            input.checked = true; // không có ngày → không lọc → giữ
+                            input.checked = true;
                         } else {
                             input.checked = (lessonDate && lessonDate >= cutoff) || hasRecentItem;
                         }
                     });
                     cqUpdateCount();
+                }
+
+                // Adapter cho select dropdown lọc thời gian
+                function cqApplyTimeFilterFromSelect(value) {
+                    cqApplyTimeFilter();
                 }
 
                 function cqUpdateCount() {
@@ -8350,51 +8668,69 @@
                     const isStruct = cqIsActive('cq-mode-struct');
                     const isQuiz = cqIsActive('cq-mode-quiz');
 
+                    // Reload fcStarredKeys từ localStorage mỗi lần tính (đảm bảo realtime)
+                    if (filterStar) {
+                        fcStarredKeys = new Set(JSON.parse(localStorage.getItem('fc_starred_keys') || '[]'));
+                    }
+
                     let totalS = 0, totalQ = 0;
                     lessons.filter(l => selected.has(l.id)).forEach(l => {
+                        // Reload vanItemExtra trước khi filter để lấy wrongCount/forgotCount mới nhất
+                        if (l.src === 'van') {
+                            (l.structItems || []).forEach(loadVanItemExtra);
+                            (l.quizItems || []).forEach(loadVanItemExtra);
+                        }
                         const itemsS = applySpecialFilters(l.structItems || [], filterWrong, filterForgot, filterStar, timeFilterDays, l.src);
-                        // Trắc nghiệm chỉ lấy quizItems thật (gramType=quiz)
                         const itemsQ = applySpecialFilters(l.quizItems || [], filterWrong, filterForgot, filterStar, timeFilterDays, l.src);
                         if (isStruct) totalS += itemsS.length;
                         if (isQuiz) totalQ += itemsQ.length;
                     });
 
-                    const total = (isStruct ? totalS : 0) + (isQuiz && !(isStruct) ? totalQ : 0) || (isStruct && isQuiz ? totalS + totalQ : isStruct ? totalS : totalQ);
                     const displayTotal = (isStruct ? totalS : 0) + (isQuiz ? totalQ : 0);
-                    document.getElementById('cq-count').textContent = displayTotal;
-                    const sel = lessons.filter(l => selected.has(l.id)).length;
-                    document.getElementById('cq-detail').textContent =
-                        displayTotal > 0 ? `Từ ${sel} bài được chọn` : 'Không có câu/từ phù hợp';
+                    const cqCountEl = document.getElementById('cq-count');
+                    const cqDetailEl = document.getElementById('cq-detail');
+                    if (cqCountEl) cqCountEl.textContent = displayTotal;
+                    const selCount = lessons.filter(l => selected.has(l.id)).length;
+                    if (cqDetailEl) cqDetailEl.textContent =
+                        displayTotal > 0 ? `Từ ${selCount} bài được chọn` : (selCount > 0 ? 'Không có câu khớp bộ lọc đặc biệt' : 'Chưa chọn bài nào');
 
-                    // Ẩn/hiện nút theo mode
+                    // Ẩn/hiện nút Làm theo count
                     const btnStruct = document.getElementById('cq-btn-struct');
                     const btnQuiz = document.getElementById('cq-btn-quiz');
-                    if (btnStruct) btnStruct.style.display = isStruct ? '' : 'none';
-                    if (btnQuiz) btnQuiz.style.display = isQuiz ? '' : 'none';
+                    if (btnStruct) btnStruct.style.display = (isStruct && totalS > 0) ? '' : 'none';
+                    if (btnQuiz) btnQuiz.style.display = (isQuiz && totalQ > 0) ? '' : 'none';
                 }
 
                 function applySpecialFilters(items, filterWrong, filterForgot, filterStar, timeFilterDays, src) {
-                    if (!filterWrong && !filterForgot && !filterStar && !timeFilterDays) return items;
+                    const hasSpecial = filterWrong || filterForgot || filterStar;
+                    if (!hasSpecial && !timeFilterDays) return items; // Tất cả — không lọc gì
                     const now = Date.now();
                     return items.filter(item => {
+                        // Lọc thời gian (chỉ user data)
                         if (timeFilterDays > 0 && src === 'user') {
                             if (!item.createdAt) return false;
                             const diffDays = (now - item.createdAt) / (1000 * 60 * 60 * 24);
                             if (diffDays > timeFilterDays) return false;
                         }
-
-                        if (filterWrong || filterForgot || filterStar) {
-                            let matchSpecial = false;
-                            if (filterWrong && (item.wrongCount || 0) > 2) matchSpecial = true;
-                            if (filterForgot && (item.forgotCount || 0) > 2) matchSpecial = true;
-                            if (filterStar && fcStarredKeys.has(_itemKey(item))) matchSpecial = true;
-                            if (!matchSpecial) return false;
-                        }
+                        // AND logic: mỗi filter đang bật đều phải khớp — chọn nhiều → thu hẹp kết quả
+                        if (filterWrong && !((item.wrongCount || 0) > 3)) return false;
+                        if (filterForgot && !((item.forgotCount || 0) > 3)) return false;
+                        if (filterStar && !fcStarredKeys.has(_itemKey(item))) return false;
                         return true;
                     });
                 }
 
                 function openCustomQuiz(forceMode) {
+                    // Nếu đang làm bài dở → hiện modal xác nhận đẹp thay vì browser confirm
+                    if (!window._cqBypassConfirm && _isQuizActive() && curLevel !== 'custom') {
+                        confirmExitQuiz(function() {
+                            window._cqBypassConfirm = true;
+                            openCustomQuiz(forceMode);
+                            window._cqBypassConfirm = false;
+                        });
+                        return;
+                    }
+                    window._cqBypassConfirm = false;
                     const lessons = window._cqLessons || [];
                     const selected = new Set(cqGetSelectedLessons());
                     const filterWrong = cqIsActive('cq-f-wrong');
@@ -8495,9 +8831,9 @@
                     lessonTimes = [];
                     sessionScores = [];
 
-                    // Show/hide reaction game button (only for voca/gram - not quiz type)
+                    // Bug-2 Fix: isVoca không tồn tại trong scope này → dùng wantStruct thay thế
                     const btnRg = document.getElementById('btn-reaction-game');
-                    if (btnRg) btnRg.style.display = (listOverride || !isVoca) ? 'none' : 'inline-flex';
+                    if (btnRg) btnRg.style.display = wantStruct ? 'inline-flex' : 'none';
 
                     // Close sidebar on mobile
                     if (window.innerWidth <= 480) {
@@ -8511,166 +8847,171 @@
     </div><!-- /app-layout -->
     <!-- ===== CUSTOM QUIZ MODAL ===== -->
     <div id="custom-quiz-modal" class="modal"
-        style="z-index:6000; align-items:flex-start; overflow-y:auto; padding:20px 10px;">
+        style="z-index:6000; align-items:flex-start; overflow-y:auto; padding:16px 10px;">
         <div class="modal-content"
-            style="max-width:560px; width:100%; border-color:#7c3aed; background:#0f172a; padding:28px; border-radius:28px; position:relative; margin:auto;">
-            <!-- Header -->
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+            style="max-width:540px; width:100%; border:1px solid rgba(139,92,246,0.4); background:linear-gradient(160deg,#0f172a,#0d1424); padding:0; border-radius:24px; position:relative; margin:auto; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.7);">
+
+            <!-- ── HEADER ── -->
+            <div style="background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(139,92,246,0.15)); padding:20px 24px 16px; border-bottom:1px solid rgba(255,255,255,0.07); display:flex; align-items:center; justify-content:space-between;">
                 <div>
-                    <h2 style="margin:0; color:#c084fc; font-size:22px;">🎲 TẠO ĐỀ TUỲ Ý</h2>
-                    <div style="font-size:12px; color:#64748b; margin-top:3px;">Lọc và ghép câu hỏi từ nhiều nguồn</div>
+                    <div style="font-size:20px; font-weight:900; color:#c7d2fe; letter-spacing:0.5px;">🎲 TẠO ĐỀ TUỲ Ý</div>
+                    <div style="font-size:12px; color:#475569; margin-top:2px; font-weight:600;">Chọn bộ lọc → chọn bài → bấm làm</div>
                 </div>
                 <button onclick="closeModal('custom-quiz-modal')"
-                    style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); color:#fff; font-size:18px; width:34px; height:34px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+                    style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); color:#64748b; font-size:16px; width:32px; height:32px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.15s;"
+                    onmouseover="this.style.color='#fff';this.style.background='rgba(239,68,68,0.2)'"
+                    onmouseout="this.style.color='#64748b';this.style.background='rgba(255,255,255,0.07)'">✕</button>
             </div>
 
-            <!-- NGUỒN DỮ LIỆU -->
-            <div class="cq-section">
-                <div class="cq-section-label">📦 Nguồn dữ liệu</div>
-                <div class="cq-chips">
-                    <div class="cq-chip active-purple" id="cq-src-van"
-                        onclick="cqToggleChip(this,'cq-src','active-purple')">🌸 Góc của Vân</div>
-                    <div class="cq-chip active" id="cq-src-user" onclick="cqToggleChip(this,'cq-src','active')">🌐 Góc
-                        của Bạn</div>
-                </div>
-            </div>
+            <!-- ── BODY (scrollable) ── -->
+            <div style="padding:18px 22px; display:flex; flex-direction:column; gap:14px; max-height:75vh; overflow-y:auto;">
+                <style>
+                    #custom-quiz-modal .body-scroll::-webkit-scrollbar{width:4px}
+                    #custom-quiz-modal .body-scroll::-webkit-scrollbar-thumb{background:rgba(99,102,241,0.3);border-radius:2px}
+                </style>
 
-            <!-- CẤP ĐỘ -->
-            <div class="cq-section">
-                <div class="cq-section-label">🎯 Cấp độ</div>
-                <div class="cq-chips">
-                    <div class="cq-chip active" id="cq-lv-n1"
-                        onclick="cqToggleChip(this,'cq-lv','active'); cqRefresh()">N1</div>
-                    <div class="cq-chip active" id="cq-lv-n2"
-                        onclick="cqToggleChip(this,'cq-lv','active'); cqRefresh()">N2</div>
-                    <div class="cq-chip active" id="cq-lv-n3"
-                        onclick="cqToggleChip(this,'cq-lv','active'); cqRefresh()">N3</div>
-                    <div class="cq-chip active" id="cq-lv-bjt"
-                        onclick="cqToggleChip(this,'cq-lv','active'); cqRefresh()">BJT</div>
-                    <div class="cq-chip active" id="cq-lv-toeic"
-                        onclick="cqToggleChip(this,'cq-lv','active'); cqRefresh()">TOEIC</div>
-                    <div class="cq-chip active" id="cq-lv-hsk"
-                        onclick="cqToggleChip(this,'cq-lv','active'); cqRefresh()">HSK</div>
-                </div>
-            </div>
-
-            <!-- LOẠI BÀI -->
-            <div class="cq-section">
-                <div class="cq-section-label">📚 Loại bài</div>
-                <div class="cq-chips">
-                    <div class="cq-chip active-green" id="cq-type-voca"
-                        onclick="cqToggleChip(this,'cq-type','active-green'); cqRefresh()">📖 Từ vựng</div>
-                    <div class="cq-chip active-green" id="cq-type-gram"
-                        onclick="cqToggleChip(this,'cq-type','active-green'); cqRefresh()">✍️ Ngữ pháp</div>
-                </div>
-            </div>
-
-            <!-- DẠNG BÀI -->
-            <div class="cq-section">
-                <div class="cq-section-label">🗂 Dạng bài <span style="color:#ef4444; font-size:10px;">(chọn 1 — tách 2
-                        đề nếu cần)</span></div>
-                <div class="cq-chips">
-                    <div class="cq-chip active" id="cq-mode-struct"
-                        onclick="cqToggleChip(this,'cq-mode','active'); cqRefresh()">📝 Từ đơn (tự luận)</div>
-                    <div class="cq-chip active" id="cq-mode-quiz"
-                        onclick="cqToggleChip(this,'cq-mode','active'); cqRefresh()">🔘 Trắc nghiệm</div>
-                </div>
-            </div>
-
-            <!-- BỘ LỌC ĐẶC BIỆT -->
-            <div class="cq-section">
-                <div class="cq-section-label">⚡ Bộ lọc đặc biệt <span style="color:#64748b; font-size:10px;">(nếu chọn →
-                        chỉ lấy câu thỏa điều kiện)</span></div>
-                <div class="cq-chips">
-                    <div class="cq-chip" id="cq-f-wrong"
-                        onclick="cqToggleChip(this,'cq-f','active-orange'); cqRefresh()">❌ Hay sai (&gt;2 lần)</div>
-                    <div class="cq-chip" id="cq-f-forgot"
-                        onclick="cqToggleChip(this,'cq-f','active-orange'); cqRefresh()">😅 Hay quên (&gt;2 lần)</div>
-                    <div class="cq-chip" id="cq-f-star"
-                        onclick="cqToggleChip(this,'cq-f','active-orange'); cqRefresh()">⭐ Đánh dấu sao</div>
-                </div>
-            </div>
-
-
-            <!-- CHỌN BÀI -->
-            <div class="cq-section">
-                <div class="cq-section-label" style="justify-content:space-between; margin-bottom:8px;">
-                    <span>📅 Chọn bài học</span>
-                    <div style="display:flex; gap:6px;">
-                        <button onclick="cqSelectAllLessons(true)"
-                            style="background:rgba(59,130,246,0.15); border:1px solid #3b82f6; color:#60a5fa; border-radius:8px; padding:2px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Tất
-                            cả</button>
-                        <button onclick="cqSelectAllLessons(false)"
-                            style="background:rgba(100,116,139,0.15); border:1px solid #475569; color:#94a3b8; border-radius:8px; padding:2px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Bỏ
-                            chọn</button>
+                <!-- ROW 1: Nguồn + Loại bài (2 cột) -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <!-- Nguồn -->
+                    <div>
+                        <div class="cq-section-label">📦 Nguồn</div>
+                        <div class="cq-chips">
+                            <div class="cq-chip active-purple" id="cq-src-van"
+                                onclick="cqToggleChip(this,'cq-src','active-purple')">🌸 Góc Vân</div>
+                            <div class="cq-chip active" id="cq-src-user"
+                                onclick="cqToggleChip(this,'cq-src','active')">🌐 Góc Bạn</div>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Thanh công cụ lọc & chọn khoảng -->
-                <div
-                    style="background:rgba(0,0,0,0.15); border:1px solid rgba(255,255,255,0.05); border-radius:8px; padding:10px; margin-bottom:10px; display:flex; flex-direction:column; gap:8px;">
-                    <!-- Lọc tên -->
-                    <div style="display:flex; align-items:center;">
-                        <input type="text" id="cq-search-lesson" placeholder="🔍 Gõ số bài hoặc ngày (vd: 5)..."
-                            style="flex:1; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:6px; padding:6px 10px; font-size:13px; outline:none;"
-                            oninput="cqFilterLessonUI()">
-                    </div>
-                    <!-- Lọc thời gian -->
-                    <div style="display:flex; flex-direction:column; gap:6px;">
-                        <span
-                            style="font-size:11px; color:#94a3b8; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">⏳
-                            Thời gian tạo bài</span>
-                        <div id="cq-time-chips" style="display:flex; flex-wrap:wrap; gap:6px;">
-                            <button class="cq-time-chip active" data-days="0" onclick="cqSelectTimeChip(this)"
-                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(165,180,252,0.5); background:rgba(99,102,241,0.3); color:#a5b4fc; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">✨
-                                Tất cả</button>
-                            <button class="cq-time-chip" data-days="7" onclick="cqSelectTimeChip(this)"
-                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">7
-                                ngày</button>
-                            <button class="cq-time-chip" data-days="14" onclick="cqSelectTimeChip(this)"
-                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">14
-                                ngày</button>
-                            <button class="cq-time-chip" data-days="30" onclick="cqSelectTimeChip(this)"
-                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">1
-                                tháng</button>
-                            <button class="cq-time-chip" data-days="60" onclick="cqSelectTimeChip(this)"
-                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">2
-                                tháng</button>
-                            <button class="cq-time-chip" data-days="90" onclick="cqSelectTimeChip(this)"
-                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">3
-                                tháng</button>
-                            <button class="cq-time-chip" data-days="180" onclick="cqSelectTimeChip(this)"
-                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">6
-                                tháng</button>
-                            <button class="cq-time-chip" data-days="365" onclick="cqSelectTimeChip(this)"
-                                style="padding:5px 11px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; color:#94a3b8; font-family:'Baloo 2'; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s;">12
-                                tháng</button>
+                    <!-- Loại bài -->
+                    <div>
+                        <div class="cq-section-label">📚 Loại bài</div>
+                        <div class="cq-chips">
+                            <div class="cq-chip active-green" id="cq-type-voca"
+                                onclick="cqToggleChip(this,'cq-type','active-green'); cqRefresh()">📖 Từ vựng</div>
+                            <div class="cq-chip active-green" id="cq-type-gram"
+                                onclick="cqToggleChip(this,'cq-type','active-green'); cqRefresh()">✍️ Ngữ pháp</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="cq-lesson-list" id="cq-lesson-list">
-                    <div style="padding:12px; color:#475569; text-align:center; font-size:13px; font-style:italic;">Chọn
-                        bộ lọc ở trên để xem danh sách bài...</div>
+                <!-- Divider -->
+                <div style="height:1px; background:rgba(255,255,255,0.06);"></div>
+
+                <!-- ROW 2: Cấp độ -->
+                <div>
+                    <div class="cq-section-label">🎯 Cấp độ</div>
+                    <div class="cq-chips">
+                        <div class="cq-chip active-lv" id="cq-lv-n1"
+                            onclick="cqToggleChip(this,'cq-lv','active-lv'); cqRefresh()">N1</div>
+                        <div class="cq-chip active-lv" id="cq-lv-n2"
+                            onclick="cqToggleChip(this,'cq-lv','active-lv'); cqRefresh()">N2</div>
+                        <div class="cq-chip active-lv" id="cq-lv-n3"
+                            onclick="cqToggleChip(this,'cq-lv','active-lv'); cqRefresh()">N3</div>
+                        <div class="cq-chip active-lv" id="cq-lv-bjt"
+                            onclick="cqToggleChip(this,'cq-lv','active-lv'); cqRefresh()">BJT</div>
+                        <div class="cq-chip active-lv" id="cq-lv-toeic"
+                            onclick="cqToggleChip(this,'cq-lv','active-lv'); cqRefresh()">TOEIC</div>
+                        <div class="cq-chip active-lv" id="cq-lv-hsk"
+                            onclick="cqToggleChip(this,'cq-lv','active-lv'); cqRefresh()">HSK</div>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div style="height:1px; background:rgba(255,255,255,0.06);"></div>
+
+                <!-- ROW 3: Dạng bài + Bộ lọc đặc biệt (2 cột) -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <!-- Dạng bài -->
+                    <div>
+                        <div class="cq-section-label">🗂 Dạng bài</div>
+                        <div class="cq-chips" style="flex-direction:column; gap:5px;">
+                            <div class="cq-chip active-mode" id="cq-mode-struct"
+                                onclick="cqToggleChip(this,'cq-mode','active-mode'); cqRefresh()">📝 Tự luận</div>
+                            <div class="cq-chip active-mode" id="cq-mode-quiz"
+                                onclick="cqToggleChip(this,'cq-mode','active-mode'); cqRefresh()">🔘 Trắc nghiệm</div>
+                        </div>
+                    </div>
+                    <!-- Bộ lọc đặc biệt -->
+                    <div>
+                        <div class="cq-section-label">⚡ Lọc đặc biệt
+                            <span style="color:#475569; font-size:10px; font-weight:600; text-transform:none; letter-spacing:0;">(AND — chọn nhiều → thu hẹp)</span>
+                        </div>
+                        <div class="cq-chips" style="flex-direction:column; gap:5px;">
+                            <div class="cq-chip active" id="cq-f-all"
+                                onclick="cqToggleSpecialFilter(this)">✨ Tất cả</div>
+                            <div class="cq-chip" id="cq-f-wrong"
+                                onclick="cqToggleSpecialFilter(this)">❌ Hay sai (&gt;3 lần)</div>
+                            <div class="cq-chip" id="cq-f-forgot"
+                                onclick="cqToggleSpecialFilter(this)">😅 Hay quên (&gt;3 lần)</div>
+                            <div class="cq-chip" id="cq-f-star"
+                                onclick="cqToggleSpecialFilter(this)">⭐ Đánh dấu sao</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div style="height:1px; background:rgba(255,255,255,0.06);"></div>
+
+                <!-- ROW 4: Chọn bài học -->
+                <div>
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+                        <div class="cq-section-label" style="margin-bottom:0;">📋 Chọn bài học</div>
+                        <div style="display:flex; gap:5px; align-items:center;">
+                            <!-- Lọc thời gian inline -->
+                            <select id="cq-time-select" onchange="cqApplyTimeFilterFromSelect(this.value)"
+                                style="background:#0f172a; border:1px solid rgba(99,102,241,0.35); color:#a5b4fc; border-radius:8px; padding:3px 8px; font-size:12px; font-weight:700; font-family:'Baloo 2'; cursor:pointer; outline:none;">
+                                <option value="0">⏳ Tất cả</option>
+                                <option value="7">7 ngày</option>
+                                <option value="14">14 ngày</option>
+                                <option value="30">1 tháng</option>
+                                <option value="60">2 tháng</option>
+                                <option value="90">3 tháng</option>
+                                <option value="180">6 tháng</option>
+                                <option value="365">12 tháng</option>
+                            </select>
+                            <button onclick="cqSelectAllLessons(true)"
+                                style="background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.4); color:#60a5fa; border-radius:7px; padding:3px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Tất cả</button>
+                            <button onclick="cqSelectAllLessons(false)"
+                                style="background:rgba(100,116,139,0.15); border:1px solid rgba(71,85,105,0.5); color:#64748b; border-radius:7px; padding:3px 10px; font-size:11px; font-weight:800; cursor:pointer; font-family:'Baloo 2';">Bỏ</button>
+                        </div>
+                    </div>
+                    <!-- Search -->
+                    <input type="text" id="cq-search-lesson" placeholder="🔍 Tìm tên bài..."
+                        style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.08); color:#e2e8f0; border-radius:8px; padding:7px 12px; font-size:13px; outline:none; margin-bottom:8px; font-family:'Baloo 2'; transition:border 0.15s;"
+                        onfocus="this.style.borderColor='rgba(99,102,241,0.5)'"
+                        onblur="this.style.borderColor='rgba(255,255,255,0.08)'"
+                        oninput="cqFilterLessonUI()">
+                    <!-- Lesson list -->
+                    <div class="cq-lesson-list" id="cq-lesson-list">
+                        <div style="padding:14px; color:#334155; text-align:center; font-size:13px; font-style:italic;">Chọn bộ lọc để xem danh sách bài...</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- PREVIEW -->
-            <div class="cq-preview-bar">
+            <!-- ── PREVIEW + ACTION BAR (sticky bottom) ── -->
+            <div style="padding:14px 22px; border-top:1px solid rgba(255,255,255,0.07); background:rgba(0,0,0,0.2); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
                 <div>
-                    <div class="cq-preview-count">📊 <span id="cq-count">0</span> câu/từ</div>
-                    <div class="cq-preview-detail" id="cq-detail">Chưa có dữ liệu phù hợp</div>
+                    <div style="font-size:13px; font-weight:900; color:#94a3b8;">
+                        📊 <span id="cq-count" style="font-size:22px; color:#c7d2fe; font-weight:900;">0</span>
+                        <span style="color:#64748b; font-size:13px; font-weight:700;"> câu/từ</span>
+                    </div>
+                    <div id="cq-detail" style="font-size:11px; color:#475569; font-weight:700; margin-top:1px;">Chưa có dữ liệu phù hợp</div>
                 </div>
                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                    <button id="cq-btn-struct" class="btn btn-purple" style="padding:10px 18px; font-size:14px;"
-                        onclick="openCustomQuiz('struct')">📝 Làm từ đơn</button>
-                    <button id="cq-btn-quiz" class="btn btn-blue" style="padding:10px 18px; font-size:14px;"
-                        onclick="openCustomQuiz('quiz')">🔘 Làm trắc nghiệm</button>
+                    <button id="cq-btn-struct" style="display:none; padding:9px 18px; font-size:13px; font-weight:800; border:none; border-radius:12px; cursor:pointer; background:linear-gradient(135deg,#7c3aed,#6d28d9); color:#fff; font-family:'Baloo 2'; transition:all 0.15s; box-shadow:0 4px 14px rgba(124,58,237,0.4);"
+                        onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 20px rgba(124,58,237,0.5)'"
+                        onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 14px rgba(124,58,237,0.4)'"
+                        onclick="openCustomQuiz('struct')">📝 Làm tự luận</button>
+                    <button id="cq-btn-quiz" style="display:none; padding:9px 18px; font-size:13px; font-weight:800; border:none; border-radius:12px; cursor:pointer; background:linear-gradient(135deg,#2563eb,#1d4ed8); color:#fff; font-family:'Baloo 2'; transition:all 0.15s; box-shadow:0 4px 14px rgba(37,99,235,0.4);"
+                        onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 20px rgba(37,99,235,0.5)'"
+                        onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 14px rgba(37,99,235,0.4)'"
+                        onclick="openCustomQuiz('quiz')">🔘 Trắc nghiệm</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- ===== REACTION GAME SCRIPT ===== -->
     <!-- ===== REACTION GAME SCRIPT ===== -->
     <script>
         (function () {
@@ -8871,49 +9212,6 @@
             else _sessionStart = Date.now();
         });
 
-        // ══════════════════════════════════════════════════════════
-        // SIDEBAR RESIZER
-        // ══════════════════════════════════════════════════════════
-        (function () {
-            const sidebar = document.querySelector('.sidebar');
-            if (!sidebar) return;
-            const resizer = document.createElement('div');
-            resizer.className = 'resizer';
-            sidebar.appendChild(resizer);
-
-            let isResizing = false;
-
-            resizer.addEventListener('mousedown', (e) => {
-                if (window.innerWidth <= 480) return; // Disable on mobile
-                isResizing = true;
-                document.body.classList.add('is-resizing');
-                resizer.classList.add('resizing');
-                e.preventDefault();
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                if (!isResizing) return;
-                let newWidth = e.clientX;
-                if (newWidth < 250) newWidth = 250;
-                if (newWidth > window.innerWidth * 0.8) newWidth = window.innerWidth * 0.8;
-                document.documentElement.style.setProperty('--sidebar-width', newWidth + 'px');
-            });
-
-            document.addEventListener('mouseup', () => {
-                if (isResizing) {
-                    isResizing = false;
-                    document.body.classList.remove('is-resizing');
-                    resizer.classList.remove('resizing');
-                    localStorage.setItem('mgao_sidebar_width', document.documentElement.style.getPropertyValue('--sidebar-width'));
-                }
-            });
-
-            // Load saved width
-            const savedWidth = localStorage.getItem('mgao_sidebar_width');
-            if (savedWidth && window.innerWidth > 480) {
-                document.documentElement.style.setProperty('--sidebar-width', savedWidth);
-            }
-        })();
 
         // ══════════════════════════════════════════════════════════
         // STATS SCREEN LOGIC
@@ -8937,7 +9235,7 @@
             });
             // vanData items - chỉ đọc khi ở chế độ Tiếng Nhật
             if ((typeof currentLang === 'undefined' || currentLang === 'jp') && typeof vanData !== 'undefined') {
-                ['n1voca', 'n2gram', 'bjtvoca'].forEach(function (sec) {
+                ['n1voca', 'n2gram', 'bjtvoca', 'bjtgram', 'chithuonglichsu'].forEach(function (sec) {
                     if (!vanData[sec]) return;
                     ['struct', 'quiz'].forEach(function (sub) {
                         if (!vanData[sec][sub]) return;
@@ -8977,13 +9275,13 @@
             var pass90 = log.filter(function (e) { return e.total > 0 && (e.ok / e.total) >= 0.9; }).length;
             var vanLearned = items.filter(it => it.isVan && (it.count || 0) >= 1).length;
 
-            // Wrong items > 2
-            var wrongItems = items.filter(function (it) { return (it.wrongCount || 0) > 2; })
+            // Wrong items > 3 (đồng nhất với KPI wrongMany > 3)
+            var wrongItems = items.filter(function (it) { return (it.wrongCount || 0) > 3; })
                 .sort(function (a, b) { return (b.wrongCount || 0) - (a.wrongCount || 0); })
                 .slice(0, 15);
 
-            // Forgot items > 2
-            var forgotItems = items.filter(function (it) { return (it.forgotCount || 0) > 2; })
+            // Forgot items > 3 (đồng nhất với KPI forgotMany > 3)
+            var forgotItems = items.filter(function (it) { return (it.forgotCount || 0) > 3; })
                 .sort(function (a, b) { return (b.forgotCount || 0) - (a.forgotCount || 0); })
                 .slice(0, 15);
 
@@ -10257,6 +10555,50 @@
     </script>
 
     <script src="ai_prompts.js"></script>
+    <!-- ===== GLOBAL RIPPLE EFFECT ===== -->
+    <script>
+        document.addEventListener('mousedown', function(e) {
+            const btn = e.target.closest('button, .btn, .cq-chip, .menu-lvl3, .mode-btn');
+            if (!btn) return;
+
+            // Đảm bảo nút có position relative
+            const style = window.getComputedStyle(btn);
+            if (style.position === 'static') btn.style.position = 'relative';
+            
+            const circle = document.createElement('span');
+            const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+            const radius = diameter / 2;
+            const rect = btn.getBoundingClientRect();
+            
+            // Xóa hiệu ứng cũ nếu bấm quá nhanh
+            const oldRipple = btn.querySelector('.ripple-circle');
+            if (oldRipple) oldRipple.remove();
+
+            // Nếu click bằng chuột, lấy tọa độ chuột. Nếu không thì lấy tâm.
+            const clientX = e.clientX || rect.left + radius;
+            const clientY = e.clientY || rect.top + radius;
+
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${clientX - rect.left - radius}px`;
+            circle.style.top = `${clientY - rect.top - radius}px`;
+            
+            // Tùy chỉnh màu sóng cho nút nền sáng
+            const bg = style.backgroundColor;
+            const isLightBg = bg.match(/rgba?\(\s*(2[0-5][0-5]|1[5-9]\d|\d{3})\s*,\s*(2[0-5][0-5]|1[5-9]\d|\d{3})\s*,\s*(2[0-5][0-5]|1[5-9]\d|\d{3})/);
+            if ((isLightBg && !bg.includes('rgba(0, 0, 0,')) || (btn.classList.contains('menu-lvl3') && !btn.classList.contains('active-lesson'))) {
+                circle.style.backgroundColor = 'rgba(0, 0, 0, 0.15)';
+            } else {
+                circle.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
+            }
+
+            circle.classList.add('ripple-circle');
+            btn.appendChild(circle);
+
+            setTimeout(() => {
+                if (circle.parentNode) circle.remove();
+            }, 600);
+        });
+    </script>
 </body>
 
 
@@ -10904,6 +11246,18 @@
 (function () {
     'use strict';
     let _kbIdx = -1;
+    let _isSidebarActive = false; // Chỉ bật điều hướng khi click vào sidebar
+
+    // Bắt sự kiện click để xác định vùng active
+    document.addEventListener('mousedown', function(e) {
+        if (e.target.closest('.sidebar')) {
+            _isSidebarActive = true;
+        } else {
+            _isSidebarActive = false;
+            _kbIdx = -1;
+            _clearFocus();
+        }
+    });
 
     /** Lấy tất cả menu-lvl3 đang hiển thị (parent sub-menu không bị ẩn) */
     function _getVisibleItems() {
@@ -10938,6 +11292,9 @@
     }
 
     document.addEventListener('keydown', function (e) {
+        // Chỉ bắt phím khi sidebar đang active (user vừa click vào)
+        if (!_isSidebarActive) return;
+
         // Bỏ qua khi đang gõ vào input/textarea
         const tag = document.activeElement && document.activeElement.tagName;
         if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
@@ -10974,6 +11331,7 @@
             const items = _getVisibleItems();
             _kbIdx = items.indexOf(el);
             el.classList.add('kb-focus');
+            _isSidebarActive = true; // Bật active khi click thẳng vào item
         }
     });
 
